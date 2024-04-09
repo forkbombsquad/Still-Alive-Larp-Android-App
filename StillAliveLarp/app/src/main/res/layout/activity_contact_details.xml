@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".ContactDetailsActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Contact Request"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/contactrequestdetails_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Name"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/contactrequestdetails_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Email"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/contactrequestdetails_postalCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Postal Code"
+            app:showDiv="true"/>
+
+        <TextView
+            android:id="@+id/contactrequestdetails_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:text="This is an example contact message that needs approval. It could be long. \n\nIt could be multiple lines. Who knows. This is just an example. See if you like it"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/contactrequestdetails_markAsRead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:buttontext="Mark as Read"/>
+
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

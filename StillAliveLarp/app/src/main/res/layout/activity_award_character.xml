@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".AwardCharacterActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/awardchar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Give Award To Character Name"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+            android:id="@+id/awardchar_awardTypeKVPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Award Type"
+            app:showDiv="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+            android:id="@+id/awardchar_awardSecondaryTypeKVPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Secondary Award Type"
+            app:showDiv="false"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/awardchar_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:inputType="numberSigned"
+                android:hint="Amount (Numbers Only)"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/awardchar_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:inputType="textMultiLine|textLongMessage|textCapSentences"
+                android:minLines="1"
+                android:hint="Reason"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/awardchar_submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:buttontext="Submit"/>
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

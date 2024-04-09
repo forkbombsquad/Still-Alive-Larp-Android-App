@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".ManageEventActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Manage Event"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Title"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Date"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_startTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Start Time"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_endTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="End Time"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_isStarted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Is Started"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_isFinished"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Is Finished"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/manageevent_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Description"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+            android:id="@+id/manageevent_edit"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="Edit Event Details"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/manageevent_startFinishButton"
+            android:paddingTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:buttontext="Start Event"/>
+
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

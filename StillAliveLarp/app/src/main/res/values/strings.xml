@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Still Alive</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--    Card Titles-->
+    <string name="announcements"><u>Announcements</u></string>
+    <string name="intrigue"><u>Intrigue</u></string>
+    <string name="checkout"><u>Checkout</u></string>
+    <string name="currentchar"><u>Current Character</u></string>
+    <string name="events"><u>Events</u></string>
+    <string name="eventToday"><u>Event Today!</u></string>
+    <string name="awards"><u>Awards</u></string>
+    <string name="title_activity_offline_skill_view">OfflineSkillViewActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="prereg_type_desc"><b>Free Tier</b> -
+        Still Alive is completely free to play, but you\'ll receive several benefits if you give a donation, including the ability to earn experience and play as a personalized character!\n\n<b>Basic Donation Tier</b> -
+        $15 (If you donate $15, you are able to play the game with a personal character and earn experience to take skills from the skill tree (NPC characters at this tier will earn double the experience of a PC character!) If you choose this option, you will need to provide your own food.)\n\n<b>Premium Donation Tier</b> -
+        $25 or more (If you donate at least $25, you gain all the benefits of the Basic Donation Tier as well as 1 Meal Ticket to the Commander\'s Feast and 1 free Raffle Ticket for The Raffle at the end of the event.)</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+</resources>

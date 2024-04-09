@@ -1,0 +1,32 @@
+package com.forkbombsquad.stillalivelarp.services.models
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
+import java.io.Serializable
+import java.time.LocalDate
+import java.time.Period
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class EventAttendeeModel(
+    @JsonProperty("id") val id: Int,
+    @JsonProperty("playerId") val playerId: Int,
+    @JsonProperty("characterId") val characterId: Int?,
+    @JsonProperty("eventId") val eventId: Int,
+    @JsonProperty("isCheckedIn") val isCheckedIn: String,
+    @JsonProperty("asNpc") val asNpc: String
+) : Serializable
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class EventAttendeeCreateModel(
+    @JsonProperty("playerId") val playerId: Int,
+    @JsonProperty("characterId") val characterId: Int? = null,
+    @JsonProperty("eventId") val eventId: Int,
+    @JsonProperty("isCheckedIn") val isCheckedIn: String,
+    @JsonProperty("asNpc") val asNpc: String
+) : Serializable
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class EventAttendeeListModel(
+    @JsonProperty("eventAttendees") val eventAttendees: Array<EventAttendeeModel>
+) : Serializable

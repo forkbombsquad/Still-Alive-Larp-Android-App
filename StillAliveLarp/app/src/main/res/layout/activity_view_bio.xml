@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".ViewBioActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/bio_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Character's\nBio"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+            android:id="@+id/bio_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:text="Edit Bio"
+            app:showLoading="false"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/bio_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="This is an example of a long bio that you can read about. It talks about lots of different people and makes you think about different things. What if this bio was your bio? Too bad you'll never get to see it. RIP In Pieces. Sudo git rekt son. \n\nTesting out new lines. It works. "/>
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

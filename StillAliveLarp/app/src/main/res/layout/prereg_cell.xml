@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/customborder_black">
+
+    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+        android:id="@+id/preregcell_playerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="Name"
+        app:value="PlayerName"
+        app:showDiv="true"/>
+
+    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+        android:id="@+id/preregcell_charName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="Character"
+        app:value="CharacterName"
+        app:showDiv="true"/>
+
+    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+        android:id="@+id/preregcell_regType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="Registraiton Type"
+        app:value="Registration"/>
+
+
+</LinearLayout>

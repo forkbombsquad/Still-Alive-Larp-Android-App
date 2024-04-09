@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Still Alive Logo"
+                android:src="@drawable/stillalivelogo_black" />
+
+            <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_edit_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
+            android:hint="Username (Email Address)"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_edit_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:hint="Password"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/stay_logged_in_checkbox"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:text="Remember Me"
+            android:checked="true"
+            />
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/log_in_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:buttontext="Log In"
+            />
+
+    </LinearLayout>
+
+    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+        android:id="@+id/create_account_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttontext="Create Account"
+        />
+
+    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+        android:id="@+id/contact_us_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttontext="Contact Us"
+        />
+
+    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+        android:id="@+id/offline_mode_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttontext="Offline Mode"
+        />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".tabbar_fragments.community.ViewPlayerStuffFragment">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/playerstuff_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Player Name Here"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_playerStatsNavArrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Player Stats"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_characterStatsNavArrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Character Stats"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_skills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Skills"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_bioNavArrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Bio"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_gearNavArrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Gear"
+            app:showLoading="false"/>
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

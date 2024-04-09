@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".CheckInPlayerActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Check In Player"
+                android:textAlignment="center"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/checkinplayer_playerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Player"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_playerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Name"
+                    app:showDiv="true"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_totalEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Total Events Attended"
+                    app:showDiv="true"
+                    app:value="Example+1" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_totalNpcEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Total NPC Events Attended"
+                    app:showDiv="true"
+                    app:value="Example+1" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_lastEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Last Event Attended"
+                    app:value="Example" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkinplayer_characterOrNpcLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:text="Character"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_characterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Name"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <LinearLayout
+                    android:id="@+id/checkinplayer_characterLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_infection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Infection"
+                        app:showDiv="true"
+                        app:value="Example% *THRESHOLD*" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_bullets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Bullets"
+                        app:showDiv="true"
+                        app:value="Example+2" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_megas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Megas"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_rivals"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Rivals"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_rockets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Rockets"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_casings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Bullet Casings"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_cloth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Cloth Supplies"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_wood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Wood Supplies"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_metal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Metal Supplies"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_tech"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Tech Supplies"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_medical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Medical Supplies"
+                        app:showDiv="true"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_armor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Armor"
+                        app:showDiv="false"
+                        app:value="Example" />
+
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_armorBeadCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="BLUE/RED BEADS NEEDED"
+                        app:showDiv="false"
+                        app:value="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkinplayer_relevantSkillsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Relevant Skills"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_ammoSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Ammo Skills"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_intrigueSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Intrigue Skills"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_regularArmorSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Regular Armor Skills"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_regularArmorSkillBeadCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="BLUE BEADS NEEDED"
+                    app:showDiv="false"
+                    app:value="1-3" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_bulletproofArmorSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Bullet Proof Armor Skill"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_bulletproofArmorSkillBeadCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="RED BEADS NEEDED"
+                    app:showDiv="false"
+                    app:value="1" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_plotArmorSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Plot Armor Skill"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_plotArmorSkillBeadCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="BLACK BEADS NEEDED"
+                    app:showDiv="false"
+                    app:value="1" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_disguiseSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Disguise Skills"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_disguiseSkillBeadCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="GREEN BEADS NEEDED"
+                    app:showDiv="false"
+                    app:value="1-2" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_gamblerSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Gambler Skills"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_gamblerSkillRaffleTicketCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="BONUS RAFFLE TICKETS NEEDED"
+                    app:showDiv="false"
+                    app:value="1-4" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_fortuneSkill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Fortune Skill"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_fortuneSkillBonusMaterials"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="BONUS MATERIALS"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_fullyLoadedSkill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Fully Loaded (&lt;=25)"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkinplayer_eventLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Event"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_eventName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Name"
+                    app:showDiv="false"
+                    app:value="Example" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/dark_gray" />
+
+            <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                android:id="@+id/checkinplayer_checkInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:buttontext="Check In" />
+
+        </LinearLayout> <!-- BEFORE THIS ONE-->
+
+    </ScrollView>
+
+</LinearLayout>

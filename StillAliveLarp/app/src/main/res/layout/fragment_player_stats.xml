@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".tabbar_fragments.account.PlayerStatsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Player Stats"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Name"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Email"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_startdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Start Date"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_xp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Experience"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_ft1s"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Free Tier-1 Skills"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_pp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Prestige Points"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_totalEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Events Attended"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_totalNpcEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="NPC Events Attended"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_lastEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Last Event Attended"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/playerstats_admin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:key="Admin"
+                app:showDiv="true"/>
+
+        </LinearLayout> <!-- BEFORE THIS ONE-->
+
+    </ScrollView>
+
+</LinearLayout>

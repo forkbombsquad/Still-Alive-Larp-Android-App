@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.forkbombsquad.stillalivelarp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".utils.StillAliveLarpApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/still_allive_larp_icon_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/still_allive_larp_icon_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.StillAliveLarp"
+        tools:targetApi="31">
+        <activity
+            android:name=".ViewRulesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineViewGearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewGearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditGearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddGearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageGearActivty"
+            android:exported="false" />
+        <activity
+            android:name=".SelectCharacterToManageGearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterPrimaryWeaponActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectCharacterToRegisterPrimaryWeaponActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateNewEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectEventForEventManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePlayerPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectPlayerToChangePassActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageIntrigueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectEventForIntrigueActivty"
+            android:exported="false" />
+        <activity
+            android:name=".CreateAnnouncementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AwardCharacterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectCharacterToAwardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AwardPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectPlayerToAwardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectSkillForClassXpReductionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectCharacterForClassXpReductionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckOutPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckInPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".utils.CaptureActivityPortrait"
+            android:screenOrientation="sensorPortrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ContactDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ApproveBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CharacterBioListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SpecialClassXpReductionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineViewBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PreregActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewPreregsForEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityTemplate"
+            android:exported="false" />
+        <activity
+            android:name=".SelectEventForPreregViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateCharacterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckOutBarcodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckInBarcodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineViewSkillsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineCharacterStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflinePlayerStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineMyAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tabbar_fragments.account.AddSkillActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".CreateAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

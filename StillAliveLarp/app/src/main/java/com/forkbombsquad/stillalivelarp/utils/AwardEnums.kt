@@ -1,0 +1,21 @@
+package com.forkbombsquad.stillalivelarp.utils
+
+enum class AwardPlayerType(val text: String) {
+    XP("XP"),
+    PRESTIGEPOINTS("PP"),
+    FREETIER1SKILLS("FREE-T1-SKILL")
+}
+
+enum class AwardCharType(val text: String) {
+    INFECTION("INFECTION"),
+    MATERIALCASINGS("MATERIAL_CASINGS"),
+    MATERIALWOOD("MATERIAL_WOOD"),
+    MATERIALCLOTH("MATERIAL_CLOTH"),
+    MATERIALMETAL("MATERIAL_METAL"),
+    MATERIALTECH("MATERIAL_TECH"),
+    MATERIALMED("MATERIAL_MED"),
+    AMMOBULLET("AMMO_BULLET"),
+    AMMOMEGA("AMMO_MEGA"),
+    AMMORIVAL("AMMO_RIVAL"),
+    AMMOROCKET("AMMO_ROCKET")
+}

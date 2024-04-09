@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".ViewPreregsForEventActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/viewpreregview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Preregistration For\nEvent"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/keyvalueview_div"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/viewpreregview_premium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Premiums"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/viewpreregview_basic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Basics"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/viewpreregview_free"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Frees"
+            app:showDiv="true"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+            android:id="@+id/viewpreregview_notAttending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Not Attending"
+            app:showDiv="true"/>
+
+        <LinearLayout
+            android:id="@+id/viewpreregview_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/viewpreregview_progressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

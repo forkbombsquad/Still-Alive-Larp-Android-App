@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".PreregActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/prereg_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Preregistration"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <ProgressBar
+            android:id="@+id/prereg_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/prereg_dataLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/prereg_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Player"
+                app:value="Player Name"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+                android:id="@+id/prereg_character"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Character"
+                app:value="Select Character"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/prereg_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Event"
+                app:value="Event Name"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+                android:id="@+id/prereg_entryType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Entry"
+                app:value="Select Attendance and Donation Type"
+                app:showDiv="false"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/prereg_type_desc"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                android:id="@+id/prereg_submit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:buttontext="Submit"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

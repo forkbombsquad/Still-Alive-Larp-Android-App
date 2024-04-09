@@ -28,3 +28,7 @@ google-services.json
 
 # Android Profiling
 *.hprof
+StillAliveLarp/app/src/main/java/com/forkbombsquad/stillalivelarp/services/utils/ServiceUtils.kt
+StillAliveLarp/app/src/test/java/com/forkbombsquad/stillalivelarp/ExampleUnitTest.kt
+StillAliveLarp/private_key.pepk
+StillAliveLarp/app/src/androidTest/java/com/forkbombsquad/stillalivelarp/ExampleInstrumentedTest.kt

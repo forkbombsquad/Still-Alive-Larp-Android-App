@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactActivity"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:background="@color/light_gray">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Still Alive Larp Contact"
+        android:textStyle="bold"
+        android:textSize="32sp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/black"
+        android:text="Still Alive is a Zombie Apocalypse LARP (Live Action Role Playing) game that takes place in North-Western Wisconsin (USA). If you live nearby, are over the age of 18, and are interested in playing, fill out the contact form below and we'll get back to you as soon as we can! \n\n-The Still Alive Team"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_edit_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_full_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:autofillHints="name"
+            android:hint="Full Name"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textAutoComplete"
+            android:autofillHints="emailAddress"
+            android:hint="Email Address"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_postal_code_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:autofillHints="postalCode"
+            android:hint="Postal Code"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_message_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textMultiLine|textLongMessage|textCapSentences"
+            android:minLines="1"
+            android:hint="Message"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+        android:layout_marginTop="32dp"
+        android:id="@+id/submit_contact_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buttontext="Submit"
+        />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

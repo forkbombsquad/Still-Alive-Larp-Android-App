@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".CheckOutPlayerActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Check Out Player"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:id="@+id/checkoutplayer_playerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_gray"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:padding="8dp"
+                android:text="Player"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/checkoutplayer_playerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Name"
+                app:value="Example"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/checkoutplayer_totalEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Events Attended"
+                app:value="Example+1"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/checkoutplayer_totalNpcEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total NPC Events Attended"
+                app:value="Example+1"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/checkoutplayer_lastEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Last Event Attended"
+                app:value="Example"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/checkoutplayer_characterOrNpcLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_gray"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:paddingTop="8dp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:text="Character"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/checkoutplayer_characterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Name"
+                app:value="Example"
+                app:showDiv="false"/>
+
+            <LinearLayout
+                android:id="@+id/checkoutplayer_characterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_infection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Infection"
+                    app:showDiv="true"
+                    app:value="22" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkoutplayer_reduceInfection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Reduce Infection By"
+                    app:value="1d4"
+                    app:showDiv="true"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_bullets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Bullets"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_megas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Megas"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_rivals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Rivals"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_rockets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Rockets"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_casings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Bullet Casings"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_cloth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Cloth Supplies"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_wood"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Wood Supplies"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_metal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Metal Supplies"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_tech"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Tech Supplies"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_medical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Medical Supplies"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_mysteriousStranger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Mysterious Stranger Uses (out of #)"
+                    app:showDiv="true"
+                    app:value="0" />
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+                    android:id="@+id/checkoutplayer_unshakableResolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Unshakable Resolve Uses (out of 1)"
+                    app:value="0"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+                    android:id="@+id/checkoutplayer_armor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Armor"
+                    app:showDiv="true"/>
+                <com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+                    android:id="@+id/checkoutplayer_alive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Is Alive?"
+                    app:showDiv="false">
+
+                </com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_gray"
+            android:layout_marginTop="16dp"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/checkoutplayer_checkOutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:buttontext="Check Out"/>
+        
+
+    </LinearLayout> <!-- BEFORE THIS ONE-->
+
+</ScrollView>
+
+</LinearLayout>

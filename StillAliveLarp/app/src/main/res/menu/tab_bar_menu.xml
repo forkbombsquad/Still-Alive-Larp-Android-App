@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_outline"
+        android:title="Home"/>
+    <item android:id="@+id/nav_rules"
+        android:icon="@drawable/ic_book_open_page_variant_outline"
+        android:title="Rules" />
+    <item android:id="@+id/nav_community"
+        android:icon="@drawable/ic_account_group_outline"
+        android:title="Community"/>
+    <item android:id="@+id/nav_myaccount"
+        android:icon="@drawable/ic_account_outline"
+        android:title="My Account"/>
+</menu>

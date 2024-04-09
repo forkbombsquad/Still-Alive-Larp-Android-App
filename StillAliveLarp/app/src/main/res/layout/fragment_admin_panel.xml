@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:background="@color/light_gray"
+tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pulltorefresh_admin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Admin Tools"
+                    android:textStyle="bold"
+                    android:textSize="32sp"
+                    android:textAlignment="center"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_viewPrereg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="View Preregistrations"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_eventManagement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Event Management"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_playerCheckIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Player Check-In"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_playerCheckOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Player Check-Out"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_giveClassXpRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Give Class Xp Reduction"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_awardPlayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Award Player"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_awardChar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Award Character"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_registerFirearm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Register Primary Firearm"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_manageGear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Manage Character Gear"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_createAnnouncement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Create Announcement"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_manageIntrigue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Manage Intrigue"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_approveBios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Approve Bios"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_contactRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Contact Requests"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_updatePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="32dp"
+                    app:text="Update Player Password"
+                    app:showLoading="false"/>
+
+            </LinearLayout> <!-- BEFORE THIS ONE-->
+
+        </ScrollView>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

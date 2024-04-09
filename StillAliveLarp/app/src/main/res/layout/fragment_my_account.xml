@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".tabbar_fragments.MyAccountFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pulltorefresh_account"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="My Account"
+                    android:textStyle="bold"
+                    android:textSize="32sp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/myAccountPlayerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_playerStatsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Player Stats"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_characterStatsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Character Stats"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_skillManagementNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Skill Management"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_specialClassXpReductionsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Special Class Xp Reductions"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_bioNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Bio"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_gearNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Gear"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_manageAccountNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Manage Account"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+                    android:id="@+id/myaccount_adminToolsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Admin Tools"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                    android:id="@+id/myaccount_signOutButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="32dp"
+                    android:paddingBottom="32dp"
+                    app:buttontext="Sign Out"/>
+
+            </LinearLayout> <!-- BEFORE THIS ONE-->
+
+        </ScrollView>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

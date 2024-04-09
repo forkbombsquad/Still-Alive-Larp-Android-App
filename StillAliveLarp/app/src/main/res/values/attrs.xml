@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavArrowButton">
+        <attr name="text" format="string"/>
+        <attr name="showLoading" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="KeyValueView">
+        <attr name="key" format="string"/>
+        <attr name="value" format="string"/>
+        <attr name="showDiv" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="LoadingButton">
+        <attr name="buttontext" format="string"/>
+        <attr name="loading" format="boolean"/>
+    </declare-styleable>
+</resources>
