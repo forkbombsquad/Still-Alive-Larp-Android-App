@@ -11,7 +11,15 @@ data class FeatureFlagModel(
     @JsonProperty("description") val description: String,
     @JsonProperty("activeAndroid") val activeAndroid: String,
     @JsonProperty("activeIos") val activeIos: String
-) : Serializable
+) : Serializable {
+    fun isActiveAndroid(): Boolean {
+        return activeAndroid.lowercase() == "false"
+    }
+
+    fun isActiveIos(): Boolean {
+        return activeIos.lowercase() == "false"
+    }
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FeatureFlagCreateModel(

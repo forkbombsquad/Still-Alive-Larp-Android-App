@@ -40,6 +40,7 @@ class AdminPanelFragment : Fragment() {
     private lateinit var approveBios: NavArrowButtonBlack
     private lateinit var contactRequests: NavArrowButtonBlack
     private lateinit var updatePass: NavArrowButtonBlack
+    private lateinit var featureFlagManagement: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -97,6 +98,7 @@ class AdminPanelFragment : Fragment() {
         approveBios = v.findViewById(R.id.adminpanel_approveBios)
         contactRequests = v.findViewById(R.id.adminpanel_contactRequests)
         updatePass = v.findViewById(R.id.adminpanel_updatePass)
+        featureFlagManagement = v.findViewById(R.id.adminpanel_featureFlagManagement)
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -171,8 +173,12 @@ class AdminPanelFragment : Fragment() {
             val intent = Intent(v.context, SelectPlayerToChangePassActivity::class.java)
             startActivity(intent)
         }
+        featureFlagManagement.setOnClick {
+            val intent = Intent(v.context, FeatureFlagManagementActivity::class.java)
+            startActivity(intent)
+        }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS), true) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS), true) {
             buildView()
         }
         buildView()
@@ -190,6 +196,7 @@ class AdminPanelFragment : Fragment() {
         approveBios.setLoading(DataManager.shared.loadingAllCharacters)
         contactRequests.setLoading(DataManager.shared.loadingContactRequests)
         updatePass.setLoading(DataManager.shared.loadingAllCharacters)
+        featureFlagManagement.setLoading(DataManager.shared.loadingFeatureFlags)
 
         DataManager.shared.allCharacters.ifLet({
             approveBios.setNotificationBubble(getNumberOfBiosThatNeedApproval(it))

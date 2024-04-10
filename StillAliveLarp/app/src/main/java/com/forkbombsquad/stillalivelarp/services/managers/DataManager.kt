@@ -100,6 +100,8 @@ class DataManager private constructor() {
     var featureFlags: Array<FeatureFlagModel>? = null
     var loadingFeatureFlags = true
 
+    var selectedFeatureFlag: FeatureFlagModel? = null
+
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
         loadCountIndex++

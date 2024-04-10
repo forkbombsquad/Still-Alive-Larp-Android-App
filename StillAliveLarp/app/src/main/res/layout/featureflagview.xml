@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="3"
+            android:paddingBottom="8dp">
+            <TextView
+                android:id="@+id/featureflagview_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="This is the name of the feature flag, even if it's really long"/>
+            <TextView
+                android:id="@+id/featureflagview_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="This is the description for the Feature Flag, even if it gets really super long"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/featureflagview_android"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/green"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="ANDROID: ON"/>
+
+                <TextView
+                    android:id="@+id/featureflagview_iOS"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/green"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="iOS: ON"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.forkbombsquad.stillalivelarp.utils.SmallLoadingButton
+            android:id="@+id/featureflagview_edit"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:buttontext="Edit"/>
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/keyvalueview_div"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:dividerColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
