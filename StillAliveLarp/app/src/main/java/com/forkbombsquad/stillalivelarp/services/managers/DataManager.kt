@@ -12,7 +12,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE
 }
 // TODO add feature flagging
 class DataManager private constructor() {
@@ -101,6 +101,9 @@ class DataManager private constructor() {
     var loadingFeatureFlags = true
 
     var selectedFeatureFlag: FeatureFlagModel? = null
+
+    var profileImage: ProfileImageModel? = null
+    var loadingProfileImage = true
 
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
@@ -513,6 +516,26 @@ class DataManager private constructor() {
                         }
                     } else {
                         loadingFeatureFlags = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.PROFILE_IMAGE -> {
+                    loadingProfileImage = true
+                    if (profileImage == null || forceDownloadIfApplicable || selectedPlayer?.id != profileImage?.id) {
+                        val request = ProfileImageService.GetProfileImage()
+                        lifecycleScope.launch {
+                            request.successfulResponse(IdSP(selectedPlayer?.id ?: 0), true).ifLet({
+                                profileImage = it
+                                loadingProfileImage = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                profileImage = null
+                                loadingProfileImage = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingProfileImage = false
                         finishedRequest(currentLoadCountIndex)
                     }
                 }

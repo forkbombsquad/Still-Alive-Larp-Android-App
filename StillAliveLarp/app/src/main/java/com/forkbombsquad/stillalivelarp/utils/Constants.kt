@@ -16,7 +16,7 @@ class Constants {
 
     class Logging {
         companion object {
-            const val showLogging = false
+            const val showLogging = true
             // TODO ensure this is false before release
         }
     }

@@ -1,10 +1,14 @@
 package com.forkbombsquad.stillalivelarp.utils
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
+import android.util.Base64
 
 /**
  * Replacement for Kotlin's deprecated `capitalize()` function.
@@ -37,4 +41,9 @@ fun String.underline(): SpannableString {
 
 fun String.containsIgnoreCase(text: String): Boolean {
     return this.lowercase().contains(text.lowercase())
+}
+
+fun String.toBitmap(): Bitmap {
+    val imageBytes = Base64.decode(this, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }

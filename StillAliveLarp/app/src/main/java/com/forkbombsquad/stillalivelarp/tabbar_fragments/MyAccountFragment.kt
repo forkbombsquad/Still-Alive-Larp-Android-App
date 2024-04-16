@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +30,8 @@ class MyAccountFragment : Fragment() {
 
     private val TAG = "MY_ACCOUNT_FRAGMENT"
 
+    private lateinit var profileImage: ImageView
+    private lateinit var profileImageProgressBar: ProgressBar
     private lateinit var playerNameText: TextView
     private lateinit var playerStatsNav: NavArrowButtonBlack
     private lateinit var charStatsNav: NavArrowButtonBlack
@@ -51,6 +55,8 @@ class MyAccountFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        profileImage = v.findViewById(R.id.myAccountProfileImage)
+        profileImageProgressBar = v.findViewById(R.id.myAccountProfileImageLoadingBar)
         playerNameText = v.findViewById(R.id.myAccountPlayerName)
         playerStatsNav = v.findViewById(R.id.myaccount_playerStatsNavArrow)
         charStatsNav = v.findViewById(R.id.myaccount_characterStatsNavArrow)
@@ -62,6 +68,17 @@ class MyAccountFragment : Fragment() {
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
 
+        profileImage.setOnClickListener {
+            DataManager.shared.unrelaltedUpdateCallback = {
+                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), true) {
+                    buildView()
+                }
+                buildView()
+            }
+            DataManager.shared.selectedPlayer = DataManager.shared.player
+            val intent = Intent(v.context, EditProfileImageActivity::class.java)
+            startActivity(intent)
+        }
         playerStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
             DataManager.shared.selectedPlayer = DataManager.shared.player
@@ -123,14 +140,20 @@ class MyAccountFragment : Fragment() {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_account)
         pullToRefresh.setOnRefreshListener {
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), true) {
-                buildView()
-                pullToRefresh.isRefreshing = false
+                DataManager.shared.selectedPlayer = DataManager.shared.player
+                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), true) {
+                    buildView()
+                    pullToRefresh.isRefreshing = false
+                }
             }
             buildView()
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), false) {
-            buildView()
+            DataManager.shared.selectedPlayer = DataManager.shared.player
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
+                buildView()
+            }
         }
         buildView()
     }
@@ -143,6 +166,12 @@ class MyAccountFragment : Fragment() {
             playerNameText.text = ""
             adminToolsNav.isGone = true
         })
+
+        profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
+
+        DataManager.shared.profileImage.ifLet {
+            profileImage.setImageBitmap(it.image.toBitmap())
+        }
 
         playerStatsNav.isGone = !DataManager.shared.loadingPlayer && DataManager.shared.player == null
         manageAccountNav.isGone = !DataManager.shared.loadingPlayer && DataManager.shared.player == null
