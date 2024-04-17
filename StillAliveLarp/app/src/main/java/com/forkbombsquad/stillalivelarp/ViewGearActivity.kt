@@ -42,7 +42,7 @@ class ViewGearActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        title.text = "${DataManager.shared.selectedChar?.fullName ?: ""} Gear"
+        title.text = "${DataManager.shared.selectedChar?.fullName ?: ""}'s Gear"
         if (DataManager.shared.loadingSelectedCharacterGear) {
             progressbar.isGone = false
             layout.isGone = true

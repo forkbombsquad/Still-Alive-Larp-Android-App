@@ -66,14 +66,6 @@
             </FrameLayout>
 
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                android:id="@+id/editProfileImage_takePhoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                app:text="Take Photo"
-                app:showLoading="false"/>
-
-            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                 android:id="@+id/editProfileImage_selectImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
@@ -21,10 +23,13 @@ import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagement
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.toBitmap
 
 class ViewPlayerStuffFragment : Fragment() {
     private val TAG = "VIEW_PLAYER_STUFF_FRAGMENT"
 
+    private lateinit var profileImage: ImageView
+    private lateinit var profileImageProgressBar: ProgressBar
     private lateinit var title: TextView
     private lateinit var playerStats: NavArrowButtonBlack
     private lateinit var charStats: NavArrowButtonBlack
@@ -42,6 +47,9 @@ class ViewPlayerStuffFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        profileImage = v.findViewById(R.id.playerstuff_profileImage)
+        profileImageProgressBar = v.findViewById(R.id.playerstuff_profileImageProgressBar)
+
         title = v.findViewById(R.id.playerstuff_title)
 
         playerStats = v.findViewById(R.id.playerstuff_playerStatsNavArrow)
@@ -81,7 +89,7 @@ class ViewPlayerStuffFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER, DataManagerType.PROFILE_IMAGE), false) {
             buildView()
         }
         buildView()
@@ -89,6 +97,12 @@ class ViewPlayerStuffFragment : Fragment() {
 
     private fun buildView() {
         val opPlayer = DataManager.shared.selectedPlayer
+
+        profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
+        DataManager.shared.profileImage.ifLet {
+            profileImage.setImageBitmap(it.image.toBitmap())
+        }
+
         opPlayer.ifLet({ player ->
             title.text = player.fullName
             playerStats.isGone = false

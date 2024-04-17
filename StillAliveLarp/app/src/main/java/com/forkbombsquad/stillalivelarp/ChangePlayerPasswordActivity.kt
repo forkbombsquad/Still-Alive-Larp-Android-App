@@ -33,6 +33,8 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
         confirmPw = findViewById(R.id.changeplayerpw_confirm)
         submit = findViewById(R.id.changeplayerpw_submit)
 
+        title.text = "Change Password For ${DataManager.shared.selectedPlayer?.fullName}"
+
         submit.setOnClick {
             if (checkPasswordsMatch()) {
                 val validationRes = validateFields()

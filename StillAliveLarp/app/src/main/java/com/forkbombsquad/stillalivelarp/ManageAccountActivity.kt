@@ -131,6 +131,18 @@ class ManageAccountActivity : NoStatusBarActivity() {
         val request = CharacterService.DeleteCharacters()
         lifecycleScope.launch {
             request.successfulResponse().ifLet({ _ ->
+                this@ManageAccountActivity.deletePhotos()
+            }, {
+                this@ManageAccountActivity.deletePhotos()
+            })
+        }
+    }
+
+    private fun deletePhotos() {
+        deleteAccount.setLoadingWithText("Deleting Profile Photos")
+        val request = ProfileImageService.DeleteProfileImages()
+        lifecycleScope.launch {
+            request.successfulResponse(IdSP(DataManager.shared.player?.id ?: -1)).ifLet({ _ ->
                 this@ManageAccountActivity.deletePlayer()
             }, {
                 this@ManageAccountActivity.deletePlayer()

@@ -1,11 +1,8 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.activity.result.ActivityResultLauncher
@@ -28,13 +25,11 @@ import com.forkbombsquad.stillalivelarp.utils.base64String
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.toBitmap
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 
 class EditProfileImageActivity : NoStatusBarActivity() {
 
     private lateinit var profileImage: ImageView
     private lateinit var profileImageProgressBar: ProgressBar
-    private lateinit var takePhoto: NavArrowButtonBlack
     private lateinit var selectImage: NavArrowButtonBlack
     private lateinit var deleteButton: LoadingButton
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
@@ -47,36 +42,37 @@ class EditProfileImageActivity : NoStatusBarActivity() {
     private fun setupView() {
         profileImage = findViewById(R.id.editProfileImage_imageView)
         profileImageProgressBar = findViewById(R.id.editProfileImage_loadingBar)
-        takePhoto = findViewById(R.id.editProfileImage_takePhoto)
         selectImage = findViewById(R.id.editProfileImage_selectImage)
         deleteButton = findViewById(R.id.editProfileImage_delete)
 
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            startLoading()
             if (uri != null) {
                 val source = ImageDecoder.createSource(this.contentResolver, uri)
                 val bitmap = ImageDecoder.decodeBitmap(source)
 
                 setImage(bitmap)
+            } else {
+                stopLoading()
             }
         }
 
-        takePhoto.setOnClick {
-            // TODO
-        }
         selectImage.setOnClick {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         deleteButton.setOnClick {
             DataManager.shared.selectedPlayer.ifLet {
-                profileImageProgressBar.isGone = false
+                startLoading()
                 val request = ProfileImageService.DeleteProfileImages()
                 lifecycleScope.launch {
                     request.successfulResponse(IdSP(it.id), true).ifLet({
                         DataManager.shared.profileImage = null
                         AlertUtils.displaySuccessMessage(this@EditProfileImageActivity, "Profile Image Deleted")
+                        stopLoading()
                         buildView()
                     }, {
                         AlertUtils.displaySomethingWentWrong(this@EditProfileImageActivity)
+                        stopLoading()
                         buildView()
                     })
                 }
@@ -89,6 +85,18 @@ class EditProfileImageActivity : NoStatusBarActivity() {
         buildView()
     }
 
+    private fun startLoading() {
+        profileImageProgressBar.isGone = false
+        selectImage.setLoading(true)
+        deleteButton.setLoading(true)
+    }
+
+    private fun stopLoading() {
+        profileImageProgressBar.isGone = true
+        selectImage.setLoading(false)
+        deleteButton.setLoading(false)
+    }
+
     private fun buildView() {
         profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
 
@@ -97,11 +105,7 @@ class EditProfileImageActivity : NoStatusBarActivity() {
         }
     }
     private fun setImage(bitmap: Bitmap) {
-        profileImageProgressBar.isGone = false
-        selectImage.setLoading(true)
-        deleteButton.setLoading(true)
-        takePhoto.setLoading(true)
-
+        startLoading()
         DataManager.shared.selectedPlayer.ifLet {
             if (DataManager.shared.profileImage == null || DataManager.shared.profileImage?.playerId != it.id) {
                 // Create
@@ -110,13 +114,11 @@ class EditProfileImageActivity : NoStatusBarActivity() {
                     request.successfulResponse(CreateModelSP(ProfileImageCreateModel(it.id, bitmap.base64String()))).ifLet({ profileImage ->
                         DataManager.shared.profileImage = profileImage
                         DataManager.shared.loadingProfileImage = false
-                        profileImageProgressBar.isGone = true
-                        selectImage.setLoading(false)
-                        deleteButton.setLoading(false)
-                        takePhoto.setLoading(false)
+                        stopLoading()
                         buildView()
                     }, {
                         AlertUtils.displaySomethingWentWrong(this@EditProfileImageActivity)
+                        stopLoading()
                         buildView()
                     })
                 }
@@ -127,13 +129,11 @@ class EditProfileImageActivity : NoStatusBarActivity() {
                     request.successfulResponse(UpdateModelSP(ProfileImageModel(DataManager.shared.profileImage?.id ?: 0, it.id, bitmap.base64String()))).ifLet({ profileImage ->
                         DataManager.shared.profileImage = profileImage
                         DataManager.shared.loadingProfileImage = false
-                        profileImageProgressBar.isGone = true
-                        selectImage.setLoading(false)
-                        deleteButton.setLoading(false)
-                        takePhoto.setLoading(false)
+                        stopLoading()
                         buildView()
                     }, {
                         AlertUtils.displaySomethingWentWrong(this@EditProfileImageActivity)
+                        stopLoading()
                         buildView()
                     })
                 }
