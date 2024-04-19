@@ -16,6 +16,15 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".CreateEditFeatureFlagActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RefundSkillsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectCharacterToRefundSkillsActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditProfileImageActivity"
             android:exported="false" />
         <activity

@@ -190,3 +190,21 @@ class TakeClassSP(characterId: Int, skillId: Int): ServicePayload(mutableMapOf(
         return get(ServicePayloadKey.PARAM2)
     }
 }
+
+class RefundSkillSP(playerId: Int, characterId: Int, skillId: Int): ServicePayload(mutableMapOf(
+    ServicePayloadKey.PARAM1.key to playerId,
+    ServicePayloadKey.PARAM2.key to characterId,
+    ServicePayloadKey.PARAM3.key to skillId
+)) {
+    fun playerId(): Int {
+        return get(ServicePayloadKey.PARAM1)
+    }
+
+    fun characterId(): Int {
+        return get(ServicePayloadKey.PARAM2)
+    }
+
+    fun skillId(): Int {
+        return get(ServicePayloadKey.PARAM3)
+    }
+}

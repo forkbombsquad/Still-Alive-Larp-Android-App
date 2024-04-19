@@ -89,7 +89,11 @@ class ViewPlayerStuffFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER, DataManagerType.PROFILE_IMAGE), false) {
+        DataManager.shared.loadingProfileImage = true
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
+                buildView()
+            }
             buildView()
         }
         buildView()
@@ -100,7 +104,9 @@ class ViewPlayerStuffFragment : Fragment() {
 
         profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
         DataManager.shared.profileImage.ifLet {
-            profileImage.setImageBitmap(it.image.toBitmap())
+            if (it.playerId == DataManager.shared.selectedPlayer?.id) {
+                profileImage.setImageBitmap(it.image.toBitmap())
+            }
         }
 
         opPlayer.ifLet({ player ->

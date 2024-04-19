@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -65,9 +64,9 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
                     }
                     buildView()
                 }
-//                val intent = Intent(this, CreateNewFeatureFlagActivity::class.java)
-                // TODO add this view
-//                startActivity(intent)
+                DataManager.shared.selectedFeatureFlag = null
+                val intent = Intent(this, CreateEditFeatureFlagActivity::class.java)
+                startActivity(intent)
             }
             layout.addView(arrow)
 
@@ -86,9 +85,8 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
                         buildView()
                     }
                     DataManager.shared.selectedFeatureFlag = ff
-//                    val intent = Intent(this, EditFeatureFlagActivity::class.java)
-                    // TODO add this view
-//                    startActivity(intent)
+                    val intent = Intent(this, CreateEditFeatureFlagActivity::class.java)
+                    startActivity(intent)
                 }
                 layout.addView(flagView)
             }

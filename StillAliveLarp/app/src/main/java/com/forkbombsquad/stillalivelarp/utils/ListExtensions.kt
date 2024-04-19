@@ -20,3 +20,8 @@ fun List<FullCharacterModel>.alphabetized(): List<FullCharacterModel> {
 fun List<EventModel>.inChronologicalOrder(): List<EventModel> {
     return this.sortedBy { it.date.yyyyMMddtoDate() }.filter { it.isToday() || it.isInFuture() }
 }
+
+@JvmName("alphabetizedFullSkillsModel")
+fun List<FullSkillModel>.alphabetized(): List<FullSkillModel> {
+    return this.sortedWith(compareBy { it.name })
+}

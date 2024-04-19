@@ -139,21 +139,25 @@ class MyAccountFragment : Fragment() {
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_account)
         pullToRefresh.setOnRefreshListener {
+            DataManager.shared.loadingProfileImage = true
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), true) {
                 DataManager.shared.selectedPlayer = DataManager.shared.player
                 DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), true) {
                     buildView()
                     pullToRefresh.isRefreshing = false
                 }
+                buildView()
             }
             buildView()
         }
 
+        DataManager.shared.loadingProfileImage = true
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), false) {
             DataManager.shared.selectedPlayer = DataManager.shared.player
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
                 buildView()
             }
+            buildView()
         }
         buildView()
     }
@@ -170,7 +174,9 @@ class MyAccountFragment : Fragment() {
         profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
 
         DataManager.shared.profileImage.ifLet {
-            profileImage.setImageBitmap(it.image.toBitmap())
+            if (it.playerId == DataManager.shared.selectedPlayer?.id) {
+                profileImage.setImageBitmap(it.image.toBitmap())
+            }
         }
 
         playerStatsNav.isGone = !DataManager.shared.loadingPlayer && DataManager.shared.player == null

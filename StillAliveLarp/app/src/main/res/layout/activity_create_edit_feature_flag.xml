@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".CreateEditFeatureFlagActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/featureflag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Edit/Create Feature Flag"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/featureflag_flagName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:inputType="text"
+                    android:hint="Flag Name"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/featureflag_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:inputType="textMultiLine|textLongMessage|textCapSentences"
+                    android:minLines="5"
+                    android:hint="\n"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/featureflag_androidCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:textSize="18sp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:background="@drawable/customborder_black"
+                android:text="Active on Android Devices"
+                android:checked="false"
+                />
+
+            <CheckBox
+                android:id="@+id/featureflag_iosCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:textSize="18sp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/customborder_black"
+                android:text="Active on iOS Devices"
+                android:checked="false"
+                />
+
+            <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                android:id="@+id/featureflag_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                app:buttontext="Save"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                android:id="@+id/featureflag_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                app:buttontext="Delete Feature Flag"/>
+
+        </LinearLayout> <!-- BEFORE THIS ONE-->
+
+    </ScrollView>
+
+</LinearLayout>

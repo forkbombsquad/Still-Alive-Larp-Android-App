@@ -12,9 +12,9 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER
 }
-// TODO add feature flagging
+
 class DataManager private constructor() {
 
     var checkinBarcodeModel: PlayerCheckInBarcodeModel? = null
@@ -104,6 +104,9 @@ class DataManager private constructor() {
 
     var profileImage: ProfileImageModel? = null
     var loadingProfileImage = true
+
+    var fullCharForSelectedChar: FullCharacterModel? = null
+    var loadingFullCharForSelectedChar = true
 
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
@@ -522,6 +525,7 @@ class DataManager private constructor() {
                 DataManagerType.PROFILE_IMAGE -> {
                     loadingProfileImage = true
                     if (profileImage == null || forceDownloadIfApplicable || selectedPlayer?.id != profileImage?.id) {
+                        profileImage = null
                         val request = ProfileImageService.GetProfileImage()
                         lifecycleScope.launch {
                             request.successfulResponse(IdSP(selectedPlayer?.id ?: 0), true).ifLet({
@@ -536,6 +540,26 @@ class DataManager private constructor() {
                         }
                     } else {
                         loadingProfileImage = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER -> {
+                    loadingFullCharForSelectedChar = true
+                    if (fullCharForSelectedChar == null || forceDownloadIfApplicable || fullCharForSelectedChar?.id != selectedChar?.id) {
+                        loadingCharForSelectedPlayer = true
+                        selectedChar.ifLet({
+                            CharacterManager.shared.getActiveCharacterForOtherPlayer(lifecycleScope, it.playerId) { char ->
+                                fullCharForSelectedChar = char
+                                loadingFullCharForSelectedChar = false
+                                finishedRequest(currentLoadCountIndex)
+                            }
+                        }, {
+                            fullCharForSelectedChar = null
+                            loadingFullCharForSelectedChar = false
+                            finishedRequest(currentLoadCountIndex)
+                        })
+                    } else {
+                        loadingFullCharForSelectedChar = false
                         finishedRequest(currentLoadCountIndex)
                     }
                 }

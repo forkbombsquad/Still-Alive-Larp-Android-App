@@ -13,11 +13,11 @@ data class FeatureFlagModel(
     @JsonProperty("activeIos") val activeIos: String
 ) : Serializable {
     fun isActiveAndroid(): Boolean {
-        return activeAndroid.lowercase() == "false"
+        return activeAndroid.lowercase() == "true"
     }
 
     fun isActiveIos(): Boolean {
-        return activeIos.lowercase() == "false"
+        return activeIos.lowercase() == "true"
     }
 }
 
