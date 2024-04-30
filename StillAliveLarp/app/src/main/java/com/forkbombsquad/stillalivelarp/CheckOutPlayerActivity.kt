@@ -167,7 +167,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                         AlertButton(
                             text = "Still Dead!",
                             onClick = { _, _ ->
-                                checkoutStepOne()
+                                checkoutStepTwo()
                             },
                             buttonType = ButtonType.POSITIVE
                         ),
@@ -336,7 +336,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
                                     adjustedXp = min(max, adjustedXp)
 
-                                    checkoutButton.setLoadingWithText("Awarding Player")
+                                    checkoutButton.setLoadingWithText("Refunding Xp")
 
                                     val award = AwardCreateModel.createPlayerAward(
                                         playerId = player.id,
@@ -347,8 +347,32 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                                     val createAwardRequest = AdminService.AwardPlayer()
                                     lifecycleScope.launch {
                                         createAwardRequest.successfulResponse(AwardCreateSP(award)).ifLet({ _ ->
-                                            checkoutButton.setLoading(false)
-                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                                            characterModel.getAllPrestigePointsSpent(lifecycleScope) { pp ->
+                                                if (pp > 0) {
+                                                    checkoutButton.setLoadingWithText("Refunding Xp")
+
+                                                    val a = AwardCreateModel.createPlayerAward(
+                                                        playerId = player.id,
+                                                        awardType = AwardPlayerType.PRESTIGEPOINTS,
+                                                        reason = "Death of Character: ${characterModel.fullName}",
+                                                        amount = pp.toString()
+                                                    )
+                                                    val car = AdminService.AwardPlayer()
+                                                    lifecycleScope.launch {
+                                                        car.successfulResponse(AwardCreateSP(a)).ifLet({ _ ->
+                                                            checkoutButton.setLoading(false)
+                                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                                                        }, {
+                                                            checkoutButton.setLoading(false)
+                                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death pp!")
+                                                        })
+                                                    }
+                                                } else {
+                                                    checkoutButton.setLoading(false)
+                                                    showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                                                }
+                                            }
+
                                         }, {
                                             checkoutButton.setLoading(false)
                                             showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death xp!")

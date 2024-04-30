@@ -51,7 +51,7 @@ data class EventPreregModel(
     }
 
     fun getCharId(): Int? {
-        return (characterId == -1).ternary(null, characterId)
+        return (characterId == -1 || characterId == 2131231423).ternary(null, characterId)
     }
 
 }

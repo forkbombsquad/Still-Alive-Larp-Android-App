@@ -13,7 +13,7 @@ import com.google.gson.Gson
 
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {
-        Log.i("LOG", "-\n$message")
+        Log.wtf("LOG", "-\n$message")
     }
 }
 

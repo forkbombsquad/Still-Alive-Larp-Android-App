@@ -238,6 +238,21 @@ data class CharacterModel(
             })
         }
     }
+
+    fun getAllPrestigePointsSpent(lifecycleScope: LifecycleCoroutineScope, callback: (xp: Int) -> Unit) {
+        val charSkillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
+        lifecycleScope.launch {
+            charSkillRequest.successfulResponse(IdSP(id)).ifLet({
+                var cost = 0
+                it.charSkills.forEach { skl ->
+                    cost += skl.ppSpent
+                }
+                callback(cost)
+            }, {
+                callback(0)
+            })
+        }
+    }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

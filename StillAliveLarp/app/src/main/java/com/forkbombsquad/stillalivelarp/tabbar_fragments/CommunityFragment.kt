@@ -62,7 +62,7 @@ class CommunityFragment : Fragment() {
         DataManager.shared.allPlayers.ifLet { players ->
             players.alphabetized().forEachIndexed { index, player ->
                 val arrow = NavArrowButtonBlackBuildable(v.context)
-                arrow.textView.text = player.fullName
+                arrow.textView.text = "${player.fullName}" + (player.isAdmin.uppercase() == "TRUE").ternary(" (Staff)", "")
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
                 arrow.layoutParams = params

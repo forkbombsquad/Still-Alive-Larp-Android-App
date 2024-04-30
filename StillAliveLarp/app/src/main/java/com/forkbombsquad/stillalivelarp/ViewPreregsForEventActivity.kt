@@ -12,6 +12,8 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.PreregCell
+import com.forkbombsquad.stillalivelarp.utils.getRegNumbers
+import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 
 class ViewPreregsForEventActivity : NoStatusBarActivity() {
@@ -62,13 +64,6 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
                 if (count > 0) {
                     DataManager.shared.eventPreregs[event.id].ifLet { preregs ->
 
-                        var premiums = 0
-                        var premiumNpcs = 0
-                        var basics = 0
-                        var basicNpcs = 0
-                        var nots = 0
-                        var frees = 0
-
                         preregs.forEach {
                             val preregCell = PreregCell(this)
 
@@ -77,37 +72,19 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
                             preregCell.set(it)
 
                             layout.addView(preregCell)
-
-                            when (it.eventRegType()) {
-                                EventRegType.PREMIUM -> {
-                                    premiums++
-                                    if (it.getCharId() == null) {
-                                        premiumNpcs++
-                                    }
-                                }
-                                EventRegType.BASIC -> {
-                                    basics++
-                                    if (it.getCharId() == null) {
-                                        basicNpcs++
-                                    }
-                                }
-                                EventRegType.FREE -> {
-                                    frees++
-                                }
-                                EventRegType.NOT_PREREGED -> nots++
-                            }
                         }
+                        val regNums = preregs.getRegNumbers()
                         premium.isGone = false
-                        premium.set("$premiums Total ($premiumNpcs NPCs)")
+                        premium.set("${regNums.premium} Total (${regNums.premiumNpc} NPCs)")
 
                         basic.isGone = false
-                        basic.set("$basics Total ($basicNpcs NPCs)")
+                        basic.set("${regNums.basic} Total (${regNums.basicNpc} NPCs)")
 
                         free.isGone = false
-                        free.set("$frees Total (All Are NPCs)")
+                        free.set("${regNums.free} Total (All Are NPCs)")
 
                         notAttending.isGone = false
-                        notAttending.set("$nots")
+                        notAttending.set("${regNums.notAttending}")
                     }
                 } else {
                     premium.isGone = true
