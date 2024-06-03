@@ -47,7 +47,11 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         rulesNav = findViewById(R.id.myaccountoffline_rulesNavArrow)
 
         allSkillsNav.setOnClick {
-            val intent = Intent(this, OfflineViewAllSkillsActivityOld::class.java)
+            allSkillsNav.setLoading(true)
+            DataManager.shared.unrelaltedUpdateCallback = {
+                allSkillsNav.setLoading(false)
+            }
+            val intent = Intent(this, OfflineViewAllSkillsActivity::class.java)
             startActivity(intent)
         }
         skillTreeNav.setOnClick {

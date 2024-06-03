@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.core.widget.addTextChangedListener
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
@@ -15,7 +16,7 @@ import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.SkillSortType
 import com.forkbombsquad.stillalivelarp.utils.ternary
 
-class OfflineViewAllSkillsActivityOld : NoStatusBarActivity() {
+class OfflineViewAllSkillsActivity : NoStatusBarActivity() {
 
     private var currentSort: SkillSortType = SkillSortType.AZ
     private var currentFilter: SkillFilterType = SkillFilterType.NONE
@@ -28,7 +29,7 @@ class OfflineViewAllSkillsActivityOld : NoStatusBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_offline_view_all_skills_old)
+        setContentView(R.layout.activity_offline_view_all_skills)
         setupView()
     }
 
@@ -98,6 +99,11 @@ class OfflineViewAllSkillsActivityOld : NoStatusBarActivity() {
             SkillSortType.TYPEDESC -> skills.sortedWith(compareByDescending { it.getTypeText() })
         }
         return sorted
+    }
+
+    override fun onBackPressed() {
+        DataManager.shared.unrelaltedUpdateCallback()
+        super.onBackPressed()
     }
 
 }

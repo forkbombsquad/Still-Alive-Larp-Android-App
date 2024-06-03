@@ -8,6 +8,7 @@ import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 
@@ -152,7 +153,8 @@ class SharedPrefsManager private constructor() {
     }
 
     fun getSkills(): List<FullSkillModel> {
-        return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "") ?: listOf()
+        val type = object: TypeToken<List<FullSkillModel>>() {}.type
+        return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "", type) ?: listOf()
     }
 
     companion object {

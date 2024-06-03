@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.forkbombsquad.stillalivelarp.services.managers.*
 import com.google.gson.Gson
+import java.lang.reflect.Type
 
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {
@@ -30,6 +31,13 @@ inline fun <reified T> globalFromJson(json: String): T? {
     val gson = Gson()
     return tryOptional {
         return gson.fromJson(json, T::class.java)
+    }
+}
+
+inline fun <reified T> globalFromJson(json: String, typeToken: Type): T? {
+    val gson = Gson()
+    return tryOptional {
+        return gson.fromJson<T>(json, typeToken)
     }
 }
 
