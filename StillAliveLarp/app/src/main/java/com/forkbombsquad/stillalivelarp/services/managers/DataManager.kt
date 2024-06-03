@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.*
@@ -107,6 +108,8 @@ class DataManager private constructor() {
 
     var fullCharForSelectedChar: FullCharacterModel? = null
     var loadingFullCharForSelectedChar = true
+
+    var passedBitmap: Bitmap? = null
 
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex

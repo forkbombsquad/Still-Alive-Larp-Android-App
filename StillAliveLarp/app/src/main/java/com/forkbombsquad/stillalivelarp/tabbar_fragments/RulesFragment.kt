@@ -9,13 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
+import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
+import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class RulesFragment : Fragment() {
@@ -24,8 +25,13 @@ class RulesFragment : Fragment() {
 
     private lateinit var skillListNav: NavArrowButtonBlack
     private lateinit var skillTreeDiagramNav: NavArrowButtonBlack
+    private lateinit var skillTreeDiagramDarkNav: NavArrowButtonBlack
     private lateinit var coreRulebookNav: NavArrowButtonBlack
     private lateinit var treatingWoundsNav: NavArrowButtonBlack
+
+    private var loadingSkillTree = true
+    private var loadingSkillTreeDark = true
+    private var loadingTreatingWounds = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +44,13 @@ class RulesFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        loadingSkillTree = true
+        loadingSkillTreeDark = true
+        loadingTreatingWounds = true
+
         skillListNav = v.findViewById(R.id.rules_skillListNav)
         skillTreeDiagramNav = v.findViewById(R.id.rules_skillTreeDiagramNav)
+        skillTreeDiagramDarkNav = v.findViewById(R.id.rules_skillTreeDiagramDarkNav)
         coreRulebookNav = v.findViewById(R.id.rules_coreRulebookNav)
         treatingWoundsNav = v.findViewById(R.id.rules_treatingWoundsFlowchartNav)
 
@@ -51,8 +62,15 @@ class RulesFragment : Fragment() {
         }
 
         skillTreeDiagramNav.setOnClick {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://stillalivelarp.com/skilltree"))
-            startActivity(browserIntent)
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+            val intent = Intent(v.context, SAImageViewActivity::class.java)
+            startActivity(intent)
+        }
+
+        skillTreeDiagramDarkNav.setOnClick {
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+            val intent = Intent(v.context, SAImageViewActivity::class.java)
+            startActivity(intent)
         }
 
         coreRulebookNav.setOnClick {
@@ -65,21 +83,48 @@ class RulesFragment : Fragment() {
         }
 
         treatingWoundsNav.setOnClick {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://stillalivelarp.com/healing"))
-            startActivity(browserIntent)
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            val intent = Intent(v.context, SAImageViewActivity::class.java)
+            startActivity(intent)
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.RULEBOOK), false) {
-            buildView()
+            buildView(v)
         }
-        buildView()
+        buildView(v)
     }
 
-    private fun buildView() {
+    private fun buildView(v: View) {
         skillListNav.setLoading(DataManager.shared.loadingSkills)
         skillListNav.isGone = !DataManager.shared.loadingSkills && DataManager.shared.skills == null
         coreRulebookNav.setLoading(DataManager.shared.loadingRulebook)
         coreRulebookNav.isGone = !DataManager.shared.loadingRulebook && DataManager.shared.rulebook == null
+        handleImages(v)
+    }
+
+    private fun handleImages(v: View) {
+        skillTreeDiagramNav.setLoading(loadingSkillTree)
+        skillTreeDiagramDarkNav.setLoading(loadingSkillTreeDark)
+        treatingWoundsNav.setLoading(loadingTreatingWounds)
+
+        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE) { success ->
+            activity?.runOnUiThread {
+                skillTreeDiagramNav.isGone = !success
+                skillTreeDiagramNav.setLoading(false)
+            }
+        }
+        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK) { success ->
+            activity?.runOnUiThread {
+                skillTreeDiagramDarkNav.isGone = !success
+                skillTreeDiagramDarkNav.setLoading(false)
+            }
+        }
+        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS) { success ->
+            activity?.runOnUiThread {
+                treatingWoundsNav.isGone = !success
+                treatingWoundsNav.setLoading(false)
+            }
+        }
     }
 
     companion object {

@@ -1,21 +1,23 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin.AdminPanelFragment
+import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
 import com.forkbombsquad.stillalivelarp.utils.*
 
 class OfflineMyAccountActivity : NoStatusBarActivity() {
 
     private lateinit var playerNameText: TextView
+
+    private lateinit var allSkillsNav: NavArrowButtonBlack
+    private lateinit var skillTreeNav: NavArrowButtonBlack
+    private lateinit var skillTreeDarkNav: NavArrowButtonBlack
+    private lateinit var treatingWoundsNav: NavArrowButtonBlack
+
     private lateinit var playerStatsNav: NavArrowButtonBlack
     private lateinit var charStatsNav: NavArrowButtonBlack
     private lateinit var skillViewNav: NavArrowButtonBlack
@@ -30,6 +32,12 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+
+        allSkillsNav = findViewById(R.id.myaccountoffline_viewAllSkillsNavArrow)
+        skillTreeNav = findViewById(R.id.myaccountoffline_skillTreeArrow)
+        skillTreeDarkNav = findViewById(R.id.myaccountoffline_skillTreeDarkArrow)
+        treatingWoundsNav = findViewById(R.id.myaccountoffline_treatingWoundsArrow)
+
         playerNameText = findViewById(R.id.myaccountoffline_playerName)
         playerStatsNav = findViewById(R.id.myaccountoffline_playerStatsNavArrow)
         charStatsNav = findViewById(R.id.myaccountoffline_characterStatsNavArrow)
@@ -37,6 +45,26 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         bioNav = findViewById(R.id.myaccountoffline_bioNavArrow)
         gearNav = findViewById(R.id.myaccountoffline_gearNavArrow)
         rulesNav = findViewById(R.id.myaccountoffline_rulesNavArrow)
+
+        allSkillsNav.setOnClick {
+            val intent = Intent(this, OfflineViewAllSkillsActivityOld::class.java)
+            startActivity(intent)
+        }
+        skillTreeNav.setOnClick {
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+            val intent = Intent(this, SAImageViewActivity::class.java)
+            startActivity(intent)
+        }
+        skillTreeDarkNav.setOnClick {
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+            val intent = Intent(this, SAImageViewActivity::class.java)
+            startActivity(intent)
+        }
+        treatingWoundsNav.setOnClick {
+            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            val intent = Intent(this, SAImageViewActivity::class.java)
+            startActivity(intent)
+        }
 
         playerStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
@@ -101,5 +129,12 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         bioNav.isGone = character == null || !(character.approvedBio.toBoolean())
         gearNav.isGone = character == null
         rulesNav.isGone = rulebook == null
+
+        allSkillsNav.isGone = SkillManager.shared.getSkillsOffline().isEmpty()
+
+        skillTreeNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key) == null
+        skillTreeDarkNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key) == null
+        treatingWoundsNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key) == null
+
     }
 }

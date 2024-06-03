@@ -1,10 +1,16 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
 import android.content.Context
-import android.preference.PreferenceManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.forkbombsquad.stillalivelarp.services.models.*
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.google.gson.Gson
+import java.io.ByteArrayOutputStream
+import java.util.Base64
+
 
 class SharedPrefsManager private constructor() {
 
@@ -14,6 +20,7 @@ class SharedPrefsManager private constructor() {
     private val gearKey = "gear_sp_key"
     private val rulebookVersionKey = "rulebook_version_sp_key"
     private val rulebookKey = "rulebook_sp_key"
+    private val skillsKey = "skills_sp_key"
 
     fun clearAll(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SharedPrefsName, Context.MODE_PRIVATE)
@@ -45,6 +52,24 @@ class SharedPrefsManager private constructor() {
             editor.putString(k, v)
         }
         editor.commit()
+    }
+
+    fun set(context: Context, key: String, value: Bitmap) {
+        val baos = ByteArrayOutputStream()
+        value.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        val encodedImage: String = Base64.getEncoder().encodeToString(b)
+        set(context, key, encodedImage)
+    }
+
+    fun getBitmap(context: Context, key: String): Bitmap? {
+        val encodedImage: String? = get(context, key)
+        if (encodedImage != null) {
+            val imageAsBytes = Base64.getDecoder().decode(encodedImage.toByteArray())
+            return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size)
+        } else {
+            return null
+        }
     }
 
     fun get(context: Context, key: String): String? {
@@ -120,6 +145,14 @@ class SharedPrefsManager private constructor() {
 
     fun storeRulebook(rulebook: String) {
         this.set(StillAliveLarpApplication.context, rulebookKey, rulebook)
+    }
+
+    fun storeSkills(skills: List<FullSkillModel>) {
+        this.set(StillAliveLarpApplication.context, skillsKey, globalToJson(skills))
+    }
+
+    fun getSkills(): List<FullSkillModel> {
+        return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "") ?: listOf()
     }
 
     companion object {

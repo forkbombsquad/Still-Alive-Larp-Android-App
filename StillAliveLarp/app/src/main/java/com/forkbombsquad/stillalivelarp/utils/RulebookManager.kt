@@ -151,15 +151,8 @@ class RulebookManager private constructor()  {
                                                     table.contents[keys[count]] = mutableListOf()
                                                 }
                                                 table.contents[keys[count]]?.add(tableCell.toString()
-                                                    .replace("<td>", "")
-                                                    .replace("</td>", "")
-                                                    .replace("<small>", "")
-                                                    .replace("</small>", "")
-                                                    .replace("<b>", "")
-                                                    .replace("</b>", "")
-                                                    .replace("<i>", "")
-                                                    .replace("</i>", "")
-                                                    .replace("<br>", "\n"))
+                                                    .replaceHtmlTags(listOf("td", "small", "b", "i", "skill", "condition", "item", "combat", "talent", "profession"))
+                                                    .replaceHtmlTag("br", "\n"))
                                                 count += 1
                                             }
                                         }
