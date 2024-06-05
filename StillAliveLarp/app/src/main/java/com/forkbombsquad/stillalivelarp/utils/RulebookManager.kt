@@ -291,13 +291,13 @@ class Heading {
         }
         for (subsub in subSubHeadings) {
             if (subsub.contains(text)) {
-                newSubSubHeadings.add(subsub.filtered(text))
+                newSubSubHeadings.add(subsub)
             }
         }
 
         for (sub in subHeadings) {
             if (sub.contains(text)) {
-                newSubHeadings.add(sub.filtered(text))
+                newSubHeadings.add(sub)
             }
         }
 
@@ -334,29 +334,6 @@ class SubHeading {
         return false
     }
 
-    fun filtered(text: String): SubHeading {
-        val newTextsAndTables: MutableList<Any> = mutableListOf()
-        val newSubSubHeadings: MutableList<SubSubHeading> = mutableListOf()
-
-        for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
-                newTextsAndTables.add(tot)
-            } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
-                newTextsAndTables.add(tot)
-            }
-        }
-        for (subsub in subSubHeadings) {
-            if (subsub.contains(text)) {
-                newSubSubHeadings.add(subsub.filtered(text))
-            }
-        }
-
-        val newSubHeading = SubHeading()
-        newSubHeading.title = title
-        newSubHeading.textsAndTables = newTextsAndTables
-        newSubHeading.subSubHeadings = newSubSubHeadings
-        return newSubHeading
-    }
 }
 
 class SubSubHeading {
@@ -377,22 +354,6 @@ class SubSubHeading {
         return false
     }
 
-    fun filtered(text: String): SubSubHeading {
-        val newTextsAndTables: MutableList<Any> = mutableListOf()
-
-        for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
-                newTextsAndTables.add(tot)
-            } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
-                newTextsAndTables.add(tot)
-            }
-        }
-
-        val newSubSubHeading = SubSubHeading()
-        newSubSubHeading.textsAndTables = newTextsAndTables
-
-        return newSubSubHeading
-    }
 }
 
 class Table {

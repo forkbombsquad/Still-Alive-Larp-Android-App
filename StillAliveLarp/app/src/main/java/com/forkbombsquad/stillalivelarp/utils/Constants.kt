@@ -4,7 +4,7 @@ class Constants {
 
     class URLs {
         companion object {
-            const val rulebookUrl = "https://stillalivelarp.com/rulebook"
+            const val rulebookUrl = "https://stillalivelarp.com/rulebook-app"
         }
     }
 

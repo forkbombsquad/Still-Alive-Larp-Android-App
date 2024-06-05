@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
         val checkoutButton = v.findViewById<NavArrowButtonRed>(R.id.checkout_navarrow)
         if (showCheckout()) {
             checkoutSection.isGone = false
-            checkoutButton.textView.text = "Checkout ${DataManager.shared.character?.fullName ?: "NPC"}"
+            checkoutButton.textView.text = "Checkout"
             checkoutButton.setOnClick {
                 checkoutButton.setLoading(true)
                 DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_ATTENDEES), true) {

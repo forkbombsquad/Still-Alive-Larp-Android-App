@@ -15,6 +15,11 @@ interface GetEventsForPlayerRequest {
     suspend fun makeRequest(@Path("playerId") playerId: Int): Response<EventAttendeeListModel>
 }
 
+interface GetEventsForEventRequest {
+    @HTTP(method ="GET", path = "event-attendee/all_for_event/{eventId}")
+    suspend fun makeRequest(@Path("eventId") eventId: Int): Response<EventAttendeeListModel>
+}
+
 interface DeleteEventAttendeesForPlayerRequest {
     @HTTP(method ="DELETE", path = "event-attendee/delete/")
     suspend fun makeRequest(): Response<EventAttendeeListModel>
@@ -25,6 +30,16 @@ class EventAttendeeService {
         UAndPServiceInterface<GetEventsForPlayerRequest, EventAttendeeListModel, IdSP> {
         override val request: GetEventsForPlayerRequest
             get() = retrofit.create(GetEventsForPlayerRequest::class.java)
+
+        override suspend fun getResponse(payload: IdSP): Response<EventAttendeeListModel> {
+            return request.makeRequest(payload.id())
+        }
+    }
+
+    class GetAttendeesForEvent:
+        UAndPServiceInterface<GetEventsForEventRequest, EventAttendeeListModel, IdSP> {
+        override val request: GetEventsForEventRequest
+            get() = retrofit.create(GetEventsForEventRequest::class.java)
 
         override suspend fun getResponse(payload: IdSP): Response<EventAttendeeListModel> {
             return request.makeRequest(payload.id())

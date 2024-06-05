@@ -75,11 +75,18 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="Search"
+            android:textSize="24sp"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/skilllist_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
 
         <ScrollView
             android:layout_width="match_parent"

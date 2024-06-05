@@ -18,6 +18,8 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.community.ViewPlayerStuffFragment
 import com.forkbombsquad.stillalivelarp.utils.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SkillManagementFragment : Fragment() {
     private val TAG = "SKILL_MANAGEMENT_FRAGMENT"
@@ -26,6 +28,10 @@ class SkillManagementFragment : Fragment() {
     private lateinit var searchBar: EditText
     private lateinit var addNewButton: Button
     private lateinit var skillListLayout: LinearLayout
+    private lateinit var progressBar: ProgressBar
+
+    private var loadingView = true
+    private var skillCells: MutableList<SkillCell> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +48,16 @@ class SkillManagementFragment : Fragment() {
         addNewButton = v.findViewById(R.id.skillman_addnew)
         skillListLayout = v.findViewById(R.id.skillman_layout)
 
+        progressBar = v.findViewById(R.id.skillman_progressBar)
+
         addNewButton.setOnClickListener {
             if (!DataManager.shared.loadingSkills) {
                 DataManager.shared.unrelaltedUpdateCallback = {
                     // Make sure this page updates when skills update
                     DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), true) {
-                        buildView(v)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            createViews(v)
+                        }
                     }
                 }
                 val intent = Intent(activity, AddSkillActivity::class.java)
@@ -56,26 +66,52 @@ class SkillManagementFragment : Fragment() {
         }
 
         searchBar.addTextChangedListener {
-            buildView(v)
+            lifecycleScope.launch(Dispatchers.IO) {
+                createViews(v)
+            }
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.PLAYER, DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
-            buildView(v)
+            lifecycleScope.launch(Dispatchers.IO) {
+                createViews(v)
+            }
         }
-        buildView(v)
+        lifecycleScope.launch(Dispatchers.IO) {
+            createViews(v)
+        }
     }
 
-    private fun buildView(v: View) {
+    @Synchronized
+    private fun createViews(v: View) {
+        loadingView = true
+        activity?.runOnUiThread {
+            buildView()
+        }
+        skillCells = mutableListOf()
+
+        getSortedSkills(DataManager.shared.charForSelectedPlayer?.skills ?: arrayOf()).forEachIndexed { index, it ->
+            val cell = SkillCell(v.context)
+            cell.setup(it)
+            cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            cell.setPadding(8, (index == 0).ternary(32, 16), 8, 16)
+            skillCells.add(cell)
+        }
+        if (skillCells.isNotEmpty()) {
+            activity?.runOnUiThread {
+                loadingView = false
+                buildView()
+            }
+        }
+    }
+
+    private fun buildView() {
         addNewButton.isGone = DataManager.shared.player?.id != DataManager.shared.selectedPlayer?.id
         title.text = "${DataManager.shared.charForSelectedPlayer?.fullName ?: "Character"}'s\nSkills"
         skillListLayout.removeAllViews()
+        progressBar.isGone = !loadingView || skillCells.isNotEmpty()
 
-        DataManager.shared.charForSelectedPlayer?.skills.ifLet { skills ->
-            getSortedSkills(skills).forEachIndexed { index, it ->
-                val cell = SkillCell(v.context)
-                cell.setup(it)
-                cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                cell.setPadding(8, (index == 0).ternary(32, 16), 8, 16)
+        if (!loadingView) {
+            for (cell in skillCells) {
                 skillListLayout.addView(cell)
             }
         }

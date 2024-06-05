@@ -8,17 +8,24 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.*
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.utils.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ViewRulesActivity : NoStatusBarActivity() {
 
     private lateinit var search: EditText
     private lateinit var layout: LinearLayout
     private lateinit var title: TextView
+    private lateinit var progressBar: ProgressBar
+
+    private var loadingView = false
+    private var headings: MutableList<View> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +42,28 @@ class ViewRulesActivity : NoStatusBarActivity() {
         title = findViewById(R.id.viewrules_title)
         search = findViewById(R.id.viewrules_searchview)
         layout = findViewById(R.id.viewrules_layout)
+        progressBar = findViewById(R.id.viewrules_progressBar)
+        progressBar = findViewById(R.id.viewrules_progressBar)
 
         search.doOnTextChanged { text, start, before, count ->
-            buildView()
+            lifecycleScope.launch(Dispatchers.IO) {
+                createViews()
+            }
         }
-
-        buildView()
+        lifecycleScope.launch(Dispatchers.IO) {
+            createViews()
+        }
     }
 
-    private fun buildView() {
-        layout.removeAllViews()
+    @Synchronized
+    private fun createViews() {
+        loadingView = true
+        runOnUiThread {
+            buildView()
+        }
+        headings = mutableListOf()
+
         DataManager.shared.rulebook.ifLet { rulebook ->
-            title.text = "Rulebook v${rulebook.version}"
             for (heading in filterHeadings(rulebook)) {
                 val headingView = HeadingView(this)
                 headingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -69,7 +86,24 @@ class ViewRulesActivity : NoStatusBarActivity() {
                     headingView.subheadings.addView(createSubHeading(subheading))
                 }
 
-                layout.addView(headingView)
+                headings.add(headingView)
+            }
+            loadingView = false
+            runOnUiThread {
+                buildView()
+            }
+        }
+    }
+
+    private fun buildView() {
+        DataManager.shared.rulebook.ifLet { rulebook ->
+            title.text = "Rulebook v${rulebook.version}"
+        }
+        layout.removeAllViews()
+        progressBar.isGone = !loadingView
+        if (!loadingView) {
+            for (heading in headings) {
+                layout.addView(heading)
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.*
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ class ManageEventActivity : NoStatusBarActivity() {
     private lateinit var isFinished: KeyValueView
     private lateinit var description: KeyValueView
     private lateinit var edit: NavArrowButtonRed
+    private lateinit var viewAttendees: NavArrowButtonBlue
     private lateinit var startFinishButton: LoadingButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +40,26 @@ class ManageEventActivity : NoStatusBarActivity() {
         isFinished = findViewById(R.id.manageevent_isFinished)
         description = findViewById(R.id.manageevent_description)
         edit = findViewById(R.id.manageevent_edit)
+        viewAttendees = findViewById(R.id.manageevent_viewAttendees)
         startFinishButton = findViewById(R.id.manageevent_startFinishButton)
 
         edit.setOnClick {
             DataManager.shared.activityToClose = this
             val intent = Intent(this, EditEventActivity::class.java)
             startActivity(intent)
+        }
+
+        viewAttendees.setOnClick {
+            viewAttendees.setLoading(true)
+            DataManager.shared.unrelaltedUpdateCallback = {
+                viewAttendees.setLoading(false)
+            }
+            buildView()
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_ATTENDEES_FOR_EVENT, DataManagerType.ALL_PLAYERS)) {
+                buildView()
+                val intent = Intent(this, ViewEventAttendeesActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         startFinishButton.setOnClick {

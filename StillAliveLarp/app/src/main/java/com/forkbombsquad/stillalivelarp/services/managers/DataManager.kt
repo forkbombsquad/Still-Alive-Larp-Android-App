@@ -13,7 +13,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT
 }
 
 class DataManager private constructor() {
@@ -108,6 +108,9 @@ class DataManager private constructor() {
 
     var fullCharForSelectedChar: FullCharacterModel? = null
     var loadingFullCharForSelectedChar = true
+
+    var eventAttendeesForEvent: List<EventAttendeeModel>? = null
+    var loadingEventAttendeesForEvent = true
 
     var passedBitmap: Bitmap? = null
 
@@ -563,6 +566,26 @@ class DataManager private constructor() {
                         })
                     } else {
                         loadingFullCharForSelectedChar = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.EVENT_ATTENDEES_FOR_EVENT -> {
+                    loadingEventAttendeesForEvent = true
+                    if (eventAttendeesForEvent == null || forceDownloadIfApplicable) {
+                        val request = EventAttendeeService.GetAttendeesForEvent()
+                        lifecycleScope.launch {
+                            request.successfulResponse(IdSP(selectedEvent?.id ?: 0)).ifLet({
+                                eventAttendeesForEvent = it.eventAttendees.toList()
+                                loadingEventAttendeesForEvent = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                eventAttendeesForEvent = null
+                                loadingEventAttendeesForEvent = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingEventAttendeesForEvent = false
                         finishedRequest(currentLoadCountIndex)
                     }
                 }

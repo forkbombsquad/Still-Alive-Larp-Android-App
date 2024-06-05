@@ -82,19 +82,27 @@ tools:context=".ManageEventActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:key="Description"
+            android:layout_marginBottom="16dp"
             app:showDiv="true"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
             android:id="@+id/manageevent_edit"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             app:text="Edit Event Details"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
+            android:id="@+id/manageevent_viewAttendees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:text="View Attendees"
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.LoadingButton
             android:id="@+id/manageevent_startFinishButton"
-            android:paddingTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:buttontext="Start Event"/>

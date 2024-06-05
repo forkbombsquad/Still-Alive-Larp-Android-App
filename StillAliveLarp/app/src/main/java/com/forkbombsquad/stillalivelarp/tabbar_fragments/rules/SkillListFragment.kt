@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.FragmentTemplate
@@ -18,6 +19,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateMode
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.utils.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SkillListFragment : Fragment() {
@@ -31,6 +33,10 @@ class SkillListFragment : Fragment() {
     private lateinit var searchBar: EditText
 
     private lateinit var layout: LinearLayout
+    private lateinit var progressBar: ProgressBar
+
+    private var loadingView = true
+    private var skillCells: MutableList<SkillCell> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +53,8 @@ class SkillListFragment : Fragment() {
         filterSpinner = v.findViewById(R.id.skilllist_filter)
         searchBar = v.findViewById(R.id.skilllist_searchview)
 
+        progressBar = v.findViewById(R.id.skilllist_progressBar)
+
         layout = v.findViewById(R.id.skilllist_layout)
 
         val sortAdapter = ArrayAdapter(v.context, android.R.layout.simple_spinner_dropdown_item, SkillSortType.getAllStrings())
@@ -54,7 +62,9 @@ class SkillListFragment : Fragment() {
         sortSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currentSort = SkillSortType.getTypeForString(sortSpinner.getItemAtPosition(position).toString())
-                buildView(v)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    createViews(v)
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -64,29 +74,59 @@ class SkillListFragment : Fragment() {
         filterSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currentFilter = SkillFilterType.getTypeForString(filterSpinner.getItemAtPosition(position).toString())
-                buildView(v)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    createViews(v)
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         searchBar.addTextChangedListener {
-            buildView(v)
+            lifecycleScope.launch(Dispatchers.IO) {
+                createViews(v)
+            }
         }
 
-        buildView(v)
+        lifecycleScope.launch(Dispatchers.IO) {
+            createViews(v)
+        }
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
-            buildView(v)
+            lifecycleScope.launch(Dispatchers.IO) {
+                createViews(v)
+            }
         }
     }
 
-    private fun buildView(v: View) {
-        layout.removeAllViews()
+    @Synchronized
+    private fun createViews(v: View) {
+        loadingView = true
+        activity?.runOnUiThread {
+            buildView(v)
+        }
+        skillCells = mutableListOf()
+
         getFilteredSkills(DataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
             val cell = SkillCell(v.context)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             cell.setPadding(8, (index == 0).ternary(32, 16), 8, 16)
-            layout.addView(cell)
+            skillCells.add(cell)
+        }
+        if (skillCells.isNotEmpty()) {
+            activity?.runOnUiThread {
+                loadingView = false
+                buildView(v)
+            }
+        }
+    }
+
+    private fun buildView(v: View) {
+        layout.removeAllViews()
+        progressBar.isGone = !loadingView || skillCells.isNotEmpty()
+        if (!loadingView) {
+            for (cell in skillCells) {
+                layout.addView(cell)
+            }
         }
     }
 
