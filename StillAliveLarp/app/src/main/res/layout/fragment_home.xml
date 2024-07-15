@@ -152,7 +152,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
-                        android:text="The following information is only given to those with one (or more) of the following skills: Investigator, Interrogator, and Web of Informant. You are free to share this information with others or keep it to yourself."/>
+                        android:textAlignment="center"
+                        android:text="The following information is only given to those with one or both of the following skills: Investigator, Interrogator. You are free to share this information with others or keep it to yourself."/>
 
                     <!--                Investigator View-->
                     <LinearLayout
@@ -172,14 +173,14 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textAlignment="center"
-                            android:text="Rumor (Investigator)"/>
+                            android:text="Fact 1 (Investigator)"/>
 
                         <TextView
                             android:id="@+id/intrigue_investigatorText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="8dp"
-                            android:text="Placeholder Rumor"/>
+                            android:text="Placeholder Fact"/>
 
                     </LinearLayout>
 
@@ -201,7 +202,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textAlignment="center"
-                            android:text="Fact (Interrogator)"/>
+                            android:text="Fact 2 (Interrogator)"/>
 
                         <TextView
                             android:id="@+id/intrigue_interrogatorText"
@@ -209,34 +210,6 @@
                             android:layout_height="wrap_content"
                             android:paddingTop="8dp"
                             android:text="Placeholder Fact"/>
-
-                    </LinearLayout>
-                    <!--                Web of Informants View-->
-                    <LinearLayout
-                        android:id="@+id/intrigue_webOfInfView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.divider.MaterialDivider
-                            android:layout_width="wrap_content"
-                            android:layout_height="1dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="8dp"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textAlignment="center"
-                            android:text="Additional Fact (Web of Informants)"/>
-
-                        <TextView
-                            android:id="@+id/intrigue_webOfInfText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="8dp"
-                            android:text="Placeholder Additional Fact"/>
 
                     </LinearLayout>
 

@@ -157,21 +157,17 @@ class HomeFragment : Fragment() {
         val intrigueSection = v.findViewById<LinearLayout>(R.id.intrigueView)
         val investigatorView = v.findViewById<LinearLayout>(R.id.intrigue_investigatorView)
         val interrogatorView = v.findViewById<LinearLayout>(R.id.intrigue_interrogatorView)
-        val webView = v.findViewById<LinearLayout>(R.id.intrigue_webOfInfView)
 
         val investigator = v.findViewById<TextView>(R.id.intrigue_investigatorText)
         val interrogator = v.findViewById<TextView>(R.id.intrigue_interrogatorText)
-        val web = v.findViewById<TextView>(R.id.intrigue_webOfInfText)
 
         DataManager.shared.intrigue.ifLet({
             if (showIntrigue()) {
                 val intrigueSkills: IntArray = DataManager.shared.character?.getIntrigueSkills() ?: IntArray(0)
                 investigator.text = it.investigatorMessage
                 interrogator.text = it.interrogatorMessage
-                web.text = it.webOfInformantsMessage
                 investigatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.investigator } == null
                 interrogatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.interrogator } == null
-                webView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.webOfInformants } == null
                 intrigueSection.isGone = false
             } else {
                 intrigueSection.isGone = true

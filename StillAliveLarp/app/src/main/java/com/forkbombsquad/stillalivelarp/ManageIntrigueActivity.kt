@@ -25,7 +25,6 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
     private lateinit var layout: LinearLayout
     private lateinit var investigator: TextInputEditText
     private lateinit var interrogator: TextInputEditText
-    private lateinit var web: TextInputEditText
     private lateinit var submitUpdateButton: LoadingButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +39,6 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
         layout = findViewById(R.id.intriguemanagement_layout)
         investigator = findViewById(R.id.intriguemanagement_investigator)
         interrogator = findViewById(R.id.intriguemanagement_interrogator)
-        web = findViewById(R.id.intriguemanagement_web)
         submitUpdateButton = findViewById(R.id.intriguemanagement_submitUpdateButton)
 
         submitUpdateButton.setOnClick {
@@ -53,7 +51,7 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                         eventId = intrigue.eventId,
                         investigatorMessage = investigator.text.toString(),
                         interrogatorMessage = interrogator.text.toString(),
-                        webOfInformantsMessage = web.text.toString()
+                        webOfInformantsMessage = ""
                     )
                     val updateIntrigueRequest = AdminService.UpdateIntrigue()
                     lifecycleScope.launch {
@@ -72,7 +70,7 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                         eventId = DataManager.shared.selectedEvent?.id ?: -1,
                         investigatorMessage = investigator.text.toString(),
                         interrogatorMessage = interrogator.text.toString(),
-                        webOfInformantsMessage = web.text.toString()
+                        webOfInformantsMessage = ""
                     )
                     val updateIntrigueRequest = AdminService.CreateIntrigue()
                     lifecycleScope.launch {
@@ -109,7 +107,6 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                 title.text = "Update Intrigue"
                 investigator.setText(intrigue.investigatorMessage)
                 interrogator.setText(intrigue.interrogatorMessage)
-                web.setText(intrigue.webOfInformantsMessage)
                 submitUpdateButton.set("Update")
             }, {
                 title.text = "Create Intrigue"
@@ -122,8 +119,7 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
         return Validator.validateMultiple(
             arrayOf(
                 ValidationGroup(investigator, ValidationType.INTRIGUE),
-                ValidationGroup(interrogator, ValidationType.INTRIGUE),
-                ValidationGroup(web, ValidationType.INTRIGUE)
+                ValidationGroup(interrogator, ValidationType.INTRIGUE)
             )
         )
     }

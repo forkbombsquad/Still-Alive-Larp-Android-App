@@ -54,7 +54,6 @@ class Constants {
             // Investigator Type
             const val investigator = 38
             const val interrogator = 37
-            const val webOfInformants = 92
 
             // Tough Skin Type
             const val toughSkin = 80
@@ -68,9 +67,7 @@ class Constants {
 
             // Gambler type
             const val gamblersLuck = 29
-            const val gamblersTalent = 30
             const val gamblersEye = 27
-            const val gamblersHeart = 28
 
             // Regression type
             const val regression = 68
@@ -109,11 +106,11 @@ class Constants {
             val allTalentIncreasingSkills: Array<Int> = arrayOf(combatAficionado_T, professionAficionado_T)
 
             val deepPocketTypeSkills: Array<Int> = arrayOf(bandoliers, parachutePants, deeperPockets, deepPockets)
-            val investigatorTypeSkills: Array<Int> = arrayOf(investigator, interrogator, webOfInformants)
+            val investigatorTypeSkills: Array<Int> = arrayOf(investigator, interrogator)
             val toughSkinTypeSkills: Array<Int> = arrayOf(toughSkin, painTolerance, naturalArmor, scaledSkin, plotArmor)
             val toughSkinTypeSkillsWithoutScaledSkin: Array<Int> = arrayOf(toughSkin, painTolerance, naturalArmor)
             val walkLikeAZombieTypeSkills: Array<Int> = arrayOf(deadManStanding, deadManWalking)
-            val gamblerTypeSkills: Array<Int> = arrayOf(gamblersLuck, gamblersTalent, gamblersEye, gamblersHeart)
+            val gamblerTypeSkills: Array<Int> = arrayOf(gamblersLuck, gamblersEye)
             val regressionTypeSkills: Array<Int> = arrayOf(regression, remission)
             val willToLiveTypeSkills: Array<Int> = arrayOf(willToLive, unshakableResolve)
             val mysteriousStrangerTypeSkills: Array<Int> = arrayOf(mysteriousStranger, unknownAssailant, annonomousAlly)
