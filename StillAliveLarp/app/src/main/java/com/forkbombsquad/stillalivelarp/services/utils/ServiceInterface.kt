@@ -11,6 +11,7 @@ import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.HTTP
 import retrofit2.http.Headers
+import java.lang.Exception
 
 interface ServiceInterface<G, T, H: ServicePayload> {
     val retrofit: Retrofit
@@ -21,14 +22,19 @@ interface ServiceInterface<G, T, H: ServicePayload> {
     suspend fun getResponse(payload: H): Response<T>
 
     suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false): T? {
-        val response = getResponse(payload)
-        response.body().ifLet({
+        val response: Response<T>? = try {
+            getResponse(payload)
+        } catch (e: Exception) {
+            globalPrint(e.message.toString())
+            null
+        }
+        response?.body().ifLet({
             globalPrint("SERVICE CONTROLLER: Response Body:\n${globalToJson(it)}")
         }, {
             if (!ignoreErrors) {
-                response.errorBody().ifLet({
+                response?.errorBody().ifLet({
                     globalFromJson<ErrorModel>(it.string()).ifLet({ error ->
-                        AlertUtils.displayError(StillAliveLarpApplication.activity, response.code(), error)
+                        AlertUtils.displayError(StillAliveLarpApplication.activity, response?.code() ?: 502, error)
                     }, {
                         AlertUtils.displaySomethingWentWrong(StillAliveLarpApplication.activity)
                     })
@@ -37,7 +43,7 @@ interface ServiceInterface<G, T, H: ServicePayload> {
                 })
             }
         })
-        return response.body()
+        return response?.body()
     }
 
     suspend fun errorResponse(payload: H = ServicePayload.empty() as H): ErrorModel {

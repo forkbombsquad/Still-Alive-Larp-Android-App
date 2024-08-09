@@ -2,6 +2,7 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,8 @@ class HomeFragment : Fragment() {
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
     private lateinit var preregisterButton: NavArrowButtonBlue
+
+    private lateinit var preregInfo: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -293,6 +296,8 @@ class HomeFragment : Fragment() {
 
         preregisterButton = v.findViewById(R.id.preregister_button)
 
+        preregInfo = v.findViewById(R.id.prereg_info)
+
         if (showEventsSection()) {
             eventView.isGone = false
             if (DataManager.shared.loadingEvents) {
@@ -377,12 +382,16 @@ class HomeFragment : Fragment() {
 
                     preregisterButton.isGone = !it.isInFuture()
                     DataManager.shared.eventPreregs[it.id].ifLet({ preregs ->
-                        preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({
+                        preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({ eventPrereg ->
                             preregisterButton.textView.text = "Edit Your Pre-Registration"
+                            preregInfo.isGone = false
+                            preregInfo.text = "You are pre-registered as:\n\n${DataManager.shared.allCharacters?.firstOrNull { eventPrereg.getCharId() == it.id }?.fullName ?: "NPC"} - ${eventPrereg.eventRegType()}"
                         }, {
                             preregisterButton.textView.text = "Pre-Register\nFor This Event"
+                            preregInfo.isGone = true
                         })
                     }, {
+                        preregInfo.isGone = true
                         preregisterButton.textView.text = "Pre-Register\nFor This Event"
                     })
                     preregisterButton.setOnClick {

@@ -62,7 +62,7 @@ class HomeActivity : NoStatusBarActivity() {
     }
 
     private fun loadHomeFragServices() {
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.INTRIGUE, DataManagerType.SKILLS, DataManagerType.FEATURE_FLAGS), true) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.INTRIGUE, DataManagerType.SKILLS, DataManagerType.FEATURE_FLAGS, DataManagerType.ALL_CHARACTERS), true) {
             DataManager.shared.selectedChar = DataManager.shared.character?.getBaseModel()
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS, DataManagerType.SELECTED_CHARACTER_GEAR), true) {
                 loadHomeFrag()
