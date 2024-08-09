@@ -105,7 +105,7 @@ class PreregActivity : NoStatusBarActivity() {
             }, {
                 // Submit new
 
-                var charId = character?.id
+                var charId = char?.id
                 if (character.valuePickerView.selectedItemPosition == 0) {
                     charId = null
                 }
