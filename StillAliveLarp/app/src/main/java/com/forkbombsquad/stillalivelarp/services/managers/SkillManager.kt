@@ -34,9 +34,19 @@ class SkillManager private constructor() {
                         lifecycleScope.launch {
                             prereqRequest.successfulResponse().ifLet({ skillPrereqList ->
                                 skills?.forEachIndexed { index, fullSkillModel ->
+                                    // Prereqs
                                     skillPrereqList.skillPrereqs.filter { spr -> spr.baseSkillId == fullSkillModel.id }.forEach { prereq ->
                                         skills?.firstOrNull { sk -> sk.id == prereq.prereqSkillId }.ifLet { prereqSkill ->
-                                            fullSkillModel.prereqs = fullSkillModel.prereqs + arrayOf(prereqSkill)
+                                            fullSkillModel.prereqs += arrayOf(prereqSkill)
+                                            skills?.set(index, fullSkillModel)
+                                        }
+                                    }
+                                }
+                                skills?.forEachIndexed { index, fullSkillModel ->
+                                    // Postreqs
+                                    skillPrereqList.skillPrereqs.filter { spr -> spr.prereqSkillId == fullSkillModel.id }.forEach { prereq ->
+                                        skills?.firstOrNull { sk -> sk.id == prereq.baseSkillId }.ifLet { prereqSkill ->
+                                            fullSkillModel.postreqs += arrayOf(prereqSkill.id)
                                             skills?.set(index, fullSkillModel)
                                         }
                                     }

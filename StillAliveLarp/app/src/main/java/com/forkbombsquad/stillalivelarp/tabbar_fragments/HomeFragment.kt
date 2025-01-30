@@ -78,7 +78,9 @@ class HomeFragment : Fragment() {
     private fun preparePullToRefresh(v: View) {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.INTRIGUE, DataManagerType.SKILLS), true) {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.INTRIGUE, DataManagerType.SKILLS), true, finishedStep = {
+                setupViews(v)
+            }) {
                 DataManager.shared.selectedChar = DataManager.shared.character?.getBaseModel()
                 DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS, DataManagerType.SELECTED_CHARACTER_GEAR), true) {
                     setupViews(v)
@@ -210,7 +212,9 @@ class HomeFragment : Fragment() {
                                 relevantSkills = relevantSkills
                             )
                             DataManager.shared.unrelaltedUpdateCallback = {
-                                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true) {
+                                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
+                                    setupViews(v)
+                                }) {
                                     setupViews(v)
                                 }
                                 setupViews(v)
@@ -329,7 +333,9 @@ class HomeFragment : Fragment() {
                                     primaryWeapon = DataManager.shared.selectedCharacterGear?.primaryWeapon()
                                 )
                                 DataManager.shared.unrelaltedUpdateCallback = {
-                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true) {
+                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
+                                        setupViews(v)
+                                    }) {
                                         setupViews(v)
                                     }
                                     setupViews(v)

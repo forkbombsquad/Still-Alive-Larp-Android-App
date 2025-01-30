@@ -219,7 +219,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                             armor = armor.valuePickerView.selectedItem as String,
                             unshakableResolveUses = unshakableResolve.getValue(),
                             mysteriousStrangerUses = mysteriousStranger.getValue(),
-                            playerId = cm.playerId
+                            playerId = cm.playerId,
+                            characterTypeId = cm.characterTypeId
                         )
                         checkoutButton.setLoadingWithText("Updating Character")
                         val updateCharRequest = AdminService.UpdateCharacter()

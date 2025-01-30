@@ -36,6 +36,7 @@ data class FullCharacterModel(
     val unshakableResolveUses: String,
     val mysteriousStrangerUses: String,
     val playerId: Int,
+    val characterTypeId: Int,
     var skills: Array<FullSkillModel>
 ) : Serializable {
     constructor(charModel: CharacterModel): this(
@@ -61,6 +62,7 @@ data class FullCharacterModel(
         charModel.unshakableResolveUses,
         charModel.mysteriousStrangerUses,
         charModel.playerId,
+        charModel.characterTypeId,
         arrayOf()
     )
 
@@ -196,7 +198,8 @@ data class CharacterModel(
     @JsonProperty("armor") val armor: String,
     @JsonProperty("unshakableResolveUses") val unshakableResolveUses: String,
     @JsonProperty("mysteriousStrangerUses") val mysteriousStrangerUses: String,
-    @JsonProperty("playerId") val playerId: Int
+    @JsonProperty("playerId") val playerId: Int,
+    @JsonProperty("characterTypeId") val characterTypeId: Int
 ) : Serializable {
 
     constructor(charModel: FullCharacterModel): this(
@@ -221,7 +224,8 @@ data class CharacterModel(
         charModel.armor,
         charModel.unshakableResolveUses,
         charModel.mysteriousStrangerUses,
-        charModel.playerId
+        charModel.playerId,
+        charModel.characterTypeId
     )
 
     fun getAllXpSpent(lifecycleScope: LifecycleCoroutineScope, callback: (xp: Int) -> Unit) {
@@ -318,7 +322,9 @@ data class CharacterCreateModel(
     @JsonProperty("armor") val armor: String,
     @JsonProperty("unshakableResolveUses") val unshakableResolveUses: String,
     @JsonProperty("mysteriousStrangerUses") val mysteriousStrangerUses: String,
-    @JsonProperty("playerId") val playerId: Int
+    @JsonProperty("playerId") val playerId: Int,
+    @JsonProperty("characterTypeId") val characterTypeId: Int
+
 ) : Serializable {
 
     fun toJson(): String {

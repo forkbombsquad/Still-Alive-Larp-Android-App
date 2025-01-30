@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
@@ -28,6 +29,7 @@ class RulesFragment : Fragment() {
     private lateinit var skillTreeDiagramDarkNav: NavArrowButtonBlack
     private lateinit var coreRulebookNav: NavArrowButtonBlack
     private lateinit var treatingWoundsNav: NavArrowButtonBlack
+    private lateinit var nativeSkillTreeDiagramNav: NavArrowButtonBlack
 
     private var loadingSkillTree = true
     private var loadingSkillTreeDark = true
@@ -53,6 +55,7 @@ class RulesFragment : Fragment() {
         skillTreeDiagramDarkNav = v.findViewById(R.id.rules_skillTreeDiagramDarkNav)
         coreRulebookNav = v.findViewById(R.id.rules_coreRulebookNav)
         treatingWoundsNav = v.findViewById(R.id.rules_treatingWoundsFlowchartNav)
+        nativeSkillTreeDiagramNav = v.findViewById(R.id.rules_skillTreeDiagramNativeNav)
 
         skillListNav.setOnClick {
             val frag = SkillListFragment.newInstance()
@@ -86,6 +89,14 @@ class RulesFragment : Fragment() {
             DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
+        }
+
+        nativeSkillTreeDiagramNav.setOnClick {
+            nativeSkillTreeDiagramNav.setLoading(true)
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.SKILL_CATEGORIES), false) {
+                val intent = Intent(v.context, NativeSkillTreeActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.RULEBOOK), false) {

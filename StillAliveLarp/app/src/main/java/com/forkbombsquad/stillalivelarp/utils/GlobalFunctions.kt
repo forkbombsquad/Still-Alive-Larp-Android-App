@@ -3,11 +3,18 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
+import android.util.AndroidException
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.WindowMetrics
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import com.forkbombsquad.stillalivelarp.BuildConfig
+import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.managers.*
 import com.google.gson.Gson
 import java.lang.reflect.Type
@@ -15,6 +22,12 @@ import java.lang.reflect.Type
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {
         Log.wtf("LOG", "-\n$message")
+    }
+}
+
+fun globalTestPrint(message: Any) {
+    if (Constants.Logging.showTestLogging) {
+        Log.wtf("LOG", message.toString())
     }
 }
 

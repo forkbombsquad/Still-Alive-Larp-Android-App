@@ -1,61 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:orientation="vertical"
-android:background="@color/light_gray"
-tools:context=".tabbar_fragments.CommunityFragment">
-
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/pulltorefresh_community"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".tabbar_fragments.CommunityFragment">
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pulltorefresh_community"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Community"
-                android:textStyle="bold"
-                android:textSize="32sp"
-                android:textAlignment="center"/>
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
-                <ProgressBar
-                    android:id="@+id/community_loadingBar"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="Community"
+                    android:textStyle="bold"
+                    android:textSize="32sp"
+                    android:textAlignment="center"/>
 
-                <LinearLayout
-                    android:id="@+id/community_playerlistlayout"
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/community_allPlayersButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:paddingTop="16dp"
+                    app:text="All Players"
+                    app:showLoading="false"/>
 
-            </LinearLayout>
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/community_campStatusButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Camp Status"
+                    app:showLoading="false"/>
 
-        </LinearLayout> <!-- BEFORE THIS ONE-->
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/community_npcsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="All NPCs"
+                    app:showLoading="false"/>
 
-    </ScrollView>
+            </LinearLayout> <!-- BEFORE THIS ONE-->
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

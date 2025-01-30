@@ -60,10 +60,9 @@ class MainActivity : NoStatusBarActivity() {
         offlineModeButton = findViewById(R.id.offline_mode_button)
 
         logInButton.setOnClick {
-            logInButton.setLoading(true)
+            logInButton.setLoadingWithText("Checking Credentials...")
             val validationResult = Validator.validateMultiple(arrayOf(ValidationGroup(usernameField, ValidationType.EMAIL), ValidationGroup(passwordField, ValidationType.PASSWORD)))
             if (!validationResult.hasError) {
-
                 val versionRequest = VersionService()
                 lifecycleScope.launch {
                     versionRequest.successfulResponse().ifLet({ versionModel ->
@@ -129,6 +128,7 @@ class MainActivity : NoStatusBarActivity() {
 
     private fun signIn() {
         UserAndPassManager.shared.setUandP(context, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
+        logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
         lifecycleScope.launch {
             service.successfulResponse().ifLet({ playerModel ->

@@ -134,7 +134,8 @@ data class FullSkillModel(
     val minInfection: String,
     val skillTypeId: String,
     val skillCategoryId: String,
-    var prereqs: Array<FullSkillModel>
+    var prereqs: Array<FullSkillModel>,
+    var postreqs: Array<Int>
 ) : Serializable {
 
     constructor(skillModel: SkillModel): this(
@@ -146,6 +147,7 @@ data class FullSkillModel(
         skillModel.minInfection,
         skillModel.skillTypeId,
         skillModel.skillCategoryId,
+        arrayOf(),
         arrayOf()
     )
 
@@ -158,6 +160,7 @@ data class FullSkillModel(
         skillModel.minInfection,
         skillModel.skillTypeId,
         skillModel.skillCategoryId,
+        arrayOf(),
         arrayOf()
     )
 
@@ -215,6 +218,13 @@ data class FullSkillModel(
             str += prereq.name
         }
         return str
+    }
+
+    fun hasSameCostPrereq(): Boolean {
+        prereqs.forEach {
+            if (it.xpCost == xpCost) { return true }
+        }
+        return false
     }
 
     fun includeInFilter(seachText: String, filterType: SkillFilterType): Boolean {

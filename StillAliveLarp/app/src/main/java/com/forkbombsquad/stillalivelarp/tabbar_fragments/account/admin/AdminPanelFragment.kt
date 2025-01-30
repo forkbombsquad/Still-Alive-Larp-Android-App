@@ -104,7 +104,9 @@ class AdminPanelFragment : Fragment() {
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS), true) {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS), true, finishedStep = {
+                buildView()
+            }) {
                 buildView()
                 pullToRefresh.isRefreshing = false
             }
@@ -184,7 +186,9 @@ class AdminPanelFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS), true) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS), true, finishedStep = {
+            buildView()
+        }) {
             buildView()
         }
         buildView()

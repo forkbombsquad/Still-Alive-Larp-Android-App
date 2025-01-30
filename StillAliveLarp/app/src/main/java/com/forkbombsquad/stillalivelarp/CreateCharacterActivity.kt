@@ -45,28 +45,29 @@ class CreateCharacterActivity : NoStatusBarActivity() {
                     request.successfulResponse(
                         CharacterCreateSP(
                             CharacterCreateModel(
-                        fullName = nameView.text.toString(),
-                        startDate = LocalDate.now().yyyyMMddFormatted(),
-                        isAlive = "TRUE",
-                        deathDate = "",
-                        infection = "0",
-                        bio = bioView.text.toString().trim(),
-                        approvedBio = "FALSE",
-                        bullets = "20",
-                        megas = "0",
-                        rivals = "0",
-                        rockets = "0",
-                        bulletCasings = "0",
-                        clothSupplies = "0",
-                        woodSupplies = "0",
-                        metalSupplies = "0",
-                        techSupplies = "0",
-                        medicalSupplies = "0",
-                        armor = CharacterArmor.NONE.text,
-                        unshakableResolveUses = "0",
-                        mysteriousStrangerUses = "0",
-                        playerId = player?.id ?: 0
-                    )
+                                fullName = nameView.text.toString(),
+                                startDate = LocalDate.now().yyyyMMddFormatted(),
+                                isAlive = "TRUE",
+                                deathDate = "",
+                                infection = "0",
+                                bio = bioView.text.toString().trim(),
+                                approvedBio = "FALSE",
+                                bullets = "20",
+                                megas = "0",
+                                rivals = "0",
+                                rockets = "0",
+                                bulletCasings = "0",
+                                clothSupplies = "0",
+                                woodSupplies = "0",
+                                metalSupplies = "0",
+                                techSupplies = "0",
+                                medicalSupplies = "0",
+                                armor = CharacterArmor.NONE.text,
+                                unshakableResolveUses = "0",
+                                mysteriousStrangerUses = "0",
+                                playerId = player?.id ?: 0,
+                                characterTypeId = Constants.CharacterTypes.standard
+                            )
                         )
                     ).ifLet({
                         DataManager.shared.unrelaltedUpdateCallback()

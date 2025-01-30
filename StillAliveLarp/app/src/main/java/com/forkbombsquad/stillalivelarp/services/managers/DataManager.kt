@@ -13,7 +13,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES
 }
 
 class DataManager private constructor() {
@@ -26,6 +26,7 @@ class DataManager private constructor() {
     private var targetCount: MutableList<Int> = mutableListOf()
     private var countReturned: MutableList<Int> = mutableListOf()
     private var callbacks: MutableList<() -> Unit> = mutableListOf()
+    private var callbackSteps: MutableList<() -> Unit> = mutableListOf()
 
     var announcements: List<AnnouncementSubModel>? = null
     var currentAnnouncement: AnnouncementModel? = null
@@ -101,6 +102,9 @@ class DataManager private constructor() {
     var featureFlags: Array<FeatureFlagModel>? = null
     var loadingFeatureFlags = true
 
+    var skillCategories: Array<SkillCategoryModel>? = null
+    var loadingSkillCategories = true
+
     var selectedFeatureFlag: FeatureFlagModel? = null
 
     var profileImage: ProfileImageModel? = null
@@ -114,12 +118,13 @@ class DataManager private constructor() {
 
     var passedBitmap: Bitmap? = null
 
-    fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finished: () -> Unit) {
+    fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
         loadCountIndex++
         targetCount.add(currentLoadCountIndex, types.count())
         countReturned.add(currentLoadCountIndex, 0)
         callbacks.add(currentLoadCountIndex, finished)
+        callbackSteps.add(currentLoadCountIndex, finishedStep)
         if (targetCount[currentLoadCountIndex] == 0) {
             callbacks[currentLoadCountIndex]()
         }
@@ -589,6 +594,26 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
+                DataManagerType.SKILL_CATEGORIES -> {
+                    loadingSkillCategories = true
+                    if (skillCategories == null || forceDownloadIfApplicable) {
+                        val request = SkillCategoryService.GetAllSkillCategories()
+                        lifecycleScope.launch {
+                            request.successfulResponse().ifLet({
+                                skillCategories = it.skillCategories
+                                loadingSkillCategories = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                skillCategories = null
+                                loadingSkillCategories = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingSkillCategories = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
             }
         }
     }
@@ -613,6 +638,9 @@ class DataManager private constructor() {
             countReturned[currentLoadCountIndex] = 0
             targetCount[currentLoadCountIndex] = 0
             callbacks[currentLoadCountIndex] = {}
+            callbackSteps[currentLoadCountIndex] = {}
+        } else {
+            callbackSteps[currentLoadCountIndex]()
         }
     }
 

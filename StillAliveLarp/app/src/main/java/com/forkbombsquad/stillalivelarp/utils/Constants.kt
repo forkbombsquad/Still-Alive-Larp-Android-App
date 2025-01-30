@@ -1,5 +1,9 @@
 package com.forkbombsquad.stillalivelarp.utils
 
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import kotlin.math.max
+
 class Constants {
 
     class URLs {
@@ -17,7 +21,8 @@ class Constants {
     class Logging {
         companion object {
             const val showLogging = false
-            // TODO ensure this is false before release
+            const val showTestLogging = true
+            // TODO ensure these are false before release
         }
     }
 
@@ -26,6 +31,15 @@ class Constants {
             const val combat = 1
             const val profession = 2
             const val talent = 3
+        }
+    }
+
+    class CharacterTypes {
+        companion object {
+            const val standard = 1
+            const val NPC = 2
+            const val Planner = 3
+            const val Hidden = 4
         }
     }
 
