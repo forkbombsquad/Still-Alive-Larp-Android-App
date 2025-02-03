@@ -1,10 +1,7 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
-import kotlin.math.max
 
 class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>, categoryId: Int) {
 
@@ -13,6 +10,7 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
     val skills: List<FullSkillModel>
     var width: Int
     val grid: MutableList<MutableList<FullSkillModel?>>
+
     init {
         this.categoryId = categoryId
         this.allSkills = allSkills
@@ -30,8 +28,14 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         if (skills.firstOrNull { it.xpCost.toInt() == 0 } != null) {
             // Free Skills
             grid.add(mutableListOf())
+            grid.add(mutableListOf())
+            grid.add(mutableListOf())
+            grid.add(mutableListOf())
             skills.forEach {
                 grid[0].add(it)
+                grid[1].add(null)
+                grid[2].add(null)
+                grid[3].add(null)
             }
 
         } else {
@@ -105,3 +109,4 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
     }
 
 }
+
