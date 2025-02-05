@@ -8,8 +8,6 @@ class Shapes {
         fun rect(x: Int, y: Int, width: Int, height: Int): Rect { return Rect(x, y, x + width, y + height) }
         fun rectf(x: Float, y: Float, width: Float, height: Float): RectF { return RectF(x, y, x + width, y + height) }
     }
-}
 
-fun Rect.panned(panX: Int, panY: Int) {
-
+    data class Circle(val x: Float, val y: Float, val radius: Float)
 }

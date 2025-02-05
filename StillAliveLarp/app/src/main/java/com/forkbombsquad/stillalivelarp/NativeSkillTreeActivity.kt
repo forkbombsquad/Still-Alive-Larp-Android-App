@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -74,7 +76,9 @@ class NativeSkillTreeActivity : NoStatusBarActivity() {
 }
 
 @SuppressLint("ClickableViewAccessibility")
-class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageView(context, attrs), ScaleGestureDetector.OnScaleGestureListener {
+class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageView(context, attrs),
+    ScaleGestureDetector.OnScaleGestureListener {
+
     private var scaleFactor = 1f
     private val minScale = 0.05f
     private val maxScale = 20f
@@ -83,21 +87,24 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
     private val savedMatrix = Matrix()
     private val scaleGestureDetector = ScaleGestureDetector(context, this)
 
+    // GestureDetector for tap events
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            // Transform the tap coordinates into canvas space
+            val inverseMatrix = Matrix()
+            matrix.invert(inverseMatrix)
+            val touchPoint = floatArrayOf(e.x, e.y)
+            inverseMatrix.mapPoints(touchPoint)
+            val canvasX = touchPoint[0]
+            val canvasY = touchPoint[1]
+            onTapEvent(canvasX, canvasY)
+            return true
+        }
+    })
+
     private var mode = NONE
     private var startX = 0f
     private var startY = 0f
-
-    // Paint object for drawing on the Canvas
-    private val paint = Paint().apply {
-        color = Color.RED
-        strokeWidth = 5f
-        style = Paint.Style.STROKE
-    }
-
-    private var rectLeft = 0f
-    private var rectTop = 0f
-    private var rectRight = 0f
-    private var rectBottom = 0f
 
     private var skillGrid: SkillGrid? = null
 
@@ -109,10 +116,13 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
 
     init {
         setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        // Set touch listener for gestures
+        // Set touch listener for gestures, taps, panning and zooming
         setOnTouchListener { _, event ->
+            // Feed the event to both detectors.
             scaleGestureDetector.onTouchEvent(event)
+            gestureDetector.onTouchEvent(event)
 
+            // Process panning and zooming
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     savedMatrix.set(matrix)
@@ -142,6 +152,14 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         }
     }
 
+    // Callback function when a tap is confirmed
+    private fun onTapEvent(canvasX: Float, canvasY: Float) {
+        // Let the SkillGrid handle the tap event.
+        // You can further test the (canvasX, canvasY) position if needed.
+        skillGrid?.handleTap(canvasX, canvasY)
+        invalidate()
+    }
+
     fun updateDrawables(skillGrid: SkillGrid) {
         this.skillGrid = skillGrid
         invalidate()
@@ -162,15 +180,6 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         return true
     }
 
-    // Function to draw a rectangle on the Canvas
-    fun drawRect(left: Float, top: Float, right: Float, bottom: Float) {
-        rectLeft = left
-        rectTop = top
-        rectRight = right
-        rectBottom = bottom
-        invalidate() // Redraw ImageView
-    }
-
     private fun getScaleFromMatrix(matrix: Matrix): Float {
         val values = FloatArray(9)
         matrix.getValues(values)
@@ -178,7 +187,6 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         val scaleY = values[Matrix.MSCALE_Y]  // Extracts scale from the matrix
         return (scaleX + scaleY) / 2  // Average the scale (handles non-uniform scaling)
     }
-
 
     override fun onScaleBegin(detector: ScaleGestureDetector): Boolean = true
     override fun onScaleEnd(detector: ScaleGestureDetector) {}

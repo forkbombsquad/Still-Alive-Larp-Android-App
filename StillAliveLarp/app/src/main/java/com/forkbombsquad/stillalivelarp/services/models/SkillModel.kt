@@ -209,6 +209,18 @@ data class FullSkillModel(
         return ""
     }
 
+    fun getFullCostText(): String {
+        var text = ""
+        text += "${xpCost}xp"
+        if (minInfection.toInt() > 0) {
+            text += " | ${minInfection}% Inf Threshold"
+        }
+        if (prestigeCost.toInt() > 0) {
+            text += " | ${prestigeCost}pp"
+        }
+        return text
+    }
+
     fun getPrereqNames(): String {
         var str = ""
         prereqs.forEachIndexed{ index, prereq ->
