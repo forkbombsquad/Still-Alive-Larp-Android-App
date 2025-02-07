@@ -127,6 +127,7 @@ class MainActivity : NoStatusBarActivity() {
     }
 
     private fun signIn() {
+        logInButton.setLoadingWithText("Fetching Player Info...")
         UserAndPassManager.shared.setUandP(context, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
         logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
