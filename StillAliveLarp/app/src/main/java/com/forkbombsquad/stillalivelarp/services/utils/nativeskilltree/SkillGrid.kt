@@ -16,7 +16,6 @@ import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Shapes
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlin.math.max
 import kotlin.math.pow
@@ -149,17 +148,17 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     private val lightGreen = Color.parseColor("#CAE1C5")
     private val darkGreen = Color.parseColor("#98D078")
 
-    private val firstTierLine = Path().apply{
+    private var firstTierLine = Path().apply{
         moveTo(0f, (2f * skillHeight) + (4f * spacingHeight))
         lineTo(100000f, (2f * skillHeight) + (4f * spacingHeight)) // End POint
     }
 
-    private val secondTierLine = Path().apply{
+    private var secondTierLine = Path().apply{
         moveTo(0f, (4f * skillHeight) + (8f * spacingHeight))
         lineTo(100000f, (4f * skillHeight) + (8f * spacingHeight)) // End POint
     }
 
-    private val thirdTierLine = Path().apply{
+    private var thirdTierLine = Path().apply{
         moveTo(0f, (6f * skillHeight) + (12f * spacingHeight))
         lineTo(100000f, (6f * skillHeight) + (12f * spacingHeight)) // End POint
     }
@@ -213,21 +212,14 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     }
 
     fun draw(canvas: Canvas, scaleFactor: Float) {
-        canvas.save()
-        dottedLine.pathEffect = DashPathEffect(floatArrayOf(30f, 30f), 0f)
-        // Draw Horizontal Lines
-        canvas.drawPath(firstTierLine, dottedLine)
-        canvas.drawPath(secondTierLine, dottedLine)
-        canvas.drawPath(thirdTierLine, dottedLine)
-        canvas.restore()
-
-        // Draw Skills
+        // Draw Category Boxes
         val exSkill = getExapnded()
         var widthSoFar = 0f
         gridCategories.forEachIndexed { index, skillGridCategory ->
             // Outline Category and Name it
             var extraXoffset = 0f
             var extraWidth = 0f
+            var extraHeight = 0f
             exSkill.ifLet {
                 if (it.skill.skillCategoryId.toInt() - 1 < index) {
                     extraXoffset = skillWidthExpanded - skillWidth
@@ -235,8 +227,9 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 if (it.skill.skillCategoryId.toInt() - 1 == index) {
                     extraWidth = skillWidthExpanded - skillWidth
                 }
+                extraHeight = it.rect.height() - skillHeight
             }
-            canvas.drawRect(Shapes.rectf(widthSoFar + extraXoffset, 0f, skillGridCategory.width * skillWidth + extraWidth + (skillGridCategory.width * 2 * spacingWidth), 8 * skillHeight + (spacingHeight * 16)), outline)
+            canvas.drawRect(Shapes.rectf(widthSoFar + extraXoffset, 0f, skillGridCategory.width * skillWidth + extraWidth + (skillGridCategory.width * 2 * spacingWidth), 8 * skillHeight + (spacingHeight * 16) + extraHeight), outline)
             val titleLayout = StaticLayout.Builder.obtain(skillGridCategory.skillCategoryName, 0, skillGridCategory.skillCategoryName.length, titlePaint, skillGridCategory.width * 2 * skillWidth.toInt() + extraWidth.toInt())
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                 .setLineSpacing(1.5f, 1f)
@@ -248,6 +241,17 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             canvas.restore()
             widthSoFar += (skillGridCategory.width * skillWidth) + (skillGridCategory.width * spacingWidth * 2)
         }
+
+        // Draw Dotted Lines
+        canvas.save()
+        dottedLine.pathEffect = DashPathEffect(floatArrayOf(30f, 30f), 0f)
+        // Draw Horizontal Lines
+        canvas.drawPath(firstTierLine, dottedLine)
+        canvas.drawPath(secondTierLine, dottedLine)
+        canvas.drawPath(thirdTierLine, dottedLine)
+        canvas.restore()
+
+        // Draw Skills
         var x = 0f
         var y = 0f
         this.trueGrid.forEach {
@@ -366,6 +370,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
 
         val circles: MutableList<Shapes.Circle> = mutableListOf()
 
+        // Draw Prereq Connections
         gridConnections.forEach { connection ->
             val fx = connection.from.x
             val fy = connection.from.y
@@ -390,29 +395,51 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 dropVal = 0f
             }
 
-            var extraXoffset = 0f
-            var extraYOffset = 0f
-            var initialYOffest = 0f
+            var fxOffset = 0f
+            var txOffset = 0f
+            var initialXOffset = 0f
+            var fyOffset = 0f
+            var tyOffset = 0f
+            var xTravelOffset = 0f
+            var initialYOffset = 0f
+            val wOff = skillWidthExpanded - skillWidth
+            val hOff = (exSkill?.rect?.height() ?: 0f) - skillHeight
             exSkill.ifLet {
                 if (it.gridX < fx) {
-                    extraXoffset = skillWidthExpanded - skillWidth
+                    fxOffset = wOff
+                }
+                if (it.gridX < tx) {
+                    txOffset = wOff
                 }
                 if (it.gridY < fy) {
-                    extraYOffset = it.rect.height() - skillHeight
+                    fyOffset = hOff
+                }
+                if (it.gridY < ty) {
+                    tyOffset = hOff
                 }
                 if (it.gridX == fx && it.gridY == fy) {
-                    initialYOffest = it.rect.height() - skillHeight
+                    initialYOffset = hOff
+                    initialXOffset = wOff
+                }
+                if (it.gridY == fy && connection.from.isLowered && fx != it.gridX) {
+                    fyOffset += hOff
+                }
+                if (it.gridY == ty && connection.to.isLowered && tx != it.gridX) {
+                    tyOffset += hOff
+                }
+                if (it.gridX == fx && it.gridY > fy) {
+                    xTravelOffset = wOff
                 }
             }
 
             linePaint.color = connection.color
             // DownLine
-            canvas.drawLine(x+ extraXoffset, y + extraYOffset + initialYOffest, x + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, linePaint)
+            canvas.drawLine(x + fxOffset, y + initialYOffset + fyOffset, x + fxOffset, y + (lineHeight * lineMult) + dropVal + initialYOffset + fyOffset, linePaint)
             if (fx == tx) {
                 // Across
-                canvas.drawLine(x + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, targetX + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, linePaint)
+                canvas.drawLine(x + fxOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, targetX + txOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, linePaint)
                 // Down to skill
-                canvas.drawLine(targetX + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, targetX + extraXoffset, targetY + extraYOffset, linePaint)
+                canvas.drawLine(targetX + txOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, targetX + txOffset, targetY + tyOffset, linePaint)
             } else {
                 val signX = (targetX - x).sign
                 val xLoc = if (signX < 0) {
@@ -420,29 +447,31 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                     x - (skillWidth * mult) - (mult * spacingWidth)
                 } else {
                     // Right
-                    x + (skillWidth * (1f - mult)) + (mult * spacingWidth)
+                    x + (skillWidth * (1f - mult)) + (mult * spacingWidth) + xTravelOffset
                 }
                 // Cross to space
-                canvas.drawLine(x + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, xLoc + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, linePaint)
+                canvas.drawLine(x + fxOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, xLoc + fxOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, linePaint)
                 if (connection.prereqs > 1) {
                     // Up or down to skill height
-                    canvas.drawLine(xLoc + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, xLoc + extraXoffset, targetY - (spacingHeight * mult) + extraYOffset, linePaint)
+                    canvas.drawLine(xLoc + fxOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, xLoc + fxOffset, targetY - (spacingHeight * mult) + tyOffset, linePaint)
                     // Cross to skill
-                    canvas.drawLine(xLoc + extraXoffset, targetY - (spacingHeight * mult) + extraYOffset, targetX + extraXoffset + (-signX * (skillWidth / 4f)), targetY - (spacingHeight * mult) + extraYOffset, linePaint)
-                    canvas.drawLine(targetX + (-signX * (skillWidth / 4f)) + extraXoffset, targetY - (spacingHeight * mult) + extraYOffset, targetX + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, linePaint)
-                    canvas.drawLine(targetX + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, targetX + extraXoffset, targetY + extraYOffset, linePaint)
+                    canvas.drawLine(xLoc + fxOffset, targetY - (spacingHeight * mult) + tyOffset, targetX + (-signX * (skillWidth / 4f)) + txOffset, targetY - (spacingHeight * mult) + tyOffset, linePaint)
+                    canvas.drawLine(targetX + (-signX * (skillWidth / 4f)) + txOffset, targetY - (spacingHeight * mult) + tyOffset, targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, linePaint)
+                    canvas.drawLine(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, targetX + txOffset, targetY + tyOffset, linePaint)
                 } else {
                     // Up or down to skill height
-                    canvas.drawLine(xLoc + extraXoffset, y + (lineHeight * lineMult) + dropVal + extraYOffset, xLoc + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, linePaint)
+                    canvas.drawLine(xLoc + fxOffset, y + (lineHeight * lineMult) + dropVal + fyOffset + initialYOffset, xLoc + fxOffset, targetY - (spacingHeight / 2f) + tyOffset, linePaint)
                     // Cross to skill
-                    canvas.drawLine(xLoc + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, targetX + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, linePaint)
-                    canvas.drawLine(targetX + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, targetX + extraXoffset, targetY + extraYOffset, linePaint)
+                    canvas.drawLine(xLoc + fxOffset, targetY - (spacingHeight / 2f) + tyOffset, targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, linePaint)
+                    canvas.drawLine(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, targetX + txOffset, targetY + tyOffset, linePaint)
                 }
                 if (connection.prereqs > 1) {
-                    circles.add(Shapes.Circle(targetX + extraXoffset, targetY - (spacingHeight / 2f) + extraYOffset, numberCircleRadius))
+                    circles.add(Shapes.Circle(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, numberCircleRadius))
                 }
             }
         }
+
+        // Draw Intersection Circles
         circles.forEach {
             circlePaint.shader = LinearGradient(it.x, it.y - (numberCircleRadius / 2f), it.x, it.y + (numberCircleRadius / 2f), lightGray, darkGray, Shader.TileMode.CLAMP)
             canvas.drawCircle(it.x, it.y, it.radius, circlePaint)
@@ -532,6 +561,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         }
         trueGrid[index].expanded = !expanded
         this.trueGrid = calculateTrueGrid()
+        recalculateDottedLines()
     }
 
     fun getExapnded(): GridSkill? {
@@ -690,6 +720,43 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             }
         }
         return gridSkills.toList()
+    }
+
+    private fun recalculateDottedLines() {
+        var firstLineOffset = 0f
+        var secondLineOffset = 0f
+        var thirdLineOffset = 0f
+        getExapnded().ifLet {
+            val offset = it.rect.height() - skillHeight
+            when(it.gridY) {
+                0 -> {
+                    firstLineOffset = offset
+                    secondLineOffset = offset
+                    thirdLineOffset = offset
+                }
+                1 -> {
+                    secondLineOffset = offset
+                    thirdLineOffset = offset
+                }
+                2 -> {
+                    thirdLineOffset = offset
+                }
+            }
+        }
+        firstTierLine = Path().apply{
+            moveTo(0f, (2f * skillHeight) + (4f * spacingHeight) + firstLineOffset)
+            lineTo(100000f, (2f * skillHeight) + (4f * spacingHeight) + firstLineOffset) // End POint
+        }
+
+        secondTierLine = Path().apply{
+            moveTo(0f, (4f * skillHeight) + (8f * spacingHeight) + secondLineOffset)
+            lineTo(100000f, (4f * skillHeight) + (8f * spacingHeight) + secondLineOffset) // End POint
+        }
+
+        thirdTierLine = Path().apply{
+            moveTo(0f, (6f * skillHeight) + (12f * spacingHeight) + thirdLineOffset)
+            lineTo(100000f, (6f * skillHeight) + (12f * spacingHeight) + thirdLineOffset) // End POint
+        }
     }
 
 }

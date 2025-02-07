@@ -94,6 +94,7 @@ class RulesFragment : Fragment() {
         nativeSkillTreeDiagramNav.setOnClick {
             nativeSkillTreeDiagramNav.setLoading(true)
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.SKILL_CATEGORIES), false) {
+                nativeSkillTreeDiagramNav.setLoading(false)
                 val intent = Intent(v.context, NativeSkillTreeActivity::class.java)
                 startActivity(intent)
             }
