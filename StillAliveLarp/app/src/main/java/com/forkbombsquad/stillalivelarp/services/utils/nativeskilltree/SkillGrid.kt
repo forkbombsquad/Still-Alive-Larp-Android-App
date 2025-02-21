@@ -15,7 +15,9 @@ import android.text.TextPaint
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillCategories.Companion
 import com.forkbombsquad.stillalivelarp.utils.Shapes
+import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlin.math.max
 import kotlin.math.pow
@@ -38,6 +40,18 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     private val titleSpacing = 20f
     private val numberCircleRadius = 50f
     private val textPadding = 4
+
+    // Dotted Lines
+    private var firstLineYOffset = 0f
+    private var secondLineYOffset = 0f
+    private var thirdLineYOffset = 0f
+    private var lineStartXOffset = 0f
+    private var lineEndXOffset = 0f
+
+    // XP Cost Column
+    private val xpCostWidth = skillWidth + spacingWidth + spacingWidth
+    private val diamondWidth = 300f
+    private val diamondHeight = 300f
 
     private val paint = Paint()
     private val blackPaint = Paint().apply {
@@ -148,21 +162,6 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     private val lightGreen = Color.parseColor("#CAE1C5")
     private val darkGreen = Color.parseColor("#98D078")
 
-    private var firstTierLine = Path().apply{
-        moveTo(0f, (2f * skillHeight) + (4f * spacingHeight))
-        lineTo(100000f, (2f * skillHeight) + (4f * spacingHeight)) // End POint
-    }
-
-    private var secondTierLine = Path().apply{
-        moveTo(0f, (4f * skillHeight) + (8f * spacingHeight))
-        lineTo(100000f, (4f * skillHeight) + (8f * spacingHeight)) // End POint
-    }
-
-    private var thirdTierLine = Path().apply{
-        moveTo(0f, (6f * skillHeight) + (12f * spacingHeight))
-        lineTo(100000f, (6f * skillHeight) + (12f * spacingHeight)) // End POint
-    }
-
     val fullGrid: MutableList<MutableList<FullSkillModel?>>
     val gridConnections: List<GridConnection>
 
@@ -215,6 +214,8 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         // Draw Category Boxes
         val exSkill = getExapnded()
         var widthSoFar = 0f
+        var startDottedLinesX = 0f
+        var finalDottedLineX = 0f
         gridCategories.forEachIndexed { index, skillGridCategory ->
             // Outline Category and Name it
             var extraXoffset = 0f
@@ -240,12 +241,149 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             titleLayout.draw(canvas)
             canvas.restore()
             widthSoFar += (skillGridCategory.width * skillWidth) + (skillGridCategory.width * spacingWidth * 2)
+            if (skillGridCategory.skillCategoryId == Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+                // Draw Tier xp label column thing
+                canvas.drawRect(Shapes.rectf(widthSoFar + extraXoffset + extraWidth, 0f, xpCostWidth, 8 * skillHeight + (spacingHeight * 16) + extraHeight), outline)
+
+                val xpTitle = "Tier - XP Cost"
+                val xpTitleLayout = StaticLayout.Builder.obtain(xpTitle, 0, xpTitle.length, titlePaint, skillGridCategory.width * 2 * skillWidth.toInt() + extraWidth.toInt())
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(1.5f, 1f)
+                    .setIncludePad(false)
+                    .build()
+                canvas.save()
+                canvas.translate(widthSoFar + extraXoffset + extraWidth + (xpCostWidth / 2), titleSize)
+                xpTitleLayout.draw(canvas)
+                canvas.restore()
+
+                val startX = widthSoFar + extraXoffset + extraWidth + spacingWidth
+                var startY1 = skillHeight + spacingHeight
+                var startY2 = skillHeight + skillHeight + (spacingHeight * 4f) + startY1
+                var startY3 = startY2 + skillHeight + skillHeight + (spacingHeight * 4f)
+                var startY4 = startY3 + skillHeight + skillHeight + (spacingHeight * 4f)
+                exSkill.ifLet { skl ->
+                    if (skl.expanded) {
+                        val xp = skl.skill.xpCost.toInt()
+                        if (xp <= 4) {
+                            startY4 += extraHeight
+                        }
+                        if (xp <= 3) {
+                            startY3 += extraHeight
+                        }
+                        if (xp <= 2) {
+                            startY2 += extraHeight
+                        }
+                        if (xp <= 1) {
+                            startY1 += extraHeight
+                        }
+                    }
+                }
+
+                val diamond1 = Path().apply {
+                    // Top
+                    moveTo(startX + (diamondWidth / 2), startY1)
+                    // Right
+                    lineTo(startX + diamondWidth, startY1 + (diamondHeight / 2))
+                    // Bottom
+                    lineTo(startX + (diamondWidth / 2), startY1 + diamondHeight)
+                    // Left
+                    lineTo(startX, startY1 + (diamondHeight / 2))
+                    close()
+                }
+                val diamond2 = Path().apply {
+                    // Top
+                    moveTo(startX + (diamondWidth / 2), startY2)
+                    // Right
+                    lineTo(startX + diamondWidth, startY2 + (diamondHeight / 2))
+                    // Bottom
+                    lineTo(startX + (diamondWidth / 2), startY2 + diamondHeight)
+                    // Left
+                    lineTo(startX, startY2 + (diamondHeight / 2))
+                    close()
+                }
+                val diamond3 = Path().apply {
+                    // Top
+                    moveTo(startX + (diamondWidth / 2), startY3)
+                    // Right
+                    lineTo(startX + diamondWidth, startY3 + (diamondHeight / 2))
+                    // Bottom
+                    lineTo(startX + (diamondWidth / 2), startY3 + diamondHeight)
+                    // Left
+                    lineTo(startX, startY3 + (diamondHeight / 2))
+                    close()
+                }
+                val diamond4 = Path().apply {
+                    // Top
+                    moveTo(startX + (diamondWidth / 2), startY4)
+                    // Right
+                    lineTo(startX + diamondWidth, startY4 + (diamondHeight / 2))
+                    // Bottom
+                    lineTo(startX + (diamondWidth / 2), startY4 + diamondHeight)
+                    // Left
+                    lineTo(startX, startY4 + (diamondHeight / 2))
+                    close()
+                }
+                canvas.save()
+                canvas.drawPath(diamond1, outline)
+                canvas.drawPath(diamond2, outline)
+                canvas.drawPath(diamond3, outline)
+                canvas.drawPath(diamond4, outline)
+                canvas.restore()
+
+                var count = 1
+                var startY = startY1
+                while (count < 5) {
+                    val xpLayout = StaticLayout.Builder.obtain(count.toString(), 0, count.toString().length, titlePaint, diamondWidth.toInt())
+                        .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                        .setLineSpacing(1.5f, 1f)
+                        .setIncludePad(false)
+                        .build()
+                    canvas.save()
+                    canvas.translate(startX + (diamondWidth / 2), startY + (diamondHeight / 2) - (titleSize / 2))
+                    xpLayout.draw(canvas)
+                    canvas.restore()
+                    count++
+                    when (count) {
+                        2 -> {
+                            startY = startY2
+                        }
+                        3 -> {
+                            startY = startY3
+                        }
+                        4 -> {
+                            startY = startY4
+                        }
+                    }
+                }
+
+                startDottedLinesX = widthSoFar
+                widthSoFar += xpCostWidth
+            }
+            if (index == gridCategories.size - 1) {
+                finalDottedLineX = widthSoFar
+            }
         }
 
         // Draw Dotted Lines
         canvas.save()
         dottedLine.pathEffect = DashPathEffect(floatArrayOf(30f, 30f), 0f)
         // Draw Horizontal Lines
+        val firstTierLine = Path().apply{
+            moveTo(startDottedLinesX + lineStartXOffset, (2f * skillHeight) + (4f * spacingHeight) + firstLineYOffset)
+            lineTo(finalDottedLineX + lineEndXOffset, (2f * skillHeight) + (4f * spacingHeight) + firstLineYOffset) // End POint
+        }
+
+        val secondTierLine = Path().apply{
+            moveTo(startDottedLinesX + lineStartXOffset, (4f * skillHeight) + (8f * spacingHeight) + secondLineYOffset)
+            lineTo(finalDottedLineX + lineEndXOffset, (4f * skillHeight) + (8f * spacingHeight) + secondLineYOffset) // End POint
+        }
+
+        val thirdTierLine = Path().apply{
+            moveTo(startDottedLinesX + lineStartXOffset, (6f * skillHeight) + (12f * spacingHeight) + thirdLineYOffset)
+            lineTo(finalDottedLineX + lineEndXOffset, (6f * skillHeight) + (12f * spacingHeight) + thirdLineYOffset) // End POint
+        }
+
+
         canvas.drawPath(firstTierLine, dottedLine)
         canvas.drawPath(secondTierLine, dottedLine)
         canvas.drawPath(thirdTierLine, dottedLine)
@@ -368,15 +506,16 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             }
         }
 
-        val circles: MutableList<Shapes.Circle> = mutableListOf()
+        val circles: MutableMap<Shapes.Circle, Int> = mutableMapOf()
 
         // Draw Prereq Connections
         gridConnections.forEach { connection ->
-            val fx = connection.from.x
+            var fx = connection.from.x
             val fy = connection.from.y
-            val tx = connection.to.x
+            var tx = connection.to.x
             val ty = connection.to.y
             val mult = connection.mult
+
             x = spacingWidth + (fx * skillWidth) + (fx * spacingWidth * 2) + (skillWidth * mult)
             y = if (!connection.from.isLowered) {
                 (fy * skillHeight * 2) + (fy * spacingHeight * 4) + spacingHeight + titleSize + titleSpacing + skillHeight
@@ -432,6 +571,12 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 }
             }
 
+            // Account for xp row
+            if (connection.fromCategoryId > Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+                fxOffset += xpCostWidth.toInt()
+                txOffset += xpCostWidth.toInt()
+            }
+
             linePaint.color = connection.color
             // DownLine
             canvas.drawLine(x + fxOffset, y + initialYOffset + fyOffset, x + fxOffset, y + (lineHeight * lineMult) + dropVal + initialYOffset + fyOffset, linePaint)
@@ -466,15 +611,25 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                     canvas.drawLine(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, targetX + txOffset, targetY + tyOffset, linePaint)
                 }
                 if (connection.prereqs > 1) {
-                    circles.add(Shapes.Circle(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, numberCircleRadius))
+                    circles[Shapes.Circle(targetX + txOffset, targetY - (spacingHeight / 2f) + tyOffset, numberCircleRadius)] = connection.prereqs
                 }
             }
         }
 
         // Draw Intersection Circles
-        circles.forEach {
+        circles.forEach { (it, num) ->
             circlePaint.shader = LinearGradient(it.x, it.y - (numberCircleRadius / 2f), it.x, it.y + (numberCircleRadius / 2f), lightGray, darkGray, Shader.TileMode.CLAMP)
             canvas.drawCircle(it.x, it.y, it.radius, circlePaint)
+            val intersectionNum = StaticLayout.Builder.obtain(num.toString(), 0, num.toString().length, textPaint, (numberCircleRadius * 2).toInt())
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setLineSpacing(1.5f, 1f)
+                .setIncludePad(false)
+                .build()
+            val intersecHeight = intersectionNum.height
+            canvas.save()
+            canvas.translate(it.x, it.y - (intersecHeight / 2))
+            intersectionNum.draw(canvas)
+            canvas.restore()
         }
     }
 
@@ -510,7 +665,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 var index = 0
                 skill?.postreqs?.forEach { postreqId ->
                     getGridLocation(postreqId).ifLet {
-                        gridConnections.add(GridConnection(GridLocation(x, y, skill.prereqs.firstOrNull { pre -> skill.xpCost.toInt() == pre.xpCost.toInt() } != null), it, increment, getSkillColor(skill.skillTypeId.toInt()), getSkill(postreqId).prereqs.count()))
+                        gridConnections.add(GridConnection(GridLocation(x, y, skill.prereqs.firstOrNull { pre -> skill.xpCost.toInt() == pre.xpCost.toInt() } != null), it, increment, getSkillColor(skill.skillTypeId.toInt()), getSkill(postreqId).prereqs.count(), skill.skillCategoryId.toInt()))
                         index += 1
                     }
                 }
@@ -697,7 +852,11 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                     } else {
                         (xpCost * skillHeight * 2) + (xpCost * spacingHeight * 4) + skillHeight + spacingHeight + spacingHeight + titleSize + titleSpacing
                     }
-                    var x = spacingWidth + (skillIndex * skillWidth) + (skillIndex * spacingWidth * 2)
+                    var xoffset = 0f
+                    if (skill.skillCategoryId.toInt() > Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+                        xoffset = xpCostWidth
+                    }
+                    var x = spacingWidth + (skillIndex * skillWidth) + (skillIndex * spacingWidth * 2) + xoffset
 
                     if (exExists) {
                         if (skillIndex > exXLoc) {
@@ -723,39 +882,31 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     }
 
     private fun recalculateDottedLines() {
-        var firstLineOffset = 0f
-        var secondLineOffset = 0f
-        var thirdLineOffset = 0f
+        firstLineYOffset = 0f
+        secondLineYOffset = 0f
+        thirdLineYOffset = 0f
+        lineStartXOffset = 0f
+        lineEndXOffset = 0f
         getExapnded().ifLet {
             val offset = it.rect.height() - skillHeight
+            lineEndXOffset = it.rect.width() - skillWidth
             when(it.gridY) {
                 0 -> {
-                    firstLineOffset = offset
-                    secondLineOffset = offset
-                    thirdLineOffset = offset
+                    firstLineYOffset = offset
+                    secondLineYOffset = offset
+                    thirdLineYOffset = offset
                 }
                 1 -> {
-                    secondLineOffset = offset
-                    thirdLineOffset = offset
+                    secondLineYOffset = offset
+                    thirdLineYOffset = offset
                 }
                 2 -> {
-                    thirdLineOffset = offset
+                    thirdLineYOffset = offset
                 }
             }
-        }
-        firstTierLine = Path().apply{
-            moveTo(0f, (2f * skillHeight) + (4f * spacingHeight) + firstLineOffset)
-            lineTo(100000f, (2f * skillHeight) + (4f * spacingHeight) + firstLineOffset) // End POint
-        }
-
-        secondTierLine = Path().apply{
-            moveTo(0f, (4f * skillHeight) + (8f * spacingHeight) + secondLineOffset)
-            lineTo(100000f, (4f * skillHeight) + (8f * spacingHeight) + secondLineOffset) // End POint
-        }
-
-        thirdTierLine = Path().apply{
-            moveTo(0f, (6f * skillHeight) + (12f * spacingHeight) + thirdLineOffset)
-            lineTo(100000f, (6f * skillHeight) + (12f * spacingHeight) + thirdLineOffset) // End POint
+            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+                lineStartXOffset = it.rect.width() - skillWidth
+            }
         }
     }
 
@@ -763,7 +914,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
 
 data class GridSkill(var rect: RectF, val skill: FullSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
 
-data class GridConnection(val from: GridLocation, val to: GridLocation, var mult: Float, var color: Int, var prereqs: Int) {
+data class GridConnection(val from: GridLocation, val to: GridLocation, var mult: Float, var color: Int, var prereqs: Int, val fromCategoryId: Int) {
     fun distance(): Float {
         return ((to.x - from.x).toFloat().pow(2f) + (to.y - from.y).toFloat().pow(2f)).pow(0.5f)
     }

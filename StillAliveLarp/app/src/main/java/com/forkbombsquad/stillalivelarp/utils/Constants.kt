@@ -43,6 +43,12 @@ class Constants {
         }
     }
 
+    class SpecificSkillCategories {
+        companion object {
+            const val BEGINNER_SKILLS = 1
+        }
+    }
+
     class SpecificSkillIds {
         companion object {
             const val combatAficionado_T = 11
