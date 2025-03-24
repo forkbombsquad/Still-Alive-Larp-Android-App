@@ -19,7 +19,9 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import android.view.VelocityTracker
 import android.view.View
+import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
@@ -87,6 +89,37 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
     private val savedMatrix = Matrix()
     private val scaleGestureDetector = ScaleGestureDetector(context, this)
 
+    private val scroller = OverScroller(context)
+    private val velocityTracker =  VelocityTracker.obtain()
+
+    private var lastFlingX = 0
+    private var lastFlingY = 0
+
+    private val flingRunnable = object : Runnable {
+        override fun run() {
+            if (scroller.computeScrollOffset()) {
+                val newX = scroller.currX
+                val newY = scroller.currY
+
+                // Compute the difference (delta)
+                val dx = (newX - lastFlingX).toFloat()
+                val dy = (newY - lastFlingY).toFloat()
+
+                // Update last positions
+                lastFlingX = newX
+                lastFlingY = newY
+
+                // Apply only the delta movement
+                matrix.postTranslate(dx, dy)
+                imageMatrix = matrix
+                invalidate()
+
+                // Continue running until the scroller finishes
+                postOnAnimation(this)
+            }
+        }
+    }
+
     // GestureDetector for tap events
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
@@ -118,19 +151,26 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         // Set touch listener for gestures, taps, panning and zooming
         setOnTouchListener { _, event ->
-            // Feed the event to both detectors.
             scaleGestureDetector.onTouchEvent(event)
             gestureDetector.onTouchEvent(event)
 
-            // Process panning and zooming
             when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                    // Stop fling when a new touch starts
+                    scroller.forceFinished(true)
+
+                    velocityTracker.clear()
+                    velocityTracker.addMovement(event)
+
                     savedMatrix.set(matrix)
                     startX = event.x
                     startY = event.y
-                    mode = DRAG
+                    mode = if (event.pointerCount > 1) ZOOM else DRAG  // Correctly detect zoom mode
                 }
+
                 MotionEvent.ACTION_MOVE -> {
+                    velocityTracker.addMovement(event)
+
                     if (mode == DRAG) {
                         val dx = event.x - startX
                         val dy = event.y - startY
@@ -138,10 +178,18 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
                         matrix.postTranslate(dx, dy)
                     }
                 }
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    mode = ZOOM
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+
+                MotionEvent.ACTION_UP -> {
+                    velocityTracker.addMovement(event)
+                    velocityTracker.computeCurrentVelocity(1000)
+
+                    val velocityX = velocityTracker.xVelocity
+                    val velocityY = velocityTracker.yVelocity
+
+                    if (Math.abs(velocityX) > 50 || Math.abs(velocityY) > 50) {
+                        startFling(-velocityX.toInt(), -velocityY.toInt())  // Start fling correctly
+                    }
+
                     mode = NONE
                 }
             }
@@ -150,7 +198,23 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
             invalidate()
             true
         }
+
     }
+
+    private fun startFling(velocityX: Int, velocityY: Int) {
+        lastFlingX = 0
+        lastFlingY = 0
+
+        scroller.fling(
+            0, 0,  // Start at (0,0) since we track deltas
+            -velocityX, -velocityY,  // Invert velocity to fix direction
+            Int.MIN_VALUE, Int.MAX_VALUE,  // X bounds
+            Int.MIN_VALUE, Int.MAX_VALUE   // Y bounds
+        )
+
+        postOnAnimation(flingRunnable)
+    }
+
 
     // Callback function when a tap is confirmed
     private fun onTapEvent(canvasX: Float, canvasY: Float) {
@@ -166,19 +230,22 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
-        val scaleChange = (detector.scaleFactor - 1) * 1f  // Reduce scale sensitivity
+        scroller.forceFinished(true)  // Stop fling when pinch-zoom starts
+
+        val scaleChange = (detector.scaleFactor - 1) * 0.8f  // Reduce sensitivity slightly
         val scale = 1 + scaleChange
 
         scaleFactor *= scale
         scaleFactor = scaleFactor.coerceIn(minScale, maxScale)
 
-        // Scale around the pinch center (focusX, focusY)
+        // Apply scaling **around the pinch center**
         matrix.postScale(scale, scale, detector.focusX, detector.focusY)
 
         imageMatrix = matrix
         invalidate()
         return true
     }
+
 
     private fun getScaleFromMatrix(matrix: Matrix): Float {
         val values = FloatArray(9)

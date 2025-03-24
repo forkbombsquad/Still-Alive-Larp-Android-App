@@ -46,6 +46,9 @@ class Constants {
     class SpecificSkillCategories {
         companion object {
             const val BEGINNER_SKILLS = 1
+            const val THE_INFECTED = 13
+            const val PRESTIGE = 14
+            const val SPECIALIZATION = 15
         }
     }
 

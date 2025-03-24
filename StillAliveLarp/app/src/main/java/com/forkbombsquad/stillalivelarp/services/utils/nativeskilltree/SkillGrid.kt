@@ -12,6 +12,8 @@ import android.graphics.Typeface
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -35,11 +37,14 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     private val spacingWidth = 75f
     private val spacingHeight = 150f
     private val lineHeight = spacingHeight / 2f
+    private val fullTitleSize = 100f
     private val textSize = 35f
-    private val titleSize = 50f
+    private val titleSize = 60f
     private val titleSpacing = 20f
     private val numberCircleRadius = 50f
     private val textPadding = 4
+
+    private val skillReqSpacing = 25
 
     // Dotted Lines
     private var firstLineYOffset = 0f
@@ -65,6 +70,19 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         style = Paint.Style.STROKE
         strokeWidth = 5F
     }
+    private val blackFill = Paint().apply {
+        color = Color.BLACK
+        style = Paint.Style.FILL
+        strokeWidth = 5F
+    }
+    private val fullTitlePaint = TextPaint().apply {
+        color = Color.BLACK
+        style = Paint.Style.FILL
+        strokeWidth = 1F
+        textSize = this@SkillGrid.fullTitleSize
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    }
     private val textPaint = TextPaint().apply {
         color = Color.BLACK
         style = Paint.Style.FILL
@@ -82,11 +100,19 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         textAlign = Paint.Align.LEFT
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
+    private val skillRequirementPaint = TextPaint().apply {
+        color = Color.WHITE
+        style = Paint.Style.FILL
+        strokeWidth = 1F
+        textSize = 40f
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    }
     private val skillDetailSkillTypePaint = TextPaint().apply {
         color = Color.BLACK
         style = Paint.Style.FILL
         strokeWidth = 1F
-        textSize = 30f
+        textSize = 28f
         textAlign = Paint.Align.RIGHT
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
@@ -216,6 +242,9 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         var widthSoFar = 0f
         var startDottedLinesX = 0f
         var finalDottedLineX = 0f
+
+        var skillRequirements: MutableList<SkillRequirement> = mutableListOf()
+
         gridCategories.forEachIndexed { index, skillGridCategory ->
             // Outline Category and Name it
             var extraXoffset = 0f
@@ -397,6 +426,43 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             y = it.rect.top
             val sectionSpacing = textPadding * 4
             val lineHeight = 4
+
+            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.THE_INFECTED) {
+                // Title
+                val text = "At Least ${it.skill.minInfection}% Infection Rating Required"
+                val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(1.5f, 1f)
+                    .setIncludePad(false)
+                    .build()
+                val titleHeight = layout.height + textPadding + textPadding
+                skillRequirements.add(SkillRequirement(Shapes.rectf(x - textPadding, y - skillReqSpacing - titleHeight - textPadding, skillWidth + textPadding, titleHeight.toFloat() + textPadding), layout))
+            }
+
+            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.PRESTIGE) {
+                // Title
+                val text = "Requires 1 Prestige Point"
+                val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(1.5f, 1f)
+                    .setIncludePad(false)
+                    .build()
+                val titleHeight = layout.height + textPadding + textPadding
+                skillRequirements.add(SkillRequirement(Shapes.rectf(x - textPadding, y - skillReqSpacing - titleHeight - textPadding, skillWidth + textPadding, titleHeight.toFloat() + textPadding), layout))
+            }
+
+            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.SPECIALIZATION) {
+                // Title
+                val text = "You may only select 1 Tier-${it.skill.xpCost} Specialization Skill"
+
+                val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setLineSpacing(1.5f, 1f)
+                    .setIncludePad(false)
+                    .build()
+                val titleHeight = layout.height + textPadding + textPadding
+                skillRequirements.add(SkillRequirement(Shapes.rectf(x - textPadding, y - skillReqSpacing - titleHeight - textPadding, skillWidth + textPadding, titleHeight.toFloat() + textPadding), layout))
+            }
 
             canvas.drawRect(it.rect, getSkillColor(x, y, it.skill.skillTypeId.toInt()))
             if (it.expanded) {
@@ -629,6 +695,19 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             canvas.save()
             canvas.translate(it.x, it.y - (intersecHeight / 2))
             intersectionNum.draw(canvas)
+            canvas.restore()
+        }
+
+        // Draw Skill Requirements
+        skillRequirements.forEach { skr ->
+            val rect = skr.rect
+            canvas.drawRect(rect, blackFill)
+            canvas.drawRect(rect, outline)
+
+
+            canvas.save()
+            canvas.translate(rect.centerX(), rect.top)
+            skr.layout.draw(canvas)
             canvas.restore()
         }
     }
@@ -913,6 +992,8 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
 }
 
 data class GridSkill(var rect: RectF, val skill: FullSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
+
+data class SkillRequirement(var rect: RectF, val layout: StaticLayout)
 
 data class GridConnection(val from: GridLocation, val to: GridLocation, var mult: Float, var color: Int, var prereqs: Int, val fromCategoryId: Int) {
     fun distance(): Float {
