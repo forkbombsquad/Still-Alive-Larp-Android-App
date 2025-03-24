@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
@@ -20,11 +21,41 @@ class CharacterManager private constructor() {
         character = null
     }
 
+    fun fetchFullCharacter(lifecycleScope: LifecycleCoroutineScope, characterId: Int, callback: (character: FullCharacterModel?) -> Unit) {
+        val request = CharacterService.GetCharacter()
+        lifecycleScope.launch {
+            request.successfulResponse(IdSP(characterId)).ifLet({
+                val fulCharModel = FullCharacterModel(it)
+                SkillManager.shared.getSkills(lifecycleScope, overrideLocal = false) { skills ->
+                    skills.ifLet({ nonnullSkills ->
+                        val cskillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
+                        lifecycleScope.launch {
+                            cskillRequest.successfulResponse(IdSP(characterId)).ifLet({ charSkills ->
+                                charSkills.charSkills.forEach { charSkill ->
+                                    nonnullSkills.firstOrNull { itSkill -> itSkill.id == charSkill.skillId }.ifLet { fsm ->
+                                        fulCharModel.skills = fulCharModel.skills + arrayOf(fsm)
+                                    }
+                                }
+                                callback(fulCharModel)
+                            }, {
+                                callback(fulCharModel)
+                            })
+                        }
+                    }, {
+                        callback(fulCharModel)
+                    })
+                }
+            }, {
+                callback(null)
+            })
+        }
+    }
+
     fun getActiveCharacterForOtherPlayer(lifecycleScope: LifecycleCoroutineScope, playerId: Int, callback: (character: FullCharacterModel?) -> Unit) {
         val request = CharacterService.GetAllPlayerCharacters()
         lifecycleScope.launch {
             request.successfulResponse(IdSP(playerId)).ifLet({
-                it.characters.firstOrNull { char -> char.isAlive.toBoolean() }.ifLet({
+                it.characters.firstOrNull { char -> char.isAlive.toBoolean() && char.characterTypeId == Constants.CharacterTypeId.standard }.ifLet({
                     val fullCharRequest = CharacterService.GetCharacter()
                     lifecycleScope.launch {
                         fullCharRequest.successfulResponse(IdSP(it.id)).ifLet({ charModel ->
@@ -72,7 +103,7 @@ class CharacterManager private constructor() {
                     val allCharRequest = CharacterService.GetAllPlayerCharacters()
                     lifecycleScope.launch {
                         allCharRequest.successfulResponse(IdSP(playerModel.id)).ifLet({ characterListModel ->
-                            characterListModel.characters.firstOrNull { it.isAlive.toBoolean() }.ifLet({ characterSubModel ->
+                            characterListModel.characters.firstOrNull { it.isAlive.toBoolean() && it.characterTypeId == Constants.CharacterTypes.standard }.ifLet({ characterSubModel ->
                                 val charRequest = CharacterService.GetCharacter()
                                 lifecycleScope.launch {
                                     charRequest.successfulResponse(IdSP(characterSubModel.id)).ifLet({ characterModel ->

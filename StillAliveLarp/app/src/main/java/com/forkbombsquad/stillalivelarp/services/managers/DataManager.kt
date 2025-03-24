@@ -5,7 +5,9 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.*
 import com.forkbombsquad.stillalivelarp.services.models.*
+import com.forkbombsquad.stillalivelarp.services.utils.CharactersForTypeWithIdSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.RulebookManager
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
@@ -13,7 +15,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES, ALL_PLANNED_CHARACTERS, ALL_NPC_CHARACTERS
 }
 
 class DataManager private constructor() {
@@ -117,6 +119,16 @@ class DataManager private constructor() {
     var loadingEventAttendeesForEvent = true
 
     var passedBitmap: Bitmap? = null
+
+    var allPlannedCharacters: List<CharacterModel>? = null
+    var loadingAllPlannedCharacters = true
+
+    var selectedPlannedCharacter: FullCharacterModel? = null
+
+    var allNPCCharacters: List<CharacterModel>? = null
+    var loadingAllNPCCharacters = true
+
+    var selectedNPCCharacter: FullCharacterModel? = null
 
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
@@ -611,6 +623,46 @@ class DataManager private constructor() {
                         }
                     } else {
                         loadingSkillCategories = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.ALL_PLANNED_CHARACTERS -> {
+                    loadingAllPlannedCharacters = true
+                    if (allPlannedCharacters == null || forceDownloadIfApplicable) {
+                        val request = CharacterService.GetAllPlayerCharactersForCharacterType()
+                        lifecycleScope.launch {
+                            request.successfulResponse(CharactersForTypeWithIdSP(player?.id ?: -1, Constants.CharacterTypes.Planner)).ifLet({
+                                allPlannedCharacters = it.characters.toList()
+                                loadingAllPlannedCharacters = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                allPlannedCharacters = null
+                                loadingAllPlannedCharacters = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingAllPlannedCharacters = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.ALL_NPC_CHARACTERS -> {
+                    loadingAllNPCCharacters = true
+                    if (allNPCCharacters == null || forceDownloadIfApplicable) {
+                        val request = CharacterService.GetAllNPCCharacters()
+                        lifecycleScope.launch {
+                            request.successfulResponse().ifLet({
+                                allNPCCharacters = it.characters.toList()
+                                loadingAllNPCCharacters = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                allNPCCharacters = null
+                                loadingAllNPCCharacters = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingAllNPCCharacters = false
                         finishedRequest(currentLoadCountIndex)
                     }
                 }

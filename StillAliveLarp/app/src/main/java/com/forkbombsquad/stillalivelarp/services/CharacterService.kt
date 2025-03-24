@@ -2,6 +2,7 @@ package com.forkbombsquad.stillalivelarp.services
 
 import com.forkbombsquad.stillalivelarp.services.models.*
 import com.forkbombsquad.stillalivelarp.services.utils.*
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import okhttp3.RequestBody
 import org.json.JSONObject
 
@@ -18,8 +19,18 @@ interface GetAllPlayerCharactersRequest {
     suspend fun makeRequest(@Query("player_id_in") playerId: Int): Response<CharacterListModel>
 }
 
+interface GetAllPlayerCharactersForCharacterTypeRequest {
+    @HTTP(method ="GET", path = "characters/all_with_type_for_player_id/{characterTypeId}")
+    suspend fun makeRequest(@Path("characterTypeId") characterTypeId: Int, @Query("player_id_in") playerId: Int): Response<CharacterListFullModel>
+}
+
 interface GetAllCharactersRequest {
-    @HTTP(method ="GET", path = "characters/all/")
+    @HTTP(method ="GET", path = "characters/all_with_type/${Constants.CharacterTypeId.standard}")
+    suspend fun makeRequest(): Response<CharacterListFullModel>
+}
+
+interface GetAllNPCCharactersRequest {
+    @HTTP(method ="GET", path = "characters/all_with_type/${Constants.CharacterTypeId.NPC}")
     suspend fun makeRequest(): Response<CharacterListFullModel>
 }
 
@@ -58,9 +69,27 @@ class CharacterService {
         }
     }
 
+    class GetAllPlayerCharactersForCharacterType: UAndPServiceInterface<GetAllPlayerCharactersForCharacterTypeRequest, CharacterListFullModel, CharactersForTypeWithIdSP> {
+        override val request: GetAllPlayerCharactersForCharacterTypeRequest
+            get() = retrofit.create(GetAllPlayerCharactersForCharacterTypeRequest::class.java)
+
+        override suspend fun getResponse(payload: CharactersForTypeWithIdSP): Response<CharacterListFullModel> {
+            return request.makeRequest(payload.characterTypeId(), payload.playerId())
+        }
+    }
+
     class GetAllCharacters: UAndPServiceInterface<GetAllCharactersRequest, CharacterListFullModel, ServicePayload> {
         override val request: GetAllCharactersRequest
             get() = retrofit.create(GetAllCharactersRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
+            return request.makeRequest()
+        }
+    }
+
+    class GetAllNPCCharacters: UAndPServiceInterface<GetAllNPCCharactersRequest, CharacterListFullModel, ServicePayload> {
+        override val request: GetAllNPCCharactersRequest
+            get() = retrofit.create(GetAllNPCCharactersRequest::class.java)
 
         override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
             return request.makeRequest()

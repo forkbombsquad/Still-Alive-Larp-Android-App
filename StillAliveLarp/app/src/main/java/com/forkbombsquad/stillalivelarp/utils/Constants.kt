@@ -6,6 +6,15 @@ import kotlin.math.max
 
 class Constants {
 
+    class CharacterTypeId {
+        companion object {
+            const val standard = 1
+            const val NPC = 2
+            const val planner = 3
+            const val hidden = 4
+        }
+    }
+
     class URLs {
         companion object {
             const val rulebookUrl = "https://stillalivelarp.com/rulebook-app"
@@ -20,7 +29,7 @@ class Constants {
 
     class Logging {
         companion object {
-            const val showLogging = false
+            const val showLogging = true
             const val showTestLogging = true
             // TODO ensure these are false before release
         }

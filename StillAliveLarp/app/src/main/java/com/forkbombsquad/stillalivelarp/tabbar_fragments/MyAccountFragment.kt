@@ -39,6 +39,7 @@ class MyAccountFragment : Fragment() {
     private lateinit var specialClassXpRedNav: NavArrowButtonBlack
     private lateinit var bioNav: NavArrowButtonBlack
     private lateinit var gearNav: NavArrowButtonBlack
+    private lateinit var characterPlannerNav: NavArrowButtonBlack
     private lateinit var manageAccountNav: NavArrowButtonBlack
     private lateinit var adminToolsNav: NavArrowButtonRed
     private lateinit var signOutButton: LoadingButton
@@ -64,6 +65,7 @@ class MyAccountFragment : Fragment() {
         specialClassXpRedNav = v.findViewById(R.id.myaccount_specialClassXpReductionsNavArrow)
         bioNav = v.findViewById(R.id.myaccount_bioNavArrow)
         gearNav = v.findViewById(R.id.myaccount_gearNavArrow)
+        characterPlannerNav = v.findViewById(R.id.myaccount_characterPlannerNavArrow)
         manageAccountNav = v.findViewById(R.id.myaccount_manageAccountNavArrow)
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
@@ -120,6 +122,10 @@ class MyAccountFragment : Fragment() {
             // set info in datamanager so things populate
             DataManager.shared.selectedChar = DataManager.shared.character?.getBaseModel()
             val intent = Intent(v.context, ViewGearActivity::class.java)
+            startActivity(intent)
+        }
+        characterPlannerNav.setOnClick {
+            val intent = Intent(v.context, CharacterPlannerActivity::class.java)
             startActivity(intent)
         }
         manageAccountNav.setOnClick {
@@ -196,6 +202,8 @@ class MyAccountFragment : Fragment() {
         specialClassXpRedNav.setLoading(DataManager.shared.loadingCharacter)
         bioNav.setLoading(DataManager.shared.loadingCharacter)
         gearNav.setLoading(DataManager.shared.loadingCharacter)
+
+        characterPlannerNav.setLoading(DataManager.shared.loadingPlayer || DataManager.shared.loadingCharacter)
     }
 
     companion object {

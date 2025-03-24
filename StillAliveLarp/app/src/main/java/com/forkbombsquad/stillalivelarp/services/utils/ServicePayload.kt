@@ -208,3 +208,16 @@ class RefundSkillSP(playerId: Int, characterId: Int, skillId: Int): ServicePaylo
         return get(ServicePayloadKey.PARAM3)
     }
 }
+
+class CharactersForTypeWithIdSP(playerId: Int, characterTypeId: Int): ServicePayload(mutableMapOf(
+    ServicePayloadKey.PARAM1.key to playerId,
+    ServicePayloadKey.PARAM2.key to characterTypeId
+)) {
+    fun playerId(): Int {
+        return get(ServicePayloadKey.PARAM1)
+    }
+
+    fun characterTypeId(): Int {
+        return get(ServicePayloadKey.PARAM2)
+    }
+}

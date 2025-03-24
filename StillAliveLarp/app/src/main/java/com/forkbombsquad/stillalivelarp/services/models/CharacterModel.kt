@@ -337,7 +337,8 @@ data class CharacterCreateModel(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CharacterSubModel(
     @JsonProperty("id") val id: Int,
-    @JsonProperty("isAlive") val isAlive: String
+    @JsonProperty("isAlive") val isAlive: String,
+    @JsonProperty("characterTypeId") val characterTypeId: Int
 ) : Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)

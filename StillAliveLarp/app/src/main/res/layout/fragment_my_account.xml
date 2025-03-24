@@ -139,6 +139,14 @@
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_characterPlannerNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Character Planner"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/myaccount_manageAccountNavArrow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
