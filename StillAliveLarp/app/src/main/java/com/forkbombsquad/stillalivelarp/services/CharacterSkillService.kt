@@ -3,8 +3,10 @@ package com.forkbombsquad.stillalivelarp.services
 import com.forkbombsquad.stillalivelarp.services.models.AwardListModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillListModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
+import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
@@ -22,6 +24,11 @@ interface GetAllCharacterSkillsForCharacterRequest {
 interface TakeCharacterSkillRequest {
     @HTTP(method ="POST", path = "char-skill/create_with_player_id/{playerId}", hasBody = true)
     suspend fun makeRequest(@Path("playerId") playerId: Int, @Body characterSkill: RequestBody): Response<PlayerModel>
+}
+
+interface TakePlannedCharacterSkillRequest {
+    @HTTP(method ="POST", path = "char-skill/create_with_plan/", hasBody = true)
+    suspend fun makeRequest(@Body characterSkill: RequestBody): Response<CharacterSkillModel>
 }
 
 interface DeleteAllCharacterSkillRequest {
@@ -46,6 +53,15 @@ class CharacterSkillService {
 
         override suspend fun getResponse(payload: CharacterSkillCreateSP): Response<PlayerModel> {
             return request.makeRequest(payload.playerId(), payload.charSkill())
+        }
+    }
+
+    class TakePlannedCharacterSkill: UAndPServiceInterface<TakePlannedCharacterSkillRequest, CharacterSkillModel, CreateModelSP> {
+        override val request: TakePlannedCharacterSkillRequest
+            get() = retrofit.create(TakePlannedCharacterSkillRequest::class.java)
+
+        override suspend fun getResponse(payload: CreateModelSP): Response<CharacterSkillModel> {
+            return request.makeRequest(payload.model())
         }
     }
 

@@ -16,6 +16,18 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".CharacterStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NPCListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddPlannedSkillActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CharacterPlannerSkillListActivity"
+            android:exported="false" />
+        <activity
             android:name=".CharacterPlannerActivity"
             android:exported="false" />
         <activity

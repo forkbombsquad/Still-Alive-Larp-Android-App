@@ -124,6 +124,7 @@ class DataManager private constructor() {
     var loadingAllPlannedCharacters = true
 
     var selectedPlannedCharacter: FullCharacterModel? = null
+    var selectedPlannedCharacterCharSkills: List<CharacterSkillModel>? = null
 
     var allNPCCharacters: List<CharacterModel>? = null
     var loadingAllNPCCharacters = true

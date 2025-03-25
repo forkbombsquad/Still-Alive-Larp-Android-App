@@ -2,6 +2,8 @@ package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
 import android.content.DialogInterface
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
@@ -65,6 +67,47 @@ class AlertUtils {
                         ButtonType.NEUTRAL -> alert.setNeutralButton(button.text, button.onClick)
                         ButtonType.NEGATIVE -> alert.setNegativeButton(button.text, button.onClick)
                     }
+                }
+                alert.show()
+            }
+        }
+
+        fun displayChoiceMessage(context: Context, title: String, choices: Array<String>, response: (index: Int) -> Unit) {
+            StillAliveLarpApplication.activity.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                var selectedIndex = 0
+                alert.setTitle(title)
+                alert.setSingleChoiceItems(choices, 0) { _, index ->
+                    selectedIndex = index
+                }
+                alert.setPositiveButton("Ok") { _, _ ->
+                    response(selectedIndex)
+                }
+                alert.setNegativeButton("Cancel") { _, _ ->
+                    response(-1)
+                }
+                alert.show()
+            }
+        }
+
+        fun displayMessageWithTextField(context: Context, title: String, response: (text: String) -> Unit) {
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(12, 12, 12, 12)
+            }
+
+            val editText = EditText(context).apply {
+                hint = "Enter a Name for your Planned Character"
+            }
+
+            layout.addView(editText)
+
+            StillAliveLarpApplication.activity.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle(title)
+                alert.setView(layout)
+                alert.setPositiveButton("Ok") { _, _ ->
+                    response(editText.text.toString())
                 }
                 alert.show()
             }

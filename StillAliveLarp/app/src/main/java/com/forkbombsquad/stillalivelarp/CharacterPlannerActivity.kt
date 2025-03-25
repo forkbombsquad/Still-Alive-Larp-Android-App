@@ -2,6 +2,7 @@ package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -12,21 +13,39 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.CharacterService
+import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
+import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
+import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
+import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonType
+import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class CharacterPlannerActivity : NoStatusBarActivity() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var layout: LinearLayout
+    private var allPersonalChars: List<CharacterModel>? = null
+
+    private var loading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +57,8 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
         progressBar = findViewById(R.id.characterplanner_loading)
         layout = findViewById(R.id.characterplanner_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS), false) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), false) {
+            allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
             buildView()
         }
         buildView()
@@ -53,11 +73,11 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 16, 0, 16)
                 navarrow.layoutParams = params
-
                 navarrow.textView.text = char.fullName
                 navarrow.setOnClick {
-                    // TODO
+                    loadExisting(char)
                 }
+                navarrow.setLoading(loading)
                 layout.addView(navarrow)
             }
             val navarrow = NavArrowButtonGreenBuildable(this)
@@ -66,11 +86,133 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             navarrow.layoutParams = params
 
             navarrow.textView.text = "Start A New Plan"
+            navarrow.setLoading(loading)
+
+            val choices: MutableList<String> = mutableListOf()
+            choices.add("New Plan")
+            allPersonalChars?.forEach {
+                choices.add(it.fullName)
+            }
             navarrow.setOnClick {
-                // TODO need to figure out how to add a picker to an alert
-                AlertUtils.displayMessage(this, "Creating Plan", "Start fresh or from an existing Character or Plan?", buttons.toTypedArray())
+                AlertUtils.displayChoiceMessage(this, "Create a new plan or base one off of an existing Character?", choices.toTypedArray()) { selectedIndex ->
+                    if (selectedIndex == 0) {
+                        AlertUtils.displayMessageWithTextField(this, "Creating Plan") { name ->
+                            createNew(name, null)
+                        }
+                    } else if (selectedIndex > 0) {
+                        allPersonalChars?.get(selectedIndex - 1).ifLet { selectedChar ->
+                            AlertUtils.displayMessageWithTextField(this, "Creating Plan") { name ->
+                                createNew(name, selectedChar)
+                            }
+                        }
+                    }
+                }
             }
             layout.addView(navarrow)
+        }
+    }
+
+    private fun createNew(name: String, selectedChar: CharacterModel?) {
+        loading = true
+        buildView()
+        var nm = name
+        if (nm.isEmpty()) {
+            selectedChar.ifLet({
+                nm = it.fullName + " plan"
+            }, {
+                nm = "Planned Character"
+            })
+        }
+        var createModel = CharacterCreateModel(
+            fullName = nm,
+            startDate = LocalDate.now().yyyyMMddFormatted(),
+            isAlive = "TRUE",
+            deathDate = "",
+            infection = "0",
+            bio = "",
+            approvedBio = "FALSE",
+            bullets = "20",
+            megas = "0",
+            rivals = "0",
+            rockets = "0",
+            bulletCasings = "0",
+            clothSupplies = "0",
+            woodSupplies = "0",
+            metalSupplies = "0",
+            techSupplies = "0",
+            medicalSupplies = "0",
+            armor = CharacterArmor.NONE.text,
+            unshakableResolveUses = "0",
+            mysteriousStrangerUses = "0",
+            playerId = DataManager.shared.player?.id ?: 0,
+            characterTypeId = Constants.CharacterTypes.Planner
+        )
+
+        val request = CharacterService.CreatePlannedCharacter()
+        lifecycleScope.launch {
+            request.successfulResponse(CharacterCreateSP(createModel)).ifLet { createdChar ->
+                selectedChar.ifLet({ oldChar ->
+                    addSkillsFromExisting(createdChar, oldChar) {
+                        loadExisting(createdChar)
+                    }
+                }, {
+                    loadExisting(createdChar)
+                })
+            }
+        }
+    }
+
+    private fun addSkillsFromExisting(newChar: CharacterModel, existingChar: CharacterModel, finished: () -> Unit) {
+        loading = true
+        val request = CharacterSkillService.GetAllCharacterSkillsForCharacter()
+        lifecycleScope.launch {
+            request.successfulResponse(IdSP(existingChar.id)).ifLet {  list ->
+                val nonZeros = list.charSkills.filter { it.xpSpent > 0 || it.fsSpent > 0 }.toList()
+                var count = 0
+                nonZeros.forEach { nzs ->
+                    val charSkill = CharacterSkillCreateModel(
+                        characterId = newChar.id,
+                        skillId = nzs.id,
+                        xpSpent = nzs.xpSpent,
+                        fsSpent = nzs.fsSpent,
+                        ppSpent = nzs.ppSpent
+                    )
+                    val csRequest = CharacterSkillService.TakePlannedCharacterSkill()
+                    lifecycleScope.launch {
+                        csRequest.successfulResponse(CreateModelSP(charSkill)).ifLet { _ ->
+                            count ++
+                            if (count == nonZeros.size) {
+                                finished()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun loadExisting(character: CharacterModel) {
+        loading = true
+        buildView()
+        CharacterManager.shared.fetchFullCharacter(lifecycleScope, character.id) { fullCharacter ->
+            DataManager.shared.selectedPlannedCharacter = fullCharacter
+            DataManager.shared.unrelaltedUpdateCallback = {
+                loading = true
+                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), forceDownloadIfApplicable = true) {
+                    loading = false
+                    allPersonalChars = DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id }
+                    buildView()
+                }
+                buildView()
+            }
+            val request = CharacterSkillService.GetAllCharacterSkillsForCharacter()
+            lifecycleScope.launch {
+                request.successfulResponse(IdSP(character.id)).ifLet { charSkills ->
+                    DataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
+                    val intent = Intent(this@CharacterPlannerActivity, CharacterPlannerSkillListActivity::class.java)
+                    loading = false
+                    startActivity(intent)
+                }
+            }
         }
     }
 }

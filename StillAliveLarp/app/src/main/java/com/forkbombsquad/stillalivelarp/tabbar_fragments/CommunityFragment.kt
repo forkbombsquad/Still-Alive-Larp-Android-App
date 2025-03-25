@@ -53,7 +53,12 @@ class CommunityFragment : Fragment() {
             // TODO
         }
         allNPCsButton.setOnClick {
-            // TODO
+            allNPCsButton.setLoading(true)
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS)) {
+                allNPCsButton.setLoading(false)
+                val intent = Intent(v.context, NPCListActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

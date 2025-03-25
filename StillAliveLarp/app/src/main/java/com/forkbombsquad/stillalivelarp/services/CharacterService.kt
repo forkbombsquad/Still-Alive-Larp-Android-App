@@ -39,6 +39,11 @@ interface CreateCharacterRequest {
     suspend fun makeRequest(@Body character: RequestBody): Response<CharacterModel>
 }
 
+interface CreatePlannedCharacterRequest {
+    @HTTP(method ="POST", path = "characters/createplan/", hasBody = true)
+    suspend fun makeRequest(@Body character: RequestBody): Response<CharacterModel>
+}
+
 interface UpdateCharacterBioRequest {
     @HTTP(method ="PUT", path = "characters/update_bio/", hasBody = true)
     suspend fun makeRequest(@Body character: RequestBody): Response<CharacterModel>
@@ -99,6 +104,15 @@ class CharacterService {
     class CreateCharacter: UAndPServiceInterface<CreateCharacterRequest, CharacterModel, CharacterCreateSP> {
         override val request: CreateCharacterRequest
             get() = retrofit.create(CreateCharacterRequest::class.java)
+
+        override suspend fun getResponse(payload: CharacterCreateSP): Response<CharacterModel> {
+            return request.makeRequest(payload.character())
+        }
+    }
+
+    class CreatePlannedCharacter: UAndPServiceInterface<CreatePlannedCharacterRequest, CharacterModel, CharacterCreateSP> {
+        override val request: CreatePlannedCharacterRequest
+            get() = retrofit.create(CreatePlannedCharacterRequest::class.java)
 
         override suspend fun getResponse(payload: CharacterCreateSP): Response<CharacterModel> {
             return request.makeRequest(payload.character())
