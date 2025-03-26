@@ -10,8 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
@@ -20,6 +22,8 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class NPCListActivity : NoStatusBarActivity() {
 
+    private lateinit var livingNPCs: KeyValueView
+    private lateinit var rewardReduction: KeyValueView
     private lateinit var layout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +33,8 @@ class NPCListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        livingNPCs = findViewById(R.id.npcs_total)
+        rewardReduction = findViewById(R.id.npcs_lootRatio)
         layout = findViewById(R.id.npcs_layout)
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS), false) {
@@ -41,7 +47,12 @@ class NPCListActivity : NoStatusBarActivity() {
         layout.removeAllViews()
 
         DataManager.shared.allNPCCharacters.ifLet { chars ->
-            chars.filter { it.isAlive.toBoolean() }.alphabetized().forEachIndexed { index, char ->
+            val living = chars.filter { it.isAlive.toBoolean() }
+
+            livingNPCs.set("${living.count()} / 10")
+            rewardReduction.set("${(10 - living.count()) * 10}%")
+
+            living.alphabetized().forEachIndexed { index, char ->
                 val arrow = NavArrowButtonBlackBuildable(this)
                 arrow.textView.text = char.fullName
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -49,8 +60,13 @@ class NPCListActivity : NoStatusBarActivity() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedChar = char
-                    // TODO view character stats and skills
+                    arrow.setLoading(true)
+                    CharacterManager.shared.fetchFullCharacter(lifecycleScope, char.id) {
+                        DataManager.shared.selectedNPCCharacter = it
+                        arrow.setLoading(false)
+                        val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 layout.addView(arrow)
             }
@@ -62,8 +78,13 @@ class NPCListActivity : NoStatusBarActivity() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedChar = char
-                    // TODO view character stats and character skills
+                    arrow.setLoading(true)
+                    CharacterManager.shared.fetchFullCharacter(lifecycleScope, char.id) {
+                        DataManager.shared.selectedNPCCharacter = it
+                        arrow.setLoading(false)
+                        val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 layout.addView(arrow)
             }

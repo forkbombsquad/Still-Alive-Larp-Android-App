@@ -17,6 +17,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
+import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
@@ -112,23 +113,28 @@ class RulesFragment : Fragment() {
         coreRulebookNav.setLoading(DataManager.shared.loadingRulebook)
         coreRulebookNav.isGone = !DataManager.shared.loadingRulebook && DataManager.shared.rulebook == null
         handleImages(v)
+
+        skillTreeDiagramNav.isGone = !FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()
+        skillTreeDiagramDarkNav.isGone = !FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()
     }
 
     private fun handleImages(v: View) {
-        skillTreeDiagramNav.setLoading(loadingSkillTree)
-        skillTreeDiagramDarkNav.setLoading(loadingSkillTreeDark)
         treatingWoundsNav.setLoading(loadingTreatingWounds)
 
-        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE) { success ->
-            activity?.runOnUiThread {
-                skillTreeDiagramNav.isGone = !success
-                skillTreeDiagramNav.setLoading(false)
+        if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
+            skillTreeDiagramNav.setLoading(loadingSkillTree)
+            skillTreeDiagramDarkNav.setLoading(loadingSkillTreeDark)
+            ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE) { success ->
+                activity?.runOnUiThread {
+                    skillTreeDiagramNav.isGone = !success
+                    skillTreeDiagramNav.setLoading(false)
+                }
             }
-        }
-        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK) { success ->
-            activity?.runOnUiThread {
-                skillTreeDiagramDarkNav.isGone = !success
-                skillTreeDiagramDarkNav.setLoading(false)
+            ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK) { success ->
+                activity?.runOnUiThread {
+                    skillTreeDiagramDarkNav.isGone = !success
+                    skillTreeDiagramDarkNav.setLoading(false)
+                }
             }
         }
         ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS) { success ->

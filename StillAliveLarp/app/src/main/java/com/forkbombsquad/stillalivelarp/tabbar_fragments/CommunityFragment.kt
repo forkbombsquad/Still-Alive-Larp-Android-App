@@ -49,9 +49,13 @@ class CommunityFragment : Fragment() {
             transaction.add(R.id.container, frag)
             transaction.addToBackStack(TAG).commit()
         }
+
         campStatusButton.setOnClick {
-            // TODO
+            // TODO add this in the future
         }
+
+        campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()
+
         allNPCsButton.setOnClick {
             allNPCsButton.setLoading(true)
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS)) {
