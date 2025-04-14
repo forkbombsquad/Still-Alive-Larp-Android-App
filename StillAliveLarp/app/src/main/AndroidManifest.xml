@@ -16,6 +16,15 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".NPCSkillListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageNPCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectNPCToManageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewNPCStuffActivity"
             android:exported="false" />
         <activity

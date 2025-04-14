@@ -42,6 +42,7 @@ class AdminPanelFragment : Fragment() {
     private lateinit var updatePass: NavArrowButtonBlack
     private lateinit var refundSkills: NavArrowButtonBlack
     private lateinit var featureFlagManagement: NavArrowButtonBlack
+    private lateinit var manageNPCs: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -101,6 +102,7 @@ class AdminPanelFragment : Fragment() {
         updatePass = v.findViewById(R.id.adminpanel_updatePass)
         featureFlagManagement = v.findViewById(R.id.adminpanel_featureFlagManagement)
         refundSkills = v.findViewById(R.id.adminpanel_refundSkills)
+        manageNPCs = v.findViewById(R.id.adminpanel_manageNPCs)
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -185,8 +187,12 @@ class AdminPanelFragment : Fragment() {
             val intent = Intent(v.context, SelectCharacterToRefundSkillsActivity::class.java)
             startActivity(intent)
         }
+        manageNPCs.setOnClick {
+            val intent = Intent(v.context, SelectNPCToManageActivity::class.java)
+            startActivity(intent)
+        }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS), true, finishedStep = {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS, DataManagerType.ALL_NPC_CHARACTERS), true, finishedStep = {
             buildView()
         }) {
             buildView()
@@ -208,6 +214,7 @@ class AdminPanelFragment : Fragment() {
         updatePass.setLoading(DataManager.shared.loadingAllCharacters)
         featureFlagManagement.setLoading(DataManager.shared.loadingFeatureFlags)
         refundSkills.setLoading(DataManager.shared.loadingAllCharacters)
+        manageNPCs.setLoading(DataManager.shared.loadingAllNPCCharacters)
 
         DataManager.shared.allCharacters.ifLet({
             approveBios.setNotificationBubble(getNumberOfBiosThatNeedApproval(it))

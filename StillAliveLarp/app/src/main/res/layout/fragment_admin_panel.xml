@@ -34,21 +34,15 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     android:textSize="32sp"
                     android:textAlignment="center"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_viewPrereg"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="View Preregistrations"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_eventManagement"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Event Management"
-                    app:showLoading="false"/>
+                    android:text="Event Tools"
+                    android:paddingTop="24dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/adminpanel_playerCheckIn"
@@ -67,11 +61,46 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_giveClassXpRed"
+                    android:id="@+id/adminpanel_viewPrereg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
-                    app:text="Give Class Xp Reduction"
+                    app:text="View Preregistrations"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_eventManagement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Event Management"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_manageIntrigue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Manage Intrigue"
+                    app:showLoading="false"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Player/Character Management"
+                    android:paddingTop="24dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_manageNPCs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Manage NPCs"
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -91,6 +120,14 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_giveClassXpRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Give Class Xp Reduction"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/adminpanel_registerFirearm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,19 +144,39 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_refundSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Refund Skills"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_updatePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Update Player Password"
+                    app:showLoading="false"/>
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Misc Administration"
+                    android:paddingTop="24dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/adminpanel_createAnnouncement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
                     app:text="Create Announcement"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_manageIntrigue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Manage Intrigue"
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -146,22 +203,9 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     app:text="Feature Flag Management"
                     app:showLoading="false"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_refundSkills"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Refund Skills"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_updatePass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="32dp"
-                    app:text="Update Player Password"
-                    app:showLoading="false"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"/>
 
             </LinearLayout> <!-- BEFORE THIS ONE-->
 
