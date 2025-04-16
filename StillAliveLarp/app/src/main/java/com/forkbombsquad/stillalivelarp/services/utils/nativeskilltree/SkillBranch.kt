@@ -56,24 +56,26 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         }
     }
 
-    private fun addSkillRec(skill: FullSkillModel, previousCost: Int) {
-        if (skillInGrid(skill)) { return }
-        if (skill.skillCategoryId.toInt() != categoryId) { return }
-        val cost = skill.xpCost.toInt()
-        grid[cost - 1].add(skill)
+    private fun addSkillRec(skill: FullSkillModel?, previousCost: Int) {
+        if (skill != null) {
+            if (skillInGrid(skill)) { return }
+            if (skill.skillCategoryId.toInt() != categoryId) { return }
+            val cost = skill.xpCost.toInt()
+            grid[cost - 1].add(skill)
 
-        // Add null spaces if there's a jump in the grid (i.e. a skill leads to another skill that skips a tier)
-        if (previousCost != -1 && previousCost + 1 < cost) {
-            var untilCost = previousCost + 1
-            while (untilCost < cost) {
-                grid[untilCost - 1].add(null)
-                untilCost += 1
+            // Add null spaces if there's a jump in the grid (i.e. a skill leads to another skill that skips a tier)
+            if (previousCost != -1 && previousCost + 1 < cost) {
+                var untilCost = previousCost + 1
+                while (untilCost < cost) {
+                    grid[untilCost - 1].add(null)
+                    untilCost += 1
+                }
             }
-        }
 
-        skill.postreqs.forEach { postreqId ->
-            val postreq = getSkill(postreqId)
-            addSkillRec(postreq, cost)
+            skill.postreqs.forEach { postreqId ->
+                val postreq = getSkill(postreqId)
+                addSkillRec(postreq, cost)
+            }
         }
     }
 
@@ -86,8 +88,8 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         return false
     }
 
-    fun getSkill(skillId: Int): FullSkillModel {
-        return allSkills.first { it.id == skillId }
+    fun getSkill(skillId: Int): FullSkillModel? {
+        return allSkills.firstOrNull() { it.id == skillId }
     }
 
     fun prettyPrintGrid(): String {

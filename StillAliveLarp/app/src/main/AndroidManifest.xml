@@ -16,6 +16,9 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".PersonalSkillTreeActivity"
+            android:exported="false" />
+        <activity
             android:name=".NPCSkillListActivity"
             android:exported="false" />
         <activity

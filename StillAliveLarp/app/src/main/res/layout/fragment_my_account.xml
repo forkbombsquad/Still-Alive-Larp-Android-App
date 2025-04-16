@@ -37,30 +37,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.25"/>
+                        android:layout_height="wrap_content">
+
                         <ImageView
                             android:id="@+id/myAccountProfileImage"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:layout_weight="0.5"
+                            android:layout_height="0dp"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/blankprofile"
-                            />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.25"/>
-                    </LinearLayout>
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintWidth_percent="0.5"
+                            app:layout_constraintDimensionRatio="1:1" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ProgressBar
                         android:id="@+id/myAccountProfileImageLoadingBar"
@@ -68,18 +61,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.forkbombsquad.stillalivelarp.utils.SmallLoadingButton
+                        android:layout_width="48dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="EDIT"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:shadowColor="#000000"
-                        android:shadowDx="5"
-                        android:shadowDy="5"
-                        android:shadowRadius="5"
-                        android:textColor="@color/blue"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_marginTop="-8dp"
+                        android:layout_gravity="center_horizontal"
+                        app:buttontext="Edit"/>
+
                 </FrameLayout>
 
                 <TextView
@@ -90,13 +79,14 @@
                     android:textAlignment="center"
                     android:textSize="24sp" />
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_playerStatsNavArrow"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Player Stats"
-                    app:showLoading="false"/>
+                    android:text="Character"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/myaccount_characterStatsNavArrow"
@@ -115,11 +105,11 @@
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_specialClassXpReductionsNavArrow"
+                    android:id="@+id/myaccount_personalSkillTree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
-                    app:text="Special Class Xp Reductions"
+                    app:text="Personal Skill Tree Diagram"
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -139,11 +129,37 @@
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_specialClassXpReductionsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Special Class Xp Reductions"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
                     android:id="@+id/myaccount_characterPlannerNavArrow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
                     app:text="Character Planner"
+                    app:showLoading="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Account"
+                    android:paddingTop="24dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/myaccount_playerStatsNavArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Player Stats"
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack

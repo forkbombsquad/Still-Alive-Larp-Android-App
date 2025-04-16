@@ -76,29 +76,31 @@ class SkillGridCategory(skills: List<FullSkillModel>, skillCategoryId: Int, skil
         }
     }
 
-    private fun buildBranchRec(skill: FullSkillModel, list: MutableList<FullSkillModel>, isPrereq: Boolean = false) {
-        if (branchesAlreadyContain(skill.id) || list.firstOrNull { it.id == skill.id } != null || edgeCaseLeft?.skills?.firstOrNull { it.id == skill.id } != null || edgeCaseRight?.skills?.firstOrNull { it.id == skill.id } != null) { return }
-        if (skillCategoryId > skill.skillCategoryId.toInt()) {
-            isEdgeCaseLeft = true
-            return
-        }
-        if (skillCategoryId < skill.skillCategoryId.toInt()) {
-            isEdgeCaseRight = true
-            return
-        }
-        list.add(skill)
-        if (!isPrereq) {
-            skill.postreqs.forEach {
-                buildBranchRec(getSkill(it), list)
+    private fun buildBranchRec(skill: FullSkillModel?, list: MutableList<FullSkillModel>, isPrereq: Boolean = false) {
+        if (skill != null) {
+            if (branchesAlreadyContain(skill.id) || list.firstOrNull { it.id == skill.id } != null || edgeCaseLeft?.skills?.firstOrNull { it.id == skill.id } != null || edgeCaseRight?.skills?.firstOrNull { it.id == skill.id } != null) { return }
+            if (skillCategoryId > skill.skillCategoryId.toInt()) {
+                isEdgeCaseLeft = true
+                return
             }
-        }
-        skill.prereqs.forEach {
-            buildBranchRec(it, list, true)
+            if (skillCategoryId < skill.skillCategoryId.toInt()) {
+                isEdgeCaseRight = true
+                return
+            }
+            list.add(skill)
+            if (!isPrereq) {
+                skill.postreqs.forEach {
+                    buildBranchRec(getSkill(it), list)
+                }
+            }
+            skill.prereqs.forEach {
+                buildBranchRec(it, list, true)
+            }
         }
     }
 
-    private fun getSkill(skillId: Int): FullSkillModel {
-        return allSkills.first { it.id == skillId }
+    private fun getSkill(skillId: Int): FullSkillModel? {
+        return allSkills.firstOrNull { it.id == skillId }
     }
 
     private fun branchesAlreadyContain(skillId: Int): Boolean {

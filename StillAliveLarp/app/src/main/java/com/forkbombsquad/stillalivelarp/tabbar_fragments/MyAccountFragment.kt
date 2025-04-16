@@ -39,10 +39,12 @@ class MyAccountFragment : Fragment() {
     private lateinit var specialClassXpRedNav: NavArrowButtonBlack
     private lateinit var bioNav: NavArrowButtonBlack
     private lateinit var gearNav: NavArrowButtonBlack
-    private lateinit var characterPlannerNav: NavArrowButtonBlack
+    private lateinit var characterPlannerNav: NavArrowButtonBlue
     private lateinit var manageAccountNav: NavArrowButtonBlack
     private lateinit var adminToolsNav: NavArrowButtonRed
     private lateinit var signOutButton: LoadingButton
+
+    private lateinit var personalSkillTree: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -69,6 +71,7 @@ class MyAccountFragment : Fragment() {
         manageAccountNav = v.findViewById(R.id.myaccount_manageAccountNavArrow)
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
+        personalSkillTree = v.findViewById(R.id.myaccount_personalSkillTree)
 
         profileImage.setOnClickListener {
             DataManager.shared.unrelaltedUpdateCallback = {
@@ -106,6 +109,21 @@ class MyAccountFragment : Fragment() {
             val transaction = parentFragmentManager.beginTransaction()
             transaction.add(R.id.container, frag)
             transaction.addToBackStack(TAG).commit()
+        }
+        personalSkillTree.setOnClick {
+            personalSkillTree.setLoading(true)
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.XP_REDUCTIONS), false) {
+                DataManager.shared.selectedPlayer = DataManager.shared.player
+                DataManager.shared.charForSelectedPlayer = DataManager.shared.character
+                DataManager.shared.unrelaltedUpdateCallback = {
+                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), true, {}, {})
+                    buildView()
+                }
+                val intent = Intent(v.context, PersonalSkillTreeActivity::class.java)
+                startActivity(intent)
+                personalSkillTree.setLoading(false)
+            }
+
         }
         specialClassXpRedNav.setOnClick {
             val intent = Intent(v.context, SpecialClassXpReductionsActivity::class.java)
@@ -146,11 +164,16 @@ class MyAccountFragment : Fragment() {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_account)
         pullToRefresh.setOnRefreshListener {
             DataManager.shared.loadingProfileImage = true
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), true) {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.SKILL_CATEGORIES), true) {
                 DataManager.shared.selectedPlayer = DataManager.shared.player
                 DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), true) {
                     buildView()
                     pullToRefresh.isRefreshing = false
+                }
+                if (DataManager.shared.character != null) {
+                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.XP_REDUCTIONS), true) {
+                        buildView()
+                    }
                 }
                 buildView()
             }
@@ -158,7 +181,7 @@ class MyAccountFragment : Fragment() {
         }
 
         DataManager.shared.loadingProfileImage = true
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER), false) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.SKILL_CATEGORIES), false) {
             DataManager.shared.selectedPlayer = DataManager.shared.player
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
                 buildView()
@@ -190,12 +213,14 @@ class MyAccountFragment : Fragment() {
 
         playerStatsNav.setLoading(DataManager.shared.loadingPlayer)
         manageAccountNav.setLoading(DataManager.shared.loadingPlayer)
+        personalSkillTree.setLoading(DataManager.shared.loadingCharacter)
 
         charStatsNav.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
         skillManagementNav.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
         specialClassXpRedNav.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
         bioNav.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
         gearNav.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
+        personalSkillTree.isGone = !DataManager.shared.loadingCharacter && DataManager.shared.character == null
 
         charStatsNav.setLoading(DataManager.shared.loadingCharacter)
         skillManagementNav.setLoading(DataManager.shared.loadingCharacter)

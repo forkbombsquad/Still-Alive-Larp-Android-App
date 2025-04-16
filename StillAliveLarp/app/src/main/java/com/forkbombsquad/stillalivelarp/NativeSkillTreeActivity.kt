@@ -23,6 +23,7 @@ import android.view.VelocityTracker
 import android.view.View
 import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
@@ -32,6 +33,7 @@ import com.forkbombsquad.stillalivelarp.utils.Shapes
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlin.math.max
+import androidx.lifecycle.lifecycleScope
 
 class NativeSkillTreeActivity : NoStatusBarActivity() {
 
@@ -70,7 +72,8 @@ class NativeSkillTreeActivity : NoStatusBarActivity() {
             SkillGrid(
                 DataManager.shared.skills!!,
                 DataManager.shared.skillCategories!!.asList()
-            )
+            ),
+            lifecycleScope
         )
         img.invalidate()
     }
@@ -94,6 +97,8 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
 
     private var lastFlingX = 0
     private var lastFlingY = 0
+
+    private lateinit var lifecycleScope: LifecycleCoroutineScope
 
     private val flingRunnable = object : Runnable {
         override fun run() {
@@ -220,12 +225,16 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
     private fun onTapEvent(canvasX: Float, canvasY: Float) {
         // Let the SkillGrid handle the tap event.
         // You can further test the (canvasX, canvasY) position if needed.
-        skillGrid?.handleTap(canvasX, canvasY)
+        skillGrid?.handleTap(canvasX, canvasY, context, lifecycleScope)
         invalidate()
     }
 
-    fun updateDrawables(skillGrid: SkillGrid) {
+    fun updateDrawables(skillGrid: SkillGrid, lifecycleScope: LifecycleCoroutineScope) {
+        this.lifecycleScope = lifecycleScope
         this.skillGrid = skillGrid
+        this.skillGrid!!.invalidate = {
+            this.invalidate()
+        }
         invalidate()
     }
 

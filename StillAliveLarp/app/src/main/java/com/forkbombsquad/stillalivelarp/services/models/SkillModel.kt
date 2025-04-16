@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import java.io.Serializable
 
 data class CharacterModifiedSkillModel(
@@ -123,6 +124,21 @@ data class CharacterModifiedSkillModel(
             SkillFilterType.INF -> minInfection.toInt() > 0
         }
     }
+
+    fun toFullSkillModel(): FullSkillModel {
+        return FullSkillModel(
+            id = id,
+            xpCost = xpCost,
+            prestigeCost = prestigeCost,
+            name = name,
+            description = description,
+            minInfection = minInfection,
+            skillTypeId = skillTypeId,
+            skillCategoryId = skillCategoryId,
+            prereqs = prereqs,
+            arrayOf()
+        )
+    }
 }
 
 data class FullSkillModel(
@@ -167,9 +183,21 @@ data class FullSkillModel(
     fun getModCost(combatMod: Int, professionMod: Int, talentMod: Int, xpReductions: Array<XpReductionModel>): Int {
         var cost = xpCost.toInt()
         when(skillTypeId.toInt()) {
-            Constants.SkillTypes.combat -> cost = cost.addMinOne(combatMod)
-            Constants.SkillTypes.profession -> cost = cost.addMinOne(professionMod)
-            Constants.SkillTypes.talent -> cost = cost.addMinOne(talentMod)
+            Constants.SkillTypes.combat -> {
+                if (cost > 0 || combatMod > 0) {
+                    cost = cost.addMinOne(combatMod)
+                }
+            }
+            Constants.SkillTypes.profession -> {
+                if (cost > 0 || professionMod > 0) {
+                    cost = cost.addMinOne(professionMod)
+                }
+            }
+            Constants.SkillTypes.talent -> {
+                if (cost > 0 || talentMod > 0) {
+                    cost = cost.addMinOne(talentMod)
+                }
+            }
         }
         xpReductions.forEach { reduction ->
             if (reduction.skillId == this.id) {
@@ -182,9 +210,21 @@ data class FullSkillModel(
     fun getModCost(combatMod: Int, professionMod: Int, talentMod: Int, xpReduction: XpReductionModel): Int {
         var cost = xpCost.toInt()
         when(skillTypeId.toInt()) {
-            Constants.SkillTypes.combat -> cost = cost.addMinOne(combatMod)
-            Constants.SkillTypes.profession -> cost = cost.addMinOne(professionMod)
-            Constants.SkillTypes.talent -> cost = cost.addMinOne(talentMod)
+            Constants.SkillTypes.combat -> {
+                if (cost > 0 || combatMod > 0) {
+                    cost = cost.addMinOne(combatMod)
+                }
+            }
+            Constants.SkillTypes.profession -> {
+                if (cost > 0 || professionMod > 0) {
+                    cost = cost.addMinOne(professionMod)
+                }
+            }
+            Constants.SkillTypes.talent -> {
+                if (cost > 0 || talentMod > 0) {
+                    cost = cost.addMinOne(talentMod)
+                }
+            }
         }
         if (xpReduction.skillId == this.id) {
             cost = cost.addMinOne(-1 * xpReduction.xpReduction.toInt())
@@ -209,14 +249,33 @@ data class FullSkillModel(
         return ""
     }
 
-    fun getFullCostText(): String {
+    fun getFullCostText(purchaseableSkills: List<CharacterModifiedSkillModel>): String {
         var text = ""
-        text += "${xpCost}xp"
-        if (minInfection.toInt() > 0) {
-            text += " | ${minInfection}% Inf Threshold"
-        }
-        if (prestigeCost.toInt() > 0) {
-            text += " | ${prestigeCost}pp"
+        val pskill = purchaseableSkills.firstOrNull { it.id == id }
+        if (pskill != null) {
+            if (pskill.hasModCost()) {
+                text += "${pskill.modXpCost}xp (usual cost: ${xpCost}xp)"
+            } else {
+                text += "${xpCost}xp"
+            }
+
+            if (pskill.hasModInfCost() && minInfection.toInt() > 0) {
+                text += " | ${pskill.modInfCost}% Inf Threshold (usual threshold: ${minInfection}%)"
+            } else if(minInfection.toInt() > 0) {
+                text += " | ${minInfection}% Inf Threshold"
+            }
+
+            if (prestigeCost.toInt() > 0) {
+                text += " | ${prestigeCost}pp"
+            }
+        } else {
+            text += "${xpCost}xp"
+            if (minInfection.toInt() > 0) {
+                text += " | ${minInfection}% Inf Threshold"
+            }
+            if (prestigeCost.toInt() > 0) {
+                text += " | ${prestigeCost}pp"
+            }
         }
         return text
     }
