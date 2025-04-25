@@ -29,12 +29,13 @@ tools:context=".OfflineMyAccountActivity">
             android:textAlignment="center"/>
 
         <TextView
-            android:id="@+id/myaccountoffline_playerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            android:text="Personal"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
             android:id="@+id/myaccountoffline_playerStatsNavArrow"
@@ -61,6 +62,14 @@ tools:context=".OfflineMyAccountActivity">
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/myaccountoffline_personalSkillTree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Personal Skill Tree Diagram"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
             android:id="@+id/myaccountoffline_bioNavArrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,12 +91,29 @@ tools:context=".OfflineMyAccountActivity">
             android:background="@color/dark_gray"
             android:layout_marginTop="16dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Global"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"/>
+
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
             android:id="@+id/myaccountoffline_viewAllSkillsNavArrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             app:text="All Skills"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/myaccountoffline_nativeSkillTree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Skill Tree Diagram"
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -99,11 +125,27 @@ tools:context=".OfflineMyAccountActivity">
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/myaccountoffline_treatingWoundsArrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Treating Wounds Diagram"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/myaccountoffline_npcs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="All NPCs"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
             android:id="@+id/myaccountoffline_skillTreeArrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            app:text="Skill Tree Diagram"
+            app:text="Skill Tree Diagram Image (Legacy)"
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -111,15 +153,7 @@ tools:context=".OfflineMyAccountActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            app:text="Skill Tree Diagram (Dark)"
-            app:showLoading="false"/>
-
-        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-            android:id="@+id/myaccountoffline_treatingWoundsArrow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            app:text="Treating Wounds Diagram"
+            app:text="Dark Skill Tree Diagram Image (Legacy)"
             app:showLoading="false"/>
 
     </LinearLayout> <!-- BEFORE THIS ONE-->

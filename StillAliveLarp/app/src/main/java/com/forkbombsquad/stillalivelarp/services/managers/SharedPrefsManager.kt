@@ -22,6 +22,8 @@ class SharedPrefsManager private constructor() {
     private val rulebookVersionKey = "rulebook_version_sp_key"
     private val rulebookKey = "rulebook_sp_key"
     private val skillsKey = "skills_sp_key"
+    private val npcsKey = "npcs_sp_key"
+    private val skillCategoriesKey = "skill_category_sp_key"
 
     fun clearAll(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SharedPrefsName, Context.MODE_PRIVATE)
@@ -155,6 +157,23 @@ class SharedPrefsManager private constructor() {
     fun getSkills(): List<FullSkillModel> {
         val type = object: TypeToken<List<FullSkillModel>>() {}.type
         return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "", type) ?: listOf()
+    }
+
+    fun storeNPCs(npcs: List<FullCharacterModel>) {
+        this.set(StillAliveLarpApplication.context, npcsKey, globalToJson(npcs))
+    }
+
+    fun getNPCs(): List<FullCharacterModel> {
+        val type = object: TypeToken<List<FullCharacterModel>>() {}.type
+        return globalFromJson(get(StillAliveLarpApplication.context, npcsKey) ?: "", type) ?: listOf()
+    }
+
+    fun storeSkillCategories(skillCategories: List<SkillCategoryModel>) {
+        this.set(StillAliveLarpApplication.context, skillCategoriesKey, globalToJson(skillCategories))
+    }
+    fun getSkillCategories(): List<SkillCategoryModel> {
+        val type = object: TypeToken<List<SkillCategoryModel>>() {}.type
+        return globalFromJson(get(StillAliveLarpApplication.context, skillCategoriesKey) ?: "", type) ?: listOf()
     }
 
     companion object {

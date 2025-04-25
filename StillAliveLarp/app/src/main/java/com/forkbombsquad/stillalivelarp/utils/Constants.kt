@@ -61,6 +61,62 @@ class Constants {
         }
     }
 
+    class GearTypes {
+        companion object {
+            const val meleeWeapon = "Melee Weapon"
+            const val firearm = "Firearm"
+            const val clothing = "Clothing"
+            const val accessory = "Accessory"
+            const val bag = "Bag"
+            const val other = "Other"
+
+            val allTypes: List<String> = listOf(meleeWeapon, firearm, clothing, accessory, bag, other)
+        }
+    }
+
+    class GearPrimarySubtype {
+        companion object {
+            const val superLightMeleeWeapon = "Super Light Melee Weapon"
+            const val lightMeleeWeapon = "Light Melee Weapon"
+            const val mediumMeleeWeapon = "Medium Melee Weapon"
+            const val heavyMeleeWeapon = "Heavy Melee Weapon"
+
+            const val lightFirearm = "Light Firearm"
+            const val mediumFirearm = "Medium Firearm"
+            const val heavyFirearm = "Heavy Firearm"
+            const val advancedFirearm = "Advanced Firearm"
+            const val militaryGradeFirearm = "Military Grade Firearm"
+
+            const val blacklightFlashlight = "Blacklight Flashlight"
+            const val flashlight = "Regular Flashlight"
+
+            const val smallBag = "Small Bag"
+            const val mediumBag = "Medium Bag"
+            const val largeBag = "Large Bag"
+            const val extraLargeBag = "Extra Large Bag"
+
+            const val other = "Other"
+            const val none = "None"
+
+            val allMeleeTypes: List<String> = listOf(superLightMeleeWeapon, lightMeleeWeapon, mediumMeleeWeapon, heavyMeleeWeapon)
+            val allFirearmTypes: List<String> = listOf(lightFirearm, mediumFirearm, heavyFirearm, advancedFirearm, militaryGradeFirearm)
+            var allClothingTypes: List<String> = listOf(none)
+            var allAccessoryTypes: List<String> = listOf(blacklightFlashlight, flashlight, other)
+            var allBagTypes: List<String> = listOf(smallBag, mediumBag, largeBag, extraLargeBag)
+            var allOtherTypes: List<String> = listOf(other)
+        }
+    }
+
+    class GearSecondarySubtype {
+        companion object {
+            const val none = "None"
+            const val primaryFirearm = "Primary Firearm"
+
+            val allFirearmTypes: List<String> = listOf(primaryFirearm, none)
+            val allNonFirearmTypes: List<String> = listOf(none)
+        }
+    }
+
     class SpecificSkillIds {
         companion object {
             const val combatAficionado_T = 11

@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -30,6 +29,8 @@ class ManageGearActivty : NoStatusBarActivity() {
         setupView()
     }
 
+    // TODO just created Gear Cells. Use them.
+
     private fun setupView() {
         title = findViewById(R.id.managegear_title)
         progressbar = findViewById(R.id.managegear_progressbar)
@@ -45,7 +46,7 @@ class ManageGearActivty : NoStatusBarActivity() {
                 }
                 buildView()
             }
-            val intent = Intent(this, AddGearActivity::class.java)
+            val intent = Intent(this, AddEditGearActivity::class.java)
             startActivity(intent)
         }
 
@@ -83,7 +84,8 @@ class ManageGearActivty : NoStatusBarActivity() {
                             }
                             buildView()
                         }
-                        val intent = Intent(this, EditGearActivity::class.java)
+                        // TODO need to add the gear to edit boi
+                        val intent = Intent(this, AddEditGearActivity::class.java)
                         startActivity(intent)
                     }
                     innerLayout.addView(arrow)

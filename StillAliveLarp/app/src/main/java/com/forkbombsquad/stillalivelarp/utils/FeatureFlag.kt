@@ -5,7 +5,6 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 class FeatureFlag(var name: String) {
     companion object {
         // Name of feature flags
-        val TEST = FeatureFlag("test")
         val OLD_SKILL_TREE_IMAGE = FeatureFlag("oldskilltreeimage")
         val CAMP_STATUS = FeatureFlag("campstatus")
     }

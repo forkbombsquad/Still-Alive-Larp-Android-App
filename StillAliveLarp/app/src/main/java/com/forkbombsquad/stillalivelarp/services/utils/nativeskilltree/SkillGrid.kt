@@ -1136,7 +1136,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     fun handleTap(x: Float, y: Float, context: Context, lifecycleScope: LifecycleCoroutineScope) {
         if (!makingPurchase) {
             val pb = purchaseButton?.copy()
-            if (pb != null && pb.rect.contains(x, y)) {
+            if (pb != null && pb.rect.contains(x, y) && couldPurchaseSkill(pb.skill.toFullSkillModel())) {
                 purchaseSkill(pb, context, lifecycleScope)
             } else {
                 val index = trueGrid.indexOfFirst { it.rect.contains(x, y) }

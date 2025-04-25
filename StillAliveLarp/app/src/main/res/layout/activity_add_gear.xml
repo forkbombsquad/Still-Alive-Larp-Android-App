@@ -6,7 +6,7 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:background="@color/light_gray"
-tools:context=".AddGearActivity">
+tools:context=".AddEditGearActivity">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -35,21 +35,6 @@ tools:context=".AddGearActivity">
             android:layout_marginTop="32dp"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addgear_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:inputType="textCapWords"
-                android:hint="Gear Type"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            >
-            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addgear_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,6 +43,55 @@ tools:context=".AddGearActivity">
                 android:hint="Gear Name"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/customborder"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Type"/>
+            <Spinner
+                android:id="@+id/gearTypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/customborder"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Primary Subtype"/>
+            <Spinner
+                android:id="@+id/gearPrimarySubtypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/customborder"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Secondary Subtype"/>
+            <Spinner
+                android:id="@+id/gearSecondarySubtypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -80,7 +114,7 @@ tools:context=".AddGearActivity">
             android:id="@+id/addgear_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:buttontext="Submit"/>
+            app:buttontext="Create"/>
 
     </LinearLayout> <!-- BEFORE THIS ONE-->
 

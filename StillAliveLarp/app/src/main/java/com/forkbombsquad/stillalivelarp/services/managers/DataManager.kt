@@ -131,6 +131,8 @@ class DataManager private constructor() {
 
     var selectedNPCCharacter: FullCharacterModel? = null
 
+    var gearToEdit: GearJsonModel? = null
+
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
         loadCountIndex++
@@ -616,6 +618,7 @@ class DataManager private constructor() {
                                 skillCategories = it.skillCategories
                                 loadingSkillCategories = false
                                 finishedRequest(currentLoadCountIndex)
+                                SharedPrefsManager.shared.storeSkillCategories(it.skillCategories.toList())
                             }, {
                                 skillCategories = null
                                 loadingSkillCategories = false
@@ -656,6 +659,7 @@ class DataManager private constructor() {
                                 allNPCCharacters = it.characters.toList()
                                 loadingAllNPCCharacters = false
                                 finishedRequest(currentLoadCountIndex)
+                                storeNpcs(lifecycleScope)
                             }, {
                                 allNPCCharacters = null
                                 loadingAllNPCCharacters = false
@@ -694,6 +698,24 @@ class DataManager private constructor() {
             callbackSteps[currentLoadCountIndex] = {}
         } else {
             callbackSteps[currentLoadCountIndex]()
+        }
+    }
+    private fun storeNpcs(lifecycleScope: LifecycleCoroutineScope) {
+        val fullNPCs: MutableList<FullCharacterModel> = mutableListOf()
+        var counter = 0
+        var actuallyStoreThem = {
+            SharedPrefsManager.shared.storeNPCs(fullNPCs)
+        }
+        allNPCCharacters?.forEach {
+            CharacterManager.shared.fetchFullCharacter(lifecycleScope, it.id) { fullChar ->
+                if (fullChar != null) {
+                    fullNPCs.add(fullChar)
+                }
+                counter += 1
+                if (counter == (allNPCCharacters?.size ?: 0)) {
+                    actuallyStoreThem()
+                }
+            }
         }
     }
 
