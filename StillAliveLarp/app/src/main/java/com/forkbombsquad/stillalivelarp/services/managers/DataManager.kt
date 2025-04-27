@@ -719,6 +719,93 @@ class DataManager private constructor() {
         }
     }
 
+    fun getGearOrganzied(): Map<String, List<GearJsonModel>> {
+        val gear = selectedCharacterGear?.firstOrNull()?.jsonModels
+        if (gear != null) {
+            var firearms: MutableList<GearJsonModel> = mutableListOf()
+            var melee: MutableList<GearJsonModel> = mutableListOf()
+            var clothing: MutableList<GearJsonModel> = mutableListOf()
+            var accessory: MutableList<GearJsonModel> = mutableListOf()
+            var bag: MutableList<GearJsonModel> = mutableListOf()
+            var other: MutableList<GearJsonModel> = mutableListOf()
+            gear.forEach { jg ->
+                when (jg.gearType) {
+                    Constants.GearTypes.firearm -> firearms.add(jg)
+                    Constants.GearTypes.meleeWeapon -> melee.add(jg)
+                    Constants.GearTypes.clothing -> clothing.add(jg)
+                    Constants.GearTypes.accessory -> accessory.add(jg)
+                    Constants.GearTypes.bag -> bag.add(jg)
+                    Constants.GearTypes.other -> other.add(jg)
+                }
+            }
+
+            // Sorting
+            firearms = firearms.sortedWith(
+                compareBy(
+                    { if (it.isPrimaryFirearm()) 0 else 1 },
+                    {
+                        when (it.primarySubtype) {
+                            Constants.GearPrimarySubtype.lightFirearm -> 0
+                            Constants.GearPrimarySubtype.mediumFirearm -> 1
+                            Constants.GearPrimarySubtype.heavyFirearm -> 2
+                            Constants.GearPrimarySubtype.advancedFirearm -> 3
+                            Constants.GearPrimarySubtype.militaryGradeFirearm -> 4
+                            else -> Int.MAX_VALUE
+                        }
+                    }
+                )
+            ).toMutableList()
+
+            melee = melee.sortedWith(
+                compareBy {
+                    when (it.primarySubtype) {
+                        Constants.GearPrimarySubtype.superLightMeleeWeapon -> 0
+                        Constants.GearPrimarySubtype.lightMeleeWeapon -> 1
+                        Constants.GearPrimarySubtype.mediumMeleeWeapon -> 2
+                        Constants.GearPrimarySubtype.heavyMeleeWeapon -> 3
+                        else -> Int.MAX_VALUE
+                    }
+                }
+            ).toMutableList()
+
+            accessory = accessory.sortedWith(
+                compareBy {
+                    when (it.primarySubtype) {
+                        Constants.GearPrimarySubtype.blacklightFlashlight -> 0
+                        Constants.GearPrimarySubtype.flashlight -> 1
+                        Constants.GearPrimarySubtype.other -> 2
+                        else -> Int.MAX_VALUE
+                    }
+                }
+            ).toMutableList()
+
+            bag = bag.sortedWith(
+                compareBy {
+                    when (it.primarySubtype) {
+                        Constants.GearPrimarySubtype.smallBag -> 0
+                        Constants.GearPrimarySubtype.mediumBag -> 1
+                        Constants.GearPrimarySubtype.largeBag -> 2
+                        Constants.GearPrimarySubtype.extraLargeBag -> 3
+                        else -> Int.MAX_VALUE
+                    }
+                }
+            ).toMutableList()
+
+            // Adding to map
+            return mapOf(
+                Pair(Constants.GearTypes.firearm, firearms),
+                Pair(Constants.GearTypes.meleeWeapon, melee),
+                Pair(Constants.GearTypes.clothing, clothing),
+                Pair(Constants.GearTypes.accessory, accessory),
+                Pair(Constants.GearTypes.bag, bag),
+                Pair(Constants.GearTypes.other, other)
+            )
+
+        } else {
+            return mapOf()
+        }
+    }
+
     companion object {
         var shared = DataManager()
         private set

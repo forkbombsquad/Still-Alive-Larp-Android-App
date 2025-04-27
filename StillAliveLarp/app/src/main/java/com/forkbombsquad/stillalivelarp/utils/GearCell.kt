@@ -41,4 +41,10 @@ class GearCell(context: Context): LinearLayout(context) {
         gearDesc.text = gear.desc
     }
 
+    fun setOnClick(callback: () -> Unit) {
+        this.setOnClickListener {
+            callback()
+        }
+    }
+
 }

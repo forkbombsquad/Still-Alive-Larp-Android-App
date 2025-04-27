@@ -1,19 +1,28 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.removingPrimaryWeapon
+import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
+import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
+import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.GearCell
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlinx.coroutines.launch
 
 class ManageGearActivty : NoStatusBarActivity() {
 
@@ -22,6 +31,9 @@ class ManageGearActivty : NoStatusBarActivity() {
     private lateinit var innerLayout: LinearLayout
     private lateinit var outerLayout: LinearLayout
     private lateinit var addNew: NavArrowButtonGreen
+    private lateinit var submitButton: LoadingButton
+
+    private var gearModified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,25 +41,62 @@ class ManageGearActivty : NoStatusBarActivity() {
         setupView()
     }
 
-    // TODO just created Gear Cells. Use them.
-
     private fun setupView() {
         title = findViewById(R.id.managegear_title)
         progressbar = findViewById(R.id.managegear_progressbar)
         innerLayout = findViewById(R.id.managegear_innerLayout)
         outerLayout = findViewById(R.id.managegear_outerLayout)
         addNew = findViewById(R.id.managegear_addNew)
+        submitButton = findViewById(R.id.gear_submitButton)
 
         addNew.setOnClick {
-            DataManager.shared.selectedGear = null
+            DataManager.shared.gearToEdit = null
             DataManager.shared.unrelaltedUpdateCallback = {
-                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), true) {
-                    buildView()
-                }
+                gearModified = true
                 buildView()
             }
             val intent = Intent(this, AddEditGearActivity::class.java)
             startActivity(intent)
+        }
+
+        submitButton.setOnClick {
+            if (gearModified) {
+                submitButton.setLoadingWithText("Organizing Gear...")
+                val gear = DataManager.shared.selectedCharacterGear?.firstOrNull()
+                if (gear != null) {
+                    if (gear.id == -1) {
+                        // Create New List
+                        val createModel = GearCreateModel(gear.characterId, gear.gearJson)
+                        val request = AdminService.CreateGear()
+                        submitButton.setLoadingWithText("Creating Gear Listing...")
+                        lifecycleScope.launch {
+                            request.successfulResponse(CreateModelSP(createModel)).ifLet { newGearModel ->
+                                DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                                AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Listing Created!") { _, _ ->
+                                    submitButton.setLoading(false)
+                                    gearModified = false
+                                    buildView()
+                                }
+                            }
+                        }
+                    } else {
+                        // update Existing
+                        val request = AdminService.UpdateGear()
+                        submitButton.setLoadingWithText("Updating Gear...")
+                        lifecycleScope.launch {
+                            request.successfulResponse(UpdateModelSP(gear)).ifLet { updatedGearModel ->
+                                DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                                AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Changes Committed!") { _, _ ->
+                                    submitButton.setLoading(false)
+                                    gearModified = false
+                                    buildView()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), true) {
@@ -61,34 +110,41 @@ class ManageGearActivty : NoStatusBarActivity() {
         if (DataManager.shared.loadingSelectedCharacterGear) {
             progressbar.isGone = false
             outerLayout.isGone = true
+            submitButton.isGone = true
         } else {
             progressbar.isGone = true
             outerLayout.isGone = false
             innerLayout.isGone = false
+            submitButton.isGone = !gearModified
 
             innerLayout.removeAllViews()
+            val gearList = DataManager.shared.getGearOrganzied()
+            gearList.forEach {(key, list) ->
+                val textView = TextView(this)
+                val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//                tvParams.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+                textView.layoutParams = tvParams
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                textView.setTypeface(null, Typeface.BOLD)
+                textView.text = key
+                innerLayout.addView(textView)
 
-            DataManager.shared.selectedCharacterGear?.removingPrimaryWeapon().ifLet { gear ->
-                gear.forEachIndexed { index, g ->
-                    val arrow = NavArrowButtonBlackBuildable(this)
-                    arrow.textView.text = "${g.name} - ${g.type}"
+                list.forEach { g ->
+                    val gearCell = GearCell(this)
+                    gearCell.setup(g)
                     val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
-                    arrow.layoutParams = params
-                    arrow.setLoading(false)
-                    arrow.setOnClick {
-                        DataManager.shared.selectedGear = g
+//                params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+                    gearCell.layoutParams = params
+                    gearCell.setOnClick {
+                        DataManager.shared.gearToEdit = g
                         DataManager.shared.unrelaltedUpdateCallback = {
-                            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), true) {
-                                buildView()
-                            }
+                            gearModified = true
                             buildView()
                         }
-                        // TODO need to add the gear to edit boi
                         val intent = Intent(this, AddEditGearActivity::class.java)
                         startActivity(intent)
                     }
-                    innerLayout.addView(arrow)
+                    innerLayout.addView(gearCell)
                 }
             }
         }

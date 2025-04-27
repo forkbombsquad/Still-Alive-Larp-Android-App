@@ -15,7 +15,6 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
-import com.forkbombsquad.stillalivelarp.services.models.primaryWeapon
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -51,35 +50,36 @@ class RegisterPrimaryWeaponActivity : NoStatusBarActivity() {
             val fieldValidation = validateFields()
             if (!fieldValidation.hasError) {
                 DataManager.shared.selectedChar.ifLet { char ->
-                    DataManager.shared.selectedCharacterGear?.primaryWeapon().ifLet({ primaryWeapon ->
-                        // Edit
-                        val gearModel = GearModel(id = primaryWeapon.id, characterId = char.id, type = Constants.Gear.primaryWeapon, name = weaponName.text.toString(), description = ammo.text.toString())
-                        val editRequest = AdminService.UpdateGear()
-                        lifecycleScope.launch {
-                            editRequest.successfulResponse(UpdateModelSP(gearModel)).ifLet({ gear ->
-                                AlertUtils.displaySuccessMessage(this@RegisterPrimaryWeaponActivity, "${gear.name} registered as Primary Weapon for ${char.fullName}") { _, _ ->
-                                    DataManager.shared.activityToClose?.finish()
-                                    finish()
-                                }
-                            }, {
-                                submitButton.setLoading(false)
-                            })
-                        }
-                    }, {
-                        // Create
-                        val createGearModel = GearCreateModel(characterId = char.id, type = Constants.Gear.primaryWeapon, name = weaponName.text.toString(), description = ammo.text.toString())
-                        val createRequest = AdminService.CreateGear()
-                        lifecycleScope.launch {
-                            createRequest.successfulResponse(CreateModelSP(createGearModel)).ifLet({ gear ->
-                                AlertUtils.displaySuccessMessage(this@RegisterPrimaryWeaponActivity, "${gear.name} registered as Primary Weapon for ${char.fullName}") { _, _ ->
-                                    DataManager.shared.activityToClose?.finish()
-                                    finish()
-                                }
-                            }, {
-                                submitButton.setLoading(false)
-                            })
-                        }
-                    })
+                    // TODO
+//                    DataManager.shared.selectedCharacterGear?.primaryWeapon().ifLet({ primaryWeapon ->
+//                        // Edit
+//                        val gearModel = GearModel(id = primaryWeapon.id, characterId = char.id, type = Constants.Gear.primaryWeapon, name = weaponName.text.toString(), description = ammo.text.toString())
+//                        val editRequest = AdminService.UpdateGear()
+//                        lifecycleScope.launch {
+//                            editRequest.successfulResponse(UpdateModelSP(gearModel)).ifLet({ gear ->
+//                                AlertUtils.displaySuccessMessage(this@RegisterPrimaryWeaponActivity, "${gear.name} registered as Primary Weapon for ${char.fullName}") { _, _ ->
+//                                    DataManager.shared.activityToClose?.finish()
+//                                    finish()
+//                                }
+//                            }, {
+//                                submitButton.setLoading(false)
+//                            })
+//                        }
+//                    }, {
+//                        // Create
+//                        val createGearModel = GearCreateModel(characterId = char.id, type = Constants.Gear.primaryWeapon, name = weaponName.text.toString(), description = ammo.text.toString())
+//                        val createRequest = AdminService.CreateGear()
+//                        lifecycleScope.launch {
+//                            createRequest.successfulResponse(CreateModelSP(createGearModel)).ifLet({ gear ->
+//                                AlertUtils.displaySuccessMessage(this@RegisterPrimaryWeaponActivity, "${gear.name} registered as Primary Weapon for ${char.fullName}") { _, _ ->
+//                                    DataManager.shared.activityToClose?.finish()
+//                                    finish()
+//                                }
+//                            }, {
+//                                submitButton.setLoading(false)
+//                            })
+//                        }
+//                    })
                 }
             } else {
                 AlertUtils.displayValidationError(this, fieldValidation.getErrorMessages())
@@ -103,13 +103,14 @@ class RegisterPrimaryWeaponActivity : NoStatusBarActivity() {
         } else {
             progressBar.isGone = true
             layout.isGone = false
-            DataManager.shared.selectedCharacterGear?.primaryWeapon().ifLet({ primWeapon ->
-                title.text = "Edit Primary Weapon $charName"
-                weaponName.setText(primWeapon.name)
-                ammo.setText(primWeapon.description)
-            }, {
-                title.text = "Register Primary Weapon $charName"
-            })
+            // TODO
+//            DataManager.shared.selectedCharacterGear?.primaryWeapon().ifLet({ primWeapon ->
+//                title.text = "Edit Primary Weapon $charName"
+//                weaponName.setText(primWeapon.name)
+//                ammo.setText(primWeapon.description)
+//            }, {
+//                title.text = "Register Primary Weapon $charName"
+//            })
         }
     }
 

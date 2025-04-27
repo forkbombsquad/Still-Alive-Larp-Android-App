@@ -325,23 +325,24 @@ class HomeFragment : Fragment() {
                             checkInAsNpcButton.isGone = false
                             eventTodayCheckedInAs.isGone = true
                             checkInAsCharButton.setOnClick {
-                                DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-                                    player = DataManager.shared.player?.getBarcodeModel()!!,
-                                    character = DataManager.shared.character?.getBarcodeModel(),
-                                    event = it.barcodeModel(),
-                                    relevantSkills = DataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
-                                    primaryWeapon = DataManager.shared.selectedCharacterGear?.primaryWeapon()
-                                )
-                                DataManager.shared.unrelaltedUpdateCallback = {
-                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
-                                        setupViews(v)
-                                    }) {
-                                        setupViews(v)
-                                    }
-                                    setupViews(v)
-                                }
-                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-                                startActivity(intent)
+                                // TODO
+//                                DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
+//                                    player = DataManager.shared.player?.getBarcodeModel()!!,
+//                                    character = DataManager.shared.character?.getBarcodeModel(),
+//                                    event = it.barcodeModel(),
+//                                    relevantSkills = DataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
+//                                    primaryWeapon = DataManager.shared.selectedCharacterGear?.primaryWeapon()
+//                                )
+//                                DataManager.shared.unrelaltedUpdateCallback = {
+//                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
+//                                        setupViews(v)
+//                                    }) {
+//                                        setupViews(v)
+//                                    }
+//                                    setupViews(v)
+//                                }
+//                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+//                                startActivity(intent)
                             }
                             checkInAsNpcButton.setOnClick {
                                 DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(

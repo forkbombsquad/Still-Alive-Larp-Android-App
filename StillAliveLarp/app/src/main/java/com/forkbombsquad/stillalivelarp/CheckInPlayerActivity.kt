@@ -332,11 +332,12 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 val fullyLoaded = getFullyLoaded(relevantSkills)
                 fullyLoaded.ifLet({ fl ->
                     fullyLoadedSkill.isGone = false
-                    primaryWeapon.ifLet({ pm ->
-                        fullyLoadedSkill.set("${pm.description} - ${pm.name}")
-                    }, {
-                        fullyLoadedSkill.set("MISSING PRIMARY WEAPON REGISTRATION")
-                    })
+                    // TODO fix this
+//                    primaryWeapon.ifLet({ pm ->
+//                        fullyLoadedSkill.set("${pm.description} - ${pm.name}")
+//                    }, {
+//                        fullyLoadedSkill.set("MISSING PRIMARY WEAPON REGISTRATION")
+//                    })
                 }, {
                     fullyLoadedSkill.isGone = true
                 })

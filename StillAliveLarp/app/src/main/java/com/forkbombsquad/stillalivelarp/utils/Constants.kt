@@ -30,7 +30,7 @@ class Constants {
     class Logging {
         companion object {
             const val showLogging = false
-            const val showTestLogging = false
+            const val showTestLogging = true
             // TODO ensure these are false before release
         }
     }
@@ -112,7 +112,7 @@ class Constants {
             const val none = "None"
             const val primaryFirearm = "Primary Firearm"
 
-            val allFirearmTypes: List<String> = listOf(primaryFirearm, none)
+            val allFirearmTypes: List<String> = listOf(none, primaryFirearm)
             val allNonFirearmTypes: List<String> = listOf(none)
         }
     }

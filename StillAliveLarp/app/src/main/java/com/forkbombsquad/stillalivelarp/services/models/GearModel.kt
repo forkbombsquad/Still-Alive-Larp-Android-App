@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.utils.AwardCharType
 import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import java.io.Serializable
 import java.time.LocalDate
@@ -18,6 +19,7 @@ data class GearModel(
 ) : Serializable {
     val jsonModels: List<GearJsonModel>?
         get() {
+            // TODO need to turn this into a model that holds the list or this won't work
             return globalFromJson<List<GearJsonModel>>(gearJson)
         }
 }

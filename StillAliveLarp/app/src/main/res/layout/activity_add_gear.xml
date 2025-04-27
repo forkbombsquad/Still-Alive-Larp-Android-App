@@ -116,6 +116,12 @@ tools:context=".AddEditGearActivity">
             android:layout_height="wrap_content"
             app:buttontext="Create"/>
 
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/addgear_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:buttontext="Delete"/>
+
     </LinearLayout> <!-- BEFORE THIS ONE-->
 
 </ScrollView>

@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
@@ -25,6 +26,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
     private lateinit var nameField: TextInputEditText
     private lateinit var desc: TextInputEditText
     private lateinit var submit: LoadingButton
+    private lateinit var delete: LoadingButton
 
     private lateinit var gearType: Spinner
     private lateinit var primarySubtype: Spinner
@@ -38,6 +40,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
         setupView()
     }
 
+    // TODO add delete  button for edit boi
+
     private fun setupView() {
         editGear = DataManager.shared.gearToEdit
 
@@ -48,6 +52,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
         secondarySubtype = findViewById(R.id.gearSecondarySubtypeSpinner)
         desc = findViewById(R.id.addgear_desc)
         submit = findViewById(R.id.addgear_submit)
+        delete = findViewById(R.id.addgear_delete)
 
         val gearTypeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Constants.GearTypes.allTypes)
         gearType.adapter = gearTypeAdapter
@@ -105,19 +110,13 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         )
                         jsonGearList.add(gjm)
 
+                        // TODO this needs to be a model
                         val toJson: String = globalToJson(jsonGearList.toList())
 
-                        val editGearModel = GearModel(gear.id, gear.characterId, toJson)
-                        val request = AdminService.UpdateGear()
-                        lifecycleScope.launch {
-                            request.successfulResponse(UpdateModelSP(editGearModel)).ifLet { updatedGearModel ->
-                                DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
-                                AlertUtils.displaySuccessMessage(this@AddEditGearActivity, "Gear modified for ${char.fullName}") { _, _ ->
-                                    DataManager.shared.unrelaltedUpdateCallback()
-                                    finish()
-                                }
-                            }
-                        }
+                        val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
+                        DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                        DataManager.shared.unrelaltedUpdateCallback()
+                        finish()
                     } else {
                         // Create New Gear json list
                         val gjm = GearJsonModel(
@@ -129,25 +128,23 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         )
                         jsonGearList.add(gjm)
 
+                        // TODO this needs to be a model
                         val toJson: String = globalToJson(jsonGearList.toList())
 
-                        val editGearModel = GearCreateModel(char.id, toJson)
-                        val request = AdminService.CreateGear()
-                        lifecycleScope.launch {
-                            request.successfulResponse(CreateModelSP(editGearModel)).ifLet { newGearModel ->
-                                DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
-                                AlertUtils.displaySuccessMessage(this@AddEditGearActivity, "Gear created for ${char.fullName}") { _, _ ->
-                                    DataManager.shared.unrelaltedUpdateCallback()
-                                    finish()
-                                }
-                            }
-                        }
+                        val newGearModel = GearModel(-1, char.id, toJson)
+                        DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                        DataManager.shared.unrelaltedUpdateCallback()
+                        finish()
                     }
                 }
             } else {
                 AlertUtils.displayValidationError(this, fieldValidation.getErrorMessages())
                 submit.setLoading(false)
             }
+        }
+
+        delete.setOnClick {
+            // TODO
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), forceDownloadIfApplicable = true) {
@@ -177,6 +174,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
                 primarySubtype.setSelection(stypes.indexOf(eg.secondarySubtype))
             }
         }
+        delete.isGone = editGear == null
     }
 
     private fun getPrimarySubtypeList(type: String): List<String> {
