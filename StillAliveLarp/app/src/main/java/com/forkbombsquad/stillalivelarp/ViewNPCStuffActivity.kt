@@ -45,10 +45,6 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
         bio = findViewById(R.id.npcstuff_bioNavArrow)
 
         skills.setOnClick {
-            skills.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
-                skills.setLoading(false)
-            }
             val intent = Intent(this, OfflineViewSkillsActivity::class.java)
             startActivity(intent)
         }
