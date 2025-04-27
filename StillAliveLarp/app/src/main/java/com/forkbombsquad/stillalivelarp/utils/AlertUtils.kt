@@ -49,6 +49,10 @@ class AlertUtils {
             displayMessage(context, title, message, arrayOf(AlertButton(context.getString(android.R.string.ok), onClickOk ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.POSITIVE), AlertButton(context.getString(android.R.string.cancel), onClickCancel ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEGATIVE)))
         }
 
+        fun displayYesNoMessage(context: Context, title: String, message: String, onClickYes: DialogInterface.OnClickListener? = null, onClickNo: DialogInterface.OnClickListener? = null) {
+            displayMessage(context, title, message, arrayOf(AlertButton(context.getString(android.R.string.yes), onClickYes ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.POSITIVE), AlertButton(context.getString(android.R.string.no), onClickNo ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEGATIVE)))
+        }
+
         fun displayDeleteAccountCancelMessage(context: Context, onClickOk: DialogInterface.OnClickListener? = null, onClickCancel: DialogInterface.OnClickListener? = null) {
             displayMessage(context, "Are You Sure?", "Once your account is deleted, it will be gone forever and CAN NOT be recovered.", arrayOf(AlertButton("Delete Account", onClickOk ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEGATIVE), AlertButton(context.getString(android.R.string.cancel), onClickCancel ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEUTRAL)))
         }

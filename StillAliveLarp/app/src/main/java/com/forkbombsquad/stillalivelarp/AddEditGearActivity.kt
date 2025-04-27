@@ -12,6 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.GearJsonListModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -39,8 +40,6 @@ class AddEditGearActivity : NoStatusBarActivity() {
         setContentView(R.layout.activity_add_gear)
         setupView()
     }
-
-    // TODO add delete  button for edit boi
 
     private fun setupView() {
         editGear = DataManager.shared.gearToEdit
@@ -87,15 +86,31 @@ class AddEditGearActivity : NoStatusBarActivity() {
                     val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
                     if (gear != null) {
                         // Add or Edit Gear in existing json
+                        var alreadyDeletedFirstMatch = false
                         if (editGear != null) {
-                            jsonGearList.removeIf { it.isEqualTo(editGear!!) }
+                            jsonGearList.removeIf {
+                                val prevVal = alreadyDeletedFirstMatch
+                                if (it.isEqualTo(editGear!!)) {
+                                    alreadyDeletedFirstMatch = true
+                                }
+                                it.isEqualTo(editGear!!) && !prevVal
+                            }
                         }
                         if (secondarySubtype.selectedItem.toString() == Constants.GearSecondarySubtype.primaryFirearm) {
                             // Remove existing primary firearms
                             val prim = jsonGearList.firstOrNull { it.isPrimaryFirearm() }
                             if (prim != null) {
                                 val newPrim = prim.duplicateWithEdit(secondarySubtype = Constants.GearSecondarySubtype.none)
-                                jsonGearList.removeIf { it.isEqualTo(prim) }
+                                var alreadyDeletedFirstMatch = false
+                                if (editGear != null) {
+                                    jsonGearList.removeIf {
+                                        val prevVal = alreadyDeletedFirstMatch
+                                        if (it.isEqualTo(prim)) {
+                                            alreadyDeletedFirstMatch = true
+                                        }
+                                        it.isEqualTo(editGear!!) && !prevVal
+                                    }
+                                }
                                 jsonGearList.add(newPrim)
                             }
                         }
@@ -110,8 +125,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         )
                         jsonGearList.add(gjm)
 
-                        // TODO this needs to be a model
-                        val toJson: String = globalToJson(jsonGearList.toList())
+                        val gearJsonListModel = GearJsonListModel(jsonGearList.toTypedArray())
+                        val toJson: String = globalToJson(gearJsonListModel)
 
                         val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
                         DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
@@ -128,8 +143,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         )
                         jsonGearList.add(gjm)
 
-                        // TODO this needs to be a model
-                        val toJson: String = globalToJson(jsonGearList.toList())
+                        val gearJsonListModel = GearJsonListModel(jsonGearList.toTypedArray())
+                        val toJson: String = globalToJson(gearJsonListModel)
 
                         val newGearModel = GearModel(-1, char.id, toJson)
                         DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
@@ -144,11 +159,33 @@ class AddEditGearActivity : NoStatusBarActivity() {
         }
 
         delete.setOnClick {
-            // TODO
-        }
+            delete.setLoading(true)
+            DataManager.shared.selectedChar.ifLet { char ->
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), forceDownloadIfApplicable = true) {
-            buildView()
+                val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
+                val gear = gearList.firstOrNull()
+                val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
+                if (gear != null) {
+                    var alreadyDeletedFirstMatch = false
+                    if (editGear != null) {
+                        jsonGearList.removeIf {
+                            val prevVal = alreadyDeletedFirstMatch
+                            if (it.isEqualTo(editGear!!)) {
+                                alreadyDeletedFirstMatch = true
+                            }
+                            it.isEqualTo(editGear!!) && !prevVal
+                        }
+                    }
+
+                    val gearJsonListModel = GearJsonListModel(jsonGearList.toTypedArray())
+                    val toJson: String = globalToJson(gearJsonListModel)
+
+                    val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
+                    DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                    DataManager.shared.unrelaltedUpdateCallback()
+                    finish()
+                }
+            }
         }
         buildView()
     }
@@ -174,6 +211,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
                 primarySubtype.setSelection(stypes.indexOf(eg.secondarySubtype))
             }
         }
+        submit.textView.text = (editGear == null).ternary("Create", "Update")
         delete.isGone = editGear == null
     }
 

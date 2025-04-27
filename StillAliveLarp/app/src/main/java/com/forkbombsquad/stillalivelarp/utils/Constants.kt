@@ -31,7 +31,6 @@ class Constants {
         companion object {
             const val showLogging = false
             const val showTestLogging = true
-            // TODO ensure these are false before release
         }
     }
 

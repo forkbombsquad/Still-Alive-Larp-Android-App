@@ -128,14 +128,6 @@ tools:context=".tabbar_fragments.account.admin.AdminPanelFragment">
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/adminpanel_registerFirearm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Register Primary Firearm"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/adminpanel_manageGear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

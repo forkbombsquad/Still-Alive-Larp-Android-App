@@ -1,12 +1,14 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.window.OnBackInvokedDispatcher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
@@ -99,7 +101,7 @@ class ManageGearActivty : NoStatusBarActivity() {
 
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), true) {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), false) {
             buildView()
         }
         buildView()
@@ -119,13 +121,14 @@ class ManageGearActivty : NoStatusBarActivity() {
 
             innerLayout.removeAllViews()
             val gearList = DataManager.shared.getGearOrganzied()
-            gearList.forEach {(key, list) ->
+            gearList.forEach { (key, list) ->
                 val textView = TextView(this)
                 val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-//                tvParams.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+                tvParams.setMargins(0, 8, 0, 8)
                 textView.layoutParams = tvParams
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
                 textView.setTypeface(null, Typeface.BOLD)
+                textView.setTextColor(Color.BLACK)
                 textView.text = key
                 innerLayout.addView(textView)
 
@@ -133,7 +136,7 @@ class ManageGearActivty : NoStatusBarActivity() {
                     val gearCell = GearCell(this)
                     gearCell.setup(g)
                     val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-//                params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+                    params.setMargins(0, 8, 0, 8)
                     gearCell.layoutParams = params
                     gearCell.setOnClick {
                         DataManager.shared.gearToEdit = g
@@ -147,6 +150,16 @@ class ManageGearActivty : NoStatusBarActivity() {
                     innerLayout.addView(gearCell)
                 }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (gearModified) {
+            AlertUtils.displayYesNoMessage(this, "Are You Sure?", "You have unsaved changes. Are you sure you want to exit?", { _, _ ->
+                super.onBackPressed()
+            }, { _, _ -> })
+        } else {
+            super.onBackPressed()
         }
     }
 }

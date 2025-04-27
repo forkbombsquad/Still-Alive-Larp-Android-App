@@ -133,6 +133,8 @@ class DataManager private constructor() {
 
     var gearToEdit: GearJsonModel? = null
 
+    var allOfflineNPCCharacters: List<FullCharacterModel>? = null
+
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
         loadCountIndex++
@@ -486,7 +488,7 @@ class DataManager private constructor() {
                 }
                 DataManagerType.SELECTED_CHARACTER_GEAR -> {
                     loadingSelectedCharacterGear = true
-                    if (selectedCharacterGear == null || forceDownloadIfApplicable) {
+                    if (selectedCharacterGear == null || forceDownloadIfApplicable || selectedCharacterGear?.firstOrNull()?.characterId != selectedChar?.id) {
                         val request = GearService.GetAllGearForCharacter()
                         lifecycleScope.launch {
                             request.successfulResponse(IdSP(selectedChar?.id ?: 0), true).ifLet({

@@ -16,6 +16,12 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".OfflineNPCListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OfflineNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
             android:name=".OfflinePersonalNativeSkillTreeActivity"
             android:exported="false" />
         <activity
@@ -96,12 +102,6 @@
             android:exported="false" />
         <activity
             android:name=".SelectCharacterToManageGearActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterPrimaryWeaponActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectCharacterToRegisterPrimaryWeaponActivity"
             android:exported="false" />
         <activity
             android:name=".EditEventActivity"

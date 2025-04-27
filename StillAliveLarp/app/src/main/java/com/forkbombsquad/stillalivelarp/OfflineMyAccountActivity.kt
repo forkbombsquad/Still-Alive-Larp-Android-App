@@ -34,7 +34,6 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-
         allSkillsNav = findViewById(R.id.myaccountoffline_viewAllSkillsNavArrow)
         skillTreeNav = findViewById(R.id.myaccountoffline_skillTreeArrow)
         skillTreeDarkNav = findViewById(R.id.myaccountoffline_skillTreeDarkArrow)
@@ -67,13 +66,16 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         }
         nativeSkillTreeNav.setOnClick {
             nativeSkillTreeNav.setLoading(true)
-//            TODO change the intent
-            val intent = Intent(this, OfflineViewAllSkillsActivity::class.java)
+            val intent = Intent(this, OfflineNativeSkillTreeActivity::class.java)
             startActivity(intent)
             nativeSkillTreeNav.setLoading(false)
         }
         allNPCsNav.setOnClick {
-            // TODO
+            allNPCsNav.setLoading(true)
+            DataManager.shared.allOfflineNPCCharacters = SharedPrefsManager.shared.getNPCs()
+            val intent = Intent(this, OfflineNPCListActivity::class.java)
+            startActivity(intent)
+            allNPCsNav.setLoading(false)
         }
         if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
             skillTreeNav.setOnClick {
@@ -123,6 +125,7 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         gearNav.setOnClick {
             // Set info in data manager so that things populate correctly
             DataManager.shared.selectedChar = SharedPrefsManager.shared.getCharacter()?.getBaseModel()
+            DataManager.shared.selectedCharacterGear = SharedPrefsManager.shared.getGear()
             val intent = Intent(this, OfflineViewGearActivity::class.java)
             startActivity(intent)
         }

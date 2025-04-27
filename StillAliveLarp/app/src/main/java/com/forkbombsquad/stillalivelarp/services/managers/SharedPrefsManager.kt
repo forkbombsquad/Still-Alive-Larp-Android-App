@@ -3,6 +3,7 @@ package com.forkbombsquad.stillalivelarp.services.managers
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.services.models.*
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
@@ -10,6 +11,7 @@ import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
+import java.io.Serializable
 import java.util.Base64
 
 
@@ -159,21 +161,28 @@ class SharedPrefsManager private constructor() {
         return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "", type) ?: listOf()
     }
 
+    private data class NPCListModel(@JsonProperty("npcs") val npcs: Array<FullCharacterModel>
+    ) : Serializable
+
     fun storeNPCs(npcs: List<FullCharacterModel>) {
-        this.set(StillAliveLarpApplication.context, npcsKey, globalToJson(npcs))
+        val npcListModel = NPCListModel(npcs.toTypedArray())
+        this.set(StillAliveLarpApplication.context, npcsKey, globalToJson(npcListModel))
     }
 
     fun getNPCs(): List<FullCharacterModel> {
-        val type = object: TypeToken<List<FullCharacterModel>>() {}.type
-        return globalFromJson(get(StillAliveLarpApplication.context, npcsKey) ?: "", type) ?: listOf()
+        val type = object: TypeToken<NPCListModel>() {}.type
+        return globalFromJson<NPCListModel>(get(StillAliveLarpApplication.context, npcsKey) ?: "", type)?.npcs?.toList() ?: listOf()
     }
 
+    private data class SkillCategoryListModel(@JsonProperty("cats") val cats: Array<SkillCategoryModel>
+    ) : Serializable
     fun storeSkillCategories(skillCategories: List<SkillCategoryModel>) {
-        this.set(StillAliveLarpApplication.context, skillCategoriesKey, globalToJson(skillCategories))
+        val skilCatListModel = SkillCategoryListModel(skillCategories.toTypedArray())
+        this.set(StillAliveLarpApplication.context, skillCategoriesKey, globalToJson(skilCatListModel))
     }
     fun getSkillCategories(): List<SkillCategoryModel> {
-        val type = object: TypeToken<List<SkillCategoryModel>>() {}.type
-        return globalFromJson(get(StillAliveLarpApplication.context, skillCategoriesKey) ?: "", type) ?: listOf()
+        val type = object: TypeToken<SkillCategoryListModel>() {}.type
+        return globalFromJson<SkillCategoryListModel>(get(StillAliveLarpApplication.context, skillCategoriesKey) ?: "", type)?.cats?.toList() ?: listOf()
     }
 
     companion object {

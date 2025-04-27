@@ -33,7 +33,6 @@ class AdminPanelFragment : Fragment() {
     private lateinit var giveClassXpRed: NavArrowButtonBlack
     private lateinit var awardPlayer: NavArrowButtonBlack
     private lateinit var awardChar: NavArrowButtonBlack
-    private lateinit var registerFirearm: NavArrowButtonBlack
     private lateinit var manageGear: NavArrowButtonBlack
     private lateinit var createAnnouncement: NavArrowButtonBlack
     private lateinit var manageIntrigue: NavArrowButtonBlack
@@ -93,7 +92,6 @@ class AdminPanelFragment : Fragment() {
         giveClassXpRed = v.findViewById(R.id.adminpanel_giveClassXpRed)
         awardPlayer = v.findViewById(R.id.adminpanel_awardPlayer)
         awardChar = v.findViewById(R.id.adminpanel_awardChar)
-        registerFirearm = v.findViewById(R.id.adminpanel_registerFirearm)
         manageGear = v.findViewById(R.id.adminpanel_manageGear)
         createAnnouncement = v.findViewById(R.id.adminpanel_createAnnouncement)
         manageIntrigue = v.findViewById(R.id.adminpanel_manageIntrigue)
@@ -151,10 +149,6 @@ class AdminPanelFragment : Fragment() {
             val intent = Intent(v.context, SelectCharacterToAwardActivity::class.java)
             startActivity(intent)
         }
-        registerFirearm.setOnClick {
-            val intent = Intent(v.context, SelectCharacterToRegisterPrimaryWeaponActivity::class.java)
-            startActivity(intent)
-        }
         manageGear.setOnClick {
             val intent = Intent(v.context, SelectCharacterToManageGearActivity::class.java)
             startActivity(intent)
@@ -206,7 +200,6 @@ class AdminPanelFragment : Fragment() {
         giveClassXpRed.setLoading(DataManager.shared.loadingAllCharacters)
         awardPlayer.setLoading(DataManager.shared.loadingAllPlayers)
         awardChar.setLoading(DataManager.shared.loadingAllCharacters)
-        registerFirearm.setLoading(DataManager.shared.loadingAllCharacters)
         manageGear.setLoading(DataManager.shared.loadingAllCharacters)
         manageIntrigue.setLoading(DataManager.shared.loadingEvents)
         approveBios.setLoading(DataManager.shared.loadingAllCharacters)

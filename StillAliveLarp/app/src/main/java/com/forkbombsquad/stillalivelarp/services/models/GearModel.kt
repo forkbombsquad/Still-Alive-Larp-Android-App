@@ -19,8 +19,7 @@ data class GearModel(
 ) : Serializable {
     val jsonModels: List<GearJsonModel>?
         get() {
-            // TODO need to turn this into a model that holds the list or this won't work
-            return globalFromJson<List<GearJsonModel>>(gearJson)
+            return globalFromJson<GearJsonListModel>(gearJson)?.gearJson?.toList()
         }
 }
 
@@ -56,3 +55,6 @@ data class GearJsonModel(
     }
 
 }
+
+data class GearJsonListModel(@JsonProperty("gearJson") val gearJson: Array<GearJsonModel>
+) : Serializable

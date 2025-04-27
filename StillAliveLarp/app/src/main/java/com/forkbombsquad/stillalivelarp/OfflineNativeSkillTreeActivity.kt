@@ -13,14 +13,14 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
-class OfflinePersonalNativeSkillTreeActivity : NoStatusBarActivity() {
+class OfflineNativeSkillTreeActivity : NoStatusBarActivity() {
 
     private lateinit var img: TouchImageView
     private lateinit var paint: Paint
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_offline_personal_native_skill_tree)
+        setContentView(R.layout.activity_offline_native_skill_tree)
         setupView()
     }
 
@@ -48,12 +48,11 @@ class OfflinePersonalNativeSkillTreeActivity : NoStatusBarActivity() {
     private fun renderSkills() {
         DataManager.shared.skills = SharedPrefsManager.shared.getSkills()
         DataManager.shared.skillCategories = SharedPrefsManager.shared.getSkillCategories().toTypedArray()
-        DataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
         img.updateDrawables(
             SkillGrid(
                 DataManager.shared.skills!!,
                 DataManager.shared.skillCategories!!.asList(),
-                personal = true,
+                personal = false,
                 allowPurchase = false
             ),
             lifecycleScope
