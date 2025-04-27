@@ -16,6 +16,8 @@ class ViewBioActivity : NoStatusBarActivity() {
     private lateinit var edit: NavArrowButtonGreen
     private lateinit var text: TextView
 
+
+    // TODO when viewing NPCS dont' allow editing
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_bio)
