@@ -1,6 +1,5 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -9,11 +8,9 @@ import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.PreregCell
 import com.forkbombsquad.stillalivelarp.utils.getRegNumbers
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 
 class ViewPreregsForEventActivity : NoStatusBarActivity() {

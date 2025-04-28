@@ -1,13 +1,13 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 
 class ViewBioActivity : NoStatusBarActivity() {
@@ -15,9 +15,6 @@ class ViewBioActivity : NoStatusBarActivity() {
     private lateinit var title: TextView
     private lateinit var edit: NavArrowButtonGreen
     private lateinit var text: TextView
-
-
-    // TODO when viewing NPCS dont' allow editing
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_bio)
@@ -49,7 +46,7 @@ class ViewBioActivity : NoStatusBarActivity() {
         val player = DataManager.shared.selectedPlayer
         val char = DataManager.shared.charForSelectedPlayer
 
-        edit.isGone = player?.id != DataManager.shared.player?.id
+        edit.isGone = !(player?.id == DataManager.shared.player?.id && char?.characterTypeId == Constants.CharacterTypes.standard)
 
         title.text = "${char?.fullName ?: ""}'s\nBio"
         text.text = char?.bio ?: ""

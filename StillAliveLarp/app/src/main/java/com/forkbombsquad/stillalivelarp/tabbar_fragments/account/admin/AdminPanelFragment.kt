@@ -2,22 +2,43 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.forkbombsquad.stillalivelarp.*
+import com.forkbombsquad.stillalivelarp.CharacterBioListActivity
+import com.forkbombsquad.stillalivelarp.CheckInPlayerActivity
+import com.forkbombsquad.stillalivelarp.CheckOutPlayerActivity
+import com.forkbombsquad.stillalivelarp.ContactListActivity
+import com.forkbombsquad.stillalivelarp.CreateAnnouncementActivity
+import com.forkbombsquad.stillalivelarp.FeatureFlagManagementActivity
+import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.SelectCharacterForClassXpReductionActivity
+import com.forkbombsquad.stillalivelarp.SelectCharacterToAwardActivity
+import com.forkbombsquad.stillalivelarp.SelectCharacterToManageGearActivity
+import com.forkbombsquad.stillalivelarp.SelectCharacterToRefundSkillsActivity
+import com.forkbombsquad.stillalivelarp.SelectEventForEventManagementActivity
+import com.forkbombsquad.stillalivelarp.SelectEventForIntrigueActivty
+import com.forkbombsquad.stillalivelarp.SelectEventForPreregViewActivity
+import com.forkbombsquad.stillalivelarp.SelectNPCToManageActivity
+import com.forkbombsquad.stillalivelarp.SelectPlayerToAwardActivity
+import com.forkbombsquad.stillalivelarp.SelectPlayerToChangePassActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.decompress
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -55,7 +76,7 @@ class AdminPanelFragment : Fragment() {
     ) { result ->
         if(result.contents != null) {
             if (checkInOutState == CHECKIN_STATE) {
-                globalFromJson<PlayerCheckInBarcodeModel>(result.contents).ifLet({
+                globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
                     DataManager.shared.playerCheckInModel = it
                     val intent = Intent(v.context, CheckInPlayerActivity::class.java)
                     startActivity(intent)
@@ -63,7 +84,7 @@ class AdminPanelFragment : Fragment() {
                   AlertUtils.displayError(v.context, "Unable to parse barcode data!")
                 })
             } else if (checkInOutState == CHECKOUT_STATE) {
-                globalFromJson<PlayerCheckOutBarcodeModel>(result.contents).ifLet({
+                globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
                     DataManager.shared.playerCheckOutModel = it
                     val intent = Intent(v.context, CheckOutPlayerActivity::class.java)
                     startActivity(intent)

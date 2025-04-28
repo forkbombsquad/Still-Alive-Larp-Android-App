@@ -2,15 +2,8 @@ package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.Data
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
@@ -21,17 +14,12 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
-import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
-import com.forkbombsquad.stillalivelarp.utils.ButtonType
 import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
 import com.forkbombsquad.stillalivelarp.utils.Constants
-import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet

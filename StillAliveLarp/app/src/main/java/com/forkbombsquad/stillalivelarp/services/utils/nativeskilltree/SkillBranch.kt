@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.utils.ifLet
 
 class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>, categoryId: Int) {
 

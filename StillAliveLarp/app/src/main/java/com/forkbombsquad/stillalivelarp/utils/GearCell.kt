@@ -1,19 +1,10 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
-import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
-import kotlin.math.max
 
 class GearCell(context: Context): LinearLayout(context) {
 

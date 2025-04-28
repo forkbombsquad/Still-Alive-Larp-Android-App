@@ -7,7 +7,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
-import com.google.android.material.divider.MaterialDivider
 
 class SmallLoadingButton(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
 

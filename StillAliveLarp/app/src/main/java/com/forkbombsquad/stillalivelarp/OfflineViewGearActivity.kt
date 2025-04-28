@@ -2,21 +2,13 @@ package com.forkbombsquad.stillalivelarp
 
 import android.graphics.Color
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
-import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.utils.GearCell
-import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
-import com.forkbombsquad.stillalivelarp.utils.ifLet
-import com.google.android.material.divider.MaterialDivider
 
 class OfflineViewGearActivity : NoStatusBarActivity() {
 

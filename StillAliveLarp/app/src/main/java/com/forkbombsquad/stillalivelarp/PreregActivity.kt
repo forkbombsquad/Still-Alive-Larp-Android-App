@@ -1,10 +1,12 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.media.metrics.Event
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.EventPreregService
@@ -16,7 +18,12 @@ import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.launch
 
 class PreregActivity : NoStatusBarActivity() {

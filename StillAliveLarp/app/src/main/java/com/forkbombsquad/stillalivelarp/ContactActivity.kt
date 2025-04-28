@@ -1,15 +1,19 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.ContactRequestService
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.ContactCreateSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationResult
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 class ContactActivity : NoStatusBarActivity() {

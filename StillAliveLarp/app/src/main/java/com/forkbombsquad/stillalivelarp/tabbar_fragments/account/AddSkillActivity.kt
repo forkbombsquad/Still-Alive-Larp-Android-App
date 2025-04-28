@@ -1,9 +1,13 @@
 package com.forkbombsquad.stillalivelarp.tabbar_fragments.account
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
@@ -11,10 +15,21 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.*
-import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
+import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
+import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.SkillCell
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
+import com.forkbombsquad.stillalivelarp.utils.SkillSortType
+import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.launch
 
 class AddSkillActivity : NoStatusBarActivity() {

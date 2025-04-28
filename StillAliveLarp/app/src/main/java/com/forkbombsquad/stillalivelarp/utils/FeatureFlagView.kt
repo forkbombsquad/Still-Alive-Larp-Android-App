@@ -1,15 +1,11 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
-import android.util.AttributeSet
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.fasterxml.jackson.core.JsonParser.Feature
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
-import com.google.android.material.divider.MaterialDivider
 
 class FeatureFlagView(context: Context): LinearLayout(context) {
 

@@ -1,6 +1,5 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -14,7 +13,13 @@ import com.forkbombsquad.stillalivelarp.services.models.IntrigueCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationResult
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 

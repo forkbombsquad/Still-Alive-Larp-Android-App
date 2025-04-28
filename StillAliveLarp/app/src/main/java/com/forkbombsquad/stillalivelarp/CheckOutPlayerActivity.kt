@@ -1,22 +1,46 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.models.*
+import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
+import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertButton
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
+import com.forkbombsquad.stillalivelarp.utils.ButtonType
+import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+import com.forkbombsquad.stillalivelarp.utils.KeyValueTextFieldView
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationResult
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.decompress
+import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
@@ -56,7 +80,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         ScanContract()
     ) { result ->
         if(result.contents != null) {
-            globalFromJson<PlayerCheckOutBarcodeModel>(result.contents).ifLet({
+            globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
                 DataManager.shared.playerCheckOutModel = it
                 buildView()
             }, {

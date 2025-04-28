@@ -1,14 +1,11 @@
 package com.forkbombsquad.stillalivelarp.services
 
-import com.forkbombsquad.stillalivelarp.services.models.AwardListModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillListModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
-import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import okhttp3.RequestBody
 import retrofit2.Response

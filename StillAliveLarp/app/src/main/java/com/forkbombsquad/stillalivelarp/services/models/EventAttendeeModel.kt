@@ -2,10 +2,7 @@ package com.forkbombsquad.stillalivelarp.services.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
 import java.io.Serializable
-import java.time.LocalDate
-import java.time.Period
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class EventAttendeeModel(

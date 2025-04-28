@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
-import android.media.Image
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.LinearLayout

@@ -2,7 +2,6 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +9,34 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.forkbombsquad.stillalivelarp.*
+import com.forkbombsquad.stillalivelarp.CharacterPlannerActivity
+import com.forkbombsquad.stillalivelarp.CheckInBarcodeActivity
+import com.forkbombsquad.stillalivelarp.EditProfileImageActivity
+import com.forkbombsquad.stillalivelarp.ManageAccountActivity
+import com.forkbombsquad.stillalivelarp.PersonalSkillTreeActivity
+import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.SpecialClassXpReductionsActivity
+import com.forkbombsquad.stillalivelarp.ViewBioActivity
+import com.forkbombsquad.stillalivelarp.ViewGearActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.models.EventBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin.AdminPanelFragment
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.toBitmap
+import com.forkbombsquad.stillalivelarp.utils.underline
 
 /**
  * A simple [Fragment] subclass.
@@ -42,6 +59,7 @@ class MyAccountFragment : Fragment() {
     private lateinit var characterPlannerNav: NavArrowButtonBlue
     private lateinit var manageAccountNav: NavArrowButtonBlack
     private lateinit var adminToolsNav: NavArrowButtonRed
+    private lateinit var debugButton: NavArrowButtonRed
     private lateinit var signOutButton: LoadingButton
 
     private lateinit var personalSkillTree: NavArrowButtonBlack
@@ -72,6 +90,7 @@ class MyAccountFragment : Fragment() {
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
         personalSkillTree = v.findViewById(R.id.myaccount_personalSkillTree)
+        debugButton = v.findViewById(R.id.myaccount_debugButton)
 
         profileImage.setOnClickListener {
             DataManager.shared.unrelaltedUpdateCallback = {
@@ -180,6 +199,10 @@ class MyAccountFragment : Fragment() {
             buildView()
         }
 
+        debugButton.setOnClick {
+            doDebugStuff()
+        }
+
         DataManager.shared.loadingProfileImage = true
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.SKILL_CATEGORIES), false) {
             DataManager.shared.selectedPlayer = DataManager.shared.player
@@ -229,6 +252,13 @@ class MyAccountFragment : Fragment() {
         gearNav.setLoading(DataManager.shared.loadingCharacter)
 
         characterPlannerNav.setLoading(DataManager.shared.loadingPlayer || DataManager.shared.loadingCharacter)
+
+        debugButton.isGone = !Constants.Logging.showDebugButtonInAccountView
+    }
+
+    private fun doDebugStuff() {
+        // Any debug stuff you need to do can be done here
+        // TODO ALWAYS - remove all code here before launch
     }
 
     companion object {

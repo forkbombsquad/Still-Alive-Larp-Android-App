@@ -1,20 +1,12 @@
 package com.forkbombsquad.stillalivelarp.utils
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.AsyncTask
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.VersionService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.TextNode
-import retrofit2.http.HEAD
 import java.io.IOException
 
 class RulebookManager private constructor()  {

@@ -2,21 +2,39 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.forkbombsquad.stillalivelarp.*
+import com.forkbombsquad.stillalivelarp.CheckInBarcodeActivity
+import com.forkbombsquad.stillalivelarp.CheckOutBarcodeActivity
+import com.forkbombsquad.stillalivelarp.CreateCharacterActivity
+import com.forkbombsquad.stillalivelarp.PreregActivity
+import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.AnnouncementManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.*
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.EventModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.inChronologicalOrder
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.google.android.material.divider.MaterialDivider
 
 /**
@@ -325,24 +343,23 @@ class HomeFragment : Fragment() {
                             checkInAsNpcButton.isGone = false
                             eventTodayCheckedInAs.isGone = true
                             checkInAsCharButton.setOnClick {
-                                // TODO
-//                                DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-//                                    player = DataManager.shared.player?.getBarcodeModel()!!,
-//                                    character = DataManager.shared.character?.getBarcodeModel(),
-//                                    event = it.barcodeModel(),
-//                                    relevantSkills = DataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
-//                                    primaryWeapon = DataManager.shared.selectedCharacterGear?.primaryWeapon()
-//                                )
-//                                DataManager.shared.unrelaltedUpdateCallback = {
-//                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
-//                                        setupViews(v)
-//                                    }) {
-//                                        setupViews(v)
-//                                    }
-//                                    setupViews(v)
-//                                }
-//                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-//                                startActivity(intent)
+                                DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
+                                    player = DataManager.shared.player?.getBarcodeModel()!!,
+                                    character = DataManager.shared.character?.getBarcodeModel(),
+                                    event = it.barcodeModel(),
+                                    relevantSkills = DataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
+                                    gear = DataManager.shared.selectedCharacterGear?.firstOrNull()
+                                )
+                                DataManager.shared.unrelaltedUpdateCallback = {
+                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.INTRIGUE, DataManagerType.EVENTS), true, finishedStep = {
+                                        setupViews(v)
+                                    }) {
+                                        setupViews(v)
+                                    }
+                                    setupViews(v)
+                                }
+                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+                                startActivity(intent)
                             }
                             checkInAsNpcButton.setOnClick {
                                 DataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
@@ -350,7 +367,7 @@ class HomeFragment : Fragment() {
                                     character = null,
                                     event = it.barcodeModel(),
                                     relevantSkills = arrayOf(),
-                                    primaryWeapon = null
+                                    gear = null
                                 )
                                 DataManager.shared.unrelaltedUpdateCallback = {
                                     DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.EVENTS), true) {
@@ -411,7 +428,6 @@ class HomeFragment : Fragment() {
                         val intent = Intent(v.context, PreregActivity::class.java)
                         startActivity(intent)
                     }
-
                 }
 
                 eventPrevButton.setOnClickListener {

@@ -2,22 +2,25 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments.account
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.FragmentTemplate
-import com.forkbombsquad.stillalivelarp.HomeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.community.ViewPlayerStuffFragment
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.SkillCell
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -11,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
-import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 
 class CharacterBioListActivity : NoStatusBarActivity() {
 

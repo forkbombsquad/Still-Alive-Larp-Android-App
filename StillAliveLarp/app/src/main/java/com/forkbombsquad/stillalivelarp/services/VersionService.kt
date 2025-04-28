@@ -4,7 +4,8 @@ import com.forkbombsquad.stillalivelarp.services.models.AppVersionModel
 import com.forkbombsquad.stillalivelarp.services.utils.AuthServiceInterface
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Headers
 
 interface VersionRequest {
     @Headers(

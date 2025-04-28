@@ -2,10 +2,10 @@ package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
 import android.content.DialogInterface
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
 
 data class AlertButton(val text: String, val onClick: DialogInterface.OnClickListener, val buttonType: ButtonType)
@@ -113,6 +113,110 @@ class AlertUtils {
                 alert.setPositiveButton("Ok") { _, _ ->
                     response(editText.text.toString())
                 }
+                alert.show()
+            }
+        }
+
+        fun displayMessageWithInputs(
+            context: Context,
+            title: String,
+            editTextHints: List<String>,
+            checkboxTexts: List<String>,
+            response: (values: Map<String, String>) -> Unit
+        ) {
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(24, 24, 24, 24)
+            }
+
+            val editTexts = mutableListOf<EditText>()
+            val checkboxes = mutableListOf<CheckBox>()
+
+            // Create and add EditTexts
+            for (hint in editTextHints) {
+                val editText = EditText(context).apply {
+                    this.hint = hint
+                }
+                editTexts.add(editText)
+                layout.addView(editText)
+            }
+
+            // Create and add CheckBoxes
+            for (text in checkboxTexts) {
+                val checkbox = CheckBox(context).apply {
+                    this.text = text
+                }
+                checkboxes.add(checkbox)
+                layout.addView(checkbox)
+            }
+
+            StillAliveLarpApplication.activity.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle(title)
+                alert.setView(layout)
+                alert.setPositiveButton("Ok") { _, _ ->
+                    val resultMap = mutableMapOf<String, String>()
+
+                    // Collect EditText values
+                    for (editText in editTexts) {
+                        val key = editText.hint?.toString() ?: ""
+                        val value = editText.text.toString()
+                        resultMap[key] = value
+                    }
+
+                    // Collect CheckBox values
+                    for (checkbox in checkboxes) {
+                        val key = checkbox.text.toString()
+                        val value = checkbox.isChecked.toString()
+                        resultMap[key] = value
+                    }
+
+                    response(resultMap)
+                }
+                alert.setNegativeButton("Cancel", null)
+                alert.show()
+            }
+        }
+
+        fun displayMessageWithInputs(
+            context: Context,
+            title: String,
+            editTexts: Map<String, EditText>,
+            checkboxes: Map<String, CheckBox>,
+            response: (values: Map<String, String>) -> Unit
+        ) {
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(24, 24, 24, 24)
+            }
+
+            for ((_, editText) in editTexts) {
+                layout.addView(editText)
+            }
+            for ((_, checkbox) in checkboxes) {
+                layout.addView(checkbox)
+            }
+
+            StillAliveLarpApplication.activity.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle(title)
+                alert.setView(layout)
+                alert.setPositiveButton("Ok") { _, _ ->
+                    val resultMap = mutableMapOf<String, String>()
+
+                    // Collect EditText values
+                    for (editText in editTexts) {
+                        resultMap[editText.key] = editText.value.text.toString()
+                    }
+
+                    // Collect CheckBox values
+                    for (checkbox in checkboxes) {
+                        resultMap[checkbox.key] = checkbox.value.isChecked.toString()
+                    }
+
+                    response(resultMap)
+                }
+                alert.setNegativeButton("Cancel", null)
                 alert.show()
             }
         }

@@ -2,14 +2,10 @@ package com.forkbombsquad.stillalivelarp.services.managers
 
 import com.forkbombsquad.stillalivelarp.services.AuthService
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
-import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.Period
-import java.util.*
 import kotlin.math.abs
 
 class AuthManager private constructor() {

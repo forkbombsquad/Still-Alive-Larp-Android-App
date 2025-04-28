@@ -1,24 +1,27 @@
 package com.forkbombsquad.stillalivelarp.tabbar_fragments.rules
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.FragmentTemplate
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.SkillCell
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
+import com.forkbombsquad.stillalivelarp.utils.SkillSortType
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

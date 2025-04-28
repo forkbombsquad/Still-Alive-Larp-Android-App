@@ -3,21 +3,11 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
-import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
-import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-import com.forkbombsquad.stillalivelarp.utils.RulebookManager
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.underline
-import org.jsoup.Connection.KeyVal
 
 class ViewNPCStuffActivity : NoStatusBarActivity() {
 

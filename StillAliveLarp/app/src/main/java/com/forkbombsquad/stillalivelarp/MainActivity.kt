@@ -13,8 +13,17 @@ import com.forkbombsquad.stillalivelarp.services.VersionService
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertButton
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.ButtonType
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication.Companion.context
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.tryOptional
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 

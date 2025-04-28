@@ -1,9 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -12,12 +9,9 @@ import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.AddSkillActivity
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
-import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

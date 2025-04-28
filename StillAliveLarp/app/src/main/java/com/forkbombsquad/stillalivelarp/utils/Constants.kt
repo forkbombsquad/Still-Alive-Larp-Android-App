@@ -1,9 +1,5 @@
 package com.forkbombsquad.stillalivelarp.utils
 
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import kotlin.math.max
-
 class Constants {
 
     class CharacterTypeId {
@@ -29,8 +25,10 @@ class Constants {
 
     class Logging {
         companion object {
+            // TODO ALWAYS - set these to false before release
             const val showLogging = false
-            const val showTestLogging = true
+            const val showTestLogging = false
+            const val showDebugButtonInAccountView = false
         }
     }
 

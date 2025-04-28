@@ -1,15 +1,24 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.*
+import com.forkbombsquad.stillalivelarp.services.AwardService
+import com.forkbombsquad.stillalivelarp.services.CharacterService
+import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
+import com.forkbombsquad.stillalivelarp.services.EventAttendeeService
+import com.forkbombsquad.stillalivelarp.services.EventPreregService
+import com.forkbombsquad.stillalivelarp.services.GearService
+import com.forkbombsquad.stillalivelarp.services.PlayerService
+import com.forkbombsquad.stillalivelarp.services.ProfileImageService
+import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.utils.EmptyServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.globalForceResetAllPlayerData
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 class ManageAccountActivity : NoStatusBarActivity() {

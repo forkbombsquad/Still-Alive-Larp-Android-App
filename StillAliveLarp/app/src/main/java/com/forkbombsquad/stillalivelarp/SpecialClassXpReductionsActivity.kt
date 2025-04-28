@@ -1,7 +1,5 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -13,9 +11,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
-import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
-import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 
 class SpecialClassXpReductionsActivity : NoStatusBarActivity() {
 

@@ -3,9 +3,9 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.*
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityFragment
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityPlayersListFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.HomeFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.RulesFragment

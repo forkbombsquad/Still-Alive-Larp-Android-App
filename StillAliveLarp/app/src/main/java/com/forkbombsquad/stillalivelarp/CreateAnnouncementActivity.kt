@@ -1,16 +1,20 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.AnnouncementManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationResult
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.time.LocalDate

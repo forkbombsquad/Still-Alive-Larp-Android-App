@@ -2,16 +2,14 @@ package com.forkbombsquad.stillalivelarp.services.utils
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
-import com.forkbombsquad.stillalivelarp.services.models.OAuthTokenModel
-import com.forkbombsquad.stillalivelarp.utils.*
-import kotlinx.coroutines.withContext
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalPrint
+import com.forkbombsquad.stillalivelarp.utils.globalToJson
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.create
-import retrofit2.http.Body
-import retrofit2.http.HTTP
-import retrofit2.http.Headers
-import java.lang.Exception
 
 interface ServiceInterface<G, T, H: ServicePayload> {
     val retrofit: Retrofit

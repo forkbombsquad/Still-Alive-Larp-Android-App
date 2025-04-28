@@ -11,7 +11,16 @@ import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.PlayerCreateSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
+import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
+import com.forkbombsquad.stillalivelarp.utils.ValidationResult
+import com.forkbombsquad.stillalivelarp.utils.ValidationType
+import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 

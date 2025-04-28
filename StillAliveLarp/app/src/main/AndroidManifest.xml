@@ -16,6 +16,9 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".AddEditGearFromBarcodeActivity"
+            android:exported="false" />
+        <activity
             android:name=".OfflineNPCListActivity"
             android:exported="false" />
         <activity

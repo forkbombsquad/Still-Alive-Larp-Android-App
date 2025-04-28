@@ -1,10 +1,7 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
-import kotlin.math.max
 
 class SkillGridCategory(skills: List<FullSkillModel>, skillCategoryId: Int, skillCategoryName: String, allSkills: List<FullSkillModel>) {
     val allSkills: List<FullSkillModel>

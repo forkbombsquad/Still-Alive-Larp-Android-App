@@ -1,20 +1,23 @@
 package com.forkbombsquad.stillalivelarp.tabbar_fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.community.ViewPlayerStuffFragment
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.alphabetized
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class CommunityPlayersListFragment : Fragment() {
     private val TAG = "COMMUNITY_PLAYERS_LIST_FRAGMENT"

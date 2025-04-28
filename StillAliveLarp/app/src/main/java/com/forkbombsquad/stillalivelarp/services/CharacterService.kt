@@ -1,13 +1,21 @@
 package com.forkbombsquad.stillalivelarp.services
 
-import com.forkbombsquad.stillalivelarp.services.models.*
-import com.forkbombsquad.stillalivelarp.services.utils.*
+import com.forkbombsquad.stillalivelarp.services.models.CharacterListFullModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterListModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
+import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
+import com.forkbombsquad.stillalivelarp.services.utils.CharacterSP
+import com.forkbombsquad.stillalivelarp.services.utils.CharactersForTypeWithIdSP
+import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
+import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import okhttp3.RequestBody
-import org.json.JSONObject
-
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.HTTP
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GetCharacterRequest {
     @HTTP(method ="GET", path = "characters/{characterId}")

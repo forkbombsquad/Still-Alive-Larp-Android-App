@@ -1,15 +1,12 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
-import android.util.AttributeSet
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
-import com.google.android.material.divider.MaterialDivider
 
 class PreregCell(context: Context): LinearLayout(context) {
 

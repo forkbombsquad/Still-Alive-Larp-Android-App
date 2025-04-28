@@ -8,7 +8,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class BarcodeGenerator {
     companion object {
-
         fun generateCheckInBarcode(model: PlayerCheckInBarcodeModel): Bitmap {
             return generateBarcodeFromModel(model)
         }
@@ -20,7 +19,7 @@ class BarcodeGenerator {
         private fun generateBarcodeFromModel(model: Any): Bitmap {
             val content = globalToJson(model)
             val bc = BarcodeEncoder()
-            return bc.encodeBitmap(content, BarcodeFormat.QR_CODE, 1000, 1000)
+            return bc.encodeBitmap(content.compress(), BarcodeFormat.QR_CODE, 1000, 1000)
         }
     }
 }

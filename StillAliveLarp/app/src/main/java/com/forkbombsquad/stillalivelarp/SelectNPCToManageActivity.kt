@@ -3,15 +3,10 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
@@ -40,6 +35,12 @@ class SelectNPCToManageActivity : NoStatusBarActivity() {
     private fun buildView() {
         layout.removeAllViews()
 
+        DataManager.shared.unrelaltedUpdateCallback = {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS), true) {
+                buildView()
+            }
+            buildView()
+        }
         DataManager.shared.allNPCCharacters.ifLet { chars ->
             val living = chars.filter { it.isAlive.toBoolean() }
             living.alphabetized().forEachIndexed { index, char ->

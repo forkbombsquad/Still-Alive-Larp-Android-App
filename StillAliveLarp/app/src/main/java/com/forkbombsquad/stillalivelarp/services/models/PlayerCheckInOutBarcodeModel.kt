@@ -10,7 +10,7 @@ data class PlayerCheckInBarcodeModel(
     @JsonProperty("character") val character: CharacterBarcodeModel?,
     @JsonProperty("event") val event: EventBarcodeModel,
     @JsonProperty("relevantSkills") val relevantSkills: Array<SkillBarcodeModel>,
-    @JsonProperty("primaryWeapon") val primaryWeapon: GearModel?
+    @JsonProperty("gear") var gear: GearModel?
 ) : Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,19 +1,43 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.models.*
+import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.GiveCharacterCheckInRewardsSP
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
+import com.forkbombsquad.stillalivelarp.utils.AlertButton
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.ButtonType
+import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
+import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.GearCell
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+import com.forkbombsquad.stillalivelarp.utils.decompress
+import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
@@ -61,19 +85,23 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
     private lateinit var eventName: KeyValueView
 
+    private lateinit var gearLayout: LinearLayout
+    private lateinit var addNewGearButton: NavArrowButtonGreen
+    private lateinit var gearListLayout: LinearLayout
+
     private lateinit var checkInButton: LoadingButton
+
+    private var gearModified = false
 
     private val barcodeScanner: ActivityResultLauncher<ScanOptions> = registerForActivityResult(
         ScanContract()
     ) { result ->
         if(result.contents != null) {
-            globalFromJson<PlayerCheckInBarcodeModel>(result.contents).ifLet({
+            globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
                 DataManager.shared.playerCheckInModel = it
                 buildView()
             }, {
-                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ ->
-                    finish()
-                }
+                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
             })
         }
     }
@@ -125,80 +153,136 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         fortuneSkillBonusMaterials = findViewById(R.id.checkinplayer_fortuneSkillBonusMaterials)
         fullyLoadedSkill = findViewById(R.id.checkinplayer_fullyLoadedSkill)
 
+        gearLayout = findViewById(R.id.checkinplayer_gearLayout)
+        addNewGearButton = findViewById(R.id.checkinplayer_addNewGear)
+        gearListLayout = findViewById(R.id.checkinplayer_gearListLayout)
+
         eventName = findViewById(R.id.checkinplayer_eventName)
 
         checkInButton = findViewById(R.id.checkinplayer_checkInButton)
 
         checkInButton.setOnClick {
-            DataManager.shared.playerCheckInModel.ifLet { checkIn ->
-                val player = checkIn.player
-                val character = checkIn.character
-                val event = checkIn.event
-                val relevantSkills = checkIn.relevantSkills
+            if (gearModified) {
+                saveModifiedGear {
+                    checkIn()
+                }
+            } else {
+                checkIn()
+            }
+        }
 
-                var isNpc = character == null
+        addNewGearButton.setOnClick {
+            DataManager.shared.gearToEdit = null
+            DataManager.shared.unrelaltedUpdateCallback = {
+                gearModified = true
+                buildView()
+            }
+            val intent = Intent(this, AddEditGearFromBarcodeActivity::class.java)
+            startActivity(intent)
+        }
 
-                checkInButton.setLoadingWithText("Checking in player")
-                // DO NOT SET THE CHAR ID, The service will do that later
-                val eventAttendeeCreate = EventAttendeeCreateModel(
-                    playerId = player.id,
-                    characterId = null,
-                    eventId = event.id,
-                    isCheckedIn = "TRUE",
-                    asNpc = isNpc.ternary("TRUE", "FALSE")
-                )
+        buildView()
+    }
 
-                val checkInPlayerRequest = AdminService.CheckInPlayer()
+    private fun saveModifiedGear(finished: () -> Unit) {
+        checkInButton.setLoadingWithText("Organizing Gear...")
+        val gear = DataManager.shared.playerCheckInModel?.gear
+        if (gear != null) {
+            if (gear.id == -1) {
+                // Create New List
+                val createModel = GearCreateModel(gear.characterId, gear.gearJson)
+                val request = AdminService.CreateGear()
+                checkInButton.setLoadingWithText("Creating Gear Listing...")
                 lifecycleScope.launch {
-                    checkInPlayerRequest.successfulResponse(CreateModelSP(eventAttendeeCreate)).ifLet({ _ ->
-                        character.ifLet({ char ->
-                            checkInButton.setLoadingWithText("Giving character rewards")
-                            var bullets = getAdditionalBulletCount(relevantSkills)
-                            bullets += char.bullets.toInt()
-                            val giveCharCheckInRewardsRequest = AdminService.GiveCharacterCheckInRewards()
-                            lifecycleScope.launch {
-                                giveCharCheckInRewardsRequest.successfulResponse(
-                                    GiveCharacterCheckInRewardsSP(
-                                        eventId = event.id,
-                                        playerId = player.id,
-                                        characterId = char.id,
-                                        newBulletCount = bullets
-                                    )
-                                ).ifLet({ _ ->
-                                    checkInButton.setLoadingWithText("Checking in character")
-                                    val checkInCharacterRequest = AdminService.CheckInCharacter()
-                                    lifecycleScope.launch {
-                                        checkInCharacterRequest.successfulResponse(
-                                            CharacterCheckInSP(
-                                                eventId = event.id,
-                                                playerId = player.id,
-                                                characterId = char.id
-                                            )
-                                        ).ifLet({
-                                            checkInButton.setLoading(false)
-                                            showSuccessAlertAllowingRescan("${player.fullName} checked in as ${char.fullName}!")
-                                        }, {
-                                            checkInButton.setLoading(false)
-                                            restartScanner()
-                                        })
-                                    }
-                                }, {
-                                    checkInButton.setLoading(false)
-                                    restartScanner()
-                                })
-                            }
-                        }, {
-                            checkInButton.setLoading(false)
-                            showSuccessAlertAllowingRescan("${player.fullName} checked in as NPC!")
-                        })
-                    }, {
-                        checkInButton.setLoading(false)
-                        restartScanner()
-                    })
+                    request.successfulResponse(CreateModelSP(createModel)).ifLet { newGearModel ->
+                        DataManager.shared.playerCheckInModel?.gear = newGearModel
+                        checkInButton.setLoadingWithText("Gear Added!")
+                        finished()
+                    }
+                }
+            } else {
+                // update Existing
+                val request = AdminService.UpdateGear()
+                checkInButton.setLoadingWithText("Updating Gear...")
+                lifecycleScope.launch {
+                    request.successfulResponse(UpdateModelSP(gear)).ifLet { updatedGearModel ->
+                        DataManager.shared.playerCheckInModel?.gear = updatedGearModel
+                        checkInButton.setLoadingWithText("Gear Updated!")
+                        finished()
+                    }
                 }
             }
         }
-        buildView()
+        gearModified = false
+    }
+    private fun checkIn() {
+        DataManager.shared.playerCheckInModel.ifLet { checkIn ->
+            val player = checkIn.player
+            val character = checkIn.character
+            val event = checkIn.event
+            val relevantSkills = checkIn.relevantSkills
+
+            var isNpc = character == null
+
+            checkInButton.setLoadingWithText("Checking in Player...")
+            // DO NOT SET THE CHAR ID, The service will do that later
+            val eventAttendeeCreate = EventAttendeeCreateModel(
+                playerId = player.id,
+                characterId = null,
+                eventId = event.id,
+                isCheckedIn = "TRUE",
+                asNpc = isNpc.ternary("TRUE", "FALSE")
+            )
+
+            val checkInPlayerRequest = AdminService.CheckInPlayer()
+            lifecycleScope.launch {
+                checkInPlayerRequest.successfulResponse(CreateModelSP(eventAttendeeCreate)).ifLet({ _ ->
+                    character.ifLet({ char ->
+                        checkInButton.setLoadingWithText("Adding Bullets...")
+                        var bullets = getAdditionalBulletCount(relevantSkills)
+                        bullets += char.bullets.toInt()
+                        val giveCharCheckInRewardsRequest = AdminService.GiveCharacterCheckInRewards()
+                        lifecycleScope.launch {
+                            giveCharCheckInRewardsRequest.successfulResponse(
+                                GiveCharacterCheckInRewardsSP(
+                                    eventId = event.id,
+                                    playerId = player.id,
+                                    characterId = char.id,
+                                    newBulletCount = bullets
+                                )
+                            ).ifLet({ _ ->
+                                checkInButton.setLoadingWithText("Checking In Character...")
+                                val checkInCharacterRequest = AdminService.CheckInCharacter()
+                                lifecycleScope.launch {
+                                    checkInCharacterRequest.successfulResponse(
+                                        CharacterCheckInSP(
+                                            eventId = event.id,
+                                            playerId = player.id,
+                                            characterId = char.id
+                                        )
+                                    ).ifLet({
+                                        checkInButton.setLoading(false)
+                                        showSuccessAlertAllowingRescan("${player.fullName} checked in as ${char.fullName}!")
+                                    }, {
+                                        checkInButton.setLoading(false)
+                                        restartScanner()
+                                    })
+                                }
+                            }, {
+                                checkInButton.setLoading(false)
+                                restartScanner()
+                            })
+                        }
+                    }, {
+                        checkInButton.setLoading(false)
+                        showSuccessAlertAllowingRescan("${player.fullName} checked in as NPC!")
+                    })
+                }, {
+                    checkInButton.setLoading(false)
+                    restartScanner()
+                })
+            }
+        }
     }
 
     private fun showSuccessAlertAllowingRescan(message: String) {
@@ -231,7 +315,13 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             val character = it.character
             val event = it.event
             val relevantSkills = it.relevantSkills
-            val primaryWeapon = it.primaryWeapon
+            val gear = it.gear
+            var gearList: Map<String, List<GearJsonModel>> = mapOf()
+            if (gear != null) {
+                DataManager.shared.selectedCharacterGear = arrayOf(gear)
+                gearList = DataManager.shared.getGearOrganzied()
+            }
+
 
             var isNpc = character == null
 
@@ -332,12 +422,11 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 val fullyLoaded = getFullyLoaded(relevantSkills)
                 fullyLoaded.ifLet({ fl ->
                     fullyLoadedSkill.isGone = false
-                    // TODO fix this
-//                    primaryWeapon.ifLet({ pm ->
-//                        fullyLoadedSkill.set("${pm.description} - ${pm.name}")
-//                    }, {
-//                        fullyLoadedSkill.set("MISSING PRIMARY WEAPON REGISTRATION")
-//                    })
+                    gear?.getPrimaryFirearm().ifLet({ pf ->
+                        fullyLoadedSkill.set("${pf.desc} - ${pf.name}")
+                    }, {
+                        fullyLoadedSkill.set("MISSING PRIMARY WEAPON REGISTRATION")
+                    })
                 }, {
                     fullyLoadedSkill.isGone = true
                 })
@@ -346,6 +435,43 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
             // Event Section
             eventName.set(event.title)
+
+            gearLayout.isGone = isNpc
+            gearListLayout.removeAllViews()
+            gearList.forEach { (key, list) ->
+                val textView = TextView(this)
+                val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                tvParams.setMargins(0, 8, 0, 8)
+                textView.layoutParams = tvParams
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                textView.setTypeface(null, Typeface.BOLD)
+                textView.setTextColor(Color.BLACK)
+                textView.text = key
+                gearListLayout.addView(textView)
+
+                list.forEach { g ->
+                    val gearCell = GearCell(this)
+                    gearCell.setup(g)
+                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    params.setMargins(0, 8, 0, 8)
+                    gearCell.layoutParams = params
+                    gearCell.setOnClick {
+                        DataManager.shared.gearToEdit = g
+                        DataManager.shared.unrelaltedUpdateCallback = {
+                            gearModified = true
+                            buildView()
+                        }
+                        val intent = Intent(this, AddEditGearFromBarcodeActivity::class.java)
+                        startActivity(intent)
+                    }
+                    gearListLayout.addView(gearCell)
+                }
+            }
+            if (gearModified) {
+                checkInButton.textView.text = "Save Gear Modifications\nAnd\nCheck In"
+            } else {
+                checkInButton.textView.text = "Check In"
+            }
         }
     }
 

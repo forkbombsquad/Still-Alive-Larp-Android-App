@@ -1,7 +1,5 @@
 package com.forkbombsquad.stillalivelarp.utils
 
-import kotlin.math.max
-
 fun Boolean.ternary(value: String, otherwise: String): String {
     if (this) {
         return value

@@ -3,12 +3,6 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import android.widget.ProgressBar
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager

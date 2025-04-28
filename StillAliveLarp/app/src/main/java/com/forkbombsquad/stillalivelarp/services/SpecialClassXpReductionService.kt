@@ -1,6 +1,5 @@
 package com.forkbombsquad.stillalivelarp.services
 
-import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeListModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionListModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface

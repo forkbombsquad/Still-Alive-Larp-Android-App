@@ -2,19 +2,11 @@ package com.forkbombsquad.stillalivelarp
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.graphics.RectF
-import android.graphics.Shader
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.Layout
-import android.text.StaticLayout
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -24,16 +16,9 @@ import android.view.View
 import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
-import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
-import com.forkbombsquad.stillalivelarp.utils.Constants
-import com.forkbombsquad.stillalivelarp.utils.Shapes
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
-import com.forkbombsquad.stillalivelarp.utils.ifLet
-import kotlin.math.max
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class NativeSkillTreeActivity : NoStatusBarActivity() {
 

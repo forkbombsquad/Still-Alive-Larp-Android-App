@@ -1,6 +1,5 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager

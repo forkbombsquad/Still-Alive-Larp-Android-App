@@ -1,13 +1,8 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
-import android.media.Image
-import android.util.AttributeSet
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 
 class HeadingView(context: Context): LinearLayout(context) {

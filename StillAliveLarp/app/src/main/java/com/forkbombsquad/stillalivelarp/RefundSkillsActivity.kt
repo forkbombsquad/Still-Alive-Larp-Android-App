@@ -1,7 +1,5 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -12,10 +10,7 @@ import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
-import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.RefundSkillSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -24,9 +19,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
-import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class RefundSkillsActivity : NoStatusBarActivity() {
 

@@ -2,8 +2,6 @@ package com.forkbombsquad.stillalivelarp.services
 
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementListModel
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillListModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface

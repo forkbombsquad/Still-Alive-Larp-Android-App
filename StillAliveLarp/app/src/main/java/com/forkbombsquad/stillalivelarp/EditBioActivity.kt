@@ -1,10 +1,8 @@
 package com.forkbombsquad.stillalivelarp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
-import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils

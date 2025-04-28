@@ -1,14 +1,10 @@
 package com.forkbombsquad.stillalivelarp.services.models
 
-import android.content.Context
-import android.graphics.Color
-import androidx.cardview.R
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
-import com.forkbombsquad.stillalivelarp.utils.ifLet
 import java.io.Serializable
 
 data class CharacterModifiedSkillModel(

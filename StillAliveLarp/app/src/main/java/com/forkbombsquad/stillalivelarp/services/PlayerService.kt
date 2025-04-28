@@ -1,13 +1,18 @@
 package com.forkbombsquad.stillalivelarp.services
 
-import com.forkbombsquad.stillalivelarp.services.models.OAuthTokenModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerListModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
-import com.forkbombsquad.stillalivelarp.services.utils.*
+import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.services.utils.PlayerCreateSP
+import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
+import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
+import com.forkbombsquad.stillalivelarp.services.utils.UpdatePSP
 import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.HTTP
+import retrofit2.http.Header
+import retrofit2.http.Path
 
 interface SignInPlayerRequest {
     @HTTP(method ="GET", path = "players/sign_in/")

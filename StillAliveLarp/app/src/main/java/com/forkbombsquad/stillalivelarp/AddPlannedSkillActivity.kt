@@ -1,18 +1,12 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
@@ -23,9 +17,6 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateMode
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
-import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
-import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.Constants

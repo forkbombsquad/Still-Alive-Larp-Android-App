@@ -8,7 +8,6 @@ import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.window.OnBackInvokedDispatcher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
@@ -20,10 +19,8 @@ import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.GearCell
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
-import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.ifLet
-import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.launch
 
 class ManageGearActivty : NoStatusBarActivity() {
@@ -98,7 +95,6 @@ class ManageGearActivty : NoStatusBarActivity() {
                     }
                 }
             }
-
         }
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), false) {

@@ -2,25 +2,25 @@ package com.forkbombsquad.stillalivelarp.services.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.forkbombsquad.stillalivelarp.utils.AwardCharType
-import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
-import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import java.io.Serializable
-import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GearModel(
     @JsonProperty("id") val id: Int,
     @JsonProperty("characterId") val characterId: Int,
-    @JsonProperty("gearJson") val gearJson: String
+    @JsonProperty("gearJson") var gearJson: String
 ) : Serializable {
     val jsonModels: List<GearJsonModel>?
         get() {
             return globalFromJson<GearJsonListModel>(gearJson)?.gearJson?.toList()
         }
+
+    fun getPrimaryFirearm(): GearJsonModel? {
+        return jsonModels?.firstOrNull { it.isPrimaryFirearm() }
+    }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

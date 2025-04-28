@@ -1,21 +1,15 @@
 package com.forkbombsquad.stillalivelarp.utils
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.os.Build
-import android.util.AndroidException
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowMetrics
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
-import com.forkbombsquad.stillalivelarp.BuildConfig
-import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
-import com.forkbombsquad.stillalivelarp.services.managers.*
+import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
+import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.google.gson.Gson
 import java.lang.reflect.Type
 

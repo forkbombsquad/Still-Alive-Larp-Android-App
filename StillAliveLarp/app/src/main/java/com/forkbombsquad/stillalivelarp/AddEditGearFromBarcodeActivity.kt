@@ -23,7 +23,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.google.android.material.textfield.TextInputEditText
 
-class AddEditGearActivity : NoStatusBarActivity() {
+class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
 
     private lateinit var title: TextView
     private lateinit var nameField: TextInputEditText
@@ -39,7 +39,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_gear)
+        setContentView(R.layout.activity_add_edit_gear_from_barcode)
         setupView()
     }
 
@@ -61,19 +61,19 @@ class AddEditGearActivity : NoStatusBarActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val item = Constants.GearTypes.allTypes[position]
                 runOnUiThread {
-                    val gap = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, getPrimarySubtypeList(item))
+                    val gap = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, getPrimarySubtypeList(item))
                     primarySubtype.adapter = gap
-                    val gas = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, getSecondarySubtypeList(item))
+                    val gas = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, getSecondarySubtypeList(item))
                     secondarySubtype.adapter = gas
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         gearType.setSelection(0)
-        val gap = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, getPrimarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition]))
+        val gap = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, getPrimarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition]))
         primarySubtype.adapter = gap
         primarySubtype.setSelection(0)
-        val gas = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, getSecondarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition]))
+        val gas = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, getSecondarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition]))
         secondarySubtype.adapter = gas
         primarySubtype.setSelection(0)
 
@@ -81,7 +81,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
             submit.setLoading(true)
             val fieldValidation = validateFields()
             if (!fieldValidation.hasError) {
-                DataManager.shared.selectedChar.ifLet { char ->
+                DataManager.shared.playerCheckInModel?.character.ifLet { char ->
 
                     val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
                     val gear = gearList.firstOrNull()
@@ -131,7 +131,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                        DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                        DataManager.shared.playerCheckInModel?.gear = updatedGearModel
                         DataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     } else {
@@ -149,7 +149,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val newGearModel = GearModel(-1, char.id, toJson)
-                        DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                        DataManager.shared.playerCheckInModel?.gear = newGearModel
                         DataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     }
@@ -162,7 +162,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
         delete.setOnClick {
             delete.setLoading(true)
-            DataManager.shared.selectedChar.ifLet { char ->
+            DataManager.shared.playerCheckInModel?.character.ifLet { char ->
 
                 val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
                 val gear = gearList.firstOrNull()
@@ -183,7 +183,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
                     val toJson: String = globalToJson(gearJsonListModel)
 
                     val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                    DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                    DataManager.shared.playerCheckInModel?.gear = updatedGearModel
                     DataManager.shared.unrelaltedUpdateCallback()
                     finish()
                 }
@@ -193,7 +193,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedChar?.ifLet { char ->
+        DataManager.shared.playerCheckInModel?.character?.ifLet { char ->
             title.text = "Add Gear For ${char.fullName}"
             editGear.ifLet { eg ->
                 title.text = "Edit Gear For ${char.fullName}"
@@ -203,12 +203,12 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
                 gearType.setSelection(Constants.GearTypes.allTypes.indexOf(eg.gearType))
                 val ptypes = getPrimarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition])
-                val gap = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, ptypes)
+                val gap = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, ptypes)
                 primarySubtype.adapter = gap
                 primarySubtype.setSelection(ptypes.indexOf(eg.primarySubtype))
 
                 val stypes = getSecondarySubtypeList(Constants.GearTypes.allTypes[gearType.selectedItemPosition])
-                val gas = ArrayAdapter(this@AddEditGearActivity, android.R.layout.simple_spinner_dropdown_item, stypes)
+                val gas = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, stypes)
                 secondarySubtype.adapter = gas
                 primarySubtype.setSelection(stypes.indexOf(eg.secondarySubtype))
             }

@@ -1,9 +1,7 @@
 package com.forkbombsquad.stillalivelarp
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
@@ -14,11 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.utils.GearCell
-import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
-import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
-import com.forkbombsquad.stillalivelarp.utils.ifLet
-import com.forkbombsquad.stillalivelarp.utils.ternary
-import com.google.android.material.divider.MaterialDivider
 
 class ViewGearActivity : NoStatusBarActivity() {
 

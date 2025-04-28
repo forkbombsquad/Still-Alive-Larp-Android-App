@@ -1,12 +1,9 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.SkillPrereqService
 import com.forkbombsquad.stillalivelarp.services.SkillService
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 

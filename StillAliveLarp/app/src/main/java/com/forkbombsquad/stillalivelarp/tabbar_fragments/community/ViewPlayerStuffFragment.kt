@@ -2,7 +2,6 @@ package com.forkbombsquad.stillalivelarp.tabbar_fragments.community
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.FragmentTemplate
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
@@ -21,7 +20,6 @@ import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsF
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.toBitmap
 

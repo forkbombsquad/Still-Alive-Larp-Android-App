@@ -4,11 +4,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Base64
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import android.util.Base64
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 /**
  * Replacement for Kotlin's deprecated `capitalize()` function.
@@ -58,4 +61,19 @@ fun String.replaceHtmlTags(tags: List<String>, replaceWith: String = ""): String
         replacement = replacement.replaceHtmlTag(tag, replaceWith)
     }
     return replacement
+}
+
+fun String.compress(): String {
+    val outputStream = ByteArrayOutputStream()
+    GZIPOutputStream(outputStream).use { gzipStream ->
+        gzipStream.write(this.toByteArray(Charsets.UTF_8))
+    }
+    val compressedBytes = outputStream.toByteArray()
+    return Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
+}
+
+fun String.decompress(): String {
+    val compressedBytes = Base64.decode(this, Base64.NO_WRAP)
+    val inputStream = GZIPInputStream(ByteArrayInputStream(compressedBytes))
+    return inputStream.reader(Charsets.UTF_8).readText()
 }

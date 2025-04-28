@@ -2,13 +2,14 @@ package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.core.view.isGone
-import com.fasterxml.jackson.core.JsonParser.Feature
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
+import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.RulebookManager
 
 class OfflineMyAccountActivity : NoStatusBarActivity() {
 

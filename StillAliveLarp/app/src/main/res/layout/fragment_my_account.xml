@@ -178,6 +178,15 @@
                     app:text="Admin Tools"
                     app:showLoading="false"/>
 
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+                    android:id="@+id/myaccount_debugButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Debug Button"
+                    app:showLoading="false"
+                    android:visibility="gone"/>
+
                 <com.forkbombsquad.stillalivelarp.utils.LoadingButton
                     android:id="@+id/myaccount_signOutButton"
                     android:layout_width="match_parent"

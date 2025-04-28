@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -11,7 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
-import com.forkbombsquad.stillalivelarp.utils.*
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 
 class SelectEventForEventManagementActivity : NoStatusBarActivity() {
 

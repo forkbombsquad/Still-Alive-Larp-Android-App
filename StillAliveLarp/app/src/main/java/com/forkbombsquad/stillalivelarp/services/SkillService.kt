@@ -1,15 +1,13 @@
 package com.forkbombsquad.stillalivelarp.services
 
-import com.forkbombsquad.stillalivelarp.services.models.*
+import com.forkbombsquad.stillalivelarp.services.models.SkillListModel
+import com.forkbombsquad.stillalivelarp.services.models.SkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
-import com.forkbombsquad.stillalivelarp.services.utils.ServicePayloadKey
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.HTTP
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 
 interface GetSkillRequest {

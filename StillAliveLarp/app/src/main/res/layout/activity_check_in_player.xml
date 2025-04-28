@@ -409,6 +409,50 @@ tools:context=".CheckInPlayerActivity">
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/checkinplayer_gearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Gear (Editable)"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+                        android:id="@+id/checkinplayer_addNewGear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Add New Gear"
+                        app:showLoading="false"/>
+
+                    <LinearLayout
+                        android:id="@+id/checkinplayer_gearListLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -421,7 +465,7 @@ tools:context=".CheckInPlayerActivity">
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                app:buttontext="Check In" />
+                app:buttontext="Save Gear Modifications\nAnd\nCheck In" />
 
         </LinearLayout> <!-- BEFORE THIS ONE-->
 
