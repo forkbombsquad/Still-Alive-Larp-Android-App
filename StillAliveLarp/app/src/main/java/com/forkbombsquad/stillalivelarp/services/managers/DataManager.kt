@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.services.GearService
 import com.forkbombsquad.stillalivelarp.services.IntrigueService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
+import com.forkbombsquad.stillalivelarp.services.ResearchProjectService
 import com.forkbombsquad.stillalivelarp.services.SkillCategoryService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
@@ -34,6 +35,7 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeMode
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageModel
+import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharactersForTypeWithIdSP
@@ -45,7 +47,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 enum class DataManagerType {
-    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES, ALL_PLANNED_CHARACTERS, ALL_NPC_CHARACTERS
+    PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES, ALL_PLANNED_CHARACTERS, ALL_NPC_CHARACTERS, RESEARCH_PROJECTS
 }
 
 class DataManager private constructor() {
@@ -164,6 +166,9 @@ class DataManager private constructor() {
     var gearToEdit: GearJsonModel? = null
 
     var allOfflineNPCCharacters: List<FullCharacterModel>? = null
+
+    var loadingResearchProjects = true
+    var researchProjects: List<ResearchProjectModel>? = null
 
     fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
@@ -700,6 +705,26 @@ class DataManager private constructor() {
                         }
                     } else {
                         loadingAllNPCCharacters = false
+                        finishedRequest(currentLoadCountIndex)
+                    }
+                }
+                DataManagerType.RESEARCH_PROJECTS -> {
+                    loadingResearchProjects = true
+                    if (researchProjects == null || forceDownloadIfApplicable) {
+                        val request = ResearchProjectService.GetAllResearchProjects()
+                        lifecycleScope.launch {
+                            request.successfulResponse().ifLet({
+                                researchProjects = it.researchProjects.toList()
+                                loadingResearchProjects = false
+                                finishedRequest(currentLoadCountIndex)
+                            }, {
+                                researchProjects = null
+                                loadingResearchProjects = false
+                                finishedRequest(currentLoadCountIndex)
+                            })
+                        }
+                    } else {
+                        loadingResearchProjects = false
                         finishedRequest(currentLoadCountIndex)
                     }
                 }

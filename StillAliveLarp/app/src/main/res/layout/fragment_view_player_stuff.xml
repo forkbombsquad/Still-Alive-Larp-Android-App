@@ -33,31 +33,23 @@ tools:context=".tabbar_fragments.community.ViewPlayerStuffFragment">
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:orientation="horizontal">
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"/>
+                android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/playerstuff_profileImage"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="0.5"
+                    android:layout_height="0dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/blankprofile"
-                    />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"/>
-            </LinearLayout>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
+                    app:layout_constraintDimensionRatio="1:1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ProgressBar
                 android:id="@+id/playerstuff_profileImageProgressBar"
@@ -88,6 +80,14 @@ tools:context=".tabbar_fragments.community.ViewPlayerStuffFragment">
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             app:text="Skills"
+            app:showLoading="false"/>
+
+        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+            android:id="@+id/playerstuff_skilltreediagram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:text="Skill Tree Diagram"
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack

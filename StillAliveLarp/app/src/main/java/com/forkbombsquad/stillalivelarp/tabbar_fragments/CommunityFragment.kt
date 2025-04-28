@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.tabbar_fragments
 
+import com.forkbombsquad.stillalivelarp.ViewResearchProjectsActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class CommunityFragment : Fragment() {
     private lateinit var allPlayersButton: NavArrowButtonBlack
     private lateinit var campStatusButton: NavArrowButtonBlack
     private lateinit var allNPCsButton: NavArrowButtonBlack
+    private lateinit var researchProjects: NavArrowButtonBlack
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,7 @@ class CommunityFragment : Fragment() {
         allPlayersButton = v.findViewById(R.id.community_allPlayersButton)
         campStatusButton = v.findViewById(R.id.community_campStatusButton)
         allNPCsButton = v.findViewById(R.id.community_npcsButton)
+        researchProjects = v.findViewById(R.id.community_researchProjects)
 
         allPlayersButton.setOnClick {
             val frag = CommunityPlayersListFragment.newInstance()
@@ -46,6 +49,15 @@ class CommunityFragment : Fragment() {
 
         campStatusButton.setOnClick {
             // TODO FUTURE - add this. It will display the Camp Fortification Rings
+        }
+
+        researchProjects.setOnClick {
+            researchProjects.setLoading(true)
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.RESEARCH_PROJECTS), true) {
+                researchProjects.setLoading(false)
+                val intent = Intent(v.context, ViewResearchProjectsActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()

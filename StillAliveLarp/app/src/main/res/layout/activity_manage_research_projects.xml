@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".ManageResearchProjectsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Manage Research Projects"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+
+            <ProgressBar
+                android:id="@+id/mrp_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:id="@+id/mrp_outerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+                    android:id="@+id/mrp_addNew"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:text="Add New"
+                    android:paddingTop="16dp"
+                    app:showLoading="false"/>
+
+                <LinearLayout
+                    android:id="@+id/mrp_innerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

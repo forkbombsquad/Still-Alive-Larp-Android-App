@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.OtherCharacterNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
@@ -34,6 +35,7 @@ class ViewPlayerStuffFragment : Fragment() {
     private lateinit var skills: NavArrowButtonBlack
     private lateinit var bio: NavArrowButtonBlack
     private lateinit var gear: NavArrowButtonBlack
+    private lateinit var nativeSkillTree: NavArrowButtonBlack
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +57,7 @@ class ViewPlayerStuffFragment : Fragment() {
         skills = v.findViewById(R.id.playerstuff_skills)
         bio = v.findViewById(R.id.playerstuff_bioNavArrow)
         gear = v.findViewById(R.id.playerstuff_gearNavArrow)
+        nativeSkillTree = v.findViewById(R.id.playerstuff_skilltreediagram)
 
         playerStats.setOnClick {
             val frag = PlayerStatsFragment.newInstance()
@@ -86,9 +89,14 @@ class ViewPlayerStuffFragment : Fragment() {
             val intent = Intent(v.context, ViewGearActivity::class.java)
             startActivity(intent)
         }
+        nativeSkillTree.setOnClick {
+            val intent = Intent(v.context, OtherCharacterNativeSkillTreeActivity::class.java)
+            startActivity(intent)
+        }
 
         DataManager.shared.loadingProfileImage = true
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
+
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER, DataManagerType.SKILLS, DataManagerType.SKILL_CATEGORIES), false) {
             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
                 buildView()
             }
@@ -99,6 +107,8 @@ class ViewPlayerStuffFragment : Fragment() {
 
     private fun buildView() {
         val opPlayer = DataManager.shared.selectedPlayer
+
+        nativeSkillTree.setLoading(DataManager.shared.loadingSkills || DataManager.shared.loadingSkillCategories)
 
         profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
         DataManager.shared.profileImage.ifLet {

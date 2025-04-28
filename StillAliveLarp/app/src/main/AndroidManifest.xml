@@ -16,6 +16,15 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".ViewResearchProjectsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageResearchProjectsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OtherCharacterNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddEditGearFromBarcodeActivity"
             android:exported="false" />
         <activity
@@ -43,9 +52,6 @@
             android:name=".ViewNPCStuffActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterStatsActivity"
-            android:exported="false" />
-        <activity
             android:name=".NPCListActivity"
             android:exported="false" />
         <activity
@@ -66,10 +72,6 @@
         <activity
             android:name=".OfflineViewAllSkillsActivity"
             android:exported="false" />
-        <activity
-            android:name=".OfflineViewAllSkillsActivityOld"
-            android:exported="false"
-            android:theme="@style/Theme.StillAliveLarp" />
         <activity
             android:name=".SAImageViewActivity"
             android:exported="false" />

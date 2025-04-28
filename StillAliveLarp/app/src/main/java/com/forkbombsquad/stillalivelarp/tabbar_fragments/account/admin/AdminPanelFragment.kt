@@ -15,6 +15,7 @@ import com.forkbombsquad.stillalivelarp.CheckOutPlayerActivity
 import com.forkbombsquad.stillalivelarp.ContactListActivity
 import com.forkbombsquad.stillalivelarp.CreateAnnouncementActivity
 import com.forkbombsquad.stillalivelarp.FeatureFlagManagementActivity
+import com.forkbombsquad.stillalivelarp.ManageResearchProjectsActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.SelectCharacterForClassXpReductionActivity
 import com.forkbombsquad.stillalivelarp.SelectCharacterToAwardActivity
@@ -63,6 +64,7 @@ class AdminPanelFragment : Fragment() {
     private lateinit var refundSkills: NavArrowButtonBlack
     private lateinit var featureFlagManagement: NavArrowButtonBlack
     private lateinit var manageNPCs: NavArrowButtonBlack
+    private lateinit var researchProjects: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -122,6 +124,7 @@ class AdminPanelFragment : Fragment() {
         featureFlagManagement = v.findViewById(R.id.adminpanel_featureFlagManagement)
         refundSkills = v.findViewById(R.id.adminpanel_refundSkills)
         manageNPCs = v.findViewById(R.id.adminpanel_manageNPCs)
+        researchProjects = v.findViewById(R.id.adminpanel_research)
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -206,8 +209,12 @@ class AdminPanelFragment : Fragment() {
             val intent = Intent(v.context, SelectNPCToManageActivity::class.java)
             startActivity(intent)
         }
+        researchProjects.setOnClick {
+            val intent = Intent(v.context, ManageResearchProjectsActivity::class.java)
+            startActivity(intent)
+        }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS, DataManagerType.ALL_NPC_CHARACTERS), true, finishedStep = {
+        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS, DataManagerType.ALL_NPC_CHARACTERS, DataManagerType.RESEARCH_PROJECTS), true, finishedStep = {
             buildView()
         }) {
             buildView()
@@ -229,6 +236,7 @@ class AdminPanelFragment : Fragment() {
         featureFlagManagement.setLoading(DataManager.shared.loadingFeatureFlags)
         refundSkills.setLoading(DataManager.shared.loadingAllCharacters)
         manageNPCs.setLoading(DataManager.shared.loadingAllNPCCharacters)
+        researchProjects.setLoading(DataManager.shared.loadingResearchProjects)
 
         DataManager.shared.allCharacters.ifLet({
             approveBios.setNotificationBubble(getNumberOfBiosThatNeedApproval(it))

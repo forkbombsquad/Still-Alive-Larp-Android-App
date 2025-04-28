@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/customborder_gray"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/rp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="Research Project Name"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"/>
+
+    <ProgressBar
+        android:id="@+id/rp_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:paddingLeft="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:text="Project Complete?"/>
+        <TextView
+            android:id="@+id/rp_complete"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="16dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:text="No"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:paddingLeft="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="Completed Milestones:"/>
+        <TextView
+            android:id="@+id/rp_milestones"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="16dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:text="0"/>
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"/>
+
+    <TextView
+        android:id="@+id/rp_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="This is a Research Project description that can go onto multiple lines and stretch the cell as needed.\n\nThese will likley be pretty long"/>
+
+</LinearLayout>

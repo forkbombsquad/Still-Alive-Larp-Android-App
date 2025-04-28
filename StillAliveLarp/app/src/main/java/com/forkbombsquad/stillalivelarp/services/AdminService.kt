@@ -12,6 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueListModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
+import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
@@ -150,6 +151,16 @@ interface DeleteFeatureFlagRequest {
 interface DeleteCharacterSkillRequest {
     @HTTP(method ="DELETE", path = "char-skill/delete-skill/{playerId}/{charId}/{skillId}", hasBody = false)
     suspend fun makeRequest(@Path("playerId") playerId: Int, @Path("charId") characterId: Int, @Path("skillId") skillId: Int): Response<CharacterSkillListModel>
+}
+
+interface CreateResearchProjectRequest {
+    @HTTP(method ="POST", path = "research-project/create/", hasBody = true)
+    suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
+}
+
+interface UpdateResearchProjectRequest {
+    @HTTP(method = "PUT", path = "research-project/update/", hasBody = true)
+    suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
 }
 
 
@@ -386,6 +397,26 @@ class AdminService {
 
         override suspend fun getResponse(payload: RefundSkillSP): Response<CharacterSkillListModel> {
             return request.makeRequest(payload.playerId(), payload.characterId(), payload.skillId())
+        }
+    }
+
+    class CreateResearchProject:
+        UAndPServiceInterface<CreateResearchProjectRequest, ResearchProjectModel, CreateModelSP> {
+        override val request: CreateResearchProjectRequest
+            get() = retrofit.create(CreateResearchProjectRequest::class.java)
+
+        override suspend fun getResponse(payload: CreateModelSP): Response<ResearchProjectModel> {
+            return request.makeRequest(payload.model())
+        }
+    }
+
+    class UpdateResearchProject:
+        UAndPServiceInterface<UpdateResearchProjectRequest, ResearchProjectModel, UpdateModelSP> {
+        override val request: UpdateResearchProjectRequest
+            get() = retrofit.create(UpdateResearchProjectRequest::class.java)
+
+        override suspend fun getResponse(payload: UpdateModelSP): Response<ResearchProjectModel> {
+            return request.makeRequest(payload.model())
         }
     }
 
