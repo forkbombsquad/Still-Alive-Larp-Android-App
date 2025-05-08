@@ -17,12 +17,6 @@ class Constants {
         }
     }
 
-    class Gear {
-        companion object {
-            const val primaryWeapon = "Primary Weapon"
-        }
-    }
-
     class Logging {
         companion object {
             // TODO ALWAYS - set these to false before release

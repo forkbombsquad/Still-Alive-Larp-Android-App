@@ -587,7 +587,7 @@ class DataManager private constructor() {
                 }
                 DataManagerType.PROFILE_IMAGE -> {
                     loadingProfileImage = true
-                    if (profileImage == null || forceDownloadIfApplicable || selectedPlayer?.id != profileImage?.id) {
+                    if (profileImage == null || forceDownloadIfApplicable || selectedPlayer?.id != profileImage?.playerId) {
                         profileImage = null
                         val request = ProfileImageService.GetProfileImage()
                         lifecycleScope.launch {

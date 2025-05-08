@@ -110,30 +110,6 @@ class SkillGridCategory(skills: List<FullSkillModel>, skillCategoryId: Int, skil
     }
 
     private fun calculateWidth(): Int {
-        // OLD WAY
-//        // For Width
-//        // 1. Count the total number of skills per category
-//        var totalSkillsInCat = skills.count()
-//        // 2. Subtract the number of skills that are prerequisites for other skills in the same category. Only count each one once (i.e. use a Set)
-//        var setOfPrereqs: MutableSet<Int> = mutableSetOf()
-//        for (skill in skills) {
-//            for (prereq in skill.prereqs) {
-//                if (prereq.skillCategoryId == skill.skillCategoryId) {
-//                    setOfPrereqs.add(prereq.id)
-//                }
-//            }
-//        }
-//        // 3. Find the highest number of skills for each XP rank
-//        var highestNumAmongSkills = max(
-//            zeroCost.count(),
-//            max(
-//                oneCost.count(),
-//                max(twoCost.count(), max(threeCost.count(), fourCost.count()))
-//            )
-//        )
-//        // 4. Your width is the max between the answers from 2 and 3.
-//        return max(highestNumAmongSkills, totalSkillsInCat - setOfPrereqs.count())
-
         return branches.sumOf { it.width }
     }
 
