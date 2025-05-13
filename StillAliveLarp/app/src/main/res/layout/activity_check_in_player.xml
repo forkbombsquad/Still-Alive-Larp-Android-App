@@ -113,6 +113,13 @@ tools:context=".CheckInPlayerActivity">
                     app:showDiv="false"
                     app:value="Example" />
 
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_npcRaffleTicketCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="BONUS RAFFLE TICKETS"
+                    app:value="+1" />
+
                 <LinearLayout
                     android:id="@+id/checkinplayer_characterLayout"
                     android:layout_width="match_parent"
@@ -130,8 +137,14 @@ tools:context=".CheckInPlayerActivity">
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:key="Infection"
+                        app:value="10%" />
+                    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                        android:id="@+id/checkinplayer_infectionThreshold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:key="Infection Threshold"
                         app:showDiv="true"
-                        app:value="Example% *THRESHOLD*" />
+                        app:value="FIRST" />
 
                     <com.forkbombsquad.stillalivelarp.utils.KeyValueView
                         android:id="@+id/checkinplayer_bullets"

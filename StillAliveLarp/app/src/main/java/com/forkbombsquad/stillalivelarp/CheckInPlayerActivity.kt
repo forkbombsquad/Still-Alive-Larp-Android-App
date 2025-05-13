@@ -50,9 +50,11 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var lastEventAttended: KeyValueView
 
     private lateinit var characterName: KeyValueView
+    private lateinit var characterRaffle: KeyValueView
 
     private lateinit var characterLayout: LinearLayout
     private lateinit var infection: KeyValueView
+    private lateinit var infectionThreshold: KeyValueView
     private lateinit var bullets: KeyValueView
     private lateinit var megas: KeyValueView
     private lateinit var rivals: KeyValueView
@@ -120,9 +122,11 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         lastEventAttended = findViewById(R.id.checkinplayer_lastEvent)
 
         characterName = findViewById(R.id.checkinplayer_characterName)
+        characterRaffle = findViewById(R.id.checkinplayer_npcRaffleTicketCount)
 
         characterLayout = findViewById(R.id.checkinplayer_characterLayout)
         infection = findViewById(R.id.checkinplayer_infection)
+        infectionThreshold = findViewById(R.id.checkinplayer_infectionThreshold)
         bullets = findViewById(R.id.checkinplayer_bullets)
         megas = findViewById(R.id.checkinplayer_megas)
         rivals = findViewById(R.id.checkinplayer_rivals)
@@ -222,7 +226,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             val event = checkIn.event
             val relevantSkills = checkIn.relevantSkills
 
-            var isNpc = character == null
+            val isNpc = character == null
 
             checkInButton.setLoadingWithText("Checking in Player...")
             // DO NOT SET THE CHAR ID, The service will do that later
@@ -323,7 +327,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             }
 
 
-            var isNpc = character == null
+            val isNpc = character == null
 
             // Player Section
             playerName.set(player.fullName)
@@ -333,9 +337,21 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
             // Character Section
             character.ifLet({ char ->
+                characterRaffle.isGone = true
                 characterLayout.isGone = false
                 characterName.set(char.fullName)
-                infection.set(char.infection)
+                val inf = char.infection.toInt()
+                infection.set("${inf}%", showDiv = (inf < 25))
+                infectionThreshold.isGone = false
+                if (inf >= 75) {
+                    infectionThreshold.set("THIRD")
+                } else if (inf >= 50) {
+                    infectionThreshold.set("SECOND")
+                } else if (inf >= 25) {
+                    infectionThreshold.set("FIRST")
+                } else {
+                    infectionThreshold.isGone = true
+                }
                 bullets.set("${char.bullets}+${getAdditionalBulletCount(relevantSkills)}")
                 megas.set(char.megas)
                 rivals.set(char.rivals)
@@ -365,6 +381,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             }, {
                 characterLayout.isGone = true
                 characterName.set("NPC")
+                characterRaffle.isGone = false
             })
 
             // Relevant Skills Section
@@ -508,7 +525,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         var count = 0
         for (sk in relevantSkills) {
             if (sk.id.equalsAnyOf(Constants.SpecificSkillIds.walkLikeAZombieTypeSkills)) {
-                count++
+                count = 1
             }
         }
         return count
