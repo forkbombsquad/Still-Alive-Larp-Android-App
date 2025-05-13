@@ -84,6 +84,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var fortuneSkill: KeyValueView
     private lateinit var fortuneSkillBonusMaterials: KeyValueView
     private lateinit var fullyLoadedSkill: KeyValueView
+    private lateinit var fullyLoadedDetails: KeyValueView
 
     private lateinit var eventName: KeyValueView
 
@@ -156,6 +157,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         fortuneSkill = findViewById(R.id.checkinplayer_fortuneSkill)
         fortuneSkillBonusMaterials = findViewById(R.id.checkinplayer_fortuneSkillBonusMaterials)
         fullyLoadedSkill = findViewById(R.id.checkinplayer_fullyLoadedSkill)
+        fullyLoadedDetails = findViewById(R.id.checkinplayer_fullyLoadedDetails)
 
         gearLayout = findViewById(R.id.checkinplayer_gearLayout)
         addNewGearButton = findViewById(R.id.checkinplayer_addNewGear)
@@ -440,12 +442,15 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 fullyLoaded.ifLet({ fl ->
                     fullyLoadedSkill.isGone = false
                     gear?.getPrimaryFirearm().ifLet({ pf ->
-                        fullyLoadedSkill.set("${pf.desc} - ${pf.name}")
+                        fullyLoadedSkill.set("${pf.name}\n${pf.desc}", showDiv = false)
+                        fullyLoadedDetails.isGone = false
                     }, {
-                        fullyLoadedSkill.set("MISSING PRIMARY WEAPON REGISTRATION")
+                        fullyLoadedSkill.set("!! No Primary Firearm Registered !!", showDiv = true)
+                        fullyLoadedDetails.isGone = true
                     })
                 }, {
                     fullyLoadedSkill.isGone = true
+                    fullyLoadedDetails.isGone = true
                 })
 
             }
@@ -476,6 +481,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                         DataManager.shared.gearToEdit = g
                         DataManager.shared.unrelaltedUpdateCallback = {
                             gearModified = true
+
                             buildView()
                         }
                         val intent = Intent(this, AddEditGearFromBarcodeActivity::class.java)
