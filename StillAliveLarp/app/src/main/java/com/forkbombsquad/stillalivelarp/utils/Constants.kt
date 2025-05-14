@@ -21,7 +21,7 @@ class Constants {
         companion object {
             // TODO ALWAYS - set these to false before release
             const val showLogging = false
-            const val showTestLogging = true
+            const val showTestLogging = false
             const val showDebugButtonInAccountView = false
         }
     }
