@@ -43,6 +43,7 @@ import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.RulebookManager
+import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
@@ -237,37 +238,11 @@ class DataManager private constructor() {
                         eventList.ifLet({
                             events = it.reversed()
                             currentEvent = it.reversed().firstOrNull()
-                            if (loadingIntrigue) {
-                                it.firstOrNull { ev -> ev.isStarted.toBoolean() && !ev.isFinished.toBoolean() }.ifLet({ current ->
-                                    currentEvent = current
-                                    val intrigueRequest = IntrigueService.GetIntrigueForEvent()
-                                    lifecycleScope.launch {
-                                        intrigueRequest.successfulResponse(IdSP(current.id)).ifLet({ intr ->
-                                            loadingIntrigue = false
-                                            intrigue = intr
-                                            finishedRequest(currentLoadCountIndex)
-                                        }, {
-                                            intrigue = null
-                                            loadingIntrigue = false
-                                            finishedRequest(currentLoadCountIndex)
-                                        })
-                                    }
-                                }, {
-                                    loadingIntrigue = false
-                                    intrigue = null
-                                    finishedRequest(currentLoadCountIndex)
-                                })
-                            }
                             loadingEvents = false
                             finishedRequest(currentLoadCountIndex)
                         }, {
                             loadingEvents = false
                             finishedRequest(currentLoadCountIndex)
-                            if (loadingIntrigue) {
-                                loadingIntrigue = false
-                                intrigue = null
-                                finishedRequest(currentLoadCountIndex)
-                            }
                         })
                     }
                 }
@@ -745,7 +720,7 @@ class DataManager private constructor() {
 
     private fun finishedRequest(currentLoadCountIndex: Int) {
         countReturned[currentLoadCountIndex]++
-//        globalPrint("REQUEST FINISHED ${countReturned[currentLoadCountIndex]} out of ${targetCount[currentLoadCountIndex]}")
+        globalPrint("REQUEST FINISHED ${countReturned[currentLoadCountIndex]} out of ${targetCount[currentLoadCountIndex]}")
         if (targetCount[currentLoadCountIndex] == countReturned[currentLoadCountIndex]) {
             callbacks[currentLoadCountIndex]()
             // Reset values to save memory

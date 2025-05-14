@@ -34,6 +34,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.inChronologicalOrder
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.google.android.material.divider.MaterialDivider
 
@@ -96,11 +97,11 @@ class HomeFragment : Fragment() {
     private fun preparePullToRefresh(v: View) {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.INTRIGUE, DataManagerType.SKILLS), true, finishedStep = {
+            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.ANNOUNCEMENTS, DataManagerType.EVENTS, DataManagerType.AWARDS, DataManagerType.SKILLS), true, finishedStep = {
                 setupViews(v)
             }) {
                 DataManager.shared.selectedChar = DataManager.shared.character?.getBaseModel()
-                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS, DataManagerType.SELECTED_CHARACTER_GEAR), true) {
+                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS, DataManagerType.SELECTED_CHARACTER_GEAR, DataManagerType.INTRIGUE), true) {
                     setupViews(v)
                     pullToRefresh.isRefreshing = false
                 }
@@ -322,16 +323,17 @@ class HomeFragment : Fragment() {
 
         if (showEventsSection()) {
             eventView.isGone = false
+            val event = DataManager.shared.events?.firstOrNull { it.isToday() } ?: DataManager.shared.events?.firstOrNull { it.isStarted.toBoolean() && !it.isFinished.toBoolean() }
             if (DataManager.shared.loadingEvents) {
                 eventLoadingView.isGone = false
                 eventTodayView.isGone = true
                 eventListView.isGone = true
-            } else if (DataManager.shared.events != null && DataManager.shared.events?.firstOrNull { it.isToday() } != null) {
+            } else if (event != null) {
                 eventLoadingView.isGone = true
                 eventTodayView.isGone = false
                 eventListView.isGone = true
 
-                DataManager.shared.events?.firstOrNull { it.isToday() }.ifLet {
+                event.ifLet {
                     eventTodayTitle.text = it.title
                     eventTodayDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
                     eventTodayDesc.text = it.description
@@ -378,7 +380,7 @@ class HomeFragment : Fragment() {
                                 val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
                                 startActivity(intent)
                             }
-                        } else {
+                        } else if (!DataManager.shared.loadingCharacter) {
                             checkInAsCharButton.isGone = true
                             checkInAsNpcButton.isGone = true
                             eventTodayCheckedInAs.isGone = false
@@ -387,6 +389,9 @@ class HomeFragment : Fragment() {
                                 name = DataManager.shared.character?.fullName ?: "UNKNOWN"
                             }
                             eventTodayCheckedInAs.text = "Checked in as $name"
+                        } else {
+                            eventTodayCheckedInAs.isGone = false
+                            eventTodayCheckedInAs.text = "Loading Check In Information..."
                         }
                     } else {
                         checkInAsCharButton.isGone = true
@@ -399,32 +404,20 @@ class HomeFragment : Fragment() {
                 eventTodayView.isGone = true
                 eventListView.isGone = false
                 DataManager.shared.currentEvent = DataManager.shared.events?.inChronologicalOrder()?.firstOrNull()
-                DataManager.shared.currentEvent.ifLet {
-                    eventTitle.text = it.title
-                    eventDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
-                    eventDesc.text = it.description
+                DataManager.shared.currentEvent.ifLet { ce ->
+                    eventTitle.text = ce.title
+                    eventDate.text = "${ce.date.yyyyMMddToMonthDayYear()}\n${ce.startTime} to ${ce.endTime}"
+                    eventDesc.text = ce.description
 
-                    preregisterButton.isGone = !it.isInFuture()
-                    DataManager.shared.eventPreregs[it.id].ifLet({ preregs ->
-                        preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({ eventPrereg ->
-                            preregisterButton.textView.text = "Edit Your Pre-Registration"
-                            preregInfo.isGone = false
-                            preregInfo.text = "You are pre-registered as:\n\n${DataManager.shared.allCharacters?.firstOrNull { eventPrereg.getCharId() == it.id }?.fullName ?: "NPC"} - ${eventPrereg.eventRegType()}"
-                        }, {
-                            preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                            preregInfo.isGone = true
-                        })
-                    }, {
-                        preregInfo.isGone = true
-                        preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                    })
+                    buildPreregSection(ce)
+
                     preregisterButton.setOnClick {
                         DataManager.shared.unrelaltedUpdateCallback = {
                             DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS), true) {
                                 setupViews(v)
                             }
                         }
-                        DataManager.shared.selectedEvent = it
+                        DataManager.shared.selectedEvent = ce
                         val intent = Intent(v.context, PreregActivity::class.java)
                         startActivity(intent)
                     }
@@ -439,27 +432,10 @@ class HomeFragment : Fragment() {
                             eventTitle.text = it.title
                             eventDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
                             eventDesc.text = it.description
-                            preregisterButton.isGone = !it.isInFuture()
-                            DataManager.shared.eventPreregs[it.id].ifLet({ preregs ->
-                                preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({
-                                    preregisterButton.textView.text = "Edit Your Pre-Registration"
-                                }, {
-                                    preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                                })
-                            }, {
-                                preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                            })
-                            preregisterButton.setOnClick {
-                                DataManager.shared.unrelaltedUpdateCallback = {
-                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS), true) {
-                                        setupViews(v)
-                                    }
-                                }
-                                DataManager.shared.selectedEvent = it
-                                val intent = Intent(v.context, PreregActivity::class.java)
-                                startActivity(intent)
-                            }
+
+                            buildPreregSection(it)
                         }
+
                         showHideEventNavButtons()
                     }
                 }
@@ -472,26 +448,8 @@ class HomeFragment : Fragment() {
                             eventTitle.text = it.title
                             eventDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
                             eventDesc.text = it.description
-                            preregisterButton.isGone = !it.isInFuture()
-                            DataManager.shared.eventPreregs[it.id].ifLet({ preregs ->
-                                preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({
-                                    preregisterButton.textView.text = "Edit Your Pre-Registration"
-                                }, {
-                                    preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                                })
-                            }, {
-                                preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                            })
-                            preregisterButton.setOnClick {
-                                DataManager.shared.unrelaltedUpdateCallback = {
-                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS), true) {
-                                        setupViews(v)
-                                    }
-                                }
-                                DataManager.shared.selectedEvent = it
-                                val intent = Intent(v.context, PreregActivity::class.java)
-                                startActivity(intent)
-                            }
+
+                            buildPreregSection(it)
                         }
                         showHideEventNavButtons()
                     }
@@ -501,6 +459,29 @@ class HomeFragment : Fragment() {
 
         } else {
             eventView.isGone = true
+        }
+    }
+
+    private fun buildPreregSection(event: EventModel) {
+        preregisterButton.isGone = !event.isInFuture()
+        preregisterButton.setLoading(DataManager.shared.loadingEventPreregs)
+        if (DataManager.shared.loadingEventPreregs) {
+            preregisterButton.textView.text = "Loading Preregistrations..."
+            preregInfo.isGone = true
+        } else {
+            DataManager.shared.eventPreregs[event.id].ifLet({ preregs ->
+                preregs.firstOrNull { prereg -> prereg.playerId == DataManager.shared.player?.id }.ifLet({ eventPrereg ->
+                    preregisterButton.textView.text = "Edit Your Pre-Registration"
+                    preregInfo.isGone = false
+                    preregInfo.text = "You are pre-registered for this event as:\n\n${(eventPrereg.getCharId() == null).ternary("NPC", "${DataManager.shared.character?.fullName ?: ""}")} - ${eventPrereg.eventRegType()}"
+                }, {
+                    preregisterButton.textView.text = "Pre-Register\nFor This Event"
+                    preregInfo.isGone = true
+                })
+            }, {
+                preregInfo.isGone = true
+                preregisterButton.textView.text = "Pre-Register\nFor This Event"
+            })
         }
     }
 
@@ -572,7 +553,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun showCurrentCharSection(): Boolean {
-        return !showIntrigue() && !showCheckout()
+        var value = true
+        DataManager.shared.player.ifLet{ player ->
+            if (player.isCheckedIn.toBoolean()) {
+                if (!DataManager.shared.loadingCharacter && DataManager.shared.character == null) {
+                    value = false
+                }
+            }
+        }
+        return value
     }
 
     private fun showEventsSection(): Boolean {

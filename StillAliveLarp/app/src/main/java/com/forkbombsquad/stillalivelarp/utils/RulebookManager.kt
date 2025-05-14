@@ -235,14 +235,39 @@ class Rulebook {
     constructor(version: String) {
         this.version = version
     }
+
+    fun getAllFilterableHeadingNames(): MutableList<String> {
+        var names: MutableList<String> = mutableListOf()
+        headings.forEach { heading ->
+            names.add(heading.title)
+            heading.subSubHeadings.forEach { subsub ->
+                names.add("            ${subsub.title}")
+            }
+            heading.subHeadings.forEach { sub ->
+                names.add("      ${sub.title}")
+                sub.subSubHeadings.forEach { subsub ->
+                    names.add("            ${subsub.title}")
+                }
+            }
+        }
+        return names
+    }
 }
 
-class Heading {
+class Heading{
     // Display in this order
     var title: String = ""
     var textsAndTables: MutableList<Any> = mutableListOf()
     var subSubHeadings: MutableList<SubSubHeading> = mutableListOf()
     var subHeadings: MutableList<SubHeading> = mutableListOf()
+
+    constructor(title: String, textsAndTables: MutableList<Any>, subSubHeadings: MutableList<SubSubHeading>, subHeadings: MutableList<SubHeading>) {
+        this.title = title
+        this.textsAndTables = textsAndTables
+        this.subSubHeadings = subSubHeadings
+        this.subHeadings = subHeadings
+    }
+    constructor(): this("", mutableListOf(), mutableListOf(), mutableListOf())
 
     fun contains(text: String): Boolean {
         if (title.containsIgnoreCase(text)) {
@@ -300,12 +325,62 @@ class Heading {
         newHeading.subHeadings = newSubHeadings
         return newHeading
     }
+
+    fun titlesContain(title: String): Boolean {
+        return if (this.title.equalsIgnoreCase(title)) {
+            true
+        } else if (this.subSubHeadings.firstOrNull { it.title.equalsIgnoreCase(title) } != null) {
+            true
+        } else if (this.subHeadings.firstOrNull { it.title.equalsIgnoreCase(title) || (it.subSubHeadings.firstOrNull { ssh -> ssh.title.equalsIgnoreCase(title) } != null) } != null) {
+            true
+        } else {
+            false
+        }
+    }
+
+    fun filterForHeadingsWithTitle(title: String): Heading {
+        val newTextsAndTables: MutableList<Any> = mutableListOf()
+        val newSubSubHeadings: MutableList<SubSubHeading> = mutableListOf()
+        val newSubHeadings: MutableList<SubHeading> = mutableListOf()
+
+        if (this.title.equalsIgnoreCase(title)) {
+            newTextsAndTables.addAll(textsAndTables)
+            newSubHeadings.addAll(subHeadings)
+            newSubSubHeadings.addAll(subSubHeadings)
+        }
+        subSubHeadings.forEach { subsub ->
+            if (subsub.title.equalsIgnoreCase(title)) {
+                newSubSubHeadings.add(subsub)
+            }
+        }
+        subHeadings.forEach { sub ->
+            val subsub = sub.subSubHeadings.firstOrNull { it.title.equalsIgnoreCase(title) }
+            if (sub.title.equalsIgnoreCase(title)) {
+                newSubHeadings.add(sub)
+            } else if (subsub != null) {
+                newSubHeadings.add(SubHeading(sub.title, mutableListOf(), mutableListOf(subsub)))
+            }
+        }
+        return Heading(this.title, newTextsAndTables, newSubSubHeadings, newSubHeadings)
+    }
+
+    override fun toString(): String {
+        return "Heading: {title: ${title}, textsAndTables: [${textsAndTables}], subSubHeadings: [${subSubHeadings}], subHeadings: [${subHeadings}]}"
+    }
+
 }
 
-class SubHeading {
+class SubHeading{
+
     var title: String = ""
     var textsAndTables: MutableList<Any> = mutableListOf()
     var subSubHeadings: MutableList<SubSubHeading> = mutableListOf()
+    constructor(title: String, textsAndTables: MutableList<Any>, subSubHeadings: MutableList<SubSubHeading>) {
+        this.title = title
+        this.textsAndTables = textsAndTables
+        this.subSubHeadings = subSubHeadings
+    }
+    constructor(): this("", mutableListOf(), mutableListOf())
 
     fun contains(text: String): Boolean {
         if (title.containsIgnoreCase(text)) {
@@ -326,6 +401,10 @@ class SubHeading {
         return false
     }
 
+    override fun toString(): String {
+        return "SubHeading: {title: ${title}, textsAndTables: [${textsAndTables}], subSubHeadings: [${subSubHeadings}]}"
+    }
+
 }
 
 class SubSubHeading {
@@ -344,6 +423,10 @@ class SubSubHeading {
             }
         }
         return false
+    }
+
+    override fun toString(): String {
+        return "SubSubHeading: {title: ${title}, textsAndTables: [${textsAndTables}]}"
     }
 
 }
@@ -382,6 +465,10 @@ class Table {
             }
         }
         return false
+    }
+
+    override fun toString(): String {
+        return "SubSubHeading: {table: ${contents}}"
     }
 }
 

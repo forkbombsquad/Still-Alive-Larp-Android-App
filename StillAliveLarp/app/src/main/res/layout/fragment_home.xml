@@ -438,6 +438,7 @@
                             android:textStyle="bold"
                             android:textSize="14sp"
                             android:textColor="@color/black"
+                            android:paddingTop="8dp"
                             android:text="Checked In as Sample Character"/>
 
                     </LinearLayout>

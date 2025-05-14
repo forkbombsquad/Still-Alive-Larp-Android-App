@@ -21,10 +21,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="prereg_type_desc"><b>Free Tier</b> -
-        Still Alive is completely free to play, but you\'ll receive several benefits if you give a donation, including the ability to earn experience and play as a personalized character!\n\n<b>Basic Donation Tier</b> -
-        $15 (If you donate $15, you are able to play the game with a personal character and earn experience to take skills from the skill tree (NPC characters at this tier will earn double the experience of a PC character!) If you choose this option, you will need to provide your own food.)\n\n<b>Premium Donation Tier</b> -
-        $25 or more (If you donate at least $25, you gain all the benefits of the Basic Donation Tier as well as 1 Meal Ticket to the Commander\'s Feast and 1 free Raffle Ticket for The Raffle at the end of the event.)</string>
+    <string name="prereg_type_desc"><b>Free Entry - $0</b>: Still Alive is completely free to play! However, there are 2 tiers of donations that you can give which afford you multiple benefits!\n\n
+        <b>Basic Donation Tier - $15</b>: If you donate $15, you are able to play the game with your PC if you wish. Playing as a PC, you will earn 1xp. If you choose to play as an NPC, you will earn 2xp. If you choose this tier, you will need to provide your own food.\n\n
+        <b>Premium Donation Tier - $25+</b>: If you donate at least $25, you gain all the benefits of the Basic Donation Tier as well as 1 Meal Ticket to the Commander\'s Feast and 1 free Raffle Ticket for The Raffle at the end of the event. If you NPC for the event along with your usual 2xp, you get 2 free raffle tickets instead of 1.</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

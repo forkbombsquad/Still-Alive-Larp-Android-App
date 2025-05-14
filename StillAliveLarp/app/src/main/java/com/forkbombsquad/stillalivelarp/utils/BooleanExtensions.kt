@@ -14,6 +14,13 @@ fun Boolean.ternary(value: Int, otherwise: Int): Int {
     return otherwise
 }
 
+fun Boolean.ternary(value: Boolean, otherwise: Boolean): Boolean {
+    if (this) {
+        return value
+    }
+    return otherwise
+}
+
 fun <T> Boolean.ternary(value: T?, otherwise: T?): T? {
     if (this) {
         return value

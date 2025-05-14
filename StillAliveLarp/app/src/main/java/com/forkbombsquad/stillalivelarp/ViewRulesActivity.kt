@@ -5,10 +5,13 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -19,11 +22,13 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.utils.Heading
 import com.forkbombsquad.stillalivelarp.utils.HeadingView
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.SubHeading
 import com.forkbombsquad.stillalivelarp.utils.SubHeadingView
 import com.forkbombsquad.stillalivelarp.utils.SubSubHeading
 import com.forkbombsquad.stillalivelarp.utils.SubSubHeadingView
 import com.forkbombsquad.stillalivelarp.utils.Table
+import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +39,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
     private lateinit var layout: LinearLayout
     private lateinit var title: TextView
     private lateinit var progressBar: ProgressBar
+    private lateinit var filterSpinner: Spinner
 
     private var loadingView = false
     private var headings: MutableList<View> = mutableListOf()
@@ -54,7 +60,23 @@ class ViewRulesActivity : NoStatusBarActivity() {
         search = findViewById(R.id.viewrules_searchview)
         layout = findViewById(R.id.viewrules_layout)
         progressBar = findViewById(R.id.viewrules_progressBar)
-        progressBar = findViewById(R.id.viewrules_progressBar)
+        filterSpinner = findViewById(R.id.rulebook_filter)
+
+        val allFilters: MutableList<String> = mutableListOf()
+        allFilters.add("No Filter")
+        DataManager.shared.rulebook.ifLet {
+            allFilters.addAll(it.getAllFilterableHeadingNames())
+        }
+        val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allFilters)
+        filterSpinner.adapter = filterAdapter
+        filterSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    createViews()
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         search.doOnTextChanged { text, start, before, count ->
             lifecycleScope.launch(Dispatchers.IO) {
@@ -73,7 +95,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
             buildView()
         }
         headings = mutableListOf()
-
+        filterSpinner.isGone = DataManager.shared.loadingRulebook
         DataManager.shared.rulebook.ifLet { rulebook ->
             for (heading in filterHeadings(rulebook)) {
                 val headingView = HeadingView(this)
@@ -120,12 +142,29 @@ class ViewRulesActivity : NoStatusBarActivity() {
     }
 
     private fun filterHeadings(rulebook: Rulebook): List<Heading> {
+        var headings = rulebook.headings.toMutableList()
+        val filter = filterSpinner.selectedItem.toString()
+        if (filter != "No Filter") {
+            headings = headings.filter { it.titlesContain(sanitizeFilter(filter))}.toMutableList()
+            headings = getFilteredHeadings(headings, filter)
+        }
         val searchText = search.text.trim().toString()
         return if (searchText.isNotEmpty()) {
-            furtherFilterHeadings(rulebook.headings.filter { it.contains(searchText) }, searchText)
+            furtherFilterHeadings(headings.filter { it.contains(searchText) }, searchText)
         } else {
-            rulebook.headings
+            headings
         }
+    }
+
+    private fun getFilteredHeadings(headings: MutableList<Heading>, filter: String): MutableList<Heading> {
+        val newHeadings: MutableList<Heading> = mutableListOf()
+        headings.forEach { heading ->
+            newHeadings.add(heading.filterForHeadingsWithTitle(sanitizeFilter(filter)))
+        }
+        return newHeadings
+    }
+    private fun sanitizeFilter(filter: String): String {
+        return filter.trim()
     }
 
     private fun furtherFilterHeadings(headings: List<Heading>, searchText: String): List<Heading> {

@@ -93,6 +93,56 @@ tools:context=".AddEditGearActivity">
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/gearLimitTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Character Limits"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/gearLimitDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Character Limits"
+            android:textAlignment="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/gearClassificationTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Classification"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/gearClassificationDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Type Classification"
+            android:textAlignment="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

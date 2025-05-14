@@ -394,7 +394,7 @@ tools:context=".CheckInPlayerActivity">
                     android:layout_height="wrap_content"
                     app:key="BONUS AMMO"
                     app:showDiv="true"
-                    app:value="Bullets: <= 25\nMegas: <= 8\nMilitaries: <= 5\nRockets: <= 2" />
+                    app:value="Bullets: &lt;= 25\nMegas: &lt;= 8\nMilitaries: &lt;= 5\nRockets: &lt;= 2" />
 
             </LinearLayout>
 

@@ -77,3 +77,7 @@ fun String.decompress(): String {
     val inputStream = GZIPInputStream(ByteArrayInputStream(compressedBytes))
     return inputStream.reader(Charsets.UTF_8).readText()
 }
+
+fun String.equalsIgnoreCase(other: String): Boolean {
+    return this.lowercase() == other.lowercase()
+}

@@ -35,6 +35,11 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
     private lateinit var primarySubtype: Spinner
     private lateinit var secondarySubtype: Spinner
 
+    private lateinit var limitTitle: TextView
+    private lateinit var limitDesc: TextView
+    private lateinit var classTitle: TextView
+    private lateinit var classDesc: TextView
+
     private var editGear: GearJsonModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +60,11 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
         submit = findViewById(R.id.addgear_submit)
         delete = findViewById(R.id.addgear_delete)
 
+        limitTitle = findViewById(R.id.gearLimitTitle)
+        limitDesc = findViewById(R.id.gearLimitDesc)
+        classTitle = findViewById(R.id.gearClassificationTitle)
+        classDesc = findViewById(R.id.gearClassificationDesc)
+
         val gearTypeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Constants.GearTypes.allTypes)
         gearType.adapter = gearTypeAdapter
         gearType.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -65,6 +75,7 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
                     primarySubtype.adapter = gap
                     val gas = ArrayAdapter(this@AddEditGearFromBarcodeActivity, android.R.layout.simple_spinner_dropdown_item, getSecondarySubtypeList(item))
                     secondarySubtype.adapter = gas
+                    this@AddEditGearFromBarcodeActivity.updateLimitAndClassText()
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -215,6 +226,66 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
         }
         submit.textView.text = (editGear == null).ternary("Create", "Update")
         delete.isGone = editGear == null
+
+        updateLimitAndClassText()
+
+    }
+
+    private fun updateLimitAndClassText() {
+        getNewCharacterLimitString().ifLet({ limit ->
+            limitDesc.text = limit
+            limitTitle.isGone = false
+            limitDesc.isGone = false
+        }, {
+            limitTitle.isGone = true
+            limitDesc.isGone = true
+        })
+        getClassificaitonString().ifLet({ classificaiton ->
+            classDesc.text = classificaiton
+            classTitle.isGone = false
+            classDesc.isGone = false
+        }, {
+            classTitle.isGone = true
+            classDesc.isGone = true
+        })
+    }
+
+    private fun getNewCharacterLimitString(): String? {
+        val type = gearType.selectedItem.toString()
+        when (type) {
+            Constants.GearTypes.meleeWeapon, Constants.GearTypes.firearm -> {
+                return "Up to 2 of each type you're proficient with"
+            }
+            Constants.GearTypes.clothing -> {
+                return "1 Mechanically Advantageous piece of Clothing\nNO LIMIT ON: regular clothing"
+            }
+            Constants.GearTypes.accessory -> {
+                return "2 Mechancially Advangageous Accessories (such as flashlights or holsters)\nNO LIMIT ON: non-advantageous accessories (such as safety glasses, sunglasses, belts, masks, headbands, gloves, phones, watches, etc)"
+            }
+            Constants.GearTypes.bag -> {
+                return "3 Small Bags OR 1 Medium Bag and 2 Small Bags OR 1 Large Bag and 1 Small Bag"
+            }
+        }
+        return null
+    }
+
+    private fun getClassificaitonString(): String? {
+        val type = gearType.selectedItem.toString()
+        when (type) {
+            Constants.GearTypes.meleeWeapon -> {
+                return "Super Light: Coreless\nLight: 22.99\" (57.3cm) or shorter\nMedium: 23\" - 43.99\" (57.4cm - 111.7cm)\nHeavy: 44\" (111.8cm) or longer"
+            }
+            Constants.GearTypes.firearm -> {
+                return "+1 per magazine\n+1 more than 5 bullets\n+1 more than 10 bullets\n+1 more than 15 bullets\n+1 Semi-Auto\n+2 Auto\nRivals or Rockets = Military Grade\n\nLight: 0\nMedium: 1\nHeavy: 2\nAdvanced: 3+\nMilitary Grade: Shoots Rivals or Rockets"
+            }
+            Constants.GearTypes.clothing, Constants.GearTypes.accessory -> {
+                return null
+            }
+            Constants.GearTypes.bag -> {
+                return "Small: 0.5L (30.5cu in) or less\nMedium: 0.5L - 5L (30.5cu in - 305.1cu in)\nLarge: 5L - 25L (305.1cu in - 1,525.6cu in)\nExtra Large: 25L (1,525.6cu in) or more"
+            }
+        }
+        return null
     }
 
     private fun getPrimarySubtypeList(type: String): List<String> {

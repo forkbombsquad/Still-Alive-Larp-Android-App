@@ -588,7 +588,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     private fun mysteriousStrangerTotal(relevantSkills: Array<SkillBarcodeModel>): Int {
         var count = 0
         for (skill in relevantSkills) {
-            if (skill.id.equalsAnyOf(Constants.SpecificSkillIds.regressionTypeSkills)) {
+            if (skill.id.equalsAnyOf(Constants.SpecificSkillIds.mysteriousStrangerTypeSkills)) {
                 count++
             }
         }
