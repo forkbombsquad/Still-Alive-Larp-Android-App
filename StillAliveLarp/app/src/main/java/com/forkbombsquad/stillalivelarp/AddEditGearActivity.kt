@@ -261,10 +261,10 @@ class AddEditGearActivity : NoStatusBarActivity() {
                 return "1 Mechanically Advantageous piece of Clothing\nNO LIMIT ON: regular clothing"
             }
             Constants.GearTypes.accessory -> {
-                return "2 Mechancially Advangageous Accessories (such as flashlights or holsters)\nNO LIMIT ON: non-advantageous accessories (such as safety glasses, sunglasses, belts, masks, headbands, gloves, phones, watches, etc)"
+                return "2 Mechanically Advantageous Accessories (such as flashlights or holsters)\nNO LIMIT ON: non-advantageous accessories (such as safety glasses, sunglasses, belts, masks, headbands, gloves, phones, watches, etc)"
             }
             Constants.GearTypes.bag -> {
-                return "3 Small Bags OR 1 Medium Bag and 2 Small Bags OR 1 Large Bag and 1 Small Bag"
+                return "1 Small Bag and (1 Medium Bag or 1 Large Bag)"
             }
         }
         return null
