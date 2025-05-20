@@ -33,6 +33,32 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
+                android:id="@+id/characterplanner_loadingstufflayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"/>
+                <TextView
+                    android:id="@+id/characterplanner_loadingstufftext"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Loading..."
+                    android:textSize="24sp"
+                    android:textColor="@color/mid_red"
+                    android:textAlignment="center"/>
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/characterplanner_layout"
                 android:orientation="vertical"
                 android:layout_width="match_parent"

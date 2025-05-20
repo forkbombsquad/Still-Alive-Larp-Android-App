@@ -17,8 +17,10 @@ enum class ButtonType {
 class AlertUtils {
     companion object {
 
+        private const val bugReportMsg = "If are seeing this error, please take a screenshot of it and post it in the bug-reports channel of the Still Alive Discord Server along with some details about what you did before getting this message!"
+
         fun displaySomethingWentWrong(context: Context) {
-            displayOkMessage(context, "Ope", "Something went wrong - likely a server error. Please try again.\nIf this continues to happen, please contact Rydge Craker")
+            displayOkMessage(context, "Ope", "Something went wrong - likely a server error. Trying again may help.\n${bugReportMsg}")
         }
 
         fun displayValidationError(context: Context, errors: String) {
@@ -26,15 +28,15 @@ class AlertUtils {
         }
 
         fun displayError(context: Context, message: String) {
-            displayOkMessage(context, "Error", message)
+            displayOkMessage(context, "Error", "$message\n${bugReportMsg}")
         }
 
         fun displayError(context: Context, statusCode: Int, error: ErrorModel) {
-            displayOkMessage(context, "Error - $statusCode", error.detail)
+            displayOkMessage(context, "Error - $statusCode", "${error.detail}\n${bugReportMsg}")
         }
 
         fun displayError(context: Context, message: String, onClick: DialogInterface.OnClickListener) {
-            displayOkMessage(context, "Error", message, onClick)
+            displayOkMessage(context, "Error", "$message\n${bugReportMsg}", onClick)
         }
 
         fun displaySuccessMessage(context: Context, message: String, onClick: DialogInterface.OnClickListener? = null) {

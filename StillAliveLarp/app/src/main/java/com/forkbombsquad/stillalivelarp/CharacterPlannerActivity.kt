@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
@@ -33,6 +34,9 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     private lateinit var layout: LinearLayout
     private var allPersonalChars: List<CharacterModel>? = null
 
+    private lateinit var loadingStuffLayout: LinearLayout
+    private lateinit var loadingStuffText: TextView
+
     private var loading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +48,8 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     private fun setupView() {
         progressBar = findViewById(R.id.characterplanner_loading)
         layout = findViewById(R.id.characterplanner_layout)
+        loadingStuffLayout = findViewById(R.id.characterplanner_loadingstufflayout)
+        loadingStuffText = findViewById(R.id.characterplanner_loadingstufftext)
 
         DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), false) {
             allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
@@ -54,6 +60,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         progressBar.isGone = !DataManager.shared.loadingAllPlannedCharacters
+        loadingStuffLayout.isGone = true
         layout.removeAllViews()
         DataManager.shared.allPlannedCharacters.ifLet { chars ->
             chars.forEach { char ->
@@ -100,9 +107,23 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
         }
     }
 
+    private fun setLoadingText(text: String?) {
+        text.ifLet({ str ->
+           runOnUiThread {
+               loadingStuffText.text = str
+               loadingStuffLayout.isGone = false
+           }
+        }, {
+            runOnUiThread {
+                loadingStuffLayout.isGone = true
+            }
+        })
+    }
+
     private fun createNew(name: String, selectedChar: CharacterModel?) {
         loading = true
         buildView()
+        setLoadingText("Creating Base Model...")
         var nm = name
         if (nm.isEmpty()) {
             selectedChar.ifLet({
@@ -111,7 +132,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 nm = "Planned Character"
             })
         }
-        var createModel = CharacterCreateModel(
+        val createModel = CharacterCreateModel(
             fullName = nm,
             startDate = LocalDate.now().yyyyMMddFormatted(),
             isAlive = "TRUE",
@@ -141,10 +162,20 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             request.successfulResponse(CharacterCreateSP(createModel)).ifLet { createdChar ->
                 selectedChar.ifLet({ oldChar ->
                     addSkillsFromExisting(createdChar, oldChar) {
-                        loadExisting(createdChar)
+                        setLoadingText("Loading New Planed Character...")
+                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), true) {
+                            allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
+                            buildView()
+                            loadExisting(createdChar)
+                        }
                     }
                 }, {
-                    loadExisting(createdChar)
+                    setLoadingText("Loading New Planed Character...")
+                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), true) {
+                        allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
+                        buildView()
+                        loadExisting(createdChar)
+                    }
                 })
             }
         }
@@ -157,10 +188,11 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             request.successfulResponse(IdSP(existingChar.id)).ifLet {  list ->
                 val nonZeros = list.charSkills.filter { it.xpSpent > 0 || it.fsSpent > 0 }.toList()
                 var count = 0
+                setLoadingText("Populating Skills (0 / ${nonZeros.size})...")
                 nonZeros.forEach { nzs ->
                     val charSkill = CharacterSkillCreateModel(
                         characterId = newChar.id,
-                        skillId = nzs.id,
+                        skillId = nzs.skillId,
                         xpSpent = nzs.xpSpent,
                         fsSpent = nzs.fsSpent,
                         ppSpent = nzs.ppSpent
@@ -169,6 +201,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                     lifecycleScope.launch {
                         csRequest.successfulResponse(CreateModelSP(charSkill)).ifLet { _ ->
                             count ++
+                            setLoadingText("Populating Skills (${count} / ${nonZeros.size})...")
                             if (count == nonZeros.size) {
                                 finished()
                             }
@@ -195,10 +228,13 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             val request = CharacterSkillService.GetAllCharacterSkillsForCharacter()
             lifecycleScope.launch {
                 request.successfulResponse(IdSP(character.id)).ifLet { charSkills ->
-                    DataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
-                    val intent = Intent(this@CharacterPlannerActivity, CharacterPlannerSkillListActivity::class.java)
-                    loading = false
-                    startActivity(intent)
+                    runOnUiThread {
+                        DataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
+                        loading = false
+                        buildView()
+                        val intent = Intent(this@CharacterPlannerActivity, CharacterPlannerSkillListActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
         }

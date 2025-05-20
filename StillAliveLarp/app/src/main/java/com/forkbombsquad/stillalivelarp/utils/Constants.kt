@@ -1,7 +1,6 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 class Constants {
-
     class CharacterTypeId {
         companion object {
             const val standard = 1
