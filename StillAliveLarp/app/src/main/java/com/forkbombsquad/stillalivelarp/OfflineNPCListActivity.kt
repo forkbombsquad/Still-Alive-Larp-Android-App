@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
@@ -34,7 +34,7 @@ class OfflineNPCListActivity : NoStatusBarActivity() {
     private fun buildView() {
         layout.removeAllViews()
 
-        DataManager.shared.allOfflineNPCCharacters.ifLet { chars ->
+        OldDataManager.shared.allOfflineNPCCharacters.ifLet { chars ->
             val living = chars.filter { it.isAlive.toBoolean() }
 
             livingNPCs.set("${living.count()} / 10")
@@ -48,7 +48,7 @@ class OfflineNPCListActivity : NoStatusBarActivity() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedNPCCharacter = char
+                    OldDataManager.shared.selectedNPCCharacter = char
                     val intent = Intent(this, ViewNPCStuffActivity::class.java)
                     startActivity(intent)
                 }
@@ -62,7 +62,7 @@ class OfflineNPCListActivity : NoStatusBarActivity() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedNPCCharacter = char
+                    OldDataManager.shared.selectedNPCCharacter = char
                     val intent = Intent(this, ViewNPCStuffActivity::class.java)
                     startActivity(intent)
                 }

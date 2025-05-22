@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -23,7 +23,7 @@ class SelectCharacterToRefundSkillsActivity : NoStatusBarActivity() {
     private fun setupView() {
         layout = findViewById(R.id.selectchartorefund_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_CHARACTERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_CHARACTERS), false) {
             buildView()
         }
         buildView()
@@ -31,7 +31,7 @@ class SelectCharacterToRefundSkillsActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         layout.removeAllViews()
-        DataManager.shared.allCharacters.ifLet { chars ->
+        OldDataManager.shared.allCharacters.ifLet { chars ->
             chars.alphabetized().forEachIndexed { index, char ->
                 val arrow = NavArrowButtonBlackBuildable(this)
                 arrow.textView.text = char.fullName
@@ -40,7 +40,7 @@ class SelectCharacterToRefundSkillsActivity : NoStatusBarActivity() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedChar = char
+                    OldDataManager.shared.selectedChar = char
                     val intent = Intent(this, RefundSkillsActivity::class.java)
                     startActivity(intent)
                 }

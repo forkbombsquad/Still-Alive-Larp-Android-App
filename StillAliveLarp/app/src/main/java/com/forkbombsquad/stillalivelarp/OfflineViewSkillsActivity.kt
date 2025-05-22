@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
@@ -58,7 +58,7 @@ class OfflineViewSkillsActivity : NoStatusBarActivity() {
         }
         skillCells = mutableListOf()
 
-        getSortedSkills(DataManager.shared.charForSelectedPlayer?.skills ?: arrayOf()).forEachIndexed { index, it ->
+        getSortedSkills(OldDataManager.shared.charForSelectedPlayer?.skills ?: arrayOf()).forEachIndexed { index, it ->
             val cell = SkillCell(this)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -74,7 +74,7 @@ class OfflineViewSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        title.text = "${DataManager.shared.charForSelectedPlayer?.fullName ?: "Character"}'s\nSkills"
+        title.text = "${OldDataManager.shared.charForSelectedPlayer?.fullName ?: "Character"}'s\nSkills"
         skillListLayout.removeAllViews()
         progressBar.isGone = !loadingView || skillCells.isNotEmpty()
         if (!loadingView) {

@@ -7,7 +7,7 @@ import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.GearCell
 
 class OfflineViewGearActivity : NoStatusBarActivity() {
@@ -29,12 +29,12 @@ class OfflineViewGearActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        title.text = "Offline\n${DataManager.shared.selectedChar?.fullName ?: ""} Gear"
+        title.text = "Offline\n${OldDataManager.shared.selectedChar?.fullName ?: ""} Gear"
         layout.isGone = false
 
         layout.removeAllViews()
 
-        val gearList = DataManager.shared.getGearOrganzied()
+        val gearList = OldDataManager.shared.getGearOrganzied()
         gearList.forEach { (key, list) ->
             val textView = TextView(this)
             val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

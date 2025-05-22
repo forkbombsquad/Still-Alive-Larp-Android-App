@@ -10,14 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
-import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
-import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
@@ -44,15 +40,15 @@ class ManageNPCActivity : NoStatusBarActivity() {
             manageSkills.setLoading(true)
             AlertUtils.displayMessageWithInputs(
                 context = this,
-                title = "Adjust ${DataManager.shared.selectedNPCCharacter?.fullName ?: "NPC"} Values",
+                title = "Adjust ${OldDataManager.shared.selectedNPCCharacter?.fullName ?: "NPC"} Values",
                 editTexts = mapOf(
                     Pair("Bullets", EditText(this).apply {
-                        setText(DataManager.shared.selectedNPCCharacter?.bullets ?: "")
+                        setText(OldDataManager.shared.selectedNPCCharacter?.bullets ?: "")
                         hint = "Bullets"
                         inputType = InputType.TYPE_CLASS_NUMBER
                     }),
                     Pair("Infection", EditText(this).apply {
-                        setText(DataManager.shared.selectedNPCCharacter?.infection ?: "0")
+                        setText(OldDataManager.shared.selectedNPCCharacter?.infection ?: "0")
                         hint = "Infection Rating"
                         inputType = InputType.TYPE_CLASS_NUMBER
                     })
@@ -60,14 +56,14 @@ class ManageNPCActivity : NoStatusBarActivity() {
                 checkboxes = mapOf(
                     Pair("Alive", CheckBox(this).apply {
                         text = "Is Alive?"
-                        isChecked = DataManager.shared.selectedNPCCharacter?.isAlive.toBoolean()
+                        isChecked = OldDataManager.shared.selectedNPCCharacter?.isAlive.toBoolean()
                     })
                 ),
             ) { response ->
 
                 val updateCharRequest = AdminService.UpdateCharacter()
 
-                var charUpdate = DataManager.shared.selectedNPCCharacter!!.getBaseModel()
+                var charUpdate = OldDataManager.shared.selectedNPCCharacter!!.getBaseModel()
                 charUpdate.bullets = response["Bullets"] ?: "0"
                 charUpdate.infection = response["Infection"] ?: "0"
                 charUpdate.isAlive = response["Alive"]?.uppercase() ?: "FALSE"
@@ -75,8 +71,8 @@ class ManageNPCActivity : NoStatusBarActivity() {
                 lifecycleScope.launch {
                     updateCharRequest.successfulResponse(UpdateModelSP(charUpdate)).ifLet({
                         CharacterManager.shared.fetchFullCharacter(lifecycleScope, it.id) { fcm ->
-                            DataManager.shared.selectedNPCCharacter = fcm
-                            DataManager.shared.unrelaltedUpdateCallback()
+                            OldDataManager.shared.selectedNPCCharacter = fcm
+                            OldDataManager.shared.unrelaltedUpdateCallback()
                             AlertUtils.displaySuccessMessage(this@ManageNPCActivity, "Updated NPC!") { _, _ -> }
                             manageStats.setLoading(false)
                             manageSkills.setLoading(false)
@@ -92,12 +88,12 @@ class ManageNPCActivity : NoStatusBarActivity() {
 
         manageSkills.setOnClick {
             manageSkills.setLoading(true)
-            CharacterManager.shared.fetchFullCharacter(lifecycleScope, DataManager.shared.selectedNPCCharacter!!.id) { fullCharacter ->
-                DataManager.shared.selectedPlannedCharacter = fullCharacter
+            CharacterManager.shared.fetchFullCharacter(lifecycleScope, OldDataManager.shared.selectedNPCCharacter!!.id) { fullCharacter ->
+                OldDataManager.shared.selectedPlannedCharacter = fullCharacter
                 val request = CharacterSkillService.GetAllCharacterSkillsForCharacter()
                 lifecycleScope.launch {
-                    request.successfulResponse(IdSP(DataManager.shared.selectedNPCCharacter!!.id)).ifLet { charSkills ->
-                        DataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
+                    request.successfulResponse(IdSP(OldDataManager.shared.selectedNPCCharacter!!.id)).ifLet { charSkills ->
+                        OldDataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
                         val intent = Intent(this@ManageNPCActivity, NPCSkillListActivity::class.java)
                         manageSkills.setLoading(false)
                         startActivity(intent)
@@ -106,13 +102,13 @@ class ManageNPCActivity : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        title.text = "Manage NPC\n" + (DataManager.shared.selectedNPCCharacter?.fullName ?: "")
+        title.text = "Manage NPC\n" + (OldDataManager.shared.selectedNPCCharacter?.fullName ?: "")
     }
 }

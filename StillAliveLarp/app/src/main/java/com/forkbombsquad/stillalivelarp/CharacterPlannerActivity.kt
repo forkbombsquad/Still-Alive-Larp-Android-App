@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
@@ -51,18 +51,18 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
         loadingStuffLayout = findViewById(R.id.characterplanner_loadingstufflayout)
         loadingStuffText = findViewById(R.id.characterplanner_loadingstufftext)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), false) {
-            allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLANNED_CHARACTERS, OldDataManagerType.ALL_CHARACTERS), false) {
+            allPersonalChars = (OldDataManager.shared.allCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf()) + (OldDataManager.shared.allPlannedCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf())
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        progressBar.isGone = !DataManager.shared.loadingAllPlannedCharacters
+        progressBar.isGone = !OldDataManager.shared.loadingAllPlannedCharacters
         loadingStuffLayout.isGone = true
         layout.removeAllViews()
-        DataManager.shared.allPlannedCharacters.ifLet { chars ->
+        OldDataManager.shared.allPlannedCharacters.ifLet { chars ->
             chars.forEach { char ->
                 val navarrow = NavArrowButtonBlueBuildable(this)
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -153,7 +153,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             armor = CharacterArmor.NONE.text,
             unshakableResolveUses = "0",
             mysteriousStrangerUses = "0",
-            playerId = DataManager.shared.player?.id ?: 0,
+            playerId = OldDataManager.shared.player?.id ?: 0,
             characterTypeId = Constants.CharacterTypes.Planner
         )
 
@@ -163,16 +163,16 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 selectedChar.ifLet({ oldChar ->
                     addSkillsFromExisting(createdChar, oldChar) {
                         setLoadingText("Loading New Planed Character...")
-                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), true) {
-                            allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
+                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLANNED_CHARACTERS, OldDataManagerType.ALL_CHARACTERS), true) {
+                            allPersonalChars = (OldDataManager.shared.allCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf()) + (OldDataManager.shared.allPlannedCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf())
                             buildView()
                             loadExisting(createdChar)
                         }
                     }
                 }, {
                     setLoadingText("Loading New Planed Character...")
-                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), true) {
-                        allPersonalChars = (DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf()) + (DataManager.shared.allPlannedCharacters?.filter { it.playerId == DataManager.shared.player?.id } ?: listOf())
+                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLANNED_CHARACTERS, OldDataManagerType.ALL_CHARACTERS), true) {
+                        allPersonalChars = (OldDataManager.shared.allCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf()) + (OldDataManager.shared.allPlannedCharacters?.filter { it.playerId == OldDataManager.shared.player?.id } ?: listOf())
                         buildView()
                         loadExisting(createdChar)
                     }
@@ -215,12 +215,12 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
         loading = true
         buildView()
         CharacterManager.shared.fetchFullCharacter(lifecycleScope, character.id) { fullCharacter ->
-            DataManager.shared.selectedPlannedCharacter = fullCharacter
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.selectedPlannedCharacter = fullCharacter
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 loading = true
-                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLANNED_CHARACTERS, DataManagerType.ALL_CHARACTERS), forceDownloadIfApplicable = true) {
+                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLANNED_CHARACTERS, OldDataManagerType.ALL_CHARACTERS), forceDownloadIfApplicable = true) {
                     loading = false
-                    allPersonalChars = DataManager.shared.allCharacters?.filter { it.playerId == DataManager.shared.player?.id }
+                    allPersonalChars = OldDataManager.shared.allCharacters?.filter { it.playerId == OldDataManager.shared.player?.id }
                     buildView()
                 }
                 buildView()
@@ -229,7 +229,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             lifecycleScope.launch {
                 request.successfulResponse(IdSP(character.id)).ifLet { charSkills ->
                     runOnUiThread {
-                        DataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
+                        OldDataManager.shared.selectedPlannedCharacterCharSkills = charSkills.charSkills.toList()
                         loading = false
                         buildView()
                         val intent = Intent(this@CharacterPlannerActivity, CharacterPlannerSkillListActivity::class.java)

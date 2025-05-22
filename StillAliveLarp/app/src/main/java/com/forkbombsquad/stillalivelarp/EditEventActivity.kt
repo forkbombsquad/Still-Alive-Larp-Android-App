@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -40,7 +40,7 @@ class EditEventActivity : NoStatusBarActivity() {
         update = findViewById(R.id.editevent_update)
 
         update.setOnClick {
-            DataManager.shared.selectedEvent.ifLet { event ->
+            OldDataManager.shared.selectedEvent.ifLet { event ->
                 val valResults = validateFields()
                 if (!valResults.hasError) {
                     update.setLoading(true)
@@ -58,9 +58,9 @@ class EditEventActivity : NoStatusBarActivity() {
                     val updateEventRequest = AdminService.UpdateEvent()
                     lifecycleScope.launch {
                         updateEventRequest.successfulResponse(UpdateModelSP(eventUpdateModel)).ifLet({ _ ->
-                            DataManager.shared.unrelaltedUpdateCallback()
+                            OldDataManager.shared.unrelaltedUpdateCallback()
                             AlertUtils.displaySuccessMessage(this@EditEventActivity,"Event Updated!") { _, _ ->
-                                DataManager.shared.activityToClose?.finish()
+                                OldDataManager.shared.activityToClose?.finish()
                                 finish()
                             }
                         }, {
@@ -77,7 +77,7 @@ class EditEventActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedEvent.ifLet { event ->
+        OldDataManager.shared.selectedEvent.ifLet { event ->
             title.setText(event.title)
             date.setText(event.date)
             startTime.setText(event.startTime)

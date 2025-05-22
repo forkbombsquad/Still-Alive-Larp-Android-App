@@ -7,8 +7,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
@@ -32,14 +32,14 @@ class SelectEventForEventManagementActivity : NoStatusBarActivity() {
         progressbar = findViewById(R.id.selecteventformanagement_progressbar)
         layout = findViewById(R.id.selecteventformanagement_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENTS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENTS), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        if (DataManager.shared.loadingEvents) {
+        if (OldDataManager.shared.loadingEvents) {
             progressbar.isGone = false
             layout.isGone = true
         } else {
@@ -55,8 +55,8 @@ class SelectEventForEventManagementActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
-                DataManager.shared.unrelaltedUpdateCallback = {
-                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENTS), true) {
+                OldDataManager.shared.unrelaltedUpdateCallback = {
+                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENTS), true) {
                         buildView()
                     }
                     buildView()
@@ -66,7 +66,7 @@ class SelectEventForEventManagementActivity : NoStatusBarActivity() {
             }
             layout.addView(arrow)
 
-            DataManager.shared.events.ifLet { events ->
+            OldDataManager.shared.events.ifLet { events ->
                 events.forEachIndexed { index, event ->
                     var view = View(this)
                     if (event.isFinished.toBoolean()) {
@@ -110,9 +110,9 @@ class SelectEventForEventManagementActivity : NoStatusBarActivity() {
     }
 
     private fun onClickEvent(event: EventModel) {
-        DataManager.shared.selectedEvent = event
-        DataManager.shared.unrelaltedUpdateCallback = {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENTS), true) {
+        OldDataManager.shared.selectedEvent = event
+        OldDataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENTS), true) {
                 buildView()
             }
             buildView()

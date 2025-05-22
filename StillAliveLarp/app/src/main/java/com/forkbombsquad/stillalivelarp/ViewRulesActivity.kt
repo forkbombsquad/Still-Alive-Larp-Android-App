@@ -18,17 +18,15 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.Heading
 import com.forkbombsquad.stillalivelarp.utils.HeadingView
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
-import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.SubHeading
 import com.forkbombsquad.stillalivelarp.utils.SubHeadingView
 import com.forkbombsquad.stillalivelarp.utils.SubSubHeading
 import com.forkbombsquad.stillalivelarp.utils.SubSubHeadingView
 import com.forkbombsquad.stillalivelarp.utils.Table
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +50,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        DataManager.shared.unrelaltedUpdateCallback()
+        OldDataManager.shared.unrelaltedUpdateCallback()
     }
 
     private fun setupView() {
@@ -64,7 +62,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
         val allFilters: MutableList<String> = mutableListOf()
         allFilters.add("No Filter")
-        DataManager.shared.rulebook.ifLet {
+        OldDataManager.shared.rulebook.ifLet {
             allFilters.addAll(it.getAllFilterableHeadingNames())
         }
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allFilters)
@@ -95,8 +93,8 @@ class ViewRulesActivity : NoStatusBarActivity() {
             buildView()
         }
         headings = mutableListOf()
-        filterSpinner.isGone = DataManager.shared.loadingRulebook
-        DataManager.shared.rulebook.ifLet { rulebook ->
+        filterSpinner.isGone = OldDataManager.shared.loadingRulebook
+        OldDataManager.shared.rulebook.ifLet { rulebook ->
             for (heading in filterHeadings(rulebook)) {
                 val headingView = HeadingView(this)
                 headingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -129,7 +127,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.rulebook.ifLet { rulebook ->
+        OldDataManager.shared.rulebook.ifLet { rulebook ->
             title.text = "Rulebook v${rulebook.version}"
         }
         layout.removeAllViews()

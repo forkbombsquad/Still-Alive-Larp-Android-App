@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.EventPreregService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
@@ -77,9 +77,9 @@ class PreregActivity : NoStatusBarActivity() {
 
         submit.setOnClick {
             submit.setLoading(true)
-            val player = DataManager.shared.player
-            val char = DataManager.shared.character
-            val event = DataManager.shared.currentEvent
+            val player = OldDataManager.shared.player
+            val char = OldDataManager.shared.character
+            val event = OldDataManager.shared.currentEvent
             val existingPrereg = getExistingPrereg(event)
 
             existingPrereg.ifLet({
@@ -104,7 +104,7 @@ class PreregActivity : NoStatusBarActivity() {
                         AlertUtils.displayOkMessage(this@PreregActivity, "Preregistration Updated Successfully", "") { _, _ ->
                             finish()
                         }
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                     }, {
                         submit.setLoading(false)
                     })
@@ -130,7 +130,7 @@ class PreregActivity : NoStatusBarActivity() {
                         AlertUtils.displayOkMessage(this@PreregActivity, "Preregistration Successful!", "") { _, _ ->
                             finish()
                         }
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                     }, {
                         submit.setLoading(false)
                     })
@@ -139,18 +139,18 @@ class PreregActivity : NoStatusBarActivity() {
 
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.EVENT_PREREGS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.EVENT_PREREGS), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        val load = DataManager.shared.loadingPlayer || DataManager.shared.loadingCharacter || DataManager.shared.loadingEventPreregs || DataManager.shared.selectedEvent == null
+        val load = OldDataManager.shared.loadingPlayer || OldDataManager.shared.loadingCharacter || OldDataManager.shared.loadingEventPreregs || OldDataManager.shared.selectedEvent == null
         loading.isGone = !load
         dataLayout.isGone = load
 
-        DataManager.shared.character.ifLet({ char ->
+        OldDataManager.shared.character.ifLet({ char ->
             val charSelectionAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("NPC", char.fullName))
             character.valuePickerView.adapter = charSelectionAdapter
             character.valuePickerView.setSelection(1)
@@ -160,11 +160,11 @@ class PreregActivity : NoStatusBarActivity() {
             character.valuePickerView.setSelection(0)
         })
 
-        DataManager.shared.player.ifLet {
+        OldDataManager.shared.player.ifLet {
             player.set(it.fullName)
         }
 
-        DataManager.shared.selectedEvent.ifLet { ev ->
+        OldDataManager.shared.selectedEvent.ifLet { ev ->
             event.set(ev.title)
             getExistingPrereg(ev).ifLet({ existingPrereg ->
                 title.text = "Update Preregistration"
@@ -188,8 +188,8 @@ class PreregActivity : NoStatusBarActivity() {
 
     private fun getExistingPrereg(ev: EventModel?): EventPreregModel? {
         ev?.let { event ->
-            DataManager.shared.eventPreregs[event.id]?.let {
-                return it.firstOrNull { prereg -> prereg.playerId == (DataManager.shared.player?.id ?: -1) }
+            OldDataManager.shared.eventPreregs[event.id]?.let {
+                return it.firstOrNull { prereg -> prereg.playerId == (OldDataManager.shared.player?.id ?: -1) }
             } ?: run {
                 return null
             }

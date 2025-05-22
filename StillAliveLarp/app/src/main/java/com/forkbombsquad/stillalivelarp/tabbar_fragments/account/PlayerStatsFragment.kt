@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
@@ -50,9 +50,9 @@ class PlayerStatsFragment : Fragment() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedPlayer.ifLet({
+        OldDataManager.shared.selectedPlayer.ifLet({
             name.isGone = false
-            email.isGone = it.id != DataManager.shared.player?.id
+            email.isGone = it.id != OldDataManager.shared.player?.id
             startDate.isGone = false
             xp.isGone = false
             ft1s.isGone = false
@@ -60,7 +60,7 @@ class PlayerStatsFragment : Fragment() {
             totalEvents.isGone = false
             npcEvents.isGone = false
             lastEvent.isGone = false
-            admin.isGone = !it.isAdmin.toBoolean() && it.id == DataManager.shared.player?.id
+            admin.isGone = !it.isAdmin.toBoolean() && it.id == OldDataManager.shared.player?.id
 
             name.set(it.fullName)
             email.set(it.username)

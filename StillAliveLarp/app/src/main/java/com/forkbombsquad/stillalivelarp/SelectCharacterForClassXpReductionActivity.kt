@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 
@@ -23,7 +23,7 @@ class SelectCharacterForClassXpReductionActivity : NoStatusBarActivity() {
 
         layout = findViewById(R.id.selectcharforclassxpred_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_CHARACTERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_CHARACTERS), false) {
             buildView()
         }
         buildView()
@@ -31,7 +31,7 @@ class SelectCharacterForClassXpReductionActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         layout.removeAllViews()
-        val chars = (DataManager.shared.allCharacters ?: listOf())
+        val chars = (OldDataManager.shared.allCharacters ?: listOf())
 
         for (char in chars.alphabetized()) {
             val navarrow = NavArrowButtonBlackBuildable(this)
@@ -40,12 +40,12 @@ class SelectCharacterForClassXpReductionActivity : NoStatusBarActivity() {
             navarrow.layoutParams = params
 
             navarrow.textView.text = char.fullName
-            navarrow.setLoading(DataManager.shared.loadingEventPreregs)
+            navarrow.setLoading(OldDataManager.shared.loadingEventPreregs)
             navarrow.setOnClick {
 
-                DataManager.shared.activityToClose = this
-                DataManager.shared.selectedPlayer = DataManager.shared.allPlayers?.firstOrNull { it.id == char.playerId }
-                DataManager.shared.selectedChar = char
+                OldDataManager.shared.activityToClose = this
+                OldDataManager.shared.selectedPlayer = OldDataManager.shared.allPlayers?.firstOrNull { it.id == char.playerId }
+                OldDataManager.shared.selectedChar = char
 
                 val intent = Intent(this, SelectSkillForClassXpReductionActivity::class.java)
                 startActivity(intent)

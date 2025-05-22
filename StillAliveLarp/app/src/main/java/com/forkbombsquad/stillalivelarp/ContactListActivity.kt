@@ -7,8 +7,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -30,7 +30,7 @@ class ContactListActivity : NoStatusBarActivity() {
         noRequest = findViewById(R.id.contactrequestlist_norequests)
         layout = findViewById(R.id.contactrequestlist_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CONTACT_REQUESTS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CONTACT_REQUESTS), false) {
             buildView()
         }
         buildView()
@@ -38,11 +38,11 @@ class ContactListActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         layout.removeAllViews()
-        if (DataManager.shared.loadingContactRequests) {
+        if (OldDataManager.shared.loadingContactRequests) {
             loading.isGone = false
             noRequest.isGone = true
             layout.isGone = true
-        } else if (DataManager.shared.contactRequests.isNullOrEmpty()) {
+        } else if (OldDataManager.shared.contactRequests.isNullOrEmpty()) {
             loading.isGone = true
             noRequest.isGone = false
             layout.isGone = true
@@ -50,22 +50,22 @@ class ContactListActivity : NoStatusBarActivity() {
             loading.isGone = true
             noRequest.isGone = true
             layout.isGone = false
-            DataManager.shared.contactRequests.ifLet { requests ->
+            OldDataManager.shared.contactRequests.ifLet { requests ->
                 for (request in requests.sortedBy { !it.read.toBoolean() }) {
                     val navarrow = NavArrowButtonBlackBuildable(this)
                     val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                     params.setMargins(0, 16, 0, 16)
                     navarrow.layoutParams = params
                     navarrow.textView.text = "${request.fullName}${request.read.toBoolean().ternary("", " *")}"
-                    navarrow.setLoading(DataManager.shared.loadingEventPreregs)
+                    navarrow.setLoading(OldDataManager.shared.loadingEventPreregs)
                     navarrow.setOnClick {
-                        DataManager.shared.unrelaltedUpdateCallback = {
-                            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CONTACT_REQUESTS), true) {
+                        OldDataManager.shared.unrelaltedUpdateCallback = {
+                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CONTACT_REQUESTS), true) {
                                 buildView()
                             }
                             buildView()
                         }
-                        DataManager.shared.selectedContactRequest = request
+                        OldDataManager.shared.selectedContactRequest = request
                         val intent = Intent(this, ContactDetailsActivity::class.java)
                         startActivity(intent)
                     }

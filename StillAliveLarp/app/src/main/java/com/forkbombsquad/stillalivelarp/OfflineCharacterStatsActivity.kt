@@ -2,7 +2,7 @@ package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
@@ -56,7 +56,7 @@ class OfflineCharacterStatsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.charForSelectedPlayer.ifLet({
+        OldDataManager.shared.charForSelectedPlayer.ifLet({
             name.isGone = false
             player.isGone = false
             startDate.isGone = false
@@ -76,7 +76,7 @@ class OfflineCharacterStatsActivity : NoStatusBarActivity() {
             unshakableResolve.isGone = !it.hasUnshakableResolve()
 
             name.set(it.fullName)
-            player.set(DataManager.shared.selectedPlayer?.fullName ?: "")
+            player.set(OldDataManager.shared.selectedPlayer?.fullName ?: "")
             startDate.set(it.startDate.yyyyMMddToMonthDayYear())
             infection.set("${it.infection}%")
             bullets.set(it.bullets)

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.UpdatePSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
@@ -35,7 +35,7 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
         confirmPw = findViewById(R.id.changeplayerpw_confirm)
         submit = findViewById(R.id.changeplayerpw_submit)
 
-        title.text = "Change Password For ${DataManager.shared.selectedPlayer?.fullName}"
+        title.text = "Change Password For ${OldDataManager.shared.selectedPlayer?.fullName}"
 
         submit.setOnClick {
             if (checkPasswordsMatch()) {
@@ -45,12 +45,12 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
                     val updatePRequest = AdminService.UpdatePAdmin()
                     lifecycleScope.launch {
                         updatePRequest.successfulResponse(UpdatePSP(
-                            playerId = DataManager.shared.selectedPlayer?.id ?: -1,
+                            playerId = OldDataManager.shared.selectedPlayer?.id ?: -1,
                             p = newPw.text.toString()
                         ))
                         .ifLet({
-                            AlertUtils.displaySuccessMessage(this@ChangePlayerPasswordActivity, "Password Successfully Updated For ${DataManager.shared.selectedPlayer?.fullName ?: ""}") { _, _ ->
-                                DataManager.shared.activityToClose?.finish()
+                            AlertUtils.displaySuccessMessage(this@ChangePlayerPasswordActivity, "Password Successfully Updated For ${OldDataManager.shared.selectedPlayer?.fullName ?: ""}") { _, _ ->
+                                OldDataManager.shared.activityToClose?.finish()
                                 finish()
                             }
                         }, {

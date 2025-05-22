@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
@@ -81,7 +81,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     ) { result ->
         if(result.contents != null) {
             globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
-                DataManager.shared.playerCheckOutModel = it
+                OldDataManager.shared.playerCheckOutModel = it
                 buildView()
             }, {
                 AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ ->
@@ -133,7 +133,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         isAlive.valuePickerView.setSelection(0)
 
         checkoutButton.setOnClick {
-            DataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
+            OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
                 val player = barcodeModel.player
                 val character = barcodeModel.character
                 val eventId = barcodeModel.eventId
@@ -178,7 +178,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun checkoutStepOne() {
-        DataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
+        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
             val isNpc = barcodeModel.character == null
             val relevantSkills = barcodeModel.relevantSkills
 
@@ -209,7 +209,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun checkoutStepTwo() {
-        DataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
+        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
             val player = barcodeModel.player
             val character = barcodeModel.character
             val eventId = barcodeModel.eventId
@@ -268,7 +268,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun checkoutStepThree() {
-        DataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
+        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
             val player = barcodeModel.player
             val character = barcodeModel.character
             val eventId = barcodeModel.eventId
@@ -325,7 +325,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun checkoutStepFour(needToAwardExtraXp: Boolean) {
-        DataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
+        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
             val player = barcodeModel.player
             val character = barcodeModel.character
             val eventId = barcodeModel.eventId
@@ -447,7 +447,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.playerCheckOutModel.ifLet {
+        OldDataManager.shared.playerCheckOutModel.ifLet {
             val player = it.player
             val character = it.character
             val eventId = it.eventId

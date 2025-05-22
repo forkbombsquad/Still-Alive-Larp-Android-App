@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.ternary
 
@@ -30,9 +30,9 @@ class ViewEventAttendeesActivity : NoStatusBarActivity() {
         playersLayout.removeAllViews()
         npcLayout.removeAllViews()
 
-        val players = DataManager.shared.allPlayers ?: listOf()
-        val event = DataManager.shared.selectedEvent!!
-        val eventAttendees = DataManager.shared.eventAttendeesForEvent ?: listOf()
+        val players = OldDataManager.shared.allPlayers ?: listOf()
+        val event = OldDataManager.shared.selectedEvent!!
+        val eventAttendees = OldDataManager.shared.eventAttendeesForEvent ?: listOf()
 
         title.text = event.title
 
@@ -49,7 +49,7 @@ class ViewEventAttendeesActivity : NoStatusBarActivity() {
     }
 
     override fun onBackPressed() {
-        DataManager.shared.unrelaltedUpdateCallback()
+        OldDataManager.shared.unrelaltedUpdateCallback()
         super.onBackPressed()
     }
 }

@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.community.ViewPlayerStuffFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
@@ -41,7 +41,7 @@ class CommunityPlayersListFragment : Fragment() {
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_community)
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS), true) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS), true) {
                 buildView(v)
                 pullToRefresh.isRefreshing = false
             }
@@ -49,17 +49,17 @@ class CommunityPlayersListFragment : Fragment() {
         }
 
         buildView(v)
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS), false) {
             buildView(v)
         }
     }
 
     private fun buildView(v: View) {
         layout.removeAllViews()
-        progressBar.isGone = !DataManager.shared.loadingAllPlayers
-        layout.isGone = DataManager.shared.loadingAllPlayers
+        progressBar.isGone = !OldDataManager.shared.loadingAllPlayers
+        layout.isGone = OldDataManager.shared.loadingAllPlayers
 
-        DataManager.shared.allPlayers.ifLet { players ->
+        OldDataManager.shared.allPlayers.ifLet { players ->
             players.alphabetized().forEachIndexed { index, player ->
                 val arrow = NavArrowButtonBlackBuildable(v.context)
                 arrow.textView.text = "${player.fullName}" + (player.isAdmin.uppercase() == "TRUE").ternary(" (Staff)", "")
@@ -68,7 +68,7 @@ class CommunityPlayersListFragment : Fragment() {
                 arrow.layoutParams = params
                 arrow.setLoading(false)
                 arrow.setOnClick {
-                    DataManager.shared.selectedPlayer = player
+                    OldDataManager.shared.selectedPlayer = player
                     val frag = ViewPlayerStuffFragment.newInstance()
                     val transaction = parentFragmentManager.beginTransaction()
                     transaction.add(R.id.container, frag)

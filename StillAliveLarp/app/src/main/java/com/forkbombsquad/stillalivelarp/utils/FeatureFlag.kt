@@ -1,6 +1,6 @@
 package com.forkbombsquad.stillalivelarp.utils
 
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 
 class FeatureFlag(var name: String) {
     companion object {
@@ -10,15 +10,15 @@ class FeatureFlag(var name: String) {
     }
 
     fun isActive(): Boolean {
-        return DataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }?.activeAndroid == "TRUE"
+        return OldDataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }?.activeAndroid == "TRUE"
     }
 
     fun isActiveIos(): Boolean {
-        return DataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }?.activeIos == "TRUE"
+        return OldDataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }?.activeIos == "TRUE"
     }
 
     fun isActiveBoth(): Boolean {
-        val ff = DataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }
+        val ff = OldDataManager.shared.featureFlags?.firstOrNull { it.name.lowercase() == name.lowercase() }
         return ff?.activeIos == "TRUE" && ff.activeAndroid == "TRUE"
     }
 }

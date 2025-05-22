@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 class CreateCharacterActivity : NoStatusBarActivity() {
 
-    private var player: PlayerModel? = DataManager.shared.player
+    private var player: PlayerModel? = OldDataManager.shared.player
 
     private lateinit var bioView: EditText
     private lateinit var nameView: EditText
@@ -76,7 +76,7 @@ class CreateCharacterActivity : NoStatusBarActivity() {
                             )
                         )
                     ).ifLet({
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displayOkMessage(this@CreateCharacterActivity, "Success!","Character named ${it.fullName} created!") { _, _ ->
                             finish()
                         }
@@ -88,8 +88,8 @@ class CreateCharacterActivity : NoStatusBarActivity() {
                 AlertUtils.displayOkMessage(this, "Validation Error(s)", validationResult.getErrorMessages())
             }
         }
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PLAYER), false) {
-            this.player = DataManager.shared.player
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER), false) {
+            this.player = OldDataManager.shared.player
         }
     }
 }

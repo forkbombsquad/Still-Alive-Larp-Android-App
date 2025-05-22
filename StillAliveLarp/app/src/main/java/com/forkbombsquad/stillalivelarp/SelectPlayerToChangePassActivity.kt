@@ -6,8 +6,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -28,14 +28,14 @@ class SelectPlayerToChangePassActivity : NoStatusBarActivity() {
         progressbar = findViewById(R.id.selectplayertochangepass_progressbar)
         layout = findViewById(R.id.selectplayertochangepass_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        if (DataManager.shared.loadingAllPlayers) {
+        if (OldDataManager.shared.loadingAllPlayers) {
             progressbar.isGone = false
             layout.isGone = true
         } else {
@@ -44,7 +44,7 @@ class SelectPlayerToChangePassActivity : NoStatusBarActivity() {
 
             layout.removeAllViews()
 
-            DataManager.shared.allPlayers.ifLet { players ->
+            OldDataManager.shared.allPlayers.ifLet { players ->
                 players.alphabetized().forEachIndexed { index, player ->
                     val arrow = NavArrowButtonBlackBuildable(this)
                     arrow.textView.text = player.fullName
@@ -53,8 +53,8 @@ class SelectPlayerToChangePassActivity : NoStatusBarActivity() {
                     arrow.layoutParams = params
                     arrow.setLoading(false)
                     arrow.setOnClick {
-                        DataManager.shared.selectedPlayer = player
-                        DataManager.shared.activityToClose = this
+                        OldDataManager.shared.selectedPlayer = player
+                        OldDataManager.shared.activityToClose = this
                         val intent = Intent(this, ChangePlayerPasswordActivity::class.java)
                         startActivity(intent)
                     }

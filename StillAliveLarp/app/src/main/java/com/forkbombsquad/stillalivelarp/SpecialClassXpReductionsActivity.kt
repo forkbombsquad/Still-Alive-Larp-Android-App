@@ -6,8 +6,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
@@ -32,20 +32,20 @@ class SpecialClassXpReductionsActivity : NoStatusBarActivity() {
         noRedsText = findViewById(R.id.xpredview_noredtext)
         layout = findViewById(R.id.xpredview_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.XP_REDUCTIONS), true) {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.XP_REDUCTIONS), true) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
                 buildView()
             }
         }
     }
 
     private fun buildView() {
-        title.text = "Class Xp Reductions For\n${DataManager.shared.character?.fullName ?: "Unknown"}"
-        if (DataManager.shared.loadingXpReductions || DataManager.shared.loadingSkills) {
+        title.text = "Class Xp Reductions For\n${OldDataManager.shared.character?.fullName ?: "Unknown"}"
+        if (OldDataManager.shared.loadingXpReductions || OldDataManager.shared.loadingSkills) {
             loading.isGone = false
             noRedsText.isGone = true
             layout.isGone = true
-        } else if (DataManager.shared.xpReductions.isNullOrEmpty()) {
+        } else if (OldDataManager.shared.xpReductions.isNullOrEmpty()) {
             loading.isGone = true
             noRedsText.isGone = false
             layout.isGone = true
@@ -55,8 +55,8 @@ class SpecialClassXpReductionsActivity : NoStatusBarActivity() {
             noRedsText.isGone = true
             layout.isGone = false
 
-            val skills = DataManager.shared.skills ?: listOf()
-            val xpReds = DataManager.shared.xpReductions ?: listOf()
+            val skills = OldDataManager.shared.skills ?: listOf()
+            val xpReds = OldDataManager.shared.xpReductions ?: listOf()
 
             for (xpred in xpReds) {
                 getSkill(xpred, skills).ifLet { skill ->

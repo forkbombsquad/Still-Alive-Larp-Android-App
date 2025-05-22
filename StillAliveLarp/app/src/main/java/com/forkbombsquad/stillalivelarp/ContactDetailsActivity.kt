@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
@@ -45,14 +45,14 @@ class ContactDetailsActivity : NoStatusBarActivity() {
         }
 
         markAsRead.setOnClick {
-            DataManager.shared.selectedContactRequest.ifLet {
+            OldDataManager.shared.selectedContactRequest.ifLet {
                 markAsRead.setLoading(true)
                 val cr = it
                 cr.read = it.read.toBoolean().ternary("FALSE", "TRUE")
                 val updateContactRequest = AdminService.UpdateContactRequest()
                 lifecycleScope.launch {
                     updateContactRequest.successfulResponse(UpdateModelSP(cr)).ifLet({
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@ContactDetailsActivity, "Marked as ${cr.read.toBoolean().ternary("read", "unread")}") { _, _ ->
                             finish()
                         }
@@ -67,7 +67,7 @@ class ContactDetailsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedContactRequest.ifLet {
+        OldDataManager.shared.selectedContactRequest.ifLet {
             name.set(it.fullName)
             email.set(it.emailAddress)
             postal.set(it.postalCode)

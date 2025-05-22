@@ -10,8 +10,8 @@ import android.widget.Spinner
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
@@ -80,17 +80,17 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
             buildView()
         }
 
-        modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.selectedPlannedCharacter)
+        modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.selectedPlannedCharacter)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
-            modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.selectedPlannedCharacter)
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
+            modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.selectedPlannedCharacter)
             buildView()
         }
         buildView()
     }
 
     private fun buildView(loading: Boolean = false) {
-        val character = DataManager.shared.selectedPlannedCharacter
+        val character = OldDataManager.shared.selectedPlannedCharacter
 
         layout.removeAllViews()
 
@@ -136,17 +136,17 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
                             val charTakeSkillRequest = CharacterSkillService.TakePlannedCharacterSkill()
                             lifecycleScope.launch {
                                 charTakeSkillRequest.successfulResponse(CreateModelSP(charSkill)).ifLet({ charSkillModel ->
-                                    val skills: MutableList<CharacterSkillModel> = DataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
+                                    val skills: MutableList<CharacterSkillModel> = OldDataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
                                     skills.add(charSkillModel)
-                                    DataManager.shared.selectedPlannedCharacterCharSkills = skills
-                                    val fs: MutableList<FullSkillModel> = DataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
-                                    fs.add(DataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
-                                    DataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
+                                    OldDataManager.shared.selectedPlannedCharacterCharSkills = skills
+                                    val fs: MutableList<FullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
+                                    fs.add(OldDataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
+                                    OldDataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
 
                                     AlertUtils.displayOkMessage(this@AddPlannedSkillActivity, "Skill Successfully Planned", messageString) { _, _ -> }
-                                    modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.selectedPlannedCharacter)
+                                    modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.selectedPlannedCharacter)
                                     buildView(false)
-                                    DataManager.shared.unrelaltedUpdateCallback()
+                                    OldDataManager.shared.unrelaltedUpdateCallback()
                                 }, {
                                     buildView(false)
                                 })
@@ -182,17 +182,17 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
                         val charTakeSkillRequest = CharacterSkillService.TakePlannedCharacterSkill()
                         lifecycleScope.launch {
                             charTakeSkillRequest.successfulResponse(CreateModelSP(charSkill)).ifLet({ charSkillModel ->
-                                val skills: MutableList<CharacterSkillModel> = DataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
+                                val skills: MutableList<CharacterSkillModel> = OldDataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
                                 skills.add(charSkillModel)
-                                DataManager.shared.selectedPlannedCharacterCharSkills = skills
-                                val fs: MutableList<FullSkillModel> = DataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
-                                fs.add(DataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
-                                DataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
+                                OldDataManager.shared.selectedPlannedCharacterCharSkills = skills
+                                val fs: MutableList<FullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
+                                fs.add(OldDataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
+                                OldDataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
 
                                 AlertUtils.displayOkMessage(this@AddPlannedSkillActivity, "Skill Successfully Planned", messageString) { _, _ -> }
-                                modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.selectedPlannedCharacter)
+                                modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.selectedPlannedCharacter)
                                 buildView(false)
-                                DataManager.shared.unrelaltedUpdateCallback()
+                                OldDataManager.shared.unrelaltedUpdateCallback()
                             }, {
                                 buildView(false)
                             })

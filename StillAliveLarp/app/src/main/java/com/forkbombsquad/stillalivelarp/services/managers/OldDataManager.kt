@@ -47,11 +47,11 @@ import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
-enum class DataManagerType {
+enum class OldDataManagerType {
     PLAYER, CHARACTER, ANNOUNCEMENTS, EVENTS, AWARDS, INTRIGUE, SKILLS, ALL_PLAYERS, ALL_CHARACTERS, CHAR_FOR_SELECTED_PLAYER, CONTACT_REQUESTS, EVENT_ATTENDEES, XP_REDUCTIONS, EVENT_PREREGS, SELECTED_CHAR_XP_REDUCTIONS, INTRIGUE_FOR_SELECTED_EVENT, SELECTED_CHARACTER_GEAR, RULEBOOK, FEATURE_FLAGS, PROFILE_IMAGE, FULL_CHARACTER_FOR_SELECTED_CHARACTER, EVENT_ATTENDEES_FOR_EVENT, SKILL_CATEGORIES, ALL_PLANNED_CHARACTERS, ALL_NPC_CHARACTERS, RESEARCH_PROJECTS
 }
 
-class DataManager private constructor() {
+class OldDataManager private constructor() {
 
     var checkinBarcodeModel: PlayerCheckInBarcodeModel? = null
     var checkoutBarcodeModel: PlayerCheckOutBarcodeModel? = null
@@ -171,7 +171,7 @@ class DataManager private constructor() {
     var loadingResearchProjects = true
     var researchProjects: List<ResearchProjectModel>? = null
 
-    fun load(lifecycleScope: LifecycleCoroutineScope, types: List<DataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
+    fun load(lifecycleScope: LifecycleCoroutineScope, types: List<OldDataManagerType>, forceDownloadIfApplicable: Boolean = false, finishedStep: () -> Unit = {}, finished: () -> Unit) {
         val currentLoadCountIndex = loadCountIndex
         loadCountIndex++
         targetCount.add(currentLoadCountIndex, types.count())
@@ -184,7 +184,7 @@ class DataManager private constructor() {
 
         types.forEach { type ->
             when (type) {
-                DataManagerType.PLAYER -> {
+                OldDataManagerType.PLAYER -> {
                     loadingPlayer = true
                     if (forceDownloadIfApplicable && player?.id != null) {
                         val request = PlayerService.GetPlayer()
@@ -206,7 +206,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.CHARACTER -> {
+                OldDataManagerType.CHARACTER -> {
                     loadingCharacter = true
                     CharacterManager.shared.fetchActiveCharacter(lifecycleScope, forceDownloadIfApplicable) {
                         character = it
@@ -214,7 +214,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.ANNOUNCEMENTS -> {
+                OldDataManagerType.ANNOUNCEMENTS -> {
                     loadingAnnouncements = true
                     AnnouncementManager.shared.getAnnouncements(lifecycleScope, forceDownloadIfApplicable) { anments ->
                         announcements = anments.reversed().ifEmpty {
@@ -232,7 +232,7 @@ class DataManager private constructor() {
                         })
                     }
                 }
-                DataManagerType.EVENTS -> {
+                OldDataManagerType.EVENTS -> {
                     loadingEvents = true
                     EventManager.shared.getEvents(lifecycleScope, forceDownloadIfApplicable) { eventList ->
                         eventList.ifLet({
@@ -246,7 +246,7 @@ class DataManager private constructor() {
                         })
                     }
                 }
-                DataManagerType.AWARDS -> {
+                OldDataManagerType.AWARDS -> {
                     loadingAwards = true
                     if (awards == null || forceDownloadIfApplicable) {
                         val awardRequestService = AwardService.GetAllAwardsForPlayer()
@@ -266,7 +266,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.INTRIGUE -> {
+                OldDataManagerType.INTRIGUE -> {
                     loadingIntrigue = true
                     if (events == null && !loadingEvents) {
                         intrigue = null
@@ -299,7 +299,7 @@ class DataManager private constructor() {
                         })
                     }
                 }
-                DataManagerType.SKILLS -> {
+                OldDataManagerType.SKILLS -> {
                     loadingSkills = true
                     SkillManager.shared.getSkills(lifecycleScope, forceDownloadIfApplicable) {
                         skills = it
@@ -307,7 +307,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.ALL_PLAYERS -> {
+                OldDataManagerType.ALL_PLAYERS -> {
                     loadingAllPlayers = true
                     if (allPlayers == null || forceDownloadIfApplicable) {
                         val request = PlayerService.GetAllPlayers()
@@ -327,7 +327,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.CHAR_FOR_SELECTED_PLAYER -> {
+                OldDataManagerType.CHAR_FOR_SELECTED_PLAYER -> {
                     loadingCharForSelectedPlayer = true
                     selectedPlayer.ifLet({
                         if (charForSelectedPlayer == null || charForSelectedPlayer?.playerId != it.id || forceDownloadIfApplicable) {
@@ -346,7 +346,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     })
                 }
-                DataManagerType.ALL_CHARACTERS -> {
+                OldDataManagerType.ALL_CHARACTERS -> {
                     loadingAllCharacters = true
                     if (allCharacters == null || forceDownloadIfApplicable) {
                         val request = CharacterService.GetAllCharacters()
@@ -366,7 +366,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.CONTACT_REQUESTS -> {
+                OldDataManagerType.CONTACT_REQUESTS -> {
                     loadingContactRequests = true
                     if (contactRequests == null || forceDownloadIfApplicable) {
                         val request = AdminService.GetAllContactRequests()
@@ -386,7 +386,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.EVENT_ATTENDEES -> {
+                OldDataManagerType.EVENT_ATTENDEES -> {
                     loadingEventAttendees = true
                     if (eventAttendeesForPlayer == null || forceDownloadIfApplicable) {
                         val request = EventAttendeeService.GetEventsForPlayer()
@@ -406,7 +406,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.XP_REDUCTIONS -> {
+                OldDataManagerType.XP_REDUCTIONS -> {
                     loadingXpReductions = true
                     if (xpReductions == null || forceDownloadIfApplicable) {
                         val request = SpecialClassXpReductionService.GetXpReductionsForCharacter()
@@ -426,7 +426,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.EVENT_PREREGS -> {
+                OldDataManagerType.EVENT_PREREGS -> {
                     loadingEventPreregs = true
                     if (hasEventsWithoutPreregs() || (forceDownloadIfApplicable && !events.isNullOrEmpty())) {
                         val request = EventPreregService.GetPreregsForEvent()
@@ -456,7 +456,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.SELECTED_CHAR_XP_REDUCTIONS -> {
+                OldDataManagerType.SELECTED_CHAR_XP_REDUCTIONS -> {
                     loadingSelectedCharacterXpReductions = true
                     if (selectedCharacterXpReductions == null || forceDownloadIfApplicable) {
                         val request = SpecialClassXpReductionService.GetXpReductionsForCharacter()
@@ -476,7 +476,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.INTRIGUE_FOR_SELECTED_EVENT -> {
+                OldDataManagerType.INTRIGUE_FOR_SELECTED_EVENT -> {
                     loadingIntrigueForSelectedEvent = true
                     if (intrigueForSelectedEvent == null || forceDownloadIfApplicable) {
                         val request = IntrigueService.GetIntrigueForEvent()
@@ -496,7 +496,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.SELECTED_CHARACTER_GEAR -> {
+                OldDataManagerType.SELECTED_CHARACTER_GEAR -> {
                     loadingSelectedCharacterGear = true
                     if (selectedCharacterGear == null || forceDownloadIfApplicable || selectedCharacterGear?.firstOrNull()?.characterId != selectedChar?.id) {
                         val request = GearService.GetAllGearForCharacter()
@@ -521,7 +521,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.RULEBOOK -> {
+                OldDataManagerType.RULEBOOK -> {
                     loadingRulebook = true
                     if (rulebook == null || forceDownloadIfApplicable) {
                         RulebookManager.shared.getOnlineVersion(lifecycleScope) { rbop ->
@@ -540,7 +540,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.FEATURE_FLAGS -> {
+                OldDataManagerType.FEATURE_FLAGS -> {
                     loadingFeatureFlags = true
                     if (featureFlags == null || forceDownloadIfApplicable) {
                         val request = FeatureFlagService.GetAllFeatureFlags()
@@ -560,7 +560,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.PROFILE_IMAGE -> {
+                OldDataManagerType.PROFILE_IMAGE -> {
                     loadingProfileImage = true
                     if (profileImage == null || forceDownloadIfApplicable || selectedPlayer?.id != profileImage?.playerId) {
                         profileImage = null
@@ -581,7 +581,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER -> {
+                OldDataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER -> {
                     loadingFullCharForSelectedChar = true
                     if (fullCharForSelectedChar == null || forceDownloadIfApplicable || fullCharForSelectedChar?.id != selectedChar?.id) {
                         loadingCharForSelectedPlayer = true
@@ -601,7 +601,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.EVENT_ATTENDEES_FOR_EVENT -> {
+                OldDataManagerType.EVENT_ATTENDEES_FOR_EVENT -> {
                     loadingEventAttendeesForEvent = true
                     if (eventAttendeesForEvent == null || forceDownloadIfApplicable) {
                         val request = EventAttendeeService.GetAttendeesForEvent()
@@ -621,7 +621,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.SKILL_CATEGORIES -> {
+                OldDataManagerType.SKILL_CATEGORIES -> {
                     loadingSkillCategories = true
                     if (skillCategories == null || forceDownloadIfApplicable) {
                         val request = SkillCategoryService.GetAllSkillCategories()
@@ -642,7 +642,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.ALL_PLANNED_CHARACTERS -> {
+                OldDataManagerType.ALL_PLANNED_CHARACTERS -> {
                     loadingAllPlannedCharacters = true
                     if (allPlannedCharacters == null || forceDownloadIfApplicable) {
                         val request = CharacterService.GetAllPlayerCharactersForCharacterType()
@@ -662,7 +662,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.ALL_NPC_CHARACTERS -> {
+                OldDataManagerType.ALL_NPC_CHARACTERS -> {
                     loadingAllNPCCharacters = true
                     if (allNPCCharacters == null || forceDownloadIfApplicable) {
                         val request = CharacterService.GetAllNPCCharacters()
@@ -683,7 +683,7 @@ class DataManager private constructor() {
                         finishedRequest(currentLoadCountIndex)
                     }
                 }
-                DataManagerType.RESEARCH_PROJECTS -> {
+                OldDataManagerType.RESEARCH_PROJECTS -> {
                     loadingResearchProjects = true
                     if (researchProjects == null || forceDownloadIfApplicable) {
                         val request = ResearchProjectService.GetAllResearchProjects()
@@ -839,11 +839,11 @@ class DataManager private constructor() {
     }
 
     companion object {
-        var shared = DataManager()
+        var shared = OldDataManager()
         private set
 
         fun forceReset() {
-            shared = DataManager()
+            shared = OldDataManager()
         }
     }
 

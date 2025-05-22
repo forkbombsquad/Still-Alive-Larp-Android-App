@@ -15,8 +15,8 @@ import com.forkbombsquad.stillalivelarp.OtherCharacterNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
@@ -85,7 +85,7 @@ class ViewPlayerStuffFragment : Fragment() {
             startActivity(intent)
         }
         gear.setOnClick {
-            DataManager.shared.selectedChar = DataManager.shared.charForSelectedPlayer?.getBaseModel()
+            OldDataManager.shared.selectedChar = OldDataManager.shared.charForSelectedPlayer?.getBaseModel()
             val intent = Intent(v.context, ViewGearActivity::class.java)
             startActivity(intent)
         }
@@ -94,10 +94,10 @@ class ViewPlayerStuffFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.loadingProfileImage = true
+        OldDataManager.shared.loadingProfileImage = true
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER, DataManagerType.SKILLS, DataManagerType.SKILL_CATEGORIES), false) {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHAR_FOR_SELECTED_PLAYER, OldDataManagerType.SKILLS, OldDataManagerType.SKILL_CATEGORIES), false) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PROFILE_IMAGE), false) {
                 buildView()
             }
             buildView()
@@ -106,13 +106,13 @@ class ViewPlayerStuffFragment : Fragment() {
     }
 
     private fun buildView() {
-        val opPlayer = DataManager.shared.selectedPlayer
+        val opPlayer = OldDataManager.shared.selectedPlayer
 
-        nativeSkillTree.setLoading(DataManager.shared.loadingSkills || DataManager.shared.loadingSkillCategories)
+        nativeSkillTree.setLoading(OldDataManager.shared.loadingSkills || OldDataManager.shared.loadingSkillCategories)
 
-        profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
-        DataManager.shared.profileImage.ifLet {
-            if (it.playerId == DataManager.shared.selectedPlayer?.id) {
+        profileImageProgressBar.isGone = !OldDataManager.shared.loadingProfileImage
+        OldDataManager.shared.profileImage.ifLet {
+            if (it.playerId == OldDataManager.shared.selectedPlayer?.id) {
                 profileImage.setImageBitmap(it.image.toBitmap())
             }
         }
@@ -121,13 +121,13 @@ class ViewPlayerStuffFragment : Fragment() {
             title.text = player.fullName
             playerStats.isGone = false
 
-            val charLoading = DataManager.shared.loadingCharForSelectedPlayer
+            val charLoading = OldDataManager.shared.loadingCharForSelectedPlayer
             charStats.setLoading(charLoading)
             skills.setLoading(charLoading)
             bio.setLoading(charLoading)
             gear.setLoading(charLoading)
 
-            DataManager.shared.charForSelectedPlayer.ifLet({ character ->
+            OldDataManager.shared.charForSelectedPlayer.ifLet({ character ->
                 charStats.isGone = false
                 skills.isGone = false
                 bio.isGone = !character.approvedBio.toBoolean()

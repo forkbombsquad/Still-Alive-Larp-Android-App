@@ -6,8 +6,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.PreregCell
 import com.forkbombsquad.stillalivelarp.utils.getRegNumbers
@@ -40,7 +40,7 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
         free = findViewById(R.id.viewpreregview_free)
         notAttending = findViewById(R.id.viewpreregview_notAttending)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS, OldDataManagerType.ALL_CHARACTERS), false) {
             buildView()
         }
         buildView()
@@ -49,17 +49,17 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
     private fun buildView() {
         layout.removeAllViews()
         loading.isGone = false
-        DataManager.shared.selectedEvent.ifLet({ event ->
+        OldDataManager.shared.selectedEvent.ifLet({ event ->
             title.text = "Pre-Registration For\n${event.title}"
 
-            if (DataManager.shared.loadingAllCharacters || DataManager.shared.loadingAllPlayers) {
+            if (OldDataManager.shared.loadingAllCharacters || OldDataManager.shared.loadingAllPlayers) {
                 loading.isGone = false
 
             } else {
                 loading.isGone = true
-                val count = DataManager.shared.eventPreregs[event.id]?.count() ?: 0
+                val count = OldDataManager.shared.eventPreregs[event.id]?.count() ?: 0
                 if (count > 0) {
-                    DataManager.shared.eventPreregs[event.id].ifLet { preregs ->
+                    OldDataManager.shared.eventPreregs[event.id].ifLet { preregs ->
 
                         preregs.forEach {
                             val preregCell = PreregCell(this)

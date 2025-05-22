@@ -2,7 +2,7 @@ package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 
 class ActivityTemplate : NoStatusBarActivity() {
 
@@ -14,7 +14,7 @@ class ActivityTemplate : NoStatusBarActivity() {
 
     private fun setupView() {
 
-        DataManager.shared.load(lifecycleScope, listOf(), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(), false) {
             buildView()
         }
         buildView()

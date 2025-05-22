@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -50,7 +50,7 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
             val valResult = validateFields()
             if (!valResult.hasError) {
                 submitUpdateButton.setLoading(true)
-                DataManager.shared.intrigueForSelectedEvent.ifLet({ intrigue ->
+                OldDataManager.shared.intrigueForSelectedEvent.ifLet({ intrigue ->
                     val intrigueUpdate = IntrigueModel(
                         id = intrigue.id,
                         eventId = intrigue.eventId,
@@ -61,9 +61,9 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                     val updateIntrigueRequest = AdminService.UpdateIntrigue()
                     lifecycleScope.launch {
                         updateIntrigueRequest.successfulResponse(UpdateModelSP(intrigueUpdate)).ifLet({ _ ->
-                            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.INTRIGUE_FOR_SELECTED_EVENT), true) {}
+                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.INTRIGUE_FOR_SELECTED_EVENT), true) {}
                             AlertUtils.displaySuccessMessage(this@ManageIntrigueActivity, "Intrigue Updated!") { _, _ ->
-                                DataManager.shared.activityToClose?.finish()
+                                OldDataManager.shared.activityToClose?.finish()
                                 finish()
                             }
                         }, {
@@ -72,7 +72,7 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                     }
                 }, {
                     val intrigueUpdate = IntrigueCreateModel(
-                        eventId = DataManager.shared.selectedEvent?.id ?: -1,
+                        eventId = OldDataManager.shared.selectedEvent?.id ?: -1,
                         investigatorMessage = investigator.text.toString(),
                         interrogatorMessage = interrogator.text.toString(),
                         webOfInformantsMessage = ""
@@ -80,9 +80,9 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
                     val updateIntrigueRequest = AdminService.CreateIntrigue()
                     lifecycleScope.launch {
                         updateIntrigueRequest.successfulResponse(CreateModelSP(intrigueUpdate)).ifLet({ _ ->
-                            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.INTRIGUE_FOR_SELECTED_EVENT), true) {}
+                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.INTRIGUE_FOR_SELECTED_EVENT), true) {}
                             AlertUtils.displaySuccessMessage(this@ManageIntrigueActivity, "Intrigue Created!") { _, _ ->
-                                DataManager.shared.activityToClose?.finish()
+                                OldDataManager.shared.activityToClose?.finish()
                                 finish()
                             }
                         }, {
@@ -95,20 +95,20 @@ class ManageIntrigueActivity : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.INTRIGUE_FOR_SELECTED_EVENT), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.INTRIGUE_FOR_SELECTED_EVENT), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        if (DataManager.shared.loadingIntrigueForSelectedEvent) {
+        if (OldDataManager.shared.loadingIntrigueForSelectedEvent) {
             progressBar.isGone = false
             layout.isGone = true
         } else {
             progressBar.isGone = true
             layout.isGone = false
-            DataManager.shared.intrigueForSelectedEvent.ifLet({ intrigue ->
+            OldDataManager.shared.intrigueForSelectedEvent.ifLet({ intrigue ->
                 title.text = "Update Intrigue"
                 investigator.setText(intrigue.investigatorMessage)
                 interrogator.setText(intrigue.interrogatorMessage)

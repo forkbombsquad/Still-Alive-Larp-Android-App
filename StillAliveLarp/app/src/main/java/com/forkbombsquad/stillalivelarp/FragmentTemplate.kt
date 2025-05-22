@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 
 class FragmentTemplate : Fragment() {
 
@@ -22,7 +22,7 @@ class FragmentTemplate : Fragment() {
     }
 
     private fun setupView(v: View) {
-        DataManager.shared.load(lifecycleScope, listOf(), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(), false) {
             buildView()
         }
         buildView()

@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -23,7 +23,7 @@ class SelectEventForPreregViewActivity : NoStatusBarActivity() {
 
     private fun setupView() {
         layout = findViewById(R.id.selectEventView_layout)
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_PREREGS), true) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS), true) {
             buildView()
         }
         buildView()
@@ -31,7 +31,7 @@ class SelectEventForPreregViewActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         layout.removeAllViews()
-        DataManager.shared.events.ifLet { events ->
+        OldDataManager.shared.events.ifLet { events ->
             events.forEach {
                 if (it.isInFuture()) {
                     val navarrow = NavArrowButtonBlackBuildable(this)
@@ -41,9 +41,9 @@ class SelectEventForPreregViewActivity : NoStatusBarActivity() {
                     navarrow.layoutParams = params
 
                     navarrow.textView.text = "${it.title} - ${it.date.yyyyMMddToMonthDayYear()}"
-                    navarrow.setLoading(DataManager.shared.loadingEventPreregs)
+                    navarrow.setLoading(OldDataManager.shared.loadingEventPreregs)
                     navarrow.setOnClick {
-                        DataManager.shared.selectedEvent = it
+                        OldDataManager.shared.selectedEvent = it
                         val intent = Intent(this, ViewPreregsForEventActivity::class.java)
                         startActivity(intent)
                     }
@@ -56,9 +56,9 @@ class SelectEventForPreregViewActivity : NoStatusBarActivity() {
                     navarrow.layoutParams = params
 
                     navarrow.textView.text = "${it.title} - ${it.date.yyyyMMddToMonthDayYear()}"
-                    navarrow.setLoading(DataManager.shared.loadingEventPreregs)
+                    navarrow.setLoading(OldDataManager.shared.loadingEventPreregs)
                     navarrow.setOnClick {
-                        DataManager.shared.selectedEvent = it
+                        OldDataManager.shared.selectedEvent = it
                         val intent = Intent(this, ViewPreregsForEventActivity::class.java)
                         startActivity(intent)
                     }

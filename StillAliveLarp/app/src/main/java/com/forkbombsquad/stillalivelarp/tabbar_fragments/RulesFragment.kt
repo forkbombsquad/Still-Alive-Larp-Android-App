@@ -12,8 +12,8 @@ import com.forkbombsquad.stillalivelarp.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
@@ -65,20 +65,20 @@ class RulesFragment : Fragment() {
         }
 
         skillTreeDiagramNav.setOnClick {
-            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         skillTreeDiagramDarkNav.setOnClick {
-            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         coreRulebookNav.setOnClick {
             coreRulebookNav.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 coreRulebookNav.setLoading(false)
             }
             val intent = Intent(v.context, ViewRulesActivity::class.java)
@@ -86,31 +86,31 @@ class RulesFragment : Fragment() {
         }
 
         treatingWoundsNav.setOnClick {
-            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         nativeSkillTreeDiagramNav.setOnClick {
             nativeSkillTreeDiagramNav.setLoading(true)
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.SKILL_CATEGORIES), false) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS, OldDataManagerType.SKILL_CATEGORIES), false) {
                 nativeSkillTreeDiagramNav.setLoading(false)
                 val intent = Intent(v.context, NativeSkillTreeActivity::class.java)
                 startActivity(intent)
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.RULEBOOK), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS, OldDataManagerType.RULEBOOK), false) {
             buildView(v)
         }
         buildView(v)
     }
 
     private fun buildView(v: View) {
-        skillListNav.setLoading(DataManager.shared.loadingSkills)
-        skillListNav.isGone = !DataManager.shared.loadingSkills && DataManager.shared.skills == null
-        coreRulebookNav.setLoading(DataManager.shared.loadingRulebook)
-        coreRulebookNav.isGone = !DataManager.shared.loadingRulebook && DataManager.shared.rulebook == null
+        skillListNav.setLoading(OldDataManager.shared.loadingSkills)
+        skillListNav.isGone = !OldDataManager.shared.loadingSkills && OldDataManager.shared.skills == null
+        coreRulebookNav.setLoading(OldDataManager.shared.loadingRulebook)
+        coreRulebookNav.isGone = !OldDataManager.shared.loadingRulebook && OldDataManager.shared.rulebook == null
         handleImages(v)
 
         skillTreeDiagramNav.isGone = !FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()

@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -25,8 +25,8 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        DataManager.shared.selectedPlayer = DataManager.shared.player
-        DataManager.shared.charForSelectedPlayer = DataManager.shared.selectedNPCCharacter
+        OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
+        OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.selectedNPCCharacter
 
         NPCNameText = findViewById(R.id.npcstuff_charName)
         infRating = findViewById(R.id.npcstuff_infection)
@@ -47,7 +47,7 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        val character = DataManager.shared.charForSelectedPlayer
+        val character = OldDataManager.shared.charForSelectedPlayer
         character.ifLet({
             NPCNameText.text = it.fullName.underline()
             bullets.set(it.bullets)

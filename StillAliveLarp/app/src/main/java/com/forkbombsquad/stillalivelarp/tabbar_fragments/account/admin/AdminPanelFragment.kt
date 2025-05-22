@@ -27,8 +27,8 @@ import com.forkbombsquad.stillalivelarp.SelectEventForPreregViewActivity
 import com.forkbombsquad.stillalivelarp.SelectNPCToManageActivity
 import com.forkbombsquad.stillalivelarp.SelectPlayerToAwardActivity
 import com.forkbombsquad.stillalivelarp.SelectPlayerToChangePassActivity
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
@@ -79,7 +79,7 @@ class AdminPanelFragment : Fragment() {
         if(result.contents != null) {
             if (checkInOutState == CHECKIN_STATE) {
                 globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
-                    DataManager.shared.playerCheckInModel = it
+                    OldDataManager.shared.playerCheckInModel = it
                     val intent = Intent(v.context, CheckInPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
@@ -87,7 +87,7 @@ class AdminPanelFragment : Fragment() {
                 })
             } else if (checkInOutState == CHECKOUT_STATE) {
                 globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
-                    DataManager.shared.playerCheckOutModel = it
+                    OldDataManager.shared.playerCheckOutModel = it
                     val intent = Intent(v.context, CheckOutPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
@@ -128,7 +128,7 @@ class AdminPanelFragment : Fragment() {
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS), true, finishedStep = {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS, OldDataManagerType.ALL_CHARACTERS, OldDataManagerType.EVENTS, OldDataManagerType.CONTACT_REQUESTS), true, finishedStep = {
                 buildView()
             }) {
                 buildView()
@@ -214,7 +214,7 @@ class AdminPanelFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_PLAYERS, DataManagerType.ALL_CHARACTERS, DataManagerType.EVENTS, DataManagerType.CONTACT_REQUESTS, DataManagerType.FEATURE_FLAGS, DataManagerType.ALL_NPC_CHARACTERS, DataManagerType.RESEARCH_PROJECTS), true, finishedStep = {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS, OldDataManagerType.ALL_CHARACTERS, OldDataManagerType.EVENTS, OldDataManagerType.CONTACT_REQUESTS, OldDataManagerType.FEATURE_FLAGS, OldDataManagerType.ALL_NPC_CHARACTERS, OldDataManagerType.RESEARCH_PROJECTS), true, finishedStep = {
             buildView()
         }) {
             buildView()
@@ -223,28 +223,28 @@ class AdminPanelFragment : Fragment() {
     }
 
     private fun buildView() {
-        prereg.setLoading(DataManager.shared.loadingEvents)
-        eventManagement.setLoading(DataManager.shared.loadingEvents)
-        giveClassXpRed.setLoading(DataManager.shared.loadingAllCharacters)
-        awardPlayer.setLoading(DataManager.shared.loadingAllPlayers)
-        awardChar.setLoading(DataManager.shared.loadingAllCharacters)
-        manageGear.setLoading(DataManager.shared.loadingAllCharacters)
-        manageIntrigue.setLoading(DataManager.shared.loadingEvents)
-        approveBios.setLoading(DataManager.shared.loadingAllCharacters)
-        contactRequests.setLoading(DataManager.shared.loadingContactRequests)
-        updatePass.setLoading(DataManager.shared.loadingAllCharacters)
-        featureFlagManagement.setLoading(DataManager.shared.loadingFeatureFlags)
-        refundSkills.setLoading(DataManager.shared.loadingAllCharacters)
-        manageNPCs.setLoading(DataManager.shared.loadingAllNPCCharacters)
-        researchProjects.setLoading(DataManager.shared.loadingResearchProjects)
+        prereg.setLoading(OldDataManager.shared.loadingEvents)
+        eventManagement.setLoading(OldDataManager.shared.loadingEvents)
+        giveClassXpRed.setLoading(OldDataManager.shared.loadingAllCharacters)
+        awardPlayer.setLoading(OldDataManager.shared.loadingAllPlayers)
+        awardChar.setLoading(OldDataManager.shared.loadingAllCharacters)
+        manageGear.setLoading(OldDataManager.shared.loadingAllCharacters)
+        manageIntrigue.setLoading(OldDataManager.shared.loadingEvents)
+        approveBios.setLoading(OldDataManager.shared.loadingAllCharacters)
+        contactRequests.setLoading(OldDataManager.shared.loadingContactRequests)
+        updatePass.setLoading(OldDataManager.shared.loadingAllCharacters)
+        featureFlagManagement.setLoading(OldDataManager.shared.loadingFeatureFlags)
+        refundSkills.setLoading(OldDataManager.shared.loadingAllCharacters)
+        manageNPCs.setLoading(OldDataManager.shared.loadingAllNPCCharacters)
+        researchProjects.setLoading(OldDataManager.shared.loadingResearchProjects)
 
-        DataManager.shared.allCharacters.ifLet({
+        OldDataManager.shared.allCharacters.ifLet({
             approveBios.setNotificationBubble(getNumberOfBiosThatNeedApproval(it))
         }, {
             approveBios.setNotificationBubble(null)
         })
 
-        DataManager.shared.contactRequests.ifLet({
+        OldDataManager.shared.contactRequests.ifLet({
             contactRequests.setNotificationBubble(getNumberUnreadContacts(it))
         }, {
             contactRequests.setNotificationBubble(null)

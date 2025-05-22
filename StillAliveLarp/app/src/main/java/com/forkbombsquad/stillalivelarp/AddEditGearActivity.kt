@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonListModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
@@ -49,7 +49,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        editGear = DataManager.shared.gearToEdit
+        editGear = OldDataManager.shared.gearToEdit
 
         title = findViewById(R.id.addgear_title)
         nameField = findViewById(R.id.addgear_name)
@@ -93,9 +93,9 @@ class AddEditGearActivity : NoStatusBarActivity() {
             submit.setLoading(true)
             val fieldValidation = validateFields()
             if (!fieldValidation.hasError) {
-                DataManager.shared.selectedChar.ifLet { char ->
+                OldDataManager.shared.selectedChar.ifLet { char ->
 
-                    val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
+                    val gearList = OldDataManager.shared.selectedCharacterGear ?: arrayOf()
                     val gear = gearList.firstOrNull()
                     val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
                     if (gear != null) {
@@ -143,8 +143,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                        DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     } else {
                         // Create New Gear json list
@@ -161,8 +161,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val newGearModel = GearModel(-1, char.id, toJson)
-                        DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     }
                 }
@@ -174,9 +174,9 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
         delete.setOnClick {
             delete.setLoading(true)
-            DataManager.shared.selectedChar.ifLet { char ->
+            OldDataManager.shared.selectedChar.ifLet { char ->
 
-                val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
+                val gearList = OldDataManager.shared.selectedCharacterGear ?: arrayOf()
                 val gear = gearList.firstOrNull()
                 val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
                 if (gear != null) {
@@ -195,8 +195,8 @@ class AddEditGearActivity : NoStatusBarActivity() {
                     val toJson: String = globalToJson(gearJsonListModel)
 
                     val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                    DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
-                    DataManager.shared.unrelaltedUpdateCallback()
+                    OldDataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                    OldDataManager.shared.unrelaltedUpdateCallback()
                     finish()
                 }
             }
@@ -205,7 +205,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedChar?.ifLet { char ->
+        OldDataManager.shared.selectedChar?.ifLet { char ->
             title.text = "Add Gear For ${char.fullName}"
             editGear.ifLet { eg ->
                 title.text = "Edit Gear For ${char.fullName}"

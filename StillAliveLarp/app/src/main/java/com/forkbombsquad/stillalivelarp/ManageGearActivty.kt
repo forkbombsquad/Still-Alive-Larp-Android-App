@@ -11,8 +11,8 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -49,8 +49,8 @@ class ManageGearActivty : NoStatusBarActivity() {
         submitButton = findViewById(R.id.gear_submitButton)
 
         addNew.setOnClick {
-            DataManager.shared.gearToEdit = null
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.gearToEdit = null
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 gearModified = true
                 buildView()
             }
@@ -61,7 +61,7 @@ class ManageGearActivty : NoStatusBarActivity() {
         submitButton.setOnClick {
             if (gearModified) {
                 submitButton.setLoadingWithText("Organizing Gear...")
-                val gear = DataManager.shared.selectedCharacterGear?.firstOrNull()
+                val gear = OldDataManager.shared.selectedCharacterGear?.firstOrNull()
                 if (gear != null) {
                     if (gear.id == -1) {
                         // Create New List
@@ -70,7 +70,7 @@ class ManageGearActivty : NoStatusBarActivity() {
                         submitButton.setLoadingWithText("Creating Gear Listing...")
                         lifecycleScope.launch {
                             request.successfulResponse(CreateModelSP(createModel)).ifLet { newGearModel ->
-                                DataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                                OldDataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
                                 AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Listing Created!") { _, _ ->
                                     submitButton.setLoading(false)
                                     gearModified = false
@@ -84,7 +84,7 @@ class ManageGearActivty : NoStatusBarActivity() {
                         submitButton.setLoadingWithText("Updating Gear...")
                         lifecycleScope.launch {
                             request.successfulResponse(UpdateModelSP(gear)).ifLet { updatedGearModel ->
-                                DataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                                OldDataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
                                 AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Changes Committed!") { _, _ ->
                                     submitButton.setLoading(false)
                                     gearModified = false
@@ -97,15 +97,15 @@ class ManageGearActivty : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SELECTED_CHARACTER_GEAR), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        title.text = "Manage Gear For ${DataManager.shared.selectedChar?.fullName ?: ""}"
-        if (DataManager.shared.loadingSelectedCharacterGear) {
+        title.text = "Manage Gear For ${OldDataManager.shared.selectedChar?.fullName ?: ""}"
+        if (OldDataManager.shared.loadingSelectedCharacterGear) {
             progressbar.isGone = false
             outerLayout.isGone = true
             submitButton.isGone = true
@@ -116,7 +116,7 @@ class ManageGearActivty : NoStatusBarActivity() {
             submitButton.isGone = !gearModified
 
             innerLayout.removeAllViews()
-            val gearList = DataManager.shared.getGearOrganzied()
+            val gearList = OldDataManager.shared.getGearOrganzied()
             gearList.forEach { (key, list) ->
                 val textView = TextView(this)
                 val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -135,8 +135,8 @@ class ManageGearActivty : NoStatusBarActivity() {
                     params.setMargins(0, 8, 0, 8)
                     gearCell.layoutParams = params
                     gearCell.setOnClick {
-                        DataManager.shared.gearToEdit = g
-                        DataManager.shared.unrelaltedUpdateCallback = {
+                        OldDataManager.shared.gearToEdit = g
+                        OldDataManager.shared.unrelaltedUpdateCallback = {
                             gearModified = true
                             buildView()
                         }

@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
@@ -56,8 +56,8 @@ class CharacterPlannerSkillListActivity : NoStatusBarActivity() {
         progressBar = findViewById(R.id.skillplan_progressBar)
 
         addNewButton.setOnClickListener {
-            if (!DataManager.shared.loadingSkills) {
-                DataManager.shared.unrelaltedUpdateCallback = {
+            if (!OldDataManager.shared.loadingSkills) {
+                OldDataManager.shared.unrelaltedUpdateCallback = {
                     // Make sure this page updates when skills update
                     createViews()
                 }
@@ -72,7 +72,7 @@ class CharacterPlannerSkillListActivity : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
             lifecycleScope.launch(Dispatchers.IO) {
                 createViews()
             }
@@ -90,7 +90,7 @@ class CharacterPlannerSkillListActivity : NoStatusBarActivity() {
         }
         skillCells = mutableListOf()
 
-        getSortedSkills(DataManager.shared.selectedPlannedCharacter?.skills ?: arrayOf()).forEachIndexed { index, it ->
+        getSortedSkills(OldDataManager.shared.selectedPlannedCharacter?.skills ?: arrayOf()).forEachIndexed { index, it ->
             val cell = SkillCell(this)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -106,8 +106,8 @@ class CharacterPlannerSkillListActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        title.text = "${DataManager.shared.selectedPlannedCharacter?.fullName ?: "Character"}'s\nPlanned Skills"
-        DataManager.shared.selectedPlannedCharacterCharSkills.ifLet {
+        title.text = "${OldDataManager.shared.selectedPlannedCharacter?.fullName ?: "Character"}'s\nPlanned Skills"
+        OldDataManager.shared.selectedPlannedCharacterCharSkills.ifLet {
             var xpCount = 0
             var ppCount = 0
             var ft1sCount = 0

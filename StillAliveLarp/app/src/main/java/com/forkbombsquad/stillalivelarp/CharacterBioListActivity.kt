@@ -7,8 +7,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 
 class CharacterBioListActivity : NoStatusBarActivity() {
@@ -28,7 +28,7 @@ class CharacterBioListActivity : NoStatusBarActivity() {
         nobios = findViewById(R.id.bioapproval_nobios)
         layout = findViewById(R.id.bioapproval_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_CHARACTERS, DataManagerType.ALL_PLAYERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_CHARACTERS, OldDataManagerType.ALL_PLAYERS), false) {
             buildView()
         }
         buildView()
@@ -37,8 +37,8 @@ class CharacterBioListActivity : NoStatusBarActivity() {
     private fun buildView() {
         layout.removeAllViews()
         val chars =
-            (DataManager.shared.allCharacters ?: listOf()).filter { !it.approvedBio.toBoolean() && it.bio.trim().isNotEmpty() }
-        if (DataManager.shared.loadingAllCharacters || DataManager.shared.loadingAllPlayers) {
+            (OldDataManager.shared.allCharacters ?: listOf()).filter { !it.approvedBio.toBoolean() && it.bio.trim().isNotEmpty() }
+        if (OldDataManager.shared.loadingAllCharacters || OldDataManager.shared.loadingAllPlayers) {
             loading.isGone = false
             nobios.isGone = true
             layout.isGone = true
@@ -57,16 +57,16 @@ class CharacterBioListActivity : NoStatusBarActivity() {
                 navarrow.layoutParams = params
 
                 navarrow.textView.text = char.fullName
-                navarrow.setLoading(DataManager.shared.loadingEventPreregs)
+                navarrow.setLoading(OldDataManager.shared.loadingEventPreregs)
                 navarrow.setOnClick {
-                    DataManager.shared.unrelaltedUpdateCallback = {
-                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_CHARACTERS), true) {
+                    OldDataManager.shared.unrelaltedUpdateCallback = {
+                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_CHARACTERS), true) {
                             buildView()
                         }
                         buildView()
                     }
-                    DataManager.shared.selectedPlayer = DataManager.shared.allPlayers?.firstOrNull { it.id == char.playerId }
-                    DataManager.shared.selectedChar = char
+                    OldDataManager.shared.selectedPlayer = OldDataManager.shared.allPlayers?.firstOrNull { it.id == char.playerId }
+                    OldDataManager.shared.selectedChar = char
                     val intent = Intent(this, ApproveBioActivity::class.java)
                     startActivity(intent)
                 }
@@ -76,7 +76,7 @@ class CharacterBioListActivity : NoStatusBarActivity() {
     }
 
     override fun onBackPressed() {
-        DataManager.shared.unrelaltedUpdateCallback()
+        OldDataManager.shared.unrelaltedUpdateCallback()
         super.onBackPressed()
     }
 }

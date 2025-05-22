@@ -9,8 +9,8 @@ import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.TakeClassSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -45,29 +45,29 @@ class SelectSkillForClassXpReductionActivity : NoStatusBarActivity() {
             buildView()
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHAR_XP_REDUCTIONS), true) {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SELECTED_CHAR_XP_REDUCTIONS), true) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
                 buildView()
             }
         }
     }
 
     private fun buildView() {
-        title.text = "Select Skill For Xp Reduction For ${DataManager.shared.selectedChar?.fullName ?: "Unknown"}"
+        title.text = "Select Skill For Xp Reduction For ${OldDataManager.shared.selectedChar?.fullName ?: "Unknown"}"
         layout.removeAllViews()
-        DataManager.shared.selectedCharacterXpReductions.ifLet({ xpReds ->
+        OldDataManager.shared.selectedCharacterXpReductions.ifLet({ xpReds ->
             loading.isGone = true
             searchView.isGone = false
             layout.isGone = false
-            getFilteredSkills(DataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
+            getFilteredSkills(OldDataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
                 val cell = SkillCell(this)
                 cell.setupForXpReduction(it, xpReds.firstOrNull { red -> red.skillId == it.id }) { skill ->
                     cell.purchaseButton.setLoading(true)
                     val xpRedRequest = AdminService.GiveXpReduction()
                     lifecycleScope.launch {
-                        xpRedRequest.successfulResponse(TakeClassSP(DataManager.shared.selectedChar?.id ?: -1, skill.id)).ifLet({ xpReduction ->
-                            AlertUtils.displayOkMessage(this@SelectSkillForClassXpReductionActivity, "Successfully Added Skill Xp Reduction", "${skill.name} now costs ${max(1, skill.xpCost.toInt() - xpReduction.xpReduction.toInt())}xp for ${DataManager.shared.selectedChar?.fullName ?: "Unknown"}") { _, _ ->
-                                DataManager.shared.activityToClose?.finish()
+                        xpRedRequest.successfulResponse(TakeClassSP(OldDataManager.shared.selectedChar?.id ?: -1, skill.id)).ifLet({ xpReduction ->
+                            AlertUtils.displayOkMessage(this@SelectSkillForClassXpReductionActivity, "Successfully Added Skill Xp Reduction", "${skill.name} now costs ${max(1, skill.xpCost.toInt() - xpReduction.xpReduction.toInt())}xp for ${OldDataManager.shared.selectedChar?.fullName ?: "Unknown"}") { _, _ ->
+                                OldDataManager.shared.activityToClose?.finish()
                                 finish()
                             }
                         }, {

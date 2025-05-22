@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
@@ -31,7 +31,7 @@ class NPCListActivity : NoStatusBarActivity() {
         rewardReduction = findViewById(R.id.npcs_lootRatio)
         layout = findViewById(R.id.npcs_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_NPC_CHARACTERS), false) {
             buildView()
         }
         buildView()
@@ -40,7 +40,7 @@ class NPCListActivity : NoStatusBarActivity() {
     private fun buildView() {
         layout.removeAllViews()
 
-        DataManager.shared.allNPCCharacters.ifLet { chars ->
+        OldDataManager.shared.allNPCCharacters.ifLet { chars ->
             val living = chars.filter { it.isAlive.toBoolean() }
 
             livingNPCs.set("${living.count()} / 10")
@@ -56,7 +56,7 @@ class NPCListActivity : NoStatusBarActivity() {
                 arrow.setOnClick {
                     arrow.setLoading(true)
                     CharacterManager.shared.fetchFullCharacter(lifecycleScope, char.id) {
-                        DataManager.shared.selectedNPCCharacter = it
+                        OldDataManager.shared.selectedNPCCharacter = it
                         arrow.setLoading(false)
                         val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
                         startActivity(intent)
@@ -74,7 +74,7 @@ class NPCListActivity : NoStatusBarActivity() {
                 arrow.setOnClick {
                     arrow.setLoading(true)
                     CharacterManager.shared.fetchFullCharacter(lifecycleScope, char.id) {
-                        DataManager.shared.selectedNPCCharacter = it
+                        OldDataManager.shared.selectedNPCCharacter = it
                         arrow.setLoading(false)
                         val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
                         startActivity(intent)

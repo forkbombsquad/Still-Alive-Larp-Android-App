@@ -12,7 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.GearService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
@@ -52,7 +52,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
     }
 
     private fun deleteCharSkills() {
-        DataManager.shared.character.ifLet({ char ->
+        OldDataManager.shared.character.ifLet({ char ->
             deleteAccount.setLoadingWithText("Deleting Skills")
             val deleteSkillsRequest = CharacterSkillService.DeleteCharacterSkills()
             lifecycleScope.launch {
@@ -68,7 +68,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
     }
 
     private fun deleteCharGear() {
-        DataManager.shared.character.ifLet({ char ->
+        OldDataManager.shared.character.ifLet({ char ->
             deleteAccount.setLoadingWithText("Deleting Gear")
             val deleteGearRequest = GearService.DeleteGear()
             lifecycleScope.launch {
@@ -84,7 +84,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
     }
 
     private fun deleteSpecialClassXpReductions() {
-        DataManager.shared.character.ifLet({ char ->
+        OldDataManager.shared.character.ifLet({ char ->
             deleteAccount.setLoadingWithText("Deleting Xp Reductions")
             val deleteXpRedsRequest = SpecialClassXpReductionService.DeleteXpReductionsForCharacter()
             lifecycleScope.launch {
@@ -151,7 +151,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
         deleteAccount.setLoadingWithText("Deleting Profile Photos")
         val request = ProfileImageService.DeleteProfileImages()
         lifecycleScope.launch {
-            request.successfulResponse(IdSP(DataManager.shared.player?.id ?: -1)).ifLet({ _ ->
+            request.successfulResponse(IdSP(OldDataManager.shared.player?.id ?: -1)).ifLet({ _ ->
                 this@ManageAccountActivity.deletePlayer()
             }, {
                 this@ManageAccountActivity.deletePlayer()

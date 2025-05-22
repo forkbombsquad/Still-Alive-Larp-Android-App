@@ -11,8 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -61,12 +61,12 @@ class EditProfileImageActivity : NoStatusBarActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         deleteButton.setOnClick {
-            DataManager.shared.selectedPlayer.ifLet {
+            OldDataManager.shared.selectedPlayer.ifLet {
                 startLoading()
                 val request = ProfileImageService.DeleteProfileImages()
                 lifecycleScope.launch {
                     request.successfulResponse(IdSP(it.id), true).ifLet({
-                        DataManager.shared.profileImage = null
+                        OldDataManager.shared.profileImage = null
                         AlertUtils.displaySuccessMessage(this@EditProfileImageActivity, "Profile Image Deleted")
                         stopLoading()
                         buildView()
@@ -79,7 +79,7 @@ class EditProfileImageActivity : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.PROFILE_IMAGE), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PROFILE_IMAGE), false) {
             buildView()
         }
         buildView()
@@ -98,22 +98,22 @@ class EditProfileImageActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        profileImageProgressBar.isGone = !DataManager.shared.loadingProfileImage
+        profileImageProgressBar.isGone = !OldDataManager.shared.loadingProfileImage
 
-        DataManager.shared.profileImage.ifLet {
+        OldDataManager.shared.profileImage.ifLet {
             profileImage.setImageBitmap(it.image.toBitmap())
         }
     }
     private fun setImage(bitmap: Bitmap) {
         startLoading()
-        DataManager.shared.selectedPlayer.ifLet {
-            if (DataManager.shared.profileImage == null || DataManager.shared.profileImage?.playerId != it.id) {
+        OldDataManager.shared.selectedPlayer.ifLet {
+            if (OldDataManager.shared.profileImage == null || OldDataManager.shared.profileImage?.playerId != it.id) {
                 // Create
                 val request = ProfileImageService.CreateProfileImage()
                 lifecycleScope.launch {
                     request.successfulResponse(CreateModelSP(ProfileImageCreateModel(it.id, bitmap.base64String()))).ifLet({ profileImage ->
-                        DataManager.shared.profileImage = profileImage
-                        DataManager.shared.loadingProfileImage = false
+                        OldDataManager.shared.profileImage = profileImage
+                        OldDataManager.shared.loadingProfileImage = false
                         stopLoading()
                         buildView()
                     }, {
@@ -126,9 +126,9 @@ class EditProfileImageActivity : NoStatusBarActivity() {
                 // Update
                 val request = ProfileImageService.UpdateProfileImage()
                 lifecycleScope.launch {
-                    request.successfulResponse(UpdateModelSP(ProfileImageModel(DataManager.shared.profileImage?.id ?: 0, it.id, bitmap.base64String()))).ifLet({ profileImage ->
-                        DataManager.shared.profileImage = profileImage
-                        DataManager.shared.loadingProfileImage = false
+                    request.successfulResponse(UpdateModelSP(ProfileImageModel(OldDataManager.shared.profileImage?.id ?: 0, it.id, bitmap.base64String()))).ifLet({ profileImage ->
+                        OldDataManager.shared.profileImage = profileImage
+                        OldDataManager.shared.loadingProfileImage = false
                         stopLoading()
                         buildView()
                     }, {
@@ -141,7 +141,7 @@ class EditProfileImageActivity : NoStatusBarActivity() {
         }
     }
     override fun onBackPressed() {
-        DataManager.shared.unrelaltedUpdateCallback()
+        OldDataManager.shared.unrelaltedUpdateCallback()
         super.onBackPressed()
     }
 }

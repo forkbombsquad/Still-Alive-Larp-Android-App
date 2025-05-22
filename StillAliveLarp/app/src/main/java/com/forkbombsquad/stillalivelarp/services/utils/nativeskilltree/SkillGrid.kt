@@ -17,8 +17,8 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
@@ -323,7 +323,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         trueGrid = calculateTrueGrid()
 
         if (personal && allowPurchase) {
-            purchaseableSkills = getAvailableSkills(skills, DataManager.shared.selectedPlayer, DataManager.shared.charForSelectedPlayer, DataManager.shared.xpReductions)
+            purchaseableSkills = getAvailableSkills(skills, OldDataManager.shared.selectedPlayer, OldDataManager.shared.charForSelectedPlayer, OldDataManager.shared.xpReductions)
         }
     }
 
@@ -433,7 +433,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         var gradient: LinearGradient? = null
         when (skill.skillTypeId.toInt()) {
             Constants.SkillTypes.combat -> {
-                if ((personal && DataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                if ((personal && OldDataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
                     // Normal Color
                     gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRed, darkRed, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -445,7 +445,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 }
             }
             Constants.SkillTypes.profession -> {
-                if ((personal && DataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                if ((personal && OldDataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
                     // Normal Color
                     gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreen, darkGreen, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -457,7 +457,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                 }
             }
             Constants.SkillTypes.talent -> {
-                if ((personal && DataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                if ((personal && OldDataManager.shared.charForSelectedPlayer?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
                     // Normal Color
                     gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlue, darkBlue, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -1156,8 +1156,8 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         dotHandler.post(dotRunnable)
         var msgStr = "It will cost you "
         val skl = pb.skill
-        val player = DataManager.shared.selectedPlayer!!
-        val char = DataManager.shared.charForSelectedPlayer!!
+        val player = OldDataManager.shared.selectedPlayer!!
+        val char = OldDataManager.shared.charForSelectedPlayer!!
         var xpSpent = 0
         var fsSpent = 0
         var ppSpent = 0
@@ -1185,14 +1185,14 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
             val charTakeSkillRequest = CharacterSkillService.TakeCharacterSkill()
             lifecycleScope.launch {
                 charTakeSkillRequest.successfulResponse(CharacterSkillCreateSP(player.id, charSkill)).ifLet({
-                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHARACTER, DataManagerType.PLAYER), true) {
+                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHARACTER, OldDataManagerType.PLAYER), true) {
                         AlertUtils.displayOkMessage(context, "${skl.name} Purchased!", "") { _, _ -> }
 
                         val xp = player.experience.toInt()
                         val fs = player.freeTier1Skills.toInt()
                         val pp = player.prestigePoints.toInt()
 
-                        DataManager.shared.selectedPlayer = PlayerModel(
+                        OldDataManager.shared.selectedPlayer = PlayerModel(
                             id = player.id,
                             username = player.username,
                             fullName = player.fullName,
@@ -1208,14 +1208,14 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
                             isAdmin = player.isAdmin
                         )
 
-                        DataManager.shared.charForSelectedPlayer!!.skills += arrayOf(skl.toFullSkillModel())
-                        purchaseableSkills = getAvailableSkills(skills, DataManager.shared.selectedPlayer, DataManager.shared.charForSelectedPlayer, DataManager.shared.xpReductions)
+                        OldDataManager.shared.charForSelectedPlayer!!.skills += arrayOf(skl.toFullSkillModel())
+                        purchaseableSkills = getAvailableSkills(skills, OldDataManager.shared.selectedPlayer, OldDataManager.shared.charForSelectedPlayer, OldDataManager.shared.xpReductions)
                         for (i in 0 until trueGrid.count()) {
                             trueGrid[i].expanded = false
                         }
                         trueGrid = calculateTrueGrid()
                         recalculateDottedLines()
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         makingPurchase = false
                         dotHandler.removeCallbacks(dotRunnable)
                         invalidate()

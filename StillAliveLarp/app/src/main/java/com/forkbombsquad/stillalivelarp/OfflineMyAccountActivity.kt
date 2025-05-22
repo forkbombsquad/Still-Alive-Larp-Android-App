@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
@@ -53,7 +53,7 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
 
         allSkillsNav.setOnClick {
             allSkillsNav.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 allSkillsNav.setLoading(false)
             }
             val intent = Intent(this, OfflineViewAllSkillsActivity::class.java)
@@ -73,70 +73,70 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         }
         allNPCsNav.setOnClick {
             allNPCsNav.setLoading(true)
-            DataManager.shared.allOfflineNPCCharacters = SharedPrefsManager.shared.getNPCs()
+            OldDataManager.shared.allOfflineNPCCharacters = SharedPrefsManager.shared.getNPCs()
             val intent = Intent(this, OfflineNPCListActivity::class.java)
             startActivity(intent)
             allNPCsNav.setLoading(false)
         }
         if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
             skillTreeNav.setOnClick {
-                DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+                OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
                 val intent = Intent(this, SAImageViewActivity::class.java)
                 startActivity(intent)
             }
             skillTreeDarkNav.setOnClick {
-                DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+                OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
                 val intent = Intent(this, SAImageViewActivity::class.java)
                 startActivity(intent)
             }
         }
         treatingWoundsNav.setOnClick {
-            DataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
             val intent = Intent(this, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         playerStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            DataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
             val intent = Intent(this, OfflinePlayerStatsActivity::class.java)
             startActivity(intent)
         }
         charStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            DataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            DataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineCharacterStatsActivity::class.java)
             startActivity(intent)
         }
         skillViewNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            DataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            DataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineViewSkillsActivity::class.java)
             startActivity(intent)
         }
         bioNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            DataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            DataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineViewBioActivity::class.java)
             startActivity(intent)
         }
         gearNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            DataManager.shared.selectedChar = SharedPrefsManager.shared.getCharacter()?.getBaseModel()
-            DataManager.shared.selectedCharacterGear = SharedPrefsManager.shared.getGear()
+            OldDataManager.shared.selectedChar = SharedPrefsManager.shared.getCharacter()?.getBaseModel()
+            OldDataManager.shared.selectedCharacterGear = SharedPrefsManager.shared.getGear()
             val intent = Intent(this, OfflineViewGearActivity::class.java)
             startActivity(intent)
         }
         rulesNav.setOnClick {
             // Set info in data manager so that things populate correctly
             rulesNav.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 rulesNav.setLoading(false)
             }
-            DataManager.shared.rulebook = RulebookManager.shared.getOfflineVersion()
+            OldDataManager.shared.rulebook = RulebookManager.shared.getOfflineVersion()
             val intent = Intent(this, ViewRulesActivity::class.java)
             startActivity(intent)
         }

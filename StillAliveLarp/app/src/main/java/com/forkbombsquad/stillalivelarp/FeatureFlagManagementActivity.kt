@@ -7,8 +7,8 @@ import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlagView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 
@@ -31,13 +31,13 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
         pullToRefresh = findViewById(R.id.pulltorefresh_featureflagmanagement)
 
         pullToRefresh.setOnRefreshListener {
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FEATURE_FLAGS), true) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FEATURE_FLAGS), true) {
                 buildView()
                 pullToRefresh.isRefreshing = false
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FEATURE_FLAGS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FEATURE_FLAGS), false) {
             buildView()
         }
         buildView()
@@ -45,7 +45,7 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         layout.removeAllViews()
-        if (DataManager.shared.loadingFeatureFlags) {
+        if (OldDataManager.shared.loadingFeatureFlags) {
             loading.isGone = false
             layout.isGone = true
         } else {
@@ -58,19 +58,19 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
-                DataManager.shared.unrelaltedUpdateCallback = {
-                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FEATURE_FLAGS), true) {
+                OldDataManager.shared.unrelaltedUpdateCallback = {
+                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FEATURE_FLAGS), true) {
                         buildView()
                     }
                     buildView()
                 }
-                DataManager.shared.selectedFeatureFlag = null
+                OldDataManager.shared.selectedFeatureFlag = null
                 val intent = Intent(this, CreateEditFeatureFlagActivity::class.java)
                 startActivity(intent)
             }
             layout.addView(arrow)
 
-            for (ff in DataManager.shared.featureFlags ?: arrayOf()) {
+            for (ff in OldDataManager.shared.featureFlags ?: arrayOf()) {
                 val flagView = FeatureFlagView(this)
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 16, 0, 16)
@@ -78,13 +78,13 @@ class FeatureFlagManagementActivity : NoStatusBarActivity() {
 
                 flagView.set(ff)
                 flagView.setOnClickEdit {
-                    DataManager.shared.unrelaltedUpdateCallback = {
-                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FEATURE_FLAGS), true) {
+                    OldDataManager.shared.unrelaltedUpdateCallback = {
+                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FEATURE_FLAGS), true) {
                             buildView()
                         }
                         buildView()
                     }
-                    DataManager.shared.selectedFeatureFlag = ff
+                    OldDataManager.shared.selectedFeatureFlag = ff
                     val intent = Intent(this, CreateEditFeatureFlagActivity::class.java)
                     startActivity(intent)
                 }

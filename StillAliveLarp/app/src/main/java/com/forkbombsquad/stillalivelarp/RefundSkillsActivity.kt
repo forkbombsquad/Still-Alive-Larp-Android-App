@@ -8,8 +8,8 @@ import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.RefundSkillSP
@@ -37,16 +37,16 @@ class RefundSkillsActivity : NoStatusBarActivity() {
         layout = findViewById(R.id.refundskills_layout)
         loadingBar = findViewById(R.id.refundskills_progressbar)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER), false) {
             buildView()
         }
         buildView()
     }
     private fun buildView() {
-        title.text = "${DataManager.shared.selectedChar?.fullName ?: ""}'s\nRefundable Skills"
-        loadingBar.isGone = !DataManager.shared.loadingFullCharForSelectedChar
+        title.text = "${OldDataManager.shared.selectedChar?.fullName ?: ""}'s\nRefundable Skills"
+        loadingBar.isGone = !OldDataManager.shared.loadingFullCharForSelectedChar
         layout.removeAllViews()
-        DataManager.shared.fullCharForSelectedChar.ifLet { char ->
+        OldDataManager.shared.fullCharForSelectedChar.ifLet { char ->
             char.skills.toList().filter { it.xpCost.toInt() != 0 }.alphabetized().forEachIndexed { index, skill ->
                 val arrow = NavArrowButtonBlackBuildable(this)
                 arrow.textView.text = skill.name
@@ -90,8 +90,8 @@ class RefundSkillsActivity : NoStatusBarActivity() {
                                         lifecycleScope.launch {
                                             playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({ _ ->
                                                 AlertUtils.displayOkMessage(this@RefundSkillsActivity, "Success!", "Refunded ${xp}xp, ${fs}fs, and ${pp}pp to ${char.fullName} (${fullPlayer.fullName})!") { _, _ ->
-                                                    DataManager.shared.loadingFullCharForSelectedChar = true
-                                                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER), false) {
+                                                    OldDataManager.shared.loadingFullCharForSelectedChar = true
+                                                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.FULL_CHARACTER_FOR_SELECTED_CHARACTER), false) {
                                                         buildView()
                                                     }
                                                     buildView()

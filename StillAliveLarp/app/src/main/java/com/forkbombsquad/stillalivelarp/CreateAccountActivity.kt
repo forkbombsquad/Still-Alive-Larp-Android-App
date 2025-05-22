@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
@@ -77,7 +77,7 @@ class CreateAccountActivity : NoStatusBarActivity() {
                                 PlayerManager.shared.setPlayer(it)
                                 SharedPrefsManager.shared.clearAll(globalGetContext())
                                 UserAndPassManager.shared.clear(globalGetContext())
-                                DataManager.forceReset()
+                                OldDataManager.forceReset()
                                 UserAndPassManager.shared.setTemp(globalGetContext(), emailField.text.toString(), passwordField.text.toString())
                                 AlertUtils.displayOkMessage(this@CreateAccountActivity, "Success!", "Account for ${emailField.text.toString()} created!") { _, _ ->
                                     runOnUiThread {

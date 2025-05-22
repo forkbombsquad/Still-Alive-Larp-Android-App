@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 
@@ -28,10 +28,10 @@ class ViewBioActivity : NoStatusBarActivity() {
 
         edit.setOnClick {
             edit.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
-                DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHARACTER), true) {
+            OldDataManager.shared.unrelaltedUpdateCallback = {
+                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHARACTER), true) {
                     edit.setLoading(false)
-                    DataManager.shared.charForSelectedPlayer = DataManager.shared.character
+                    OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
                     buildView()
                 }
             }
@@ -43,10 +43,10 @@ class ViewBioActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        val player = DataManager.shared.selectedPlayer
-        val char = DataManager.shared.charForSelectedPlayer
+        val player = OldDataManager.shared.selectedPlayer
+        val char = OldDataManager.shared.charForSelectedPlayer
 
-        edit.isGone = !(player?.id == DataManager.shared.player?.id && char?.characterTypeId == Constants.CharacterTypes.standard)
+        edit.isGone = !(player?.id == OldDataManager.shared.player?.id && char?.characterTypeId == Constants.CharacterTypes.standard)
 
         title.text = "${char?.fullName ?: ""}'s\nBio"
         text.text = char?.bio ?: ""

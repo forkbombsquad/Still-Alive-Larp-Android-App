@@ -3,8 +3,8 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.ResearchProjectCell
 
 class ViewResearchProjectsActivity : NoStatusBarActivity() {
@@ -20,7 +20,7 @@ class ViewResearchProjectsActivity : NoStatusBarActivity() {
     private fun setupView() {
         innerLayout = findViewById(R.id.rp_innerLayout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.RESEARCH_PROJECTS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.RESEARCH_PROJECTS), false) {
             buildView()
         }
         buildView()
@@ -28,7 +28,7 @@ class ViewResearchProjectsActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         innerLayout.removeAllViews()
-        val projects = DataManager.shared.researchProjects?.sortedByDescending { it.id } ?: listOf()
+        val projects = OldDataManager.shared.researchProjects?.sortedByDescending { it.id } ?: listOf()
         projects.forEach { rp ->
             val rpCell = ResearchProjectCell(this)
             rpCell.setup(rp)

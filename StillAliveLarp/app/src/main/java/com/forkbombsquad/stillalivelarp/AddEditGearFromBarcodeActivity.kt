@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonListModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
@@ -49,7 +49,7 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        editGear = DataManager.shared.gearToEdit
+        editGear = OldDataManager.shared.gearToEdit
 
         title = findViewById(R.id.addgear_title)
         nameField = findViewById(R.id.addgear_name)
@@ -92,9 +92,9 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
             submit.setLoading(true)
             val fieldValidation = validateFields()
             if (!fieldValidation.hasError) {
-                DataManager.shared.playerCheckInModel?.character.ifLet { char ->
+                OldDataManager.shared.playerCheckInModel?.character.ifLet { char ->
 
-                    val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
+                    val gearList = OldDataManager.shared.selectedCharacterGear ?: arrayOf()
                     val gear = gearList.firstOrNull()
                     val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
                     if (gear != null) {
@@ -142,8 +142,8 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                        DataManager.shared.playerCheckInModel?.gear = updatedGearModel
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.playerCheckInModel?.gear = updatedGearModel
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     } else {
                         // Create New Gear json list
@@ -160,8 +160,8 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
                         val toJson: String = globalToJson(gearJsonListModel)
 
                         val newGearModel = GearModel(-1, char.id, toJson)
-                        DataManager.shared.playerCheckInModel?.gear = newGearModel
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.playerCheckInModel?.gear = newGearModel
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         finish()
                     }
                 }
@@ -173,9 +173,9 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
 
         delete.setOnClick {
             delete.setLoading(true)
-            DataManager.shared.playerCheckInModel?.character.ifLet { char ->
+            OldDataManager.shared.playerCheckInModel?.character.ifLet { char ->
 
-                val gearList = DataManager.shared.selectedCharacterGear ?: arrayOf()
+                val gearList = OldDataManager.shared.selectedCharacterGear ?: arrayOf()
                 val gear = gearList.firstOrNull()
                 val jsonGearList = gear?.jsonModels?.toMutableList() ?: mutableListOf()
                 if (gear != null) {
@@ -194,8 +194,8 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
                     val toJson: String = globalToJson(gearJsonListModel)
 
                     val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
-                    DataManager.shared.playerCheckInModel?.gear = updatedGearModel
-                    DataManager.shared.unrelaltedUpdateCallback()
+                    OldDataManager.shared.playerCheckInModel?.gear = updatedGearModel
+                    OldDataManager.shared.unrelaltedUpdateCallback()
                     finish()
                 }
             }
@@ -204,7 +204,7 @@ class AddEditGearFromBarcodeActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.playerCheckInModel?.character?.ifLet { char ->
+        OldDataManager.shared.playerCheckInModel?.character?.ifLet { char ->
             title.text = "Add Gear For ${char.fullName}"
             editGear.ifLet { eg ->
                 title.text = "Edit Gear For ${char.fullName}"

@@ -15,8 +15,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
@@ -93,7 +93,7 @@ class SkillListFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             createViews(v)
         }
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
             lifecycleScope.launch(Dispatchers.IO) {
                 createViews(v)
             }
@@ -108,7 +108,7 @@ class SkillListFragment : Fragment() {
         }
         skillCells = mutableListOf()
 
-        getFilteredSkills(DataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
+        getFilteredSkills(OldDataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
             val cell = SkillCell(v.context)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

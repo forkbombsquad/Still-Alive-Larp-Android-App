@@ -9,8 +9,8 @@ import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -84,9 +84,9 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
                 val request = AdminService.CreateResearchProject()
                 lifecycleScope.launch {
                     request.successfulResponse(CreateModelSP(researchProjectCreateModel)).ifLet({ rpm ->
-                        val newProjects = DataManager.shared.researchProjects?.toMutableList() ?: mutableListOf()
+                        val newProjects = OldDataManager.shared.researchProjects?.toMutableList() ?: mutableListOf()
                         newProjects.add(rpm)
-                        DataManager.shared.researchProjects = newProjects
+                        OldDataManager.shared.researchProjects = newProjects
                         buildView()
                         addNew.setLoading(false)
                     }, {
@@ -97,14 +97,14 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.RESEARCH_PROJECTS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.RESEARCH_PROJECTS), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        if (DataManager.shared.loadingResearchProjects) {
+        if (OldDataManager.shared.loadingResearchProjects) {
             progressbar.isGone = false
             outerLayout.isGone = true
         } else {
@@ -112,7 +112,7 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
             outerLayout.isGone = false
 
             innerLayout.removeAllViews()
-            val projects = DataManager.shared.researchProjects?.sortedByDescending { it.id } ?: listOf()
+            val projects = OldDataManager.shared.researchProjects?.sortedByDescending { it.id } ?: listOf()
             projects.forEach { rp ->
                 val rpCell = ResearchProjectCell(this)
                 rpCell.setup(rp)
@@ -162,10 +162,10 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
                         val request = AdminService.UpdateResearchProject()
                         lifecycleScope.launch {
                             request.successfulResponse(UpdateModelSP(researchProjectModel)).ifLet({ rpm ->
-                                val newProjects = DataManager.shared.researchProjects?.toMutableList() ?: mutableListOf()
+                                val newProjects = OldDataManager.shared.researchProjects?.toMutableList() ?: mutableListOf()
                                 newProjects.removeIf { it.id == rpm.id }
                                 newProjects.add(rpm)
-                                DataManager.shared.researchProjects = newProjects
+                                OldDataManager.shared.researchProjects = newProjects
                                 rpCell.setLoading(false)
                                 buildView()
                             }, {

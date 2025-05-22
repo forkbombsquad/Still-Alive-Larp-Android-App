@@ -9,8 +9,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.GearCell
 
 class ViewGearActivity : NoStatusBarActivity() {
@@ -30,15 +30,15 @@ class ViewGearActivity : NoStatusBarActivity() {
         progressbar = findViewById(R.id.gear_progressbar)
         layout = findViewById(R.id.gear_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SELECTED_CHARACTER_GEAR), true) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SELECTED_CHARACTER_GEAR), true) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        title.text = "${DataManager.shared.selectedChar?.fullName ?: ""}'s Gear"
-        if (DataManager.shared.loadingSelectedCharacterGear) {
+        title.text = "${OldDataManager.shared.selectedChar?.fullName ?: ""}'s Gear"
+        if (OldDataManager.shared.loadingSelectedCharacterGear) {
             progressbar.isGone = false
             layout.isGone = true
         } else {
@@ -46,7 +46,7 @@ class ViewGearActivity : NoStatusBarActivity() {
             layout.isGone = false
 
             layout.removeAllViews()
-            val gearList = DataManager.shared.getGearOrganzied()
+            val gearList = OldDataManager.shared.getGearOrganzied()
             gearList.forEach { (key, list) ->
                 val textView = TextView(this)
                 val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

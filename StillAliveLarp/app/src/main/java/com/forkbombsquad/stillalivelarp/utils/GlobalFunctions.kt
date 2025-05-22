@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
@@ -72,7 +72,7 @@ fun globalCopyToClipboard(context: Context, string: String) {
 }
 
 fun globalForceResetAllPlayerData(context: Context) {
-    DataManager.forceReset()
+    OldDataManager.forceReset()
     SharedPrefsManager.shared.clearAll(context)
     UserAndPassManager.shared.clear(context)
     PlayerManager.shared.forceReset()

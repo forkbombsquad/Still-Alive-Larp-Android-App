@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -48,7 +48,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
 
         save.setOnClick {
             save.setLoading(true)
-            DataManager.shared.selectedFeatureFlag.ifLet({ flag ->
+            OldDataManager.shared.selectedFeatureFlag.ifLet({ flag ->
                 val updatedFlag = FeatureFlagModel(
                     id = flag.id,
                     name = this.name.text.toString(),
@@ -59,7 +59,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
                 val request = AdminService.UpdateFeatureFlag()
                 lifecycleScope.launch {
                     request.successfulResponse(UpdateModelSP(updatedFlag)).ifLet({ newFlag ->
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Updated feature flag!") { _, _ ->
                             save.setLoading(false)
                             finish()
@@ -79,7 +79,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
                 val request = AdminService.CreateFeatureFlag()
                 lifecycleScope.launch {
                     request.successfulResponse(CreateModelSP(featureFlagCreateModel)).ifLet({ newFlag ->
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Created feature flag!") { _, _ ->
                             save.setLoading(false)
                             finish()
@@ -93,12 +93,12 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
         }
 
         delete.setOnClick {
-            DataManager.shared.selectedFeatureFlag.ifLet {
+            OldDataManager.shared.selectedFeatureFlag.ifLet {
                 delete.setLoading(true)
                 val request = AdminService.DeleteFeatureFlag()
                 lifecycleScope.launch {
                     request.successfulResponse(IdSP(it.id)).ifLet({
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Deleted feature flag!") { _, _ ->
                             delete.setLoading(false)
                             finish()
@@ -115,7 +115,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedFeatureFlag.ifLet({ flag ->
+        OldDataManager.shared.selectedFeatureFlag.ifLet({ flag ->
             title.text = "Edit Feature Flag"
             name.setText(flag.name)
             desc.setText(flag.description)

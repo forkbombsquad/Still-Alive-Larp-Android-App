@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NPCListActivity
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
@@ -53,7 +53,7 @@ class CommunityFragment : Fragment() {
 
         researchProjects.setOnClick {
             researchProjects.setLoading(true)
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.RESEARCH_PROJECTS), true) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.RESEARCH_PROJECTS), true) {
                 researchProjects.setLoading(false)
                 val intent = Intent(v.context, ViewResearchProjectsActivity::class.java)
                 startActivity(intent)
@@ -64,7 +64,7 @@ class CommunityFragment : Fragment() {
 
         allNPCsButton.setOnClick {
             allNPCsButton.setLoading(true)
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ALL_NPC_CHARACTERS)) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_NPC_CHARACTERS)) {
                 allNPCsButton.setLoading(false)
                 val intent = Intent(v.context, NPCListActivity::class.java)
                 startActivity(intent)

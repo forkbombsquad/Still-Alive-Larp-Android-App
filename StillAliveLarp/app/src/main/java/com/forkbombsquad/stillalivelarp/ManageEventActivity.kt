@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
@@ -50,18 +50,18 @@ class ManageEventActivity : NoStatusBarActivity() {
         startFinishButton = findViewById(R.id.manageevent_startFinishButton)
 
         edit.setOnClick {
-            DataManager.shared.activityToClose = this
+            OldDataManager.shared.activityToClose = this
             val intent = Intent(this, EditEventActivity::class.java)
             startActivity(intent)
         }
 
         viewAttendees.setOnClick {
             viewAttendees.setLoading(true)
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 viewAttendees.setLoading(false)
             }
             buildView()
-            DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENT_ATTENDEES_FOR_EVENT, DataManagerType.ALL_PLAYERS)) {
+            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_ATTENDEES_FOR_EVENT, OldDataManagerType.ALL_PLAYERS)) {
                 buildView()
                 val intent = Intent(this, ViewEventAttendeesActivity::class.java)
                 startActivity(intent)
@@ -69,7 +69,7 @@ class ManageEventActivity : NoStatusBarActivity() {
         }
 
         startFinishButton.setOnClick {
-            DataManager.shared.selectedEvent.ifLet { event ->
+            OldDataManager.shared.selectedEvent.ifLet { event ->
                 startFinishButton.setLoading(true)
                 var starting = false
                 if (!event.isStarted.toBoolean()) {
@@ -81,7 +81,7 @@ class ManageEventActivity : NoStatusBarActivity() {
                 val updateEventRequest = AdminService.UpdateEvent()
                 lifecycleScope.launch {
                     updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
-                        DataManager.shared.unrelaltedUpdateCallback()
+                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@ManageEventActivity, starting.ternary("Event Started!", "Event Finished!")) { _, _ ->
                             finish()
                         }
@@ -96,7 +96,7 @@ class ManageEventActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedEvent.ifLet { event ->
+        OldDataManager.shared.selectedEvent.ifLet { event ->
             title.set(event.title)
             date.set(event.date.yyyyMMddToMonthDayYear())
             startTime.set(event.startTime)

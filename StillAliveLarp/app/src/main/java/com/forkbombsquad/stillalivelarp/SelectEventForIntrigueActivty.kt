@@ -6,8 +6,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -27,14 +27,14 @@ class SelectEventForIntrigueActivty : NoStatusBarActivity() {
         progressbar = findViewById(R.id.selecteventforintrigue_progressbar)
         layout = findViewById(R.id.selecteventforintrigue_layout)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.EVENTS), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENTS), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        if (DataManager.shared.loadingEvents) {
+        if (OldDataManager.shared.loadingEvents) {
             progressbar.isGone = false
             layout.isGone = true
         } else {
@@ -43,7 +43,7 @@ class SelectEventForIntrigueActivty : NoStatusBarActivity() {
 
             layout.removeAllViews()
 
-            DataManager.shared.events.ifLet { events ->
+            OldDataManager.shared.events.ifLet { events ->
                 events.forEachIndexed { index, event ->
                     val arrow = NavArrowButtonBlackBuildable(this)
                     arrow.textView.text = event.title
@@ -52,8 +52,8 @@ class SelectEventForIntrigueActivty : NoStatusBarActivity() {
                     arrow.layoutParams = params
                     arrow.setLoading(false)
                     arrow.setOnClick {
-                        DataManager.shared.selectedEvent = event
-                        DataManager.shared.activityToClose = this
+                        OldDataManager.shared.selectedEvent = event
+                        OldDataManager.shared.activityToClose = this
                         val intent = Intent(this, ManageIntrigueActivity::class.java)
                         startActivity(intent)
                     }

@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
@@ -42,13 +42,13 @@ class OfflinePersonalNativeSkillTreeActivity : NoStatusBarActivity() {
     }
 
     private fun renderSkills() {
-        DataManager.shared.skills = SharedPrefsManager.shared.getSkills()
-        DataManager.shared.skillCategories = SharedPrefsManager.shared.getSkillCategories().toTypedArray()
-        DataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+        OldDataManager.shared.skills = SharedPrefsManager.shared.getSkills()
+        OldDataManager.shared.skillCategories = SharedPrefsManager.shared.getSkillCategories().toTypedArray()
+        OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills!!,
-                DataManager.shared.skillCategories!!.asList(),
+                OldDataManager.shared.skills!!,
+                OldDataManager.shared.skillCategories!!.asList(),
                 personal = true,
                 allowPurchase = false
             ),

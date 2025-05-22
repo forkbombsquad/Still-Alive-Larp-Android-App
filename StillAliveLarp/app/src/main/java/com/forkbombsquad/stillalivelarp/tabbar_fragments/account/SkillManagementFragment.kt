@@ -15,8 +15,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
@@ -54,10 +54,10 @@ class SkillManagementFragment : Fragment() {
         progressBar = v.findViewById(R.id.skillman_progressBar)
 
         addNewButton.setOnClickListener {
-            if (!DataManager.shared.loadingSkills) {
-                DataManager.shared.unrelaltedUpdateCallback = {
+            if (!OldDataManager.shared.loadingSkills) {
+                OldDataManager.shared.unrelaltedUpdateCallback = {
                     // Make sure this page updates when skills update
-                    DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), true) {
+                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHAR_FOR_SELECTED_PLAYER), true) {
                         lifecycleScope.launch(Dispatchers.IO) {
                             createViews(v)
                         }
@@ -74,7 +74,7 @@ class SkillManagementFragment : Fragment() {
             }
         }
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.PLAYER, DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS, OldDataManagerType.PLAYER, OldDataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
             lifecycleScope.launch(Dispatchers.IO) {
                 createViews(v)
             }
@@ -92,7 +92,7 @@ class SkillManagementFragment : Fragment() {
         }
         skillCells = mutableListOf()
 
-        getSortedSkills(DataManager.shared.charForSelectedPlayer?.skills ?: arrayOf()).forEachIndexed { index, it ->
+        getSortedSkills(OldDataManager.shared.charForSelectedPlayer?.skills ?: arrayOf()).forEachIndexed { index, it ->
             val cell = SkillCell(v.context)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -108,8 +108,8 @@ class SkillManagementFragment : Fragment() {
     }
 
     private fun buildView() {
-        addNewButton.isGone = DataManager.shared.player?.id != DataManager.shared.selectedPlayer?.id
-        title.text = "${DataManager.shared.charForSelectedPlayer?.fullName ?: "Character"}'s\nSkills"
+        addNewButton.isGone = OldDataManager.shared.player?.id != OldDataManager.shared.selectedPlayer?.id
+        title.text = "${OldDataManager.shared.charForSelectedPlayer?.fullName ?: "Character"}'s\nSkills"
         skillListLayout.removeAllViews()
         progressBar.isGone = !loadingView || skillCells.isNotEmpty()
 

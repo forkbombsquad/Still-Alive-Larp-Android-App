@@ -8,8 +8,8 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
@@ -62,14 +62,14 @@ class CharacterStatsFragment : Fragment() {
         mysteriousStranger = v.findViewById(R.id.characterstats_mysteriousStranger)
         unshakableResolve = v.findViewById(R.id.characterstats_unshakableResolve)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHAR_FOR_SELECTED_PLAYER), false) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        DataManager.shared.charForSelectedPlayer.ifLet({
+        OldDataManager.shared.charForSelectedPlayer.ifLet({
             name.isGone = false
             player.isGone = false
             startDate.isGone = false
@@ -89,7 +89,7 @@ class CharacterStatsFragment : Fragment() {
             unshakableResolve.isGone = !it.hasUnshakableResolve()
 
             name.set(it.fullName)
-            player.set(DataManager.shared.selectedPlayer?.fullName ?: "")
+            player.set(OldDataManager.shared.selectedPlayer?.fullName ?: "")
             startDate.set(it.startDate.yyyyMMddToMonthDayYear())
             infection.set("${it.infection}%")
             bullets.set(it.bullets)

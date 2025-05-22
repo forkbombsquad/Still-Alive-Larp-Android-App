@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
@@ -92,18 +92,18 @@ class AddSkillActivity : NoStatusBarActivity() {
             buildView()
         }
 
-        modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.player, DataManager.shared.character, DataManager.shared.xpReductions)
+        modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.player, OldDataManager.shared.character, OldDataManager.shared.xpReductions)
 
-        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.SKILLS, DataManagerType.PLAYER, DataManagerType.CHARACTER, DataManagerType.XP_REDUCTIONS), false) {
-            modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.player, DataManager.shared.character, DataManager.shared.xpReductions)
+        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS, OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.XP_REDUCTIONS), false) {
+            modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.player, OldDataManager.shared.character, OldDataManager.shared.xpReductions)
             buildView()
         }
         buildView()
     }
 
     private fun buildView(loading: Boolean = false) {
-        val character = DataManager.shared.character
-        val player = DataManager.shared.player
+        val character = OldDataManager.shared.character
+        val player = OldDataManager.shared.player
 
         xp.text = "experience\n${player?.experience ?: "0"}"
         pp.text = "prestige\n${player?.prestigePoints ?: "0"}"
@@ -143,11 +143,11 @@ class AddSkillActivity : NoStatusBarActivity() {
                 val charTakeSkillRequest = CharacterSkillService.TakeCharacterSkill()
                 lifecycleScope.launch {
                     charTakeSkillRequest.successfulResponse(CharacterSkillCreateSP(player?.id ?: 0, charSkill)).ifLet({
-                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.CHARACTER, DataManagerType.PLAYER), true) {
+                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.CHARACTER, OldDataManagerType.PLAYER), true) {
                             AlertUtils.displayOkMessage(this@AddSkillActivity, "Skill Purchased", messageString) { _, _ -> }
-                            modSkillList = getAvailableSkills(DataManager.shared.skills, DataManager.shared.player, DataManager.shared.character, DataManager.shared.xpReductions)
+                            modSkillList = getAvailableSkills(OldDataManager.shared.skills, OldDataManager.shared.player, OldDataManager.shared.character, OldDataManager.shared.xpReductions)
                             buildView(false)
-                            DataManager.shared.unrelaltedUpdateCallback()
+                            OldDataManager.shared.unrelaltedUpdateCallback()
                         }
                     }, {
                         buildView(false)

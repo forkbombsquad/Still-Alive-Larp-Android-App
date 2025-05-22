@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 
 class OfflineViewBioActivity : NoStatusBarActivity() {
@@ -28,8 +28,8 @@ class OfflineViewBioActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        val player = DataManager.shared.selectedPlayer
-        val char = DataManager.shared.charForSelectedPlayer
+        val player = OldDataManager.shared.selectedPlayer
+        val char = OldDataManager.shared.charForSelectedPlayer
 
         title.text = "${char?.fullName ?: ""}'s\nBio (Offline)"
         text.text = char?.bio ?: ""

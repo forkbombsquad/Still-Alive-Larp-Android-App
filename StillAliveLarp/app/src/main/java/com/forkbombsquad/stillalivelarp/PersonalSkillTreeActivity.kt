@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class PersonalSkillTreeActivity : NoStatusBarActivity() {
@@ -41,12 +41,12 @@ class PersonalSkillTreeActivity : NoStatusBarActivity() {
     }
 
     private fun renderSkills() {
-        DataManager.shared.charForSelectedPlayer = DataManager.shared.character
-        DataManager.shared.selectedPlayer = DataManager.shared.player
+        OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
+        OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills!!,
-                DataManager.shared.skillCategories!!.asList(),
+                OldDataManager.shared.skills!!,
+                OldDataManager.shared.skillCategories!!.asList(),
                 personal = true,
                 allowPurchase = true
             ),

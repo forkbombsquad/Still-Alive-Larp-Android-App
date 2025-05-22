@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -79,7 +79,7 @@ class AwardCharacterActivity : NoStatusBarActivity() {
         }
 
         submitButton.setOnClick {
-            DataManager.shared.selectedChar.ifLet { character ->
+            OldDataManager.shared.selectedChar.ifLet { character ->
                 submitButton.setLoading(true)
                 val awardCreateModel = AwardCreateModel.createCharacterAward(
                     char = character,
@@ -91,7 +91,7 @@ class AwardCharacterActivity : NoStatusBarActivity() {
                 lifecycleScope.launch {
                     awardCharRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
                         AlertUtils.displaySuccessMessage(this@AwardCharacterActivity, "Successfully Awarded ${character.fullName}!") { _, _ ->
-                            DataManager.shared.activityToClose?.finish()
+                            OldDataManager.shared.activityToClose?.finish()
                             finish()
                         }
                     }, {
@@ -105,7 +105,7 @@ class AwardCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.selectedChar.ifLet {
+        OldDataManager.shared.selectedChar.ifLet {
             title.text = "Give Award To ${it.fullName}"
         }
     }

@@ -11,7 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
@@ -34,7 +34,6 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
-import com.forkbombsquad.stillalivelarp.utils.globalTestPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
@@ -101,7 +100,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     ) { result ->
         if(result.contents != null) {
             globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
-                DataManager.shared.playerCheckInModel = it
+                OldDataManager.shared.playerCheckInModel = it
                 buildView()
             }, {
                 AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
@@ -178,8 +177,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         }
 
         addNewGearButton.setOnClick {
-            DataManager.shared.gearToEdit = null
-            DataManager.shared.unrelaltedUpdateCallback = {
+            OldDataManager.shared.gearToEdit = null
+            OldDataManager.shared.unrelaltedUpdateCallback = {
                 gearModified = true
                 buildView()
             }
@@ -192,7 +191,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
     private fun saveModifiedGear(finished: () -> Unit) {
         checkInButton.setLoadingWithText("Organizing Gear...")
-        val gear = DataManager.shared.playerCheckInModel?.gear
+        val gear = OldDataManager.shared.playerCheckInModel?.gear
         if (gear != null) {
             if (gear.id == -1) {
                 // Create New List
@@ -201,7 +200,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 checkInButton.setLoadingWithText("Creating Gear Listing...")
                 lifecycleScope.launch {
                     request.successfulResponse(CreateModelSP(createModel)).ifLet { newGearModel ->
-                        DataManager.shared.playerCheckInModel?.gear = newGearModel
+                        OldDataManager.shared.playerCheckInModel?.gear = newGearModel
                         checkInButton.setLoadingWithText("Gear Added!")
                         finished()
                     }
@@ -212,7 +211,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 checkInButton.setLoadingWithText("Updating Gear...")
                 lifecycleScope.launch {
                     request.successfulResponse(UpdateModelSP(gear)).ifLet { updatedGearModel ->
-                        DataManager.shared.playerCheckInModel?.gear = updatedGearModel
+                        OldDataManager.shared.playerCheckInModel?.gear = updatedGearModel
                         checkInButton.setLoadingWithText("Gear Updated!")
                         finished()
                     }
@@ -222,7 +221,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         gearModified = false
     }
     private fun checkIn() {
-        DataManager.shared.playerCheckInModel.ifLet { checkIn ->
+        OldDataManager.shared.playerCheckInModel.ifLet { checkIn ->
             val player = checkIn.player
             val character = checkIn.character
             val event = checkIn.event
@@ -316,7 +315,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.playerCheckInModel.ifLet {
+        OldDataManager.shared.playerCheckInModel.ifLet {
             val player = it.player
             val character = it.character
             val event = it.event
@@ -324,8 +323,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             val gear = it.gear
             var gearList: Map<String, List<GearJsonModel>> = mapOf()
             if (gear != null) {
-                DataManager.shared.selectedCharacterGear = arrayOf(gear)
-                gearList = DataManager.shared.getGearOrganzied()
+                OldDataManager.shared.selectedCharacterGear = arrayOf(gear)
+                gearList = OldDataManager.shared.getGearOrganzied()
             }
 
 
@@ -478,8 +477,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                     params.setMargins(0, 8, 0, 8)
                     gearCell.layoutParams = params
                     gearCell.setOnClick {
-                        DataManager.shared.gearToEdit = g
-                        DataManager.shared.unrelaltedUpdateCallback = {
+                        OldDataManager.shared.gearToEdit = g
+                        OldDataManager.shared.unrelaltedUpdateCallback = {
                             gearModified = true
 
                             buildView()

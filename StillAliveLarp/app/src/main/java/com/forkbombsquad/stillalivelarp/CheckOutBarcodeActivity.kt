@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -31,7 +31,7 @@ class CheckOutBarcodeActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.checkoutBarcodeModel?.ifLet({
+        OldDataManager.shared.checkoutBarcodeModel?.ifLet({
             kvView.isGone = false
             image.isGone = false
 
@@ -46,7 +46,7 @@ class CheckOutBarcodeActivity : NoStatusBarActivity() {
     }
 
     override fun onBackPressed() {
-        DataManager.shared.unrelaltedUpdateCallback()
+        OldDataManager.shared.unrelaltedUpdateCallback()
         super.onBackPressed()
     }
 }

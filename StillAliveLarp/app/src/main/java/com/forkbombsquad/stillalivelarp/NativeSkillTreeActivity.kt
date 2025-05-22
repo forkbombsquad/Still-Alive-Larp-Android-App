@@ -17,7 +17,7 @@ import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class NativeSkillTreeActivity : NoStatusBarActivity() {
@@ -55,8 +55,8 @@ class NativeSkillTreeActivity : NoStatusBarActivity() {
     private fun renderSkills() {
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills!!,
-                DataManager.shared.skillCategories!!.asList()
+                OldDataManager.shared.skills!!,
+                OldDataManager.shared.skillCategories!!.asList()
             ),
             lifecycleScope
         )

@@ -3,8 +3,8 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -48,7 +48,7 @@ class CreateAnnouncementActivity : NoStatusBarActivity() {
                 val createAnnouncementRequest = AdminService.CreateAnnouncement()
                 lifecycleScope.launch {
                     createAnnouncementRequest.successfulResponse(CreateModelSP(announcementCreateModel)).ifLet({ _ ->
-                        DataManager.shared.load(lifecycleScope, listOf(DataManagerType.ANNOUNCEMENTS), true) { }
+                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ANNOUNCEMENTS), true) { }
                         AlertUtils.displaySuccessMessage(this@CreateAnnouncementActivity, "Announcement Created") { _, _ ->
                             finish()
                         }
