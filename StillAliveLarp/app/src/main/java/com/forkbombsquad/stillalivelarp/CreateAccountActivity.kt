@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.PlayerCreateSP
@@ -75,7 +75,7 @@ class CreateAccountActivity : NoStatusBarActivity() {
                         createPlayerReqeuest.successfulResponse(PlayerCreateSP(preapprovalcode = preApprovalCodeField.text.toString(), player = newPlayer)).ifLet({
                             runOnUiThread {
                                 PlayerManager.shared.setPlayer(it)
-                                SharedPrefsManager.shared.clearAll(globalGetContext())
+                                OldSharedPrefsManager.shared.clearAll(globalGetContext())
                                 UserAndPassManager.shared.clear(globalGetContext())
                                 OldDataManager.forceReset()
                                 UserAndPassManager.shared.setTemp(globalGetContext(), emailField.text.toString(), passwordField.text.toString())

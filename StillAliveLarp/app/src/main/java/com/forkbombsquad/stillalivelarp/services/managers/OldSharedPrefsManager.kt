@@ -15,7 +15,7 @@ import java.io.Serializable
 import java.util.Base64
 
 
-class SharedPrefsManager private constructor() {
+class OldSharedPrefsManager private constructor() {
 
     private val SharedPrefsName = "StillAliveLarpSharedPrefs"
     private val playerKey = "player_sp_key"
@@ -186,6 +186,6 @@ class SharedPrefsManager private constructor() {
     }
 
     companion object {
-        val shared = SharedPrefsManager()
+        val shared = OldSharedPrefsManager()
     }
 }

@@ -8,7 +8,7 @@ import android.widget.Toast
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.google.gson.Gson
 import java.lang.reflect.Type
@@ -73,7 +73,7 @@ fun globalCopyToClipboard(context: Context, string: String) {
 
 fun globalForceResetAllPlayerData(context: Context) {
     OldDataManager.forceReset()
-    SharedPrefsManager.shared.clearAll(context)
+    OldSharedPrefsManager.shared.clearAll(context)
     UserAndPassManager.shared.clear(context)
     PlayerManager.shared.forceReset()
     CharacterManager.shared.forceReset()

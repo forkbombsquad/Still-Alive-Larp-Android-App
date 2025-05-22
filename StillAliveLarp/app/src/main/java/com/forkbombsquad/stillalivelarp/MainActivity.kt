@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.VersionService
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -125,7 +125,7 @@ class MainActivity : NoStatusBarActivity() {
         }
 
         offlineModeButton.setOnClick {
-            if (SharedPrefsManager.shared.getPlayer() == null) {
+            if (OldSharedPrefsManager.shared.getPlayer() == null) {
                 AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store your character and player for offline mode use")
             } else {
                 val intent = Intent(this, OfflineMyAccountActivity::class.java)

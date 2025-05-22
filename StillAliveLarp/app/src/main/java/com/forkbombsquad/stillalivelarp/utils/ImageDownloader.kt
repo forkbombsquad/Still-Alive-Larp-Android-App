@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp.utils
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class ImageDownloader {
                         val imageStream = connection?.inputStream
                         val bmp = BitmapFactory.decodeStream(imageStream)
                         imageStream?.close()
-                        SharedPrefsManager.shared.set(context, key.key, bmp)
+                        OldSharedPrefsManager.shared.set(context, key.key, bmp)
                         onCompletion(true)
                     } else {
                         onCompletion(false)

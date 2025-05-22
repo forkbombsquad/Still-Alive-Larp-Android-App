@@ -118,7 +118,7 @@ class CharacterManager private constructor() {
                                                             }
                                                         }
                                                         this@CharacterManager.character = fullCharModel
-                                                        SharedPrefsManager.shared.storeCharacter(fullCharModel)
+                                                        OldSharedPrefsManager.shared.storeCharacter(fullCharModel)
                                                         fetching = false
                                                         completionBlocks.forEach { cb ->
                                                             cb(fullCharModel)
@@ -189,7 +189,7 @@ class CharacterManager private constructor() {
                             }
                         }
                         this@CharacterManager.character = fullCharModel
-                        SharedPrefsManager.shared.storeCharacter(fullCharModel)
+                        OldSharedPrefsManager.shared.storeCharacter(fullCharModel)
                         fetching = false
                         completionBlocks.forEach { cb ->
                             cb(fullCharModel)

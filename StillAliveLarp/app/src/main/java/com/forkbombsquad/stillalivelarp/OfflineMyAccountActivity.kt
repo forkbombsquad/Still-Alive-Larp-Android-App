@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
@@ -73,60 +73,60 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
         }
         allNPCsNav.setOnClick {
             allNPCsNav.setLoading(true)
-            OldDataManager.shared.allOfflineNPCCharacters = SharedPrefsManager.shared.getNPCs()
+            OldDataManager.shared.allOfflineNPCCharacters = OldSharedPrefsManager.shared.getNPCs()
             val intent = Intent(this, OfflineNPCListActivity::class.java)
             startActivity(intent)
             allNPCsNav.setLoading(false)
         }
         if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
             skillTreeNav.setOnClick {
-                OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+                OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
                 val intent = Intent(this, SAImageViewActivity::class.java)
                 startActivity(intent)
             }
             skillTreeDarkNav.setOnClick {
-                OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+                OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
                 val intent = Intent(this, SAImageViewActivity::class.java)
                 startActivity(intent)
             }
         }
         treatingWoundsNav.setOnClick {
-            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
             val intent = Intent(this, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         playerStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.selectedPlayer = OldSharedPrefsManager.shared.getPlayer()
             val intent = Intent(this, OfflinePlayerStatsActivity::class.java)
             startActivity(intent)
         }
         charStatsNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = OldSharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = OldSharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineCharacterStatsActivity::class.java)
             startActivity(intent)
         }
         skillViewNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = OldSharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = OldSharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineViewSkillsActivity::class.java)
             startActivity(intent)
         }
         bioNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = SharedPrefsManager.shared.getPlayer()
-            OldDataManager.shared.charForSelectedPlayer = SharedPrefsManager.shared.getCharacter()
+            OldDataManager.shared.selectedPlayer = OldSharedPrefsManager.shared.getPlayer()
+            OldDataManager.shared.charForSelectedPlayer = OldSharedPrefsManager.shared.getCharacter()
             val intent = Intent(this, OfflineViewBioActivity::class.java)
             startActivity(intent)
         }
         gearNav.setOnClick {
             // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedChar = SharedPrefsManager.shared.getCharacter()?.getBaseModel()
-            OldDataManager.shared.selectedCharacterGear = SharedPrefsManager.shared.getGear()
+            OldDataManager.shared.selectedChar = OldSharedPrefsManager.shared.getCharacter()?.getBaseModel()
+            OldDataManager.shared.selectedCharacterGear = OldSharedPrefsManager.shared.getGear()
             val intent = Intent(this, OfflineViewGearActivity::class.java)
             startActivity(intent)
         }
@@ -145,11 +145,11 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        val player = SharedPrefsManager.shared.getPlayer()
-        val character = SharedPrefsManager.shared.getCharacter()
+        val player = OldSharedPrefsManager.shared.getPlayer()
+        val character = OldSharedPrefsManager.shared.getCharacter()
         val rulebook = RulebookManager.shared.getOfflineVersion()
         val skills = SkillManager.shared.getSkillsOffline()
-        val skillCategories = SharedPrefsManager.shared.getSkillCategories()
+        val skillCategories = OldSharedPrefsManager.shared.getSkillCategories()
 
         playerStatsNav.isGone = player == null
 
@@ -161,20 +161,20 @@ class OfflineMyAccountActivity : NoStatusBarActivity() {
 
         allSkillsNav.isGone = skills.isEmpty()
 
-        allNPCsNav.isGone = SharedPrefsManager.shared.getNPCs().isEmpty()
+        allNPCsNav.isGone = OldSharedPrefsManager.shared.getNPCs().isEmpty()
         nativeSkillTreeNav.isGone = skills.isEmpty() || skillCategories.isEmpty()
         personalSkillTreeNav.isGone = skills.isEmpty() || skillCategories.isEmpty() || character == null
 
 
         if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
-            skillTreeNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key) == null
-            skillTreeDarkNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key) == null
+            skillTreeNav.isGone = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE.key) == null
+            skillTreeDarkNav.isGone = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key) == null
         } else {
             skillTreeNav.isGone = true
             skillTreeDarkNav.isGone = true
         }
 
-        treatingWoundsNav.isGone = SharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key) == null
+        treatingWoundsNav.isGone = OldSharedPrefsManager.shared.getBitmap(this, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key) == null
 
     }
 }

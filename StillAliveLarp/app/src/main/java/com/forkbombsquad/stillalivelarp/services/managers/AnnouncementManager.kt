@@ -23,14 +23,14 @@ class AnnouncementManager {
     private constructor() {
         this.cachedAnnouncements = mutableListOf()
         var counter = 1
-        var announcementJson: String? = SharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
+        var announcementJson: String? = OldSharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
         var gson = Gson()
         while (announcementJson != null) {
             gson.fromJson(announcementJson, AnnouncementModel::class.java).ifLet({
                 cachedAnnouncements.add(it)
             },{})
             counter++
-            announcementJson = SharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
+            announcementJson = OldSharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
         }
     }
 
@@ -101,7 +101,7 @@ class AnnouncementManager {
 
     private fun cacheAnnouncement(announcement: AnnouncementModel) {
         val gson = Gson()
-        SharedPrefsManager.shared.set(StillAliveLarpApplication.context, "$cacheKey${announcement.id}", gson.toJson(announcement))
+        OldSharedPrefsManager.shared.set(StillAliveLarpApplication.context, "$cacheKey${announcement.id}", gson.toJson(announcement))
     }
 
     private fun getAnnouncementFromService(lifecycleScope: LifecycleCoroutineScope, id: Int, callback: (announcement: AnnouncementModel?) -> Unit) {
