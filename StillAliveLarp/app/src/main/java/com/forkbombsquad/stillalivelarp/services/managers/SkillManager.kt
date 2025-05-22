@@ -48,7 +48,7 @@ class SkillManager private constructor() {
                                         }
                                     }
                                 }
-                                SharedPrefsManager.shared.storeSkills(skills ?: listOf())
+                                OldSharedPrefsManager.shared.storeSkills(skills ?: listOf())
                                 fetching = false
                                 completionBlocks.forEach { cb ->
                                     cb(skills)
@@ -75,7 +75,7 @@ class SkillManager private constructor() {
     }
 
     fun getSkillsOffline(): List<FullSkillModel> {
-        return SharedPrefsManager.shared.getSkills()
+        return OldSharedPrefsManager.shared.getSkills()
     }
 
     companion object {

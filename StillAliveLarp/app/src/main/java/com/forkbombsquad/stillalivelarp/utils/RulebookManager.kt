@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp.utils
 import android.os.AsyncTask
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.VersionService
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -16,11 +16,11 @@ class RulebookManager private constructor()  {
     }
 
     fun getOfflineVersion(): Rulebook? {
-        val rulebookString = SharedPrefsManager.shared.getRulebook()
+        val rulebookString = OldSharedPrefsManager.shared.getRulebook()
         return if (rulebookString == null) {
             null
         } else {
-            parseDocAsRulebook(Jsoup.parse(rulebookString), SharedPrefsManager.shared.getRulebookVersion() ?: "Unknown Version")
+            parseDocAsRulebook(Jsoup.parse(rulebookString), OldSharedPrefsManager.shared.getRulebookVersion() ?: "Unknown Version")
         }
     }
 
@@ -29,10 +29,10 @@ class RulebookManager private constructor()  {
         val versionRequest = VersionService()
         lifecycleScope.launch {
             versionRequest.successfulResponse().ifLet({ versionModel ->
-                val rulesVersion = SharedPrefsManager.shared.getRulebookVersion()
-                if (rulesVersion != versionModel.rulebookVersion || SharedPrefsManager.shared.getRulebook() == null) {
+                val rulesVersion = OldSharedPrefsManager.shared.getRulebookVersion()
+                if (rulesVersion != versionModel.rulebookVersion || OldSharedPrefsManager.shared.getRulebook() == null) {
                     // Download
-                    SharedPrefsManager.shared.storeRulebookVersion(versionModel.rulebookVersion)
+                    OldSharedPrefsManager.shared.storeRulebookVersion(versionModel.rulebookVersion)
                     downloadPage(lifecycleScope, versionModel.rulebookVersion) { rulebook ->
                         callback(rulebook)
                     }
@@ -219,7 +219,7 @@ class RulebookManager private constructor()  {
     private fun downloadPage(lifecycleScope: LifecycleCoroutineScope, version: String, onSuccess: (rulebook: Rulebook) -> Unit) {
         lifecycleScope.launch {
             val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
-                SharedPrefsManager.shared.storeRulebook(doc.toString())
+                OldSharedPrefsManager.shared.storeRulebook(doc.toString())
                 onSuccess(parseDocAsRulebook(doc, version))
             }
             jsoupAsyncTask.execute()

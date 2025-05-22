@@ -12,7 +12,7 @@ class PlayerManager private constructor() {
 
     fun setPlayer(player: PlayerModel) {
         this.player = player
-        SharedPrefsManager.shared.storePlayer(player)
+        OldSharedPrefsManager.shared.storePlayer(player)
     }
 
     fun getPlayer(): PlayerModel? {
@@ -21,7 +21,7 @@ class PlayerManager private constructor() {
 
     fun updatePlayer(updatedPlayer: PlayerModel) {
         this.player = updatedPlayer
-        SharedPrefsManager.shared.storePlayer(updatedPlayer)
+        OldSharedPrefsManager.shared.storePlayer(updatedPlayer)
     }
 
     companion object {

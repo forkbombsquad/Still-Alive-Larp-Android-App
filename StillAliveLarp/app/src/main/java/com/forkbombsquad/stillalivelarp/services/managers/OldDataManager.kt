@@ -504,7 +504,7 @@ class OldDataManager private constructor() {
                             request.successfulResponse(IdSP(selectedChar?.id ?: 0), true).ifLet({
                                 if (selectedChar?.id == character?.id && character != null) {
                                     // Store gear in shared prefs
-                                    SharedPrefsManager.shared.storeGear(it)
+                                    OldSharedPrefsManager.shared.storeGear(it)
                                 }
 
                                 selectedCharacterGear = it.charGear
@@ -630,7 +630,7 @@ class OldDataManager private constructor() {
                                 skillCategories = it.skillCategories
                                 loadingSkillCategories = false
                                 finishedRequest(currentLoadCountIndex)
-                                SharedPrefsManager.shared.storeSkillCategories(it.skillCategories.toList())
+                                OldSharedPrefsManager.shared.storeSkillCategories(it.skillCategories.toList())
                             }, {
                                 skillCategories = null
                                 loadingSkillCategories = false
@@ -736,7 +736,7 @@ class OldDataManager private constructor() {
         val fullNPCs: MutableList<FullCharacterModel> = mutableListOf()
         var counter = 0
         var actuallyStoreThem = {
-            SharedPrefsManager.shared.storeNPCs(fullNPCs)
+            OldSharedPrefsManager.shared.storeNPCs(fullNPCs)
         }
         allNPCCharacters?.forEach {
             CharacterManager.shared.fetchFullCharacter(lifecycleScope, it.id) { fullChar ->

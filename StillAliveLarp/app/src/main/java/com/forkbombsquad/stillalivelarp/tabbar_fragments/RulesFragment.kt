@@ -14,7 +14,7 @@ import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
+import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
@@ -65,13 +65,13 @@ class RulesFragment : Fragment() {
         }
 
         skillTreeDiagramNav.setOnClick {
-            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
+            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
 
         skillTreeDiagramDarkNav.setOnClick {
-            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
+            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
@@ -86,7 +86,7 @@ class RulesFragment : Fragment() {
         }
 
         treatingWoundsNav.setOnClick {
-            OldDataManager.shared.passedBitmap = SharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
             val intent = Intent(v.context, SAImageViewActivity::class.java)
             startActivity(intent)
         }
