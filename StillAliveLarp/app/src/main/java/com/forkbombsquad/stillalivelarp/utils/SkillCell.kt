@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import kotlin.math.max
@@ -50,7 +50,7 @@ class SkillCell(context: Context): LinearLayout(context) {
         purchaseButton = findViewById(R.id.skillcell_purchaseButton)
     }
 
-    fun setup(skill: FullSkillModel) {
+    fun setup(skill: OldFullSkillModel) {
         title.text = skill.name
         type.text = skill.getTypeText()
 
@@ -78,7 +78,7 @@ class SkillCell(context: Context): LinearLayout(context) {
         purchaseLayout.isGone = true
     }
 
-    fun setupForXpReduction(skill: FullSkillModel, xpReduction: XpReductionModel?, buttonCallback: (skill: FullSkillModel) -> Unit) {
+    fun setupForXpReduction(skill: OldFullSkillModel, xpReduction: XpReductionModel?, buttonCallback: (skill: OldFullSkillModel) -> Unit) {
         title.text = skill.name
         type.text = skill.getTypeText()
 

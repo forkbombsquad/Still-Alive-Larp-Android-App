@@ -25,8 +25,8 @@ fun globalTestPrint(message: Any) {
     }
 }
 
-fun globalGetContext(): Context {
-    return StillAliveLarpApplication.context
+fun globalGetContext(): Context? {
+    return StillAliveLarpApplication.currentActivty
 }
 
 fun globalToJson(model: Any): String {

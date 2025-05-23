@@ -27,8 +27,6 @@ class ContactActivity : NoStatusBarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
 
-        StillAliveLarpApplication.activity = this
-
         fullName = findViewById(R.id.contact_full_name_edit_text)
         email = findViewById(R.id.contact_email_edit_text)
         postalCode = findViewById(R.id.contact_postal_code_edit_text)

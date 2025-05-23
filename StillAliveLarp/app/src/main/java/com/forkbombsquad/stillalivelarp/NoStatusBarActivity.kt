@@ -9,7 +9,11 @@ open class NoStatusBarActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        StillAliveLarpApplication.activity = this
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StillAliveLarpApplication.setCurrentActivty(this)
     }
 
 }

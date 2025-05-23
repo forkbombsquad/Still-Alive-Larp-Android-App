@@ -3,17 +3,17 @@ package com.forkbombsquad.stillalivelarp.services.managers
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.SkillPrereqService
 import com.forkbombsquad.stillalivelarp.services.SkillService
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 
 class SkillManager private constructor() {
 
-    private var skills: MutableList<FullSkillModel>? = null
+    private var skills: MutableList<OldFullSkillModel>? = null
     private var fetching = false
-    private var completionBlocks: MutableList<(skills: List<FullSkillModel>?) -> Unit> = mutableListOf()
+    private var completionBlocks: MutableList<(skills: List<OldFullSkillModel>?) -> Unit> = mutableListOf()
 
-    fun getSkills(lifecycleScope: LifecycleCoroutineScope, overrideLocal: Boolean, callback: (skills: List<FullSkillModel>?) -> Unit) {
+    fun getSkills(lifecycleScope: LifecycleCoroutineScope, overrideLocal: Boolean, callback: (skills: List<OldFullSkillModel>?) -> Unit) {
         if (!overrideLocal && skills != null) {
             callback(skills)
         } else {
@@ -25,7 +25,7 @@ class SkillManager private constructor() {
                     skillRequest.successfulResponse().ifLet({ skillList ->
                         skills = mutableListOf()
                         skillList.skills.forEach { skill ->
-                            skills?.add(FullSkillModel(skill))
+                            skills?.add(OldFullSkillModel(skill))
                         }
                         val prereqRequest = SkillPrereqService.GetAllSkillPrereqs()
                         lifecycleScope.launch {
@@ -74,7 +74,7 @@ class SkillManager private constructor() {
         }
     }
 
-    fun getSkillsOffline(): List<FullSkillModel> {
+    fun getSkillsOffline(): List<OldFullSkillModel> {
         return OldSharedPrefsManager.shared.getSkills()
     }
 

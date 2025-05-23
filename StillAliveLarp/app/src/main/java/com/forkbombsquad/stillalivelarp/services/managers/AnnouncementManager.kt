@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementSubModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -23,14 +24,14 @@ class AnnouncementManager {
     private constructor() {
         this.cachedAnnouncements = mutableListOf()
         var counter = 1
-        var announcementJson: String? = OldSharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
+        var announcementJson: String? = OldSharedPrefsManager.shared.get(globalGetContext()!!, "$cacheKey$counter")
         var gson = Gson()
         while (announcementJson != null) {
             gson.fromJson(announcementJson, AnnouncementModel::class.java).ifLet({
                 cachedAnnouncements.add(it)
             },{})
             counter++
-            announcementJson = OldSharedPrefsManager.shared.get(StillAliveLarpApplication.context, "$cacheKey$counter")
+            announcementJson = OldSharedPrefsManager.shared.get(globalGetContext()!!, "$cacheKey$counter")
         }
     }
 
@@ -101,7 +102,7 @@ class AnnouncementManager {
 
     private fun cacheAnnouncement(announcement: AnnouncementModel) {
         val gson = Gson()
-        OldSharedPrefsManager.shared.set(StillAliveLarpApplication.context, "$cacheKey${announcement.id}", gson.toJson(announcement))
+        OldSharedPrefsManager.shared.set(globalGetContext()!!, "$cacheKey${announcement.id}", gson.toJson(announcement))
     }
 
     private fun getAnnouncementFromService(lifecycleScope: LifecycleCoroutineScope, id: Int, callback: (announcement: AnnouncementModel?) -> Unit) {

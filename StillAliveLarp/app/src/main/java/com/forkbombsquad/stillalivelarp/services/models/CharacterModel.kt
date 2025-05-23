@@ -37,7 +37,7 @@ data class FullCharacterModel(
     val mysteriousStrangerUses: String,
     val playerId: Int,
     val characterTypeId: Int,
-    var skills: Array<FullSkillModel>
+    var skills: Array<OldFullSkillModel>
 ) : Serializable {
     constructor(charModel: CharacterModel): this(
         charModel.id,
@@ -85,7 +85,7 @@ data class FullCharacterModel(
         return list.toIntArray()
     }
 
-    fun getChooseOneSkills(): Array<FullSkillModel> {
+    fun getChooseOneSkills(): Array<OldFullSkillModel> {
         return skills.filter {
             it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
         }.toTypedArray()

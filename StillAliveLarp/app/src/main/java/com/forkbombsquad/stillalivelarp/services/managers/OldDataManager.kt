@@ -27,7 +27,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
@@ -83,7 +83,7 @@ class OldDataManager private constructor() {
     var intrigue: IntrigueModel? = null
     var loadingIntrigue = true
 
-    var skills: List<FullSkillModel>? = null
+    var skills: List<OldFullSkillModel>? = null
     var loadingSkills = true
 
     var allPlayers: List<PlayerModel>? = null

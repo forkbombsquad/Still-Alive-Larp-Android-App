@@ -8,7 +8,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -69,7 +69,7 @@ class SpecialClassXpReductionsActivity : NoStatusBarActivity() {
         }
     }
 
-    private fun getSkill(xpRed: XpReductionModel, skills: List<FullSkillModel>): FullSkillModel? {
+    private fun getSkill(xpRed: XpReductionModel, skills: List<OldFullSkillModel>): OldFullSkillModel? {
         return skills.firstOrNull { it.id == xpRed.skillId }
     }
 }

@@ -9,7 +9,7 @@ import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -85,7 +85,7 @@ class OfflineViewSkillsActivity : NoStatusBarActivity() {
     }
 
 
-    private fun getSortedSkills(skills: Array<FullSkillModel>): List<FullSkillModel> {
+    private fun getSortedSkills(skills: Array<OldFullSkillModel>): List<OldFullSkillModel> {
         var filteredSkills = skills.toList()
         if (searchBar.text.toString().trim().isNotEmpty()) {
             val text = searchBar.text.toString().trim().lowercase()

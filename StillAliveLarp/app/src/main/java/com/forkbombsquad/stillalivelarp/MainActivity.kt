@@ -21,8 +21,6 @@ import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonType
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
-import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
-import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication.Companion.context
 import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
 import com.forkbombsquad.stillalivelarp.utils.ValidationType
 import com.forkbombsquad.stillalivelarp.utils.Validator
@@ -50,17 +48,15 @@ class MainActivity : NoStatusBarActivity() {
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        StillAliveLarpApplication.activity = this
-
         usernameField = findViewById(R.id.username_edit_text)
         passwordField = findViewById(R.id.password_edit_text)
 
-        var u = UserAndPassManager.shared.getTempU(context)
-        var p = UserAndPassManager.shared.getTempP(context)
+        var u = UserAndPassManager.shared.getTempU(this)
+        var p = UserAndPassManager.shared.getTempP(this)
 
-        if (u == null && p == null && UserAndPassManager.shared.getRemember(context)) {
-            u = UserAndPassManager.shared.getU(context)
-            p = UserAndPassManager.shared.getP(context)
+        if (u == null && p == null && UserAndPassManager.shared.getRemember(this)) {
+            u = UserAndPassManager.shared.getU(this)
+            p = UserAndPassManager.shared.getP(this)
         }
 
         usernameField.setText(u ?: "")
@@ -81,7 +77,7 @@ class MainActivity : NoStatusBarActivity() {
                 lifecycleScope.launch {
                     versionRequest.successfulResponse().ifLet({ versionModel ->
                         val pInfo = tryOptional {
-                            context.packageManager.getPackageInfo(context.packageName, 0)
+                            this@MainActivity.packageManager.getPackageInfo(this@MainActivity.packageName, 0)
                         }
                         val currentVersion = tryOptional {
                             pInfo?.longVersionCode?.toInt() ?: 0
@@ -142,7 +138,7 @@ class MainActivity : NoStatusBarActivity() {
 
     private fun signIn() {
         logInButton.setLoadingWithText("Fetching Player Info...")
-        UserAndPassManager.shared.setUandP(context, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
+        UserAndPassManager.shared.setUandP(this, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
         logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
         lifecycleScope.launch {
@@ -161,12 +157,12 @@ class MainActivity : NoStatusBarActivity() {
 
     override fun onResume() {
         super.onResume()
-        var u = UserAndPassManager.shared.getTempU(context)
-        var p = UserAndPassManager.shared.getTempP(context)
+        var u = UserAndPassManager.shared.getTempU(this)
+        var p = UserAndPassManager.shared.getTempP(this)
 
-        if (u == null && p == null && UserAndPassManager.shared.getRemember(context)) {
-            u = UserAndPassManager.shared.getU(context)
-            p = UserAndPassManager.shared.getP(context)
+        if (u == null && p == null && UserAndPassManager.shared.getRemember(this)) {
+            u = UserAndPassManager.shared.getU(this)
+            p = UserAndPassManager.shared.getP(this)
         }
 
         usernameField.setText(u ?: "")

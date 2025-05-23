@@ -39,8 +39,6 @@ class CreateAccountActivity : NoStatusBarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
-        StillAliveLarpApplication.activity = this
-
         fullNameField = findViewById(R.id.full_name_edit_text)
         emailField = findViewById(R.id.email_edit_text)
         passwordField = findViewById(R.id.password_edit_text)
@@ -75,10 +73,10 @@ class CreateAccountActivity : NoStatusBarActivity() {
                         createPlayerReqeuest.successfulResponse(PlayerCreateSP(preapprovalcode = preApprovalCodeField.text.toString(), player = newPlayer)).ifLet({
                             runOnUiThread {
                                 PlayerManager.shared.setPlayer(it)
-                                OldSharedPrefsManager.shared.clearAll(globalGetContext())
-                                UserAndPassManager.shared.clear(globalGetContext())
+                                OldSharedPrefsManager.shared.clearAll(globalGetContext()!!)
+                                UserAndPassManager.shared.clear(globalGetContext()!!)
                                 OldDataManager.forceReset()
-                                UserAndPassManager.shared.setTemp(globalGetContext(), emailField.text.toString(), passwordField.text.toString())
+                                UserAndPassManager.shared.setTemp(globalGetContext()!!, emailField.text.toString(), passwordField.text.toString())
                                 AlertUtils.displayOkMessage(this@CreateAccountActivity, "Success!", "Account for ${emailField.text.toString()} created!") { _, _ ->
                                     runOnUiThread {
                                         finish()

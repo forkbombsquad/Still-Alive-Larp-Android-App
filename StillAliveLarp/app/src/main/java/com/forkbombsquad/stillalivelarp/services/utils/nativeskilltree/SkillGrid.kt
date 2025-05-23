@@ -22,7 +22,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillCategoryModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
@@ -37,11 +37,11 @@ import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sign
 
-class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategoryModel>, personal: Boolean = false, allowPurchase: Boolean = false) {
+class SkillGrid(skills: List<OldFullSkillModel>, skillCategories: List<SkillCategoryModel>, personal: Boolean = false, allowPurchase: Boolean = false) {
     private val personal: Boolean
     private val allowPurchase: Boolean
 
-    private val skills: List<FullSkillModel>
+    private val skills: List<OldFullSkillModel>
     private var purchaseableSkills: List<CharacterModifiedSkillModel> = listOf()
     private val skillCategories: List<SkillCategoryModel>
     private val gridCategories: MutableList<SkillGridCategory> = mutableListOf()
@@ -305,7 +305,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
     private val lightGreenDull = Color.parseColor("#667D61")
     private val darkGreenDull = Color.parseColor("#346C14")
 
-    val fullGrid: MutableList<MutableList<FullSkillModel?>>
+    val fullGrid: MutableList<MutableList<OldFullSkillModel?>>
     val gridConnections: List<GridConnection>
 
     lateinit var invalidate: () -> Unit
@@ -327,12 +327,12 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         }
     }
 
-    private fun getAvailableSkills(skls: List<FullSkillModel>?, player: PlayerModel?, character: FullCharacterModel?, xpReductions: List<XpReductionModel>?): List<CharacterModifiedSkillModel> {
+    private fun getAvailableSkills(skls: List<OldFullSkillModel>?, player: PlayerModel?, character: FullCharacterModel?, xpReductions: List<XpReductionModel>?): List<CharacterModifiedSkillModel> {
         val allSkills = skls ?: listOf()
-        val charSkills: List<FullSkillModel> = character?.skills?.toList() ?: listOf()
+        val charSkills: List<OldFullSkillModel> = character?.skills?.toList() ?: listOf()
 
         // Remove skills the character already has
-        var newSkillList: List<FullSkillModel> = allSkills.filter { skillToKeep ->
+        var newSkillList: List<OldFullSkillModel> = allSkills.filter { skillToKeep ->
             charSkills.firstOrNull { charSkill ->
                 charSkill.id == skillToKeep.id
             } == null
@@ -362,7 +362,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         }
 
         // Remove Choose One Skills that can't be chosen
-        val cskills: List<FullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
+        val cskills: List<OldFullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
         if (cskills.isEmpty()) {
             // Remove all level 2 cskills
             newSkillList = newSkillList.filter { skillToKeep ->
@@ -429,7 +429,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         }
     }
 
-    fun getSkillColor(x: Float, y: Float, skill: FullSkillModel): Paint {
+    fun getSkillColor(x: Float, y: Float, skill: OldFullSkillModel): Paint {
         var gradient: LinearGradient? = null
         when (skill.skillTypeId.toInt()) {
             Constants.SkillTypes.combat -> {
@@ -489,7 +489,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         }
         return blackPaint.color
     }
-    private fun couldPurchaseSkill(skill: FullSkillModel): Boolean {
+    private fun couldPurchaseSkill(skill: OldFullSkillModel): Boolean {
         if (personal && allowPurchase) {
             return purchaseableSkills.firstOrNull { it.id == skill.id } != null
         }
@@ -1062,8 +1062,8 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         this.gridCategories.sortBy { it.skillCategoryId }
     }
 
-    private fun calculateFullGrid(): MutableList<MutableList<FullSkillModel?>> {
-        val grid: MutableList<MutableList<FullSkillModel?>> = mutableListOf()
+    private fun calculateFullGrid(): MutableList<MutableList<OldFullSkillModel?>> {
+        val grid: MutableList<MutableList<OldFullSkillModel?>> = mutableListOf()
         grid.add(mutableListOf())
         grid.add(mutableListOf())
         grid.add(mutableListOf())
@@ -1116,7 +1116,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         return cons
     }
 
-    private fun getSkill(skillId: Int): FullSkillModel {
+    private fun getSkill(skillId: Int): OldFullSkillModel {
         return skills.first { it.id == skillId }
     }
 
@@ -1334,10 +1334,10 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
         // If you never need to calculate it,
         // Count the maximum number of skills that are prerequisites for other skills, both of the same xp value (right now it's 2)
 
-        val skillsCategorized: MutableMap<String, MutableList<FullSkillModel>> = mutableMapOf()
+        val skillsCategorized: MutableMap<String, MutableList<OldFullSkillModel>> = mutableMapOf()
         for (skill in skills) {
             if (skillsCategorized[skill.skillCategoryId] == null) {
-                val mutableList: MutableList<FullSkillModel> = mutableListOf(skill)
+                val mutableList: MutableList<OldFullSkillModel> = mutableListOf(skill)
                 skillsCategorized[skill.skillCategoryId] = mutableList
             } else {
                 skillsCategorized[skill.skillCategoryId]?.add(skill)
@@ -1435,7 +1435,7 @@ class SkillGrid(skills: List<FullSkillModel>, skillCategories: List<SkillCategor
 
 }
 
-data class GridSkill(var rect: RectF, val skill: FullSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
+data class GridSkill(var rect: RectF, val skill: OldFullSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
 
 data class SkillRequirement(var rect: RectF, val layout: StaticLayout)
 

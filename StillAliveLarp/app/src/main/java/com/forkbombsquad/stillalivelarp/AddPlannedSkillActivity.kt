@@ -16,7 +16,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillMo
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -139,7 +139,7 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
                                     val skills: MutableList<CharacterSkillModel> = OldDataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
                                     skills.add(charSkillModel)
                                     OldDataManager.shared.selectedPlannedCharacterCharSkills = skills
-                                    val fs: MutableList<FullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
+                                    val fs: MutableList<OldFullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
                                     fs.add(OldDataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
                                     OldDataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
 
@@ -185,7 +185,7 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
                                 val skills: MutableList<CharacterSkillModel> = OldDataManager.shared.selectedPlannedCharacterCharSkills?.toMutableList() ?: mutableListOf()
                                 skills.add(charSkillModel)
                                 OldDataManager.shared.selectedPlannedCharacterCharSkills = skills
-                                val fs: MutableList<FullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
+                                val fs: MutableList<OldFullSkillModel> = OldDataManager.shared.selectedPlannedCharacter?.skills?.toMutableList() ?: mutableListOf()
                                 fs.add(OldDataManager.shared.skills!!.first { it.id == charSkillModel.skillId })
                                 OldDataManager.shared.selectedPlannedCharacter?.skills = fs.toTypedArray()
 
@@ -229,12 +229,12 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
         return sorted
     }
 
-    private fun getAvailableSkills(skls: List<FullSkillModel>?, character: FullCharacterModel?): List<CharacterModifiedSkillModel> {
+    private fun getAvailableSkills(skls: List<OldFullSkillModel>?, character: FullCharacterModel?): List<CharacterModifiedSkillModel> {
         val allSkills = skls ?: listOf()
-        val charSkills: List<FullSkillModel> = character?.skills?.toList() ?: listOf()
+        val charSkills: List<OldFullSkillModel> = character?.skills?.toList() ?: listOf()
 
         // Remove skills the character already has
-        var newSkillList: List<FullSkillModel> = allSkills.filter { skillToKeep ->
+        var newSkillList: List<OldFullSkillModel> = allSkills.filter { skillToKeep ->
             charSkills.firstOrNull { charSkill ->
                 charSkill.id == skillToKeep.id
             } == null
@@ -259,7 +259,7 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
         }
 
         // Remove Choose One Skills that can't be chosen
-        val cskills: List<FullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
+        val cskills: List<OldFullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
         if (cskills.isEmpty()) {
             // Remove all level 2 cskills
             newSkillList = newSkillList.filter { skillToKeep ->

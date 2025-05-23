@@ -63,7 +63,7 @@ class AlertUtils {
          * Only works for one type of each button
          */
         fun displayMessage(context: Context, title: String, message: String, buttons: Array<AlertButton>) {
-            StillAliveLarpApplication.activity.runOnUiThread {
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
                 alert.setTitle(title)
                 alert.setMessage(message)
@@ -79,7 +79,7 @@ class AlertUtils {
         }
 
         fun displayChoiceMessage(context: Context, title: String, choices: Array<String>, response: (index: Int) -> Unit) {
-            StillAliveLarpApplication.activity.runOnUiThread {
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
                 var selectedIndex = 0
                 alert.setTitle(title)
@@ -108,7 +108,7 @@ class AlertUtils {
 
             layout.addView(editText)
 
-            StillAliveLarpApplication.activity.runOnUiThread {
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
                 alert.setTitle(title)
                 alert.setView(layout)
@@ -152,7 +152,7 @@ class AlertUtils {
                 layout.addView(checkbox)
             }
 
-            StillAliveLarpApplication.activity.runOnUiThread {
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
                 alert.setTitle(title)
                 alert.setView(layout)
@@ -199,7 +199,7 @@ class AlertUtils {
                 layout.addView(checkbox)
             }
 
-            StillAliveLarpApplication.activity.runOnUiThread {
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
                 alert.setTitle(title)
                 alert.setView(layout)

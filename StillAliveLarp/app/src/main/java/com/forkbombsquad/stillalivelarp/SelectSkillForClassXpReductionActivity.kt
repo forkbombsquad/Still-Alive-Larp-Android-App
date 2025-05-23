@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.TakeClassSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
@@ -86,7 +86,7 @@ class SelectSkillForClassXpReductionActivity : NoStatusBarActivity() {
         })
     }
 
-    private fun getFilteredSkills(skills: List<FullSkillModel>): List<FullSkillModel> {
+    private fun getFilteredSkills(skills: List<OldFullSkillModel>): List<OldFullSkillModel> {
         var filteredSkills = skills
         val text = searchView.text.toString().trim().lowercase()
         if (text.isNotEmpty()) {

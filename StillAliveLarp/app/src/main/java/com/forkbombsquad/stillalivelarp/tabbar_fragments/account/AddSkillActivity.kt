@@ -18,7 +18,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
@@ -183,12 +183,12 @@ class AddSkillActivity : NoStatusBarActivity() {
         return sorted
     }
 
-    private fun getAvailableSkills(skls: List<FullSkillModel>?, player: PlayerModel?, character: FullCharacterModel?, xpReductions: List<XpReductionModel>?): List<CharacterModifiedSkillModel> {
+    private fun getAvailableSkills(skls: List<OldFullSkillModel>?, player: PlayerModel?, character: FullCharacterModel?, xpReductions: List<XpReductionModel>?): List<CharacterModifiedSkillModel> {
         val allSkills = skls ?: listOf()
-        val charSkills: List<FullSkillModel> = character?.skills?.toList() ?: listOf()
+        val charSkills: List<OldFullSkillModel> = character?.skills?.toList() ?: listOf()
 
         // Remove skills the character already has
-        var newSkillList: List<FullSkillModel> = allSkills.filter { skillToKeep ->
+        var newSkillList: List<OldFullSkillModel> = allSkills.filter { skillToKeep ->
             charSkills.firstOrNull { charSkill ->
                 charSkill.id == skillToKeep.id
             } == null
@@ -218,7 +218,7 @@ class AddSkillActivity : NoStatusBarActivity() {
         }
 
         // Remove Choose One Skills that can't be chosen
-        val cskills: List<FullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
+        val cskills: List<OldFullSkillModel> = character?.getChooseOneSkills()?.toList() ?: listOf()
         if (cskills.isEmpty()) {
             // Remove all level 2 cskills
             newSkillList = newSkillList.filter { skillToKeep ->

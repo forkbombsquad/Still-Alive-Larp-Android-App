@@ -1,14 +1,14 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 
-class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>, categoryId: Int) {
+class SkillBranch(skills: List<OldFullSkillModel>, allSkills: List<OldFullSkillModel>, categoryId: Int) {
 
     val categoryId: Int
-    val allSkills: List<FullSkillModel>
-    val skills: List<FullSkillModel>
+    val allSkills: List<OldFullSkillModel>
+    val skills: List<OldFullSkillModel>
     var width: Int
-    val grid: MutableList<MutableList<FullSkillModel?>>
+    val grid: MutableList<MutableList<OldFullSkillModel?>>
 
     init {
         this.categoryId = categoryId
@@ -55,7 +55,7 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         }
     }
 
-    private fun addSkillRec(skill: FullSkillModel?, previousCost: Int) {
+    private fun addSkillRec(skill: OldFullSkillModel?, previousCost: Int) {
         if (skill != null) {
             if (skillInGrid(skill)) { return }
             if (skill.skillCategoryId.toInt() != categoryId) { return }
@@ -78,7 +78,7 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         }
     }
 
-    fun skillInGrid(skill: FullSkillModel): Boolean {
+    fun skillInGrid(skill: OldFullSkillModel): Boolean {
         grid.forEach {
             if (it.firstOrNull { sk -> sk?.id == skill.id } != null) {
                 return true
@@ -87,7 +87,7 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         return false
     }
 
-    fun getSkill(skillId: Int): FullSkillModel? {
+    fun getSkill(skillId: Int): OldFullSkillModel? {
         return allSkills.firstOrNull() { it.id == skillId }
     }
 

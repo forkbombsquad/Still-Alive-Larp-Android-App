@@ -24,3 +24,8 @@ fun Int.equalsAnyOf(array: Array<Int>): Boolean {
     }
     return false
 }
+
+fun Int.equalsAnyOf(list: List<Int>): Boolean {
+    return list.contains(this)
+}
+

@@ -13,7 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.SkillSortType
@@ -120,7 +120,7 @@ class OfflineViewAllSkillsActivity : NoStatusBarActivity() {
         }
     }
 
-    private fun getFilteredSkills(skills: List<FullSkillModel>): List<FullSkillModel> {
+    private fun getFilteredSkills(skills: List<OldFullSkillModel>): List<OldFullSkillModel> {
         var filteredSkills = skills
         val text = searchBar.text.toString().trim().lowercase()
         if (text.isNotEmpty() || currentFilter != SkillFilterType.NONE) {
@@ -129,7 +129,7 @@ class OfflineViewAllSkillsActivity : NoStatusBarActivity() {
         return getSortedSkills(filteredSkills)
     }
 
-    private fun getSortedSkills(skills: List<FullSkillModel>): List<FullSkillModel> {
+    private fun getSortedSkills(skills: List<OldFullSkillModel>): List<OldFullSkillModel> {
         var sorted = skills
         sorted = when (currentSort) {
             SkillSortType.AZ -> skills.sortedWith(compareBy { it.name })

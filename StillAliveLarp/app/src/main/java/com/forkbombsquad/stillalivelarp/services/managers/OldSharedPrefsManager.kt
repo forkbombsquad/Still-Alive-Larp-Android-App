@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.services.models.*
-import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -96,12 +96,12 @@ class OldSharedPrefsManager private constructor() {
 
     fun storePlayer(player: PlayerModel) {
         val gson = Gson()
-        this.set(StillAliveLarpApplication.context, playerKey, gson.toJson(player))
+        this.set(globalGetContext()!!, playerKey, gson.toJson(player))
     }
 
     fun getPlayer(): PlayerModel? {
         val gson = Gson()
-        get(StillAliveLarpApplication.context, playerKey)?.let {
+        get(globalGetContext()!!, playerKey)?.let {
             return gson.fromJson(it, PlayerModel::class.java)
         } ?: run {
             return null
@@ -110,12 +110,12 @@ class OldSharedPrefsManager private constructor() {
 
     fun storeCharacter(character: FullCharacterModel) {
         val gson = Gson()
-        this.set(StillAliveLarpApplication.context, characterKey, gson.toJson(character))
+        this.set(globalGetContext()!!, characterKey, gson.toJson(character))
     }
 
     fun getCharacter(): FullCharacterModel? {
         val gson = Gson()
-        get(StillAliveLarpApplication.context, characterKey)?.let {
+        get(globalGetContext()!!, characterKey)?.let {
             return gson.fromJson(it, FullCharacterModel::class.java)
         } ?: run {
             return null
@@ -124,12 +124,12 @@ class OldSharedPrefsManager private constructor() {
 
     fun storeGear(gearListModel: GearListModel) {
         val gson = Gson()
-        this.set(StillAliveLarpApplication.context, gearKey, gson.toJson(gearListModel))
+        this.set(globalGetContext()!!, gearKey, gson.toJson(gearListModel))
     }
 
     fun getGear(): Array<GearModel>? {
         val gson = Gson()
-        get(StillAliveLarpApplication.context, gearKey)?.let {
+        get(globalGetContext()!!, gearKey)?.let {
             return gson.fromJson(it, GearListModel::class.java).charGear
         } ?: run {
             return null
@@ -137,28 +137,28 @@ class OldSharedPrefsManager private constructor() {
     }
 
     fun getRulebookVersion(): String? {
-        return get(StillAliveLarpApplication.context, rulebookVersionKey)
+        return get(globalGetContext()!!, rulebookVersionKey)
     }
 
     fun storeRulebookVersion(version: String) {
-        this.set(StillAliveLarpApplication.context, rulebookVersionKey, version)
+        this.set(globalGetContext()!!, rulebookVersionKey, version)
     }
 
     fun getRulebook(): String? {
-        return get(StillAliveLarpApplication.context, rulebookKey)
+        return get(globalGetContext()!!, rulebookKey)
     }
 
     fun storeRulebook(rulebook: String) {
-        this.set(StillAliveLarpApplication.context, rulebookKey, rulebook)
+        this.set(globalGetContext()!!, rulebookKey, rulebook)
     }
 
-    fun storeSkills(skills: List<FullSkillModel>) {
-        this.set(StillAliveLarpApplication.context, skillsKey, globalToJson(skills))
+    fun storeSkills(skills: List<OldFullSkillModel>) {
+        this.set(globalGetContext()!!, skillsKey, globalToJson(skills))
     }
 
-    fun getSkills(): List<FullSkillModel> {
-        val type = object: TypeToken<List<FullSkillModel>>() {}.type
-        return globalFromJson(get(StillAliveLarpApplication.context, skillsKey) ?: "", type) ?: listOf()
+    fun getSkills(): List<OldFullSkillModel> {
+        val type = object: TypeToken<List<OldFullSkillModel>>() {}.type
+        return globalFromJson(get(globalGetContext()!!, skillsKey) ?: "", type) ?: listOf()
     }
 
     private data class NPCListModel(@JsonProperty("npcs") val npcs: Array<FullCharacterModel>
@@ -166,23 +166,23 @@ class OldSharedPrefsManager private constructor() {
 
     fun storeNPCs(npcs: List<FullCharacterModel>) {
         val npcListModel = NPCListModel(npcs.toTypedArray())
-        this.set(StillAliveLarpApplication.context, npcsKey, globalToJson(npcListModel))
+        this.set(globalGetContext()!!, npcsKey, globalToJson(npcListModel))
     }
 
     fun getNPCs(): List<FullCharacterModel> {
         val type = object: TypeToken<NPCListModel>() {}.type
-        return globalFromJson<NPCListModel>(get(StillAliveLarpApplication.context, npcsKey) ?: "", type)?.npcs?.toList() ?: listOf()
+        return globalFromJson<NPCListModel>(get(globalGetContext()!!, npcsKey) ?: "", type)?.npcs?.toList() ?: listOf()
     }
 
     private data class SkillCategoryListModel(@JsonProperty("cats") val cats: Array<SkillCategoryModel>
     ) : Serializable
     fun storeSkillCategories(skillCategories: List<SkillCategoryModel>) {
         val skilCatListModel = SkillCategoryListModel(skillCategories.toTypedArray())
-        this.set(StillAliveLarpApplication.context, skillCategoriesKey, globalToJson(skilCatListModel))
+        this.set(globalGetContext()!!, skillCategoriesKey, globalToJson(skilCatListModel))
     }
     fun getSkillCategories(): List<SkillCategoryModel> {
         val type = object: TypeToken<SkillCategoryListModel>() {}.type
-        return globalFromJson<SkillCategoryListModel>(get(StillAliveLarpApplication.context, skillCategoriesKey) ?: "", type)?.cats?.toList() ?: listOf()
+        return globalFromJson<SkillCategoryListModel>(get(globalGetContext()!!, skillCategoriesKey) ?: "", type)?.cats?.toList() ?: listOf()
     }
 
     companion object {
