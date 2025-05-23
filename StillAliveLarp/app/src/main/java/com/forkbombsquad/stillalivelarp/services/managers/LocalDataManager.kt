@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
+import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
@@ -383,12 +384,21 @@ class LocalDataManager private constructor() {
     }
 
     private fun buildAndStoreFullEvents(events: List<EventModel>, attendees: LDEventAttendeeModels, preregs: LDPreregModels) {
-        // TODO preregs event attendees needs to have been gotten for this to work
-        // TODO make a FullEvent model that has attendees and preregs on it
+        val fullEvents: MutableList<FullEventModel> = mutableListOf()
+        events.forEach { event ->
+            fullEvents.add(
+                FullEventModel(
+                    event = event,
+                    attendees = attendees.byEvent[event.id] ?: listOf(),
+                    preregs = preregs.byEvent[event.id] ?: listOf()
+                )
+            )
+        }
+        store(fullEvents, LDMKeys.fullEventsKey)
     }
 
-    fun getFullEvents() {
-        // TODO
+    fun getFullEvents(): List<FullEventModel> {
+        return get(LDMKeys.fullEventsKey) ?: listOf()
     }
 
     private fun buildAndStoreFullCharacters() {
