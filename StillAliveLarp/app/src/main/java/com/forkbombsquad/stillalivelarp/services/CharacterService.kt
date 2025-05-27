@@ -37,6 +37,11 @@ interface GetAllCharactersRequest {
     suspend fun makeRequest(): Response<CharacterListFullModel>
 }
 
+interface GetAllFullCharactersRequest {
+    @HTTP(method ="GET", path = "characters/all/")
+    suspend fun makeRequest(): Response<CharacterListFullModel>
+}
+
 interface GetAllNPCCharactersRequest {
     @HTTP(method ="GET", path = "characters/all_with_type/${Constants.CharacterTypeId.NPC}")
     suspend fun makeRequest(): Response<CharacterListFullModel>
@@ -94,6 +99,15 @@ class CharacterService {
     class GetAllCharacters: UAndPServiceInterface<GetAllCharactersRequest, CharacterListFullModel, ServicePayload> {
         override val request: GetAllCharactersRequest
             get() = retrofit.create(GetAllCharactersRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
+            return request.makeRequest()
+        }
+    }
+
+    class GetAllFullCharacters: UAndPServiceInterface<GetAllFullCharactersRequest, CharacterListFullModel, ServicePayload> {
+        override val request: GetAllFullCharactersRequest
+            get() = retrofit.create(GetAllFullCharactersRequest::class.java)
 
         override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
             return request.makeRequest()

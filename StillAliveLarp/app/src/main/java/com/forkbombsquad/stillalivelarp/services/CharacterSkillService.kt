@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -16,6 +17,11 @@ import retrofit2.http.Path
 interface GetAllCharacterSkillsForCharacterRequest {
     @HTTP(method ="GET", path = "char-skill/all_for_char/{characterId}")
     suspend fun makeRequest(@Path("characterId") characterId: Int): Response<CharacterSkillListModel>
+}
+
+interface GetAllCharacterSkillsRequest {
+    @HTTP(method ="GET", path = "char-skill/all/")
+    suspend fun makeRequest(): Response<CharacterSkillListModel>
 }
 
 interface TakeCharacterSkillRequest {
@@ -41,6 +47,16 @@ class CharacterSkillService {
 
         override suspend fun getResponse(payload: IdSP): Response<CharacterSkillListModel> {
             return request.makeRequest(payload.id())
+        }
+    }
+
+    class GetAllCharacterSkills:
+        UAndPServiceInterface<GetAllCharacterSkillsRequest, CharacterSkillListModel, ServicePayload> {
+        override val request: GetAllCharacterSkillsRequest
+            get() = retrofit.create(GetAllCharacterSkillsRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<CharacterSkillListModel> {
+            return request.makeRequest()
         }
     }
 

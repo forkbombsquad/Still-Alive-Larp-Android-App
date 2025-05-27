@@ -79,13 +79,8 @@ interface UpdateCharacterRequest {
 }
 
 interface UpdateContactRequestRequest {
-    @HTTP(method ="PUT", path = "contact/update/", hasBody = true)
+    @HTTP(method = "PUT", path = "contact/update/", hasBody = true)
     suspend fun makeRequest(@Body characterSkill: RequestBody): Response<ContactRequestModel>
-}
-
-interface GetAllContactRequestsRequest {
-    @HTTP(method ="GET", path = "contact/all/")
-    suspend fun makeRequest(): Response<ContactRequestListModel>
 }
 
 interface UpdatePAdminRequest {
@@ -101,11 +96,6 @@ interface CreateIntrigueRequest {
 interface UpdateIntrigueRequest {
     @HTTP(method ="PUT", path = "intrigue/update/", hasBody = true)
     suspend fun makeRequest(@Body intrigue: RequestBody): Response<IntrigueModel>
-}
-
-interface GetAllIntriguesRequest {
-    @HTTP(method ="GET", path = "intrigue/all/")
-    suspend fun makeRequest(): Response<IntrigueListModel>
 }
 
 interface UpdatePlayerRequest {
@@ -265,15 +255,6 @@ class AdminService {
         }
     }
 
-    class GetAllContactRequests: UAndPServiceInterface<GetAllContactRequestsRequest, ContactRequestListModel, ServicePayload> {
-        override val request: GetAllContactRequestsRequest
-            get() = retrofit.create(GetAllContactRequestsRequest::class.java)
-
-        override suspend fun getResponse(payload: ServicePayload): Response<ContactRequestListModel> {
-            return request.makeRequest()
-        }
-    }
-
     class UpdatePAdmin: UAndPServiceInterface<UpdatePAdminRequest, PlayerModel, UpdatePSP> {
         override val request: UpdatePAdminRequest
             get() = retrofit.create(UpdatePAdminRequest::class.java)
@@ -300,15 +281,6 @@ class AdminService {
 
         override suspend fun getResponse(payload: UpdateModelSP): Response<IntrigueModel> {
             return request.makeRequest(payload.model())
-        }
-    }
-
-    class GetAllIntrigues: UAndPServiceInterface<GetAllIntriguesRequest, IntrigueListModel, ServicePayload> {
-        override val request: GetAllIntriguesRequest
-            get() = retrofit.create(GetAllIntriguesRequest::class.java)
-
-        override suspend fun getResponse(payload: ServicePayload): Response<IntrigueListModel> {
-            return request.makeRequest()
         }
     }
 

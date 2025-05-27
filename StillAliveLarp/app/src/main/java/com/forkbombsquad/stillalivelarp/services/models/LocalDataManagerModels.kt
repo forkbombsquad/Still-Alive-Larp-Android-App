@@ -22,23 +22,53 @@ data class LDAwardModels(
         return list
     }
 
+    companion object {
+        fun empty(): LDAwardModels {
+            return LDAwardModels(mapOf(), mapOf())
+        }
+    }
+
 }
 
 data class LDEventAttendeeModels(
     @JsonProperty("byEvent") val byEvent: Map<Int, List<EventAttendeeModel>>,
     @JsonProperty("byPlayer") val byPlayer: Map<Int, List<EventAttendeeModel>>,
     @JsonProperty("byCharacter") val byCharacter: Map<Int, List<EventAttendeeModel>>
-): Serializable
+): Serializable {
+
+    companion object {
+        fun empty(): LDEventAttendeeModels {
+            return LDEventAttendeeModels(mapOf(), mapOf(), mapOf())
+        }
+    }
+
+}
 
 data class LDPreregModels(
     @JsonProperty("byEvent") val byEvent: Map<Int, List<EventPreregModel>>,
     @JsonProperty("byPlayer") val byPlayer: Map<Int, List<EventPreregModel>>,
     @JsonProperty("byCharacter") val byCharacter: Map<Int, List<EventPreregModel>>,
     @JsonProperty("byRegType") val byRegType: Map<EventRegType, List<EventPreregModel>>
-): Serializable
+): Serializable {
+
+    companion object {
+        fun empty(): LDPreregModels {
+            return LDPreregModels(mapOf(), mapOf(), mapOf(), mapOf())
+        }
+    }
+
+}
 
 data class LDSkillPrereqModels(
     @JsonProperty("all") val all: List<SkillPrereqModel>,
     @JsonProperty("byBaseSkill") val byBaseSkill: Map<Int, List<SkillPrereqModel>>,
     @JsonProperty("byPrereqSkill") val byPrereqSkill: Map<Int, List<SkillPrereqModel>>
-): Serializable
+): Serializable {
+
+    companion object {
+        fun empty(): LDSkillPrereqModels {
+            return LDSkillPrereqModels(listOf(), mapOf(), mapOf())
+        }
+    }
+
+}

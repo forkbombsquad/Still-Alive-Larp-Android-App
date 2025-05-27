@@ -108,15 +108,15 @@ class OldSharedPrefsManager private constructor() {
         }
     }
 
-    fun storeCharacter(character: FullCharacterModel) {
+    fun storeCharacter(character: OldFullCharacterModel) {
         val gson = Gson()
         this.set(globalGetContext()!!, characterKey, gson.toJson(character))
     }
 
-    fun getCharacter(): FullCharacterModel? {
+    fun getCharacter(): OldFullCharacterModel? {
         val gson = Gson()
         get(globalGetContext()!!, characterKey)?.let {
-            return gson.fromJson(it, FullCharacterModel::class.java)
+            return gson.fromJson(it, OldFullCharacterModel::class.java)
         } ?: run {
             return null
         }
@@ -161,15 +161,15 @@ class OldSharedPrefsManager private constructor() {
         return globalFromJson(get(globalGetContext()!!, skillsKey) ?: "", type) ?: listOf()
     }
 
-    private data class NPCListModel(@JsonProperty("npcs") val npcs: Array<FullCharacterModel>
+    private data class NPCListModel(@JsonProperty("npcs") val npcs: Array<OldFullCharacterModel>
     ) : Serializable
 
-    fun storeNPCs(npcs: List<FullCharacterModel>) {
+    fun storeNPCs(npcs: List<OldFullCharacterModel>) {
         val npcListModel = NPCListModel(npcs.toTypedArray())
         this.set(globalGetContext()!!, npcsKey, globalToJson(npcListModel))
     }
 
-    fun getNPCs(): List<FullCharacterModel> {
+    fun getNPCs(): List<OldFullCharacterModel> {
         val type = object: TypeToken<NPCListModel>() {}.type
         return globalFromJson<NPCListModel>(get(globalGetContext()!!, npcsKey) ?: "", type)?.npcs?.toList() ?: listOf()
     }

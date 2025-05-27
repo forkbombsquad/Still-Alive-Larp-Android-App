@@ -26,7 +26,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
@@ -70,7 +70,7 @@ class OldDataManager private constructor() {
     var player: PlayerModel? = null
     var loadingPlayer = true
 
-    var character: FullCharacterModel? = null
+    var character: OldFullCharacterModel? = null
     var loadingCharacter = true
 
     var events: List<EventModel>? = null
@@ -94,7 +94,7 @@ class OldDataManager private constructor() {
 
     var selectedPlayer: PlayerModel? = null
 
-    var charForSelectedPlayer: FullCharacterModel? = null
+    var charForSelectedPlayer: OldFullCharacterModel? = null
     var loadingCharForSelectedPlayer = true
 
     var contactRequests: List<ContactRequestModel>? = null
@@ -145,7 +145,7 @@ class OldDataManager private constructor() {
     var profileImage: ProfileImageModel? = null
     var loadingProfileImage = true
 
-    var fullCharForSelectedChar: FullCharacterModel? = null
+    var fullCharForSelectedChar: OldFullCharacterModel? = null
     var loadingFullCharForSelectedChar = true
 
     var eventAttendeesForEvent: List<EventAttendeeModel>? = null
@@ -156,17 +156,17 @@ class OldDataManager private constructor() {
     var allPlannedCharacters: List<CharacterModel>? = null
     var loadingAllPlannedCharacters = true
 
-    var selectedPlannedCharacter: FullCharacterModel? = null
+    var selectedPlannedCharacter: OldFullCharacterModel? = null
     var selectedPlannedCharacterCharSkills: List<CharacterSkillModel>? = null
 
     var allNPCCharacters: List<CharacterModel>? = null
     var loadingAllNPCCharacters = true
 
-    var selectedNPCCharacter: FullCharacterModel? = null
+    var selectedNPCCharacter: OldFullCharacterModel? = null
 
     var gearToEdit: GearJsonModel? = null
 
-    var allOfflineNPCCharacters: List<FullCharacterModel>? = null
+    var allOfflineNPCCharacters: List<OldFullCharacterModel>? = null
 
     var loadingResearchProjects = true
     var researchProjects: List<ResearchProjectModel>? = null
@@ -733,7 +733,7 @@ class OldDataManager private constructor() {
         }
     }
     private fun storeNpcs(lifecycleScope: LifecycleCoroutineScope) {
-        val fullNPCs: MutableList<FullCharacterModel> = mutableListOf()
+        val fullNPCs: MutableList<OldFullCharacterModel> = mutableListOf()
         var counter = 0
         var actuallyStoreThem = {
             OldSharedPrefsManager.shared.storeNPCs(fullNPCs)

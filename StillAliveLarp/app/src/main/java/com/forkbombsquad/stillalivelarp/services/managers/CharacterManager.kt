@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -12,19 +12,19 @@ import kotlinx.coroutines.launch
 
 class CharacterManager private constructor() {
 
-    private var character: FullCharacterModel? = null
+    private var character: OldFullCharacterModel? = null
     private var fetching = false
-    private var completionBlocks: MutableList<(character: FullCharacterModel?) -> Unit> = mutableListOf()
+    private var completionBlocks: MutableList<(character: OldFullCharacterModel?) -> Unit> = mutableListOf()
 
     fun forceReset() {
         character = null
     }
 
-    fun fetchFullCharacter(lifecycleScope: LifecycleCoroutineScope, characterId: Int, callback: (character: FullCharacterModel?) -> Unit) {
+    fun fetchFullCharacter(lifecycleScope: LifecycleCoroutineScope, characterId: Int, callback: (character: OldFullCharacterModel?) -> Unit) {
         val request = CharacterService.GetCharacter()
         lifecycleScope.launch {
             request.successfulResponse(IdSP(characterId)).ifLet({
-                val fulCharModel = FullCharacterModel(it)
+                val fulCharModel = OldFullCharacterModel(it)
                 SkillManager.shared.getSkills(lifecycleScope, overrideLocal = false) { skills ->
                     skills.ifLet({ nonnullSkills ->
                         val cskillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
@@ -50,7 +50,7 @@ class CharacterManager private constructor() {
         }
     }
 
-    fun getActiveCharacterForOtherPlayer(lifecycleScope: LifecycleCoroutineScope, playerId: Int, callback: (character: FullCharacterModel?) -> Unit) {
+    fun getActiveCharacterForOtherPlayer(lifecycleScope: LifecycleCoroutineScope, playerId: Int, callback: (character: OldFullCharacterModel?) -> Unit) {
         val request = CharacterService.GetAllPlayerCharacters()
         lifecycleScope.launch {
             request.successfulResponse(IdSP(playerId)).ifLet({
@@ -58,7 +58,7 @@ class CharacterManager private constructor() {
                     val fullCharRequest = CharacterService.GetCharacter()
                     lifecycleScope.launch {
                         fullCharRequest.successfulResponse(IdSP(it.id)).ifLet({ charModel ->
-                            val fulCharModel = FullCharacterModel(charModel)
+                            val fulCharModel = OldFullCharacterModel(charModel)
                             SkillManager.shared.getSkills(lifecycleScope, overrideLocal = false) { skills ->
                                 skills.ifLet({ nonnullSkills ->
                                     val cskillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
@@ -91,7 +91,7 @@ class CharacterManager private constructor() {
         }
     }
 
-    fun fetchActiveCharacter(lifecycleScope: LifecycleCoroutineScope, overrideLocal: Boolean = false, callback: (character: FullCharacterModel?) -> Unit) {
+    fun fetchActiveCharacter(lifecycleScope: LifecycleCoroutineScope, overrideLocal: Boolean = false, callback: (character: OldFullCharacterModel?) -> Unit) {
         if (!overrideLocal && character != null) {
             callback(character)
         } else {
@@ -106,7 +106,7 @@ class CharacterManager private constructor() {
                                 val charRequest = CharacterService.GetCharacter()
                                 lifecycleScope.launch {
                                     charRequest.successfulResponse(IdSP(characterSubModel.id)).ifLet({ characterModel ->
-                                        val fullCharModel = FullCharacterModel(characterModel)
+                                        val fullCharModel = OldFullCharacterModel(characterModel)
                                         SkillManager.shared.getSkills(lifecycleScope, overrideLocal = false) { skills ->
                                             skills.ifLet({
                                                 val charSkillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
@@ -176,7 +176,7 @@ class CharacterManager private constructor() {
     }
 
     fun newCharacterCreated(lifecycleScope: LifecycleCoroutineScope, characterModel: CharacterModel) {
-        val fullCharModel = FullCharacterModel(characterModel)
+        val fullCharModel = OldFullCharacterModel(characterModel)
         fetching = true
         SkillManager.shared.getSkills(lifecycleScope, overrideLocal = false) { skills ->
             skills.ifLet({

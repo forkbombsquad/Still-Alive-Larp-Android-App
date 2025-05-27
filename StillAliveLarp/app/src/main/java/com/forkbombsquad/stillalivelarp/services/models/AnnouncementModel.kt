@@ -28,3 +28,8 @@ data class AnnouncementSubModel(
 data class AnnouncementListModel(
     @JsonProperty("announcements") val announcements: Array<AnnouncementSubModel>
 ) : Serializable
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class AnnouncementFullListModel(
+    @JsonProperty("announcements") val announcements: List<AnnouncementModel>
+) : Serializable

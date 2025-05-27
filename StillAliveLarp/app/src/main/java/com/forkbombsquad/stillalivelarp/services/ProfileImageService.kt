@@ -3,6 +3,7 @@ import com.forkbombsquad.stillalivelarp.services.models.ProfileImageListModel
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import okhttp3.RequestBody
@@ -14,6 +15,11 @@ import retrofit2.http.Path
 interface GetProfileImageRequest {
     @HTTP(method ="GET", path = "profile/player/{playerId}")
     suspend fun makeRequest(@Path("playerId") playerId: Int): Response<ProfileImageModel>
+}
+
+interface GetAllProfileImagesRequest {
+    @HTTP(method ="GET", path = "profile/all/")
+    suspend fun makeRequest(): Response<ProfileImageListModel>
 }
 
 interface CreateProfileImageRequest {
@@ -38,6 +44,15 @@ class ProfileImageService {
 
         override suspend fun getResponse(payload: IdSP): Response<ProfileImageModel> {
             return request.makeRequest(payload.id())
+        }
+    }
+
+    class GetAllProfileImages: UAndPServiceInterface<GetAllProfileImagesRequest, ProfileImageListModel, ServicePayload> {
+        override val request: GetAllProfileImagesRequest
+            get() = retrofit.create(GetAllProfileImagesRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<ProfileImageListModel> {
+            return request.makeRequest()
         }
     }
 

@@ -115,9 +115,15 @@ data class UpdateTrackerModel(
     }
 
     fun updateToNew(successfulUpdates: List<DMT>): UpdateTrackerModel {
-        val tracker = UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)
+        val tracker = empty()
         tracker.updateInPlace(this, successfulUpdates)
         return tracker
+    }
+
+    companion object {
+        fun empty(): UpdateTrackerModel {
+            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)
+        }
     }
 
 }

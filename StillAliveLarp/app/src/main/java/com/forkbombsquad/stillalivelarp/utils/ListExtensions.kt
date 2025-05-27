@@ -4,7 +4,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 
@@ -32,7 +32,7 @@ fun List<CharacterModel>.alphabetized(): List<CharacterModel> {
 }
 
 @JvmName("alphabetizedFullCharacterModel")
-fun List<FullCharacterModel>.alphabetized(): List<FullCharacterModel> {
+fun List<OldFullCharacterModel>.alphabetized(): List<OldFullCharacterModel> {
     return this.sortedWith(compareBy { it.fullName })
 }
 

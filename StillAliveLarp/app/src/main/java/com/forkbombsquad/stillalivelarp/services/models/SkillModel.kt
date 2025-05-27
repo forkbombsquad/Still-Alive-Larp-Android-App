@@ -5,7 +5,120 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import java.io.Serializable
+import kotlin.math.max
+
+data class FullCharacterModifiedSkillModel(
+    val skill: FullSkillModel,
+    val charSkillModel: CharacterSkillModel?,
+    val xpReduction: XpReductionModel?,
+    private val combatXpMod: Int,
+    private val professionXpMod: Int,
+    private val talentXpMod: Int,
+    private val inf50Mod: Int,
+    private val inf75Mod: Int
+
+): Serializable {
+
+    val id = skill.id
+
+    fun prestigeCost(): Int {
+        return skill.prestigeCost
+    }
+
+    fun xpCost(): Int {
+        var baseCost = skill.xpCost
+        xpReduction.ifLet {
+            baseCost -= it.xpReduction.toInt()
+        }
+        when (skill.skillTypeId) {
+            Constants.SkillTypes.combat -> baseCost -= combatXpMod
+            Constants.SkillTypes.talent -> baseCost -= talentXpMod
+            Constants.SkillTypes.profession -> baseCost -= professionXpMod
+        }
+        var max = 1
+        if (skill.xpCost == 0) {
+            max = 0
+        }
+        return max(max, baseCost)
+    }
+
+    fun infectionCost(): Int {
+        var baseCost = skill.minInfection
+        if (baseCost == 50) {
+            baseCost -= inf50Mod
+        } else if (baseCost == 75) {
+            baseCost -= inf75Mod
+        }
+
+        return max(0, baseCost)
+    }
+
+    fun usesPrestige(): Boolean {
+        return prestigeCost() > 0
+    }
+
+    fun canUseFreeSkill(): Boolean {
+        // Free Skills may not be used on skills that have been reduced to 1 xp, ONLY skills that are naturally 1 xp
+        return skill.xpCost == 1
+    }
+
+    fun usesInfection(): Boolean {
+        return infectionCost() > 0
+    }
+
+    fun hasModCost(): Boolean {
+        return xpCost() != skill.xpCost
+    }
+
+    fun hasModInfCost(): Boolean {
+        return infectionCost() != skill.minInfection
+    }
+
+    fun getTypeText(): String {
+        when(skill.skillTypeId) {
+            Constants.SkillTypes.combat -> return "Combat"
+            Constants.SkillTypes.profession -> return "Profession"
+            Constants.SkillTypes.talent -> return "Talent"
+        }
+        return ""
+    }
+
+    fun getPrereqNames(): String {
+        var str = ""
+        skill.prereqs.forEachIndexed{ index, prereq ->
+            if (index > 0) {
+                str += "\n"
+            }
+            str += prereq.name
+        }
+        return str
+    }
+
+    fun includeInFilter(seachText: String, filterType: SkillFilterType): Boolean {
+        val text = seachText.trim().lowercase()
+        if (text.isNotEmpty()) {
+            if (!skill.name.lowercase().contains(text) && !getTypeText().lowercase().contains(text) && !skill.description.lowercase().contains(text) && !getPrereqNames().lowercase().contains(text)) {
+                return false
+            }
+        }
+        return when (filterType) {
+            SkillFilterType.NONE -> true
+            SkillFilterType.COMBAT -> skill.skillTypeId == Constants.SkillTypes.combat
+            SkillFilterType.PROFESSION -> skill.skillTypeId == Constants.SkillTypes.profession
+            SkillFilterType.TALENT -> skill.skillTypeId == Constants.SkillTypes.talent
+            SkillFilterType.XP0 -> xpCost() == 0
+            SkillFilterType.XP1 -> xpCost() == 1
+            SkillFilterType.XP2 -> xpCost() == 2
+            SkillFilterType.XP3 -> xpCost() == 3
+            SkillFilterType.XP4 -> xpCost() >= 4 // <-- Also show skills that cost higher than 4
+            SkillFilterType.PP -> prestigeCost() > 0
+            SkillFilterType.INF -> infectionCost() > 0
+        }
+    }
+
+}
 
 data class CharacterModifiedSkillModel(
     var id: Int,

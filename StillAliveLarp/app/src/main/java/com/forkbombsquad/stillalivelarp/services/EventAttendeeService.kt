@@ -8,6 +8,11 @@ import retrofit2.Response
 import retrofit2.http.HTTP
 import retrofit2.http.Path
 
+interface GetAllEventAttendeesRequest {
+    @HTTP(method ="GET", path = "event-attendee/all/")
+    suspend fun makeRequest(): Response<EventAttendeeListModel>
+}
+
 interface GetEventsForPlayerRequest {
     @HTTP(method ="GET", path = "event-attendee/all_for_player/{playerId}")
     suspend fun makeRequest(@Path("playerId") playerId: Int): Response<EventAttendeeListModel>
@@ -31,6 +36,16 @@ class EventAttendeeService {
 
         override suspend fun getResponse(payload: IdSP): Response<EventAttendeeListModel> {
             return request.makeRequest(payload.id())
+        }
+    }
+
+    class GetAllEventAttendees:
+        UAndPServiceInterface<GetAllEventAttendeesRequest, EventAttendeeListModel, ServicePayload> {
+        override val request: GetAllEventAttendeesRequest
+            get() = retrofit.create(GetAllEventAttendeesRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<EventAttendeeListModel> {
+            return request.makeRequest()
         }
     }
 

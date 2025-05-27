@@ -17,6 +17,183 @@ data class FullCharacterModel(
     val id: Int,
     val fullName: String,
     val startDate: String,
+    val isAlive: Boolean,
+    val deathDate: String,
+    val infection: String,
+    var bio: String,
+    val approvedBio: Boolean,
+    val bullets: Int,
+    val megas: Int,
+    val rivals: Int,
+    val rockets: Int,
+    val bulletCasings: Int,
+    val clothSupplies: Int,
+    val woodSupplies: Int,
+    val metalSupplies: Int,
+    val techSupplies: Int,
+    val medicalSupplies: Int,
+    val armor: String,
+    val unshakableResolveUses: Int,
+    val mysteriousStrangerUses: Int,
+    val playerId: Int,
+    val characterTypeId: Int,
+    val gear: GearModel?,
+    val awards: List<AwardModel>,
+    val eventAttendees: List<EventAttendeeModel>,
+    val preregs: List<EventPreregModel>,
+    val xpReductions: List<XpReductionModel>
+) : Serializable {
+
+    var skills: List<FullCharacterModifiedSkillModel> = listOf()
+        private set
+
+    constructor(charModel: CharacterModel, allSkills: List<FullSkillModel>, charSkills: List<CharacterSkillModel>, gear: GearModel?, awards: List<AwardModel>, eventAttendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>, xpReductions: List<XpReductionModel>): this(
+        charModel.id,
+        charModel.fullName,
+        charModel.startDate,
+        charModel.isAlive.toBoolean(),
+        charModel.deathDate,
+        charModel.infection,
+        charModel.bio,
+        charModel.approvedBio.toBoolean(),
+        charModel.bullets.toInt(),
+        charModel.megas.toInt(),
+        charModel.rivals.toInt(),
+        charModel.rockets.toInt(),
+        charModel.bulletCasings.toInt(),
+        charModel.clothSupplies.toInt(),
+        charModel.woodSupplies.toInt(),
+        charModel.metalSupplies.toInt(),
+        charModel.techSupplies.toInt(),
+        charModel.medicalSupplies.toInt(),
+        charModel.armor,
+        charModel.unshakableResolveUses.toInt(),
+        charModel.mysteriousStrangerUses.toInt(),
+        charModel.playerId,
+        charModel.characterTypeId,
+        gear,
+        awards,
+        eventAttendees,
+        preregs,
+        xpReductions
+    ) {
+        val fcmSkills: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
+        charSkills.forEach { charSkill ->
+            allSkills.firstOrNull { it.id == charSkill.skillId }.ifLet {  baseFullSkill ->
+                val xpRed = xpReductions.firstOrNull { it.skillId == baseFullSkill.id }
+                fcmSkills.add(FullCharacterModifiedSkillModel(
+                    skill = baseFullSkill,
+                    charSkillModel = charSkills.firstOrNull { it.skillId == baseFullSkill.id },
+                    xpReduction =  xpRed,
+                    costOfCombatSkills(),
+                    costOfProfessionSkills(),
+                    costOfTalentSkills(),
+                    costOf50InfectSkills(),
+                    costOf75InfectSkills()
+                ))
+            }
+        }
+        this.skills = fcmSkills
+    }
+
+    fun getIntrigueSkills(): List<Int> {
+        val list = mutableListOf<Int>()
+        val filteredSkills = skills.filter { sk ->
+            sk.id.equalsAnyOf(Constants.SpecificSkillIds.investigatorTypeSkills)
+        }
+        filteredSkills.forEach {
+            list.add(it.id)
+        }
+        return list
+    }
+
+    fun getChooseOneSkills(): List<FullCharacterModifiedSkillModel> {
+        return skills.filter {
+            it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
+        }
+    }
+
+    fun costOfCombatSkills(): Int {
+        skills.forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allCombatReducingSkills)) {
+                return -1
+            }
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allCombatIncreasingSkills)) {
+                return 1
+            }
+        }
+        return 0
+    }
+
+    fun costOfProfessionSkills(): Int {
+        skills.forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allProfessionReducingSkills)) {
+                return -1
+            }
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allProfessionIncreasingSkills)) {
+                return 1
+            }
+        }
+        return 0
+    }
+
+    fun costOfTalentSkills(): Int {
+        skills.forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allTalentReducingSkills)) {
+                return -1
+            }
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allTalentIncreasingSkills)) {
+                return 1
+            }
+        }
+        return 0
+    }
+
+    fun costOf50InfectSkills(): Int {
+        skills.forEach {
+            if (it.id == Constants.SpecificSkillIds.adaptable) {
+                return 25
+            }
+        }
+        return 50
+    }
+
+    fun costOf75InfectSkills(): Int {
+        skills.forEach {
+            if (it.id == Constants.SpecificSkillIds.extremelyAdaptable) {
+                return 50
+            }
+        }
+        return 75
+    }
+
+    fun hasUnshakableResolve(): Boolean {
+        skills.forEach {
+            if (it.id == Constants.SpecificSkillIds.unshakableResolve) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun mysteriousStrangerCount(): Int {
+        var count = 0
+        skills.forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.mysteriousStrangerTypeSkills)) {
+                count++
+            }
+        }
+        return count
+    }
+
+
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class OldFullCharacterModel(
+    val id: Int,
+    val fullName: String,
+    val startDate: String,
     val isAlive: String,
     val deathDate: String,
     val infection: String,
@@ -146,7 +323,7 @@ data class FullCharacterModel(
     }
 
     fun getRelevantBarcodeSkills(): Array<SkillBarcodeModel> {
-        var bskills = mutableListOf<SkillBarcodeModel>()
+        val bskills = mutableListOf<SkillBarcodeModel>()
         skills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
                 bskills.add(SkillBarcodeModel(it))
@@ -202,7 +379,7 @@ data class CharacterModel(
     @JsonProperty("characterTypeId") val characterTypeId: Int
 ) : Serializable {
 
-    constructor(charModel: FullCharacterModel): this(
+    constructor(charModel: OldFullCharacterModel): this(
         charModel.id,
         charModel.fullName,
         charModel.startDate,
@@ -279,7 +456,7 @@ data class CharacterBarcodeModel(
     val mysteriousStrangerUses: String,
     val playerId: Int
 ) : Serializable {
-    constructor(charModel: FullCharacterModel): this(
+    constructor(charModel: OldFullCharacterModel): this(
         charModel.id,
         charModel.fullName,
         charModel.infection,

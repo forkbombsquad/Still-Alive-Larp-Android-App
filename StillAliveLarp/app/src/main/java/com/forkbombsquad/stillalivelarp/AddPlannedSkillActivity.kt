@@ -15,7 +15,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.OldFullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -229,7 +229,7 @@ class AddPlannedSkillActivity : NoStatusBarActivity() {
         return sorted
     }
 
-    private fun getAvailableSkills(skls: List<OldFullSkillModel>?, character: FullCharacterModel?): List<CharacterModifiedSkillModel> {
+    private fun getAvailableSkills(skls: List<OldFullSkillModel>?, character: OldFullCharacterModel?): List<CharacterModifiedSkillModel> {
         val allSkills = skls ?: listOf()
         val charSkills: List<OldFullSkillModel> = character?.skills?.toList() ?: listOf()
 

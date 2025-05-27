@@ -13,7 +13,10 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
@@ -93,7 +96,7 @@ class LocalDataManager private constructor() {
         return get(DMT.UPDATE_TRACKER)
     }
 
-    private fun storeUpdateTracker(tracker: UpdateTrackerModel) {
+    fun storeUpdateTracker(tracker: UpdateTrackerModel) {
         store(tracker, DMT.UPDATE_TRACKER)
     }
 
@@ -124,7 +127,7 @@ class LocalDataManager private constructor() {
     // Returns Awards in two separate dictionaries, where the key is playerId and characterId
     // You can call .getAllAwardsFor() to get ones for player and character if needed
     fun getAwards(): LDAwardModels {
-        return get(DMT.AWARDS) ?: LDAwardModels(mapOf(), mapOf())
+        return get(DMT.AWARDS) ?: LDAwardModels.empty()
     }
 
     fun storeCharacters(characters: List<CharacterModel>) {
@@ -195,7 +198,7 @@ class LocalDataManager private constructor() {
 
     // Returns the event attendees organized by events, players and characters. There ARE duplicate entries in the maps as these categories overlap.
     fun getEventAttendees(): LDEventAttendeeModels {
-        return get(DMT.EVENT_ATTENDEES) ?: LDEventAttendeeModels(mapOf(), mapOf(), mapOf())
+        return get(DMT.EVENT_ATTENDEES) ?: LDEventAttendeeModels.empty()
     }
 
     fun storePreregs(preregs: List<EventPreregModel>) {
@@ -216,7 +219,7 @@ class LocalDataManager private constructor() {
 
     // Returns the preregs organized by events, players, characters, and regType. There ARE duplicate entries in the maps as these categories overlap.
     fun getPreregs(): LDPreregModels {
-        return get(DMT.PREREGS) ?: LDPreregModels(mapOf(), mapOf(), mapOf(), mapOf())
+        return get(DMT.PREREGS) ?: LDPreregModels.empty()
     }
 
     fun storeFeatureFlags(featureFlags: List<FeatureFlagModel>) {
@@ -228,15 +231,15 @@ class LocalDataManager private constructor() {
     }
 
     fun storeIntrigues(intrigues: List<IntrigueModel>) {
-        val intrigueMap: MutableMap<Int, MutableList<IntrigueModel>> = mutableMapOf()
+        val intrigueMap: MutableMap<Int, IntrigueModel> = mutableMapOf()
         intrigues.forEach {
-            intrigueMap.addCreateListIfNecessary(it.eventId, it)
+            intrigueMap[it.eventId] = it
         }
         store(intrigueMap, DMT.INTRIGUES)
     }
 
     // Returns a map of intrigues with keys equal to the event id
-    fun getIntrigues(): Map<Int, List<IntrigueModel>> {
+    fun getIntrigues(): Map<Int, IntrigueModel> {
         return get(DMT.INTRIGUES) ?: mapOf()
     }
 
@@ -249,15 +252,15 @@ class LocalDataManager private constructor() {
     }
 
     fun storeProfileImages(profileImages: List<ProfileImageModel>) {
-        val profileImageMap: MutableMap<Int, MutableList<ProfileImageModel>> = mutableMapOf()
+        val profileImageMap: MutableMap<Int, ProfileImageModel> = mutableMapOf()
         profileImages.forEach {
-            profileImageMap.addCreateListIfNecessary(it.playerId, it)
+            profileImageMap[it.playerId] = it
         }
         store(profileImageMap, DMT.PROFILE_IMAGES)
     }
 
     // Returns a map of profile images with keys equal to the playerId
-    fun getProfileImages(): Map<Int, List<ProfileImageModel>> {
+    fun getProfileImages(): Map<Int, ProfileImageModel> {
         return get(DMT.PROFILE_IMAGES) ?: mapOf()
     }
 
@@ -335,6 +338,7 @@ class LocalDataManager private constructor() {
 
         val attendees = getEventAttendees()
         val preregs = getPreregs()
+        val awards = getAwards()
 
         // FULL SKILLS
         if (neededUpdates.doesNotContain(listOf(DMT.SKILLS, DMT.SKILL_CATEGORIES, DMT.SKILL_PREREQS))) {
@@ -349,13 +353,31 @@ class LocalDataManager private constructor() {
         }
 
         // FULL CHARACTERS
-        if (builtFullSkills) {
-            // TODO
+        if (builtFullSkills && builtFullEvents && neededUpdates.doesNotContain(listOf(DMT.CHARACTERS, DMT.CHARACTER_SKILLS, DMT.GEAR, DMT.AWARDS, DMT.XP_REDUCTIONS))) {
+            buildAndStoreFullCharacters(
+                characters = getCharacters(),
+                fullSkills = getFullSkills(),
+                characterSkills = getCharacterSkills(),
+                gear = getGear(),
+                awards = awards,
+                attendees = attendees,
+                preregs = preregs,
+                xpReductions = getXpReductions()
+            )
             builtFullCharacters = true
         }
 
         // FULL PLAYERS
-        if (builtFullCharacters && builtFullEvents) {
+
+        if (builtFullCharacters && builtFullEvents && neededUpdates.doesNotContain(listOf(DMT.PLAYERS, DMT.PROFILE_IMAGES)) ) {
+            buildAndStoreFullPlayers(
+                players = getPlayers(),
+                characters = getFullCharacters(),
+                awards = awards,
+                attendees = attendees,
+                preregs = preregs,
+                profileImages = getProfileImages()
+            )
             // TODO
         }
 
@@ -401,22 +423,48 @@ class LocalDataManager private constructor() {
         return get(LDMKeys.fullEventsKey) ?: listOf()
     }
 
-    private fun buildAndStoreFullCharacters() {
-        // TODO characters, skills, skillPrereqs, skillCategories and charSkills need to have been gotten for this to work
-        // TODO update full character model to have gear on it. Then need to wait for gear too
+    private fun buildAndStoreFullCharacters(characters: List<CharacterModel>, fullSkills: List<FullSkillModel>, characterSkills: Map<Int, List<CharacterSkillModel>>, gear: Map<Int, GearModel>, awards: LDAwardModels, attendees: LDEventAttendeeModels, preregs: LDPreregModels, xpReductions: Map<Int, List<XpReductionModel>>) {
+        val fullChars: MutableList<FullCharacterModel> = mutableListOf()
+        characters.forEach { character ->
+            fullChars.add(
+                FullCharacterModel(
+                    charModel = character,
+                    allSkills = fullSkills,
+                    charSkills = characterSkills[character.id] ?: listOf(),
+                    gear = gear[character.id],
+                    awards = awards.characterAwards[character.id] ?: listOf(),
+                    eventAttendees = attendees.byCharacter[character.id] ?: listOf(),
+                    preregs = preregs.byCharacter[character.id] ?: listOf(),
+                    xpReductions = xpReductions[character.id] ?: listOf()
+                )
+            )
+        }
+        store(fullChars, LDMKeys.fullCharactersKey)
     }
 
-    fun getFullCharacters() {
-        // TODO
+    fun getFullCharacters(): List<FullCharacterModel> {
+        return get(LDMKeys.fullCharactersKey) ?: listOf()
     }
 
-    private fun buildAndStoreFullPlayers() {
-        // TODO this requires basically everything else that could be attached to a player
-        // TODO make a FullPlayer model that has everything on it like characters, eventAttendees, Preregs, etc
+    private fun buildAndStoreFullPlayers(players: List<PlayerModel>, characters: List<FullCharacterModel>, awards: LDAwardModels, attendees: LDEventAttendeeModels, preregs: LDPreregModels, profileImages: Map<Int, ProfileImageModel>) {
+        val fullPlayers: MutableList<FullPlayerModel> = mutableListOf()
+        players.forEach { player ->
+            fullPlayers.add(
+                FullPlayerModel(
+                    player = player,
+                    characters = characters.filter { it.playerId == player.id },
+                    awards = awards.playerAwards[player.id] ?: listOf(),
+                    eventAttendees = attendees.byPlayer[player.id] ?: listOf(),
+                    preregs = preregs.byPlayer[player.id] ?: listOf(),
+                    profileImage = profileImages[player.id]
+                )
+            )
+        }
+        store(fullPlayers, LDMKeys.fullPlayersKey)
     }
 
-    fun getFullPlayers() {
-        // TODO
+    fun getFullPlayers(): List<FullPlayerModel> {
+        return get(LDMKeys.fullPlayersKey) ?: listOf()
     }
 
 }
