@@ -6,8 +6,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable

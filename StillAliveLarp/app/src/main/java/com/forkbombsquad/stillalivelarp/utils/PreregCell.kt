@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.LinearLayout
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 

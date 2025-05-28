@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet

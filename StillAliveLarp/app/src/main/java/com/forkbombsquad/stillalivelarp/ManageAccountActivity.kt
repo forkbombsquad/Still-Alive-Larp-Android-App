@@ -12,7 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.GearService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton

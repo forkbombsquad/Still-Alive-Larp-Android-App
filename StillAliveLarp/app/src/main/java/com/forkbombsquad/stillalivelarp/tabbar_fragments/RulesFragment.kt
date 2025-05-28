@@ -11,8 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 

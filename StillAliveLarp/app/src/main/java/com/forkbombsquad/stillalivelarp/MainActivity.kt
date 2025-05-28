@@ -121,13 +121,14 @@ class MainActivity : NoStatusBarActivity() {
 
         offlineModeButton.setOnClick {
             DataManager.shared.setOfflineMode(true)
-            // TODO
-            if (OldSharedPrefsManager.shared.getPlayer() == null) {
-                AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store your character and player for offline mode use")
-            } else {
-                val intent = Intent(this, OfflineMyAccountActivity::class.java)
-                startActivity(intent)
-            }
+            DataManager.shared.load(lifecycleScope, finished = {
+                if (DataManager.shared.players.isNotEmpty()) {
+                    AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store the info required to use offline mode")
+                } else {
+                    val intent = Intent(this, OfflineMyAccountActivity::class.java)
+                    startActivity(intent)
+                }
+            })
         }
 
     }

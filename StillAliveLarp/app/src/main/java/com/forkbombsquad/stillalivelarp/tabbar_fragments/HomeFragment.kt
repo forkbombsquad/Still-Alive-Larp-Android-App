@@ -19,8 +19,7 @@ import com.forkbombsquad.stillalivelarp.CreateCharacterActivity
 import com.forkbombsquad.stillalivelarp.PreregActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
@@ -77,6 +76,9 @@ class HomeFragment : Fragment() {
         // Pull To Refresh
         preparePullToRefresh(v)
 
+        // Loading Stuff
+        prepareLoadingSection(v)
+
         // Announcements
         prepareAnnouncementsSection(v)
 
@@ -96,6 +98,14 @@ class HomeFragment : Fragment() {
         prepareAwardsSection(v)
     }
 
+    private fun prepareLoadingSection(v: View) {
+        val loadingLayout = v.findViewById<LinearLayout>(R.id.loadingView)
+        val loadingTextView = v.findViewById<TextView>(R.id.loadingText)
+
+        loadingLayout.isGone = DataManager.shared.loading
+        loadingTextView.text = DataManager.shared.loadingText
+    }
+
     private fun preparePullToRefresh(v: View) {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
@@ -112,6 +122,8 @@ class HomeFragment : Fragment() {
 
     private fun prepareAnnouncementsSection(v: View) {
         val sectionTitle = v.findViewById<TextView>(R.id.announcement_section_title)
+        sectionTitle.text = DataManager.shared.offlineMode.ternary("Offline Announcements", "Announcements")
+
         val announcementsProgressBar = v.findViewById<ProgressBar>(R.id.announcement_list_progress_bar)
 
         val title = v.findViewById<TextView>(R.id.announcement_title)
@@ -120,43 +132,31 @@ class HomeFragment : Fragment() {
         prevButton = v.findViewById<Button>(R.id.announcement_prev_button)
         nextButton = v.findViewById<Button>(R.id.announcement_next_button)
 
-        val announcements = OldDataManager.shared.announcements ?: listOf()
-
         prevButton.setOnClickListener {
-            announcements.ifLet {
-                if (currentAnnouncementIndex > 0) {
-                    currentAnnouncementIndex--
-                    AnnouncementManager.shared.getAnnouncement(lifecycleScope, it[currentAnnouncementIndex].id) { an ->
-                        OldDataManager.shared.currentAnnouncement = an
-                        an.ifLet { am ->
-                            title.text = am.title
-                            date.text = am.date.yyyyMMddToMonthDayYear()
-                            desc.text = am.text
-                            showHideAnnouncementNavButtons()
-                        }
-                    }
+            if (currentAnnouncementIndex > 0) {
+                currentAnnouncementIndex--
+                DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet { an ->
+                    title.text = an.title
+                    date.text = an.date.yyyyMMddToMonthDayYear()
+                    desc.text = an.text
+                    showHideAnnouncementNavButtons()
                 }
             }
         }
 
         nextButton.setOnClickListener {
-            announcements.ifLet {
-                if (currentAnnouncementIndex + 1 < it.size) {
-                    currentAnnouncementIndex++
-                    AnnouncementManager.shared.getAnnouncement(lifecycleScope, it[currentAnnouncementIndex].id) { an ->
-                        OldDataManager.shared.currentAnnouncement = an
-                        an.ifLet { am ->
-                            title.text = am.title
-                            date.text = am.date.yyyyMMddToMonthDayYear()
-                            desc.text = am.text
-                            showHideAnnouncementNavButtons()
-                        }
-                    }
+            if (currentAnnouncementIndex + 1 < DataManager.shared.announcements.size) {
+                currentAnnouncementIndex++
+                DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet { an ->
+                    title.text = an.title
+                    date.text = an.date.yyyyMMddToMonthDayYear()
+                    desc.text = an.text
+                    showHideAnnouncementNavButtons()
                 }
             }
         }
 
-        OldDataManager.shared.currentAnnouncement.ifLet({
+        DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet({
             announcementsProgressBar.isGone = true
             title.text = it.title
             date.text = it.date.yyyyMMddToMonthDayYear()
@@ -167,7 +167,6 @@ class HomeFragment : Fragment() {
             desc.isGone = false
 
             showHideAnnouncementNavButtons()
-
         }, {
             announcementsProgressBar.isGone = false
             title.isGone = true
@@ -185,11 +184,11 @@ class HomeFragment : Fragment() {
         val investigator = v.findViewById<TextView>(R.id.intrigue_investigatorText)
         val interrogator = v.findViewById<TextView>(R.id.intrigue_interrogatorText)
 
-        OldDataManager.shared.intrigue.ifLet({
+        DataManager.shared.getStartedOrTodayEvent()?.intrigue.ifLet({ intrigue ->
             if (showIntrigue()) {
-                val intrigueSkills: IntArray = OldDataManager.shared.character?.getIntrigueSkills() ?: IntArray(0)
-                investigator.text = it.investigatorMessage
-                interrogator.text = it.interrogatorMessage
+                val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getIntrigueSkills() ?: listOf()
+                investigator.text = intrigue.investigatorMessage
+                interrogator.text = intrigue.interrogatorMessage
                 investigatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.investigator } == null
                 interrogatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.interrogator } == null
                 intrigueSection.isGone = false
@@ -199,7 +198,6 @@ class HomeFragment : Fragment() {
         }, {
             intrigueSection.isGone = true
         })
-
     }
 
     private fun prepareCheckoutSection(v: View) {
@@ -210,6 +208,42 @@ class HomeFragment : Fragment() {
             checkoutButton.textView.text = "Checkout"
             checkoutButton.setOnClick {
                 checkoutButton.setLoading(true)
+                DataManager.shared.load(lifecycleScope) {
+                    DataManager.shared.getCurrentPlayer()?.eventAttendees?.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
+                        var char: CharacterBarcodeModel? = null
+                        var relevantSkills: Array<SkillBarcodeModel> = arrayOf()
+
+                        if (!eventAttendee.asNpc.toBoolean()) {
+                            DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == eventAttendee.characterId }.ifLet { char ->
+                                // TODO
+//                              char = char.barcodeModel()
+//                              relevantSkills = char.getRelevantBarcodeSkills()
+                            }
+                        }
+
+                        // TODO
+//                        OldDataManager.shared.checkoutBarcodeModel = PlayerCheckOutBarcodeModel(
+//                            player = OldDataManager.shared.player!!.getBarcodeModel(),
+//                            character = char,
+//                            eventAttendeeId = it.id,
+//                            eventId = it.eventId,
+//                            relevantSkills = relevantSkills
+//                        )
+                        // TODO
+//                        OldDataManager.shared.unrelaltedUpdateCallback = {
+//                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
+//                                setupViews(v)
+//                            }) {
+//                                setupViews(v)
+//                            }
+//                            setupViews(v)
+//                        }
+                        val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
+                        startActivity(intent)
+                    }, {
+                        checkoutButton.setLoading(false)
+                    })
+                }
                 OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_ATTENDEES), true) {
                     checkoutButton.setLoading(false)
                     OldDataManager.shared.eventAttendeesForPlayer.ifLet({ eventAttendees ->

@@ -72,8 +72,9 @@ class LocalDataManager private constructor() {
             val fullEventsKey = "fullevents_LDMKEYS_dm_sp_key"
             val fullCharactersKey = "fullcharacters_LDMKEYS_dm_sp_key"
             val fullPlayersKey = "fullplayers_LDMKEYS_dm_sp_key"
+            val playerIdKey = "playerid_LDMKEYS_dm_sp_key"
 
-            val allKeys: List<String> = listOf(fullSkillsKey, fullEventsKey, fullCharactersKey, fullPlayersKey)
+            val allKeys: List<String> = listOf(fullSkillsKey, fullEventsKey, fullCharactersKey, fullPlayersKey, playerIdKey)
         }
     }
 
@@ -383,6 +384,14 @@ class LocalDataManager private constructor() {
         }
     }
 
+    fun storePlayerId(id: Int) {
+        store(id, LDMKeys.playerIdKey)
+    }
+
+    fun getPlayerId(): Int {
+        return get(LDMKeys.playerIdKey) ?: -1
+    }
+
     fun determineWhichTypesNeedUpdates(newUpdateTracker: UpdateTrackerModel): List<DMT> {
         return getUpdateTracker()?.getDifferences(newUpdateTracker) ?: return DMT.values().filter { it != DataManagerType.UPDATE_TRACKER }
     }
@@ -414,8 +423,8 @@ class LocalDataManager private constructor() {
         }
 
         // FULL EVENTS
-        if (neededUpdates.doesNotContain(listOf(DMT.EVENTS, DMT.EVENT_ATTENDEES, DMT.PREREGS))) {
-            buildAndStoreFullEvents(getEvents(), attendees, preregs)
+        if (neededUpdates.doesNotContain(listOf(DMT.EVENTS, DMT.EVENT_ATTENDEES, DMT.PREREGS, DMT.INTRIGUES))) {
+            buildAndStoreFullEvents(getEvents(), attendees, preregs, getIntrigues())
             builtFullEvents = true
         }
 
@@ -471,14 +480,15 @@ class LocalDataManager private constructor() {
         return get(LDMKeys.fullSkillsKey) ?: listOf()
     }
 
-    private fun buildAndStoreFullEvents(events: List<EventModel>, attendees: LDEventAttendeeModels, preregs: LDPreregModels) {
+    private fun buildAndStoreFullEvents(events: List<EventModel>, attendees: LDEventAttendeeModels, preregs: LDPreregModels, intrigues: Map<Int, IntrigueModel>) {
         val fullEvents: MutableList<FullEventModel> = mutableListOf()
         events.forEach { event ->
             fullEvents.add(
                 FullEventModel(
                     event = event,
                     attendees = attendees.byEvent[event.id] ?: listOf(),
-                    preregs = preregs.byEvent[event.id] ?: listOf()
+                    preregs = preregs.byEvent[event.id] ?: listOf(),
+                    intrigue = intrigues[event.id]
                 )
             )
         }

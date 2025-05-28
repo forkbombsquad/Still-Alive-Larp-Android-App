@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP

@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class OfflineNativeSkillTreeActivity : NoStatusBarActivity() {

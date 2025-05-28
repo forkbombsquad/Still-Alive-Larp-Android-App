@@ -2,7 +2,7 @@ package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 
 class ActivityTemplate : NoStatusBarActivity() {
 

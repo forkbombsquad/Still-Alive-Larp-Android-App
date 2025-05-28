@@ -15,8 +15,7 @@ import com.forkbombsquad.stillalivelarp.OtherCharacterNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment

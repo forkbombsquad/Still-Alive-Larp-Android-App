@@ -1,7 +1,7 @@
 package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.github.chrisbanes.photoview.PhotoView
 

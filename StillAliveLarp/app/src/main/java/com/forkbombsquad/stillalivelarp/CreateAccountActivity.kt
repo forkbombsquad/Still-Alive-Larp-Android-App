@@ -69,12 +69,10 @@ class CreateAccountActivity : NoStatusBarActivity() {
                     lifecycleScope.launch {
                         createPlayerReqeuest.successfulResponse(PlayerCreateSP(preapprovalcode = preApprovalCodeField.text.toString(), player = newPlayer)).ifLet({
                             runOnUiThread {
-                                PlayerManager.shared.setPlayer(it)
-                                OldSharedPrefsManager.shared.clearAll(globalGetContext()!!)
                                 UserAndPassManager.shared.clearAll()
                                 UserAndPassManager.shared.setTemp(emailField.text.toString(), passwordField.text.toString())
                                 DataManager.shared.setCurrentPlayerId(it)
-                                AlertUtils.displayOkMessage(this@CreateAccountActivity, "Success!", "Account for ${emailField.text.toString()} created!") { _, _ ->
+                                AlertUtils.displayOkMessage(this@CreateAccountActivity, "Success!", "Account for ${emailField.text} created!") { _, _ ->
                                     runOnUiThread {
                                         finish()
                                     }

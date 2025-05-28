@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable

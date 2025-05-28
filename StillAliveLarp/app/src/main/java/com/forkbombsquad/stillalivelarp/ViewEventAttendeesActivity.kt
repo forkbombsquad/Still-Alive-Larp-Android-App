@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.ternary
 

@@ -7,8 +7,7 @@ import android.widget.ProgressBar
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlagView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 

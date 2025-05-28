@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel

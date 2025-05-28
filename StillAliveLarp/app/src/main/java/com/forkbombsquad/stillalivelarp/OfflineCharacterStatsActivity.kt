@@ -2,7 +2,7 @@ package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear

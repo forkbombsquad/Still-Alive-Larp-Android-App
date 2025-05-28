@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 
 class OfflineViewBioActivity : NoStatusBarActivity() {

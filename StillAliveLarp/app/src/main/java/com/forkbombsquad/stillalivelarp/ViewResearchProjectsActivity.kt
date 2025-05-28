@@ -3,8 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.utils.ResearchProjectCell
 
 class ViewResearchProjectsActivity : NoStatusBarActivity() {

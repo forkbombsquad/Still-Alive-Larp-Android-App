@@ -3,7 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class OfflineMyAccountActivity : NoStatusBarActivity() {

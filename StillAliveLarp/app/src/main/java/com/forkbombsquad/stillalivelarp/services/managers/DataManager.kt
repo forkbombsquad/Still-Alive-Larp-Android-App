@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -96,6 +97,8 @@ class DataManager private constructor() {
     var events: List<FullEventModel> = listOf()
     var characters: List<FullCharacterModel> = listOf()
     var players: List<FullPlayerModel> = listOf()
+    var rulebook: Rulebook? = null
+    var treatingWounds: Bitmap? = null
 
     // DM variables
     private var firstLoad: Boolean = true
@@ -110,22 +113,6 @@ class DataManager private constructor() {
 
     private val mutexThreadLocker = Mutex()
     private val finishedCountMutexThreadLocker = Mutex()
-
-    fun setOfflineMode(enabled: Boolean) {
-        offlineMode = enabled
-    }
-
-    fun setCurrentPlayerId(id: Int) {
-        currentPlayerId = id
-    }
-
-    fun setCurrentPlayerId(player: PlayerModel) {
-        setCurrentPlayerId(player.id)
-    }
-
-    fun getCurrentPlayer(): FullPlayerModel? {
-        return players.firstOrNull { it.id == currentPlayerId }
-    }
 
     fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
         var modLoadType = loadType
@@ -470,7 +457,6 @@ class DataManager private constructor() {
                         lifecycleScope.launch {
                             val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
                                 lifecycleScope.launch {
-                                    OldSharedPrefsManager.shared.storeRulebook(doc.toString())
                                     LocalDataManager.shared.storeRulebook(Rulebook.parseWebDocumentAsRulebook(doc, updateTracker.rulebookVersion))
                                     serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
                                 }
@@ -556,6 +542,9 @@ class DataManager private constructor() {
                     events = LocalDataManager.shared.getFullEvents()
                     characters = LocalDataManager.shared.getFullCharacters()
                     players = LocalDataManager.shared.getFullPlayers()
+                    rulebook = LocalDataManager.shared.getRulebook()
+                    treatingWounds = LocalDataManager.shared.getTreatingWounds()
+                    currentPlayerId = LocalDataManager.shared.getPlayerId()
                 }
                 loadingText = ""
                 loading = false
@@ -574,6 +563,41 @@ class DataManager private constructor() {
         fun forceReset() {
             shared = DataManager()
         }
+    }
+
+    // Utility Methods
+
+    fun setOfflineMode(enabled: Boolean) {
+        offlineMode = enabled
+    }
+
+    fun setCurrentPlayerId(id: Int) {
+        LocalDataManager.shared.storePlayerId(id)
+        currentPlayerId = id
+    }
+
+    fun setCurrentPlayerId(player: PlayerModel) {
+        setCurrentPlayerId(player.id)
+    }
+
+    fun getCurrentPlayer(): FullPlayerModel? {
+        return players.firstOrNull { it.id == currentPlayerId }
+    }
+
+    fun getActiveCharacter(): FullCharacterModel? {
+        return getCurrentPlayer()?.getActiveCharacter()
+    }
+
+    fun getStartedEvent(): FullEventModel? {
+        return events.firstOrNull { it.isStarted } ?: events.firstOrNull { it.isToday() }
+    }
+
+    fun getStartedOrTodayEvent(): FullEventModel? {
+        return getStartedEvent() ?: getEventToday()
+    }
+
+    fun getEventToday(): FullEventModel? {
+        return events.firstOrNull { it.isToday() }
     }
 
 }

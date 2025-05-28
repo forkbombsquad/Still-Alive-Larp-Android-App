@@ -11,8 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.ProfileImageModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP

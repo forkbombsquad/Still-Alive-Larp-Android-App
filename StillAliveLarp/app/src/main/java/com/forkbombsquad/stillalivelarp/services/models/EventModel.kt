@@ -17,10 +17,11 @@ data class FullEventModel(
     @JsonProperty("isStarted") var isStarted: Boolean,
     @JsonProperty("isFinished") var isFinished: Boolean,
     @JsonProperty("attendees") var attendees: List<EventAttendeeModel>,
-    @JsonProperty("preregs") var preregs: List<EventPreregModel>
+    @JsonProperty("preregs") var preregs: List<EventPreregModel>,
+    @JsonProperty("intrigue") var intrigue: IntrigueModel?
 ) : Serializable {
 
-    constructor(event: EventModel, attendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>): this(
+    constructor(event: EventModel, attendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>, intrigue: IntrigueModel?): this(
         event.id,
         event.title,
         event.description,
@@ -30,7 +31,8 @@ data class FullEventModel(
         event.isStarted.toBoolean(),
         event.isFinished.toBoolean(),
         attendees,
-        preregs
+        preregs,
+        intrigue
     )
 
     fun isToday(): Boolean {

@@ -1,6 +1,6 @@
 package com.forkbombsquad.stillalivelarp.utils
 
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 
 class FeatureFlag(var name: String) {
     companion object {

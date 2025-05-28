@@ -27,8 +27,7 @@ import com.forkbombsquad.stillalivelarp.SelectEventForPreregViewActivity
 import com.forkbombsquad.stillalivelarp.SelectNPCToManageActivity
 import com.forkbombsquad.stillalivelarp.SelectPlayerToAwardActivity
 import com.forkbombsquad.stillalivelarp.SelectPlayerToChangePassActivity
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel

@@ -18,7 +18,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.utils.Heading
 import com.forkbombsquad.stillalivelarp.utils.HeadingView
 import com.forkbombsquad.stillalivelarp.utils.Rulebook

@@ -17,7 +17,7 @@ import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
+
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class NativeSkillTreeActivity : NoStatusBarActivity() {
