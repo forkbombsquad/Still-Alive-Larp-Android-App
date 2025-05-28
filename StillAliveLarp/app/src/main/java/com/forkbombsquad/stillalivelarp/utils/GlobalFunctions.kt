@@ -11,6 +11,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 fun globalPrint(message: String) {
@@ -37,14 +38,8 @@ fun globalToJson(model: Any): String {
 inline fun <reified T> globalFromJson(json: String): T? {
     val gson = Gson()
     return tryOptional {
-        return gson.fromJson(json, T::class.java)
-    }
-}
-
-inline fun <reified T> globalFromJson(json: String, typeToken: Type): T? {
-    val gson = Gson()
-    return tryOptional {
-        return gson.fromJson<T>(json, typeToken)
+        val type = object : TypeToken<T>() {}.type
+        gson.fromJson<T>(json, type)
     }
 }
 

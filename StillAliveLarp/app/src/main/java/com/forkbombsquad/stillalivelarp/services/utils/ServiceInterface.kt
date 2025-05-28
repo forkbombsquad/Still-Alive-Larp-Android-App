@@ -5,6 +5,7 @@ import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -32,12 +33,12 @@ interface ServiceInterface<G, T, H: ServicePayload> {
             if (!ignoreErrors) {
                 response?.errorBody().ifLet({
                     globalFromJson<ErrorModel>(it.string()).ifLet({ error ->
-                        AlertUtils.displayError(StillAliveLarpApplication.activity, response?.code() ?: 502, error)
+                        AlertUtils.displayError(globalGetContext()!!, response?.code() ?: 502, error)
                     }, {
-                        AlertUtils.displaySomethingWentWrong(StillAliveLarpApplication.activity)
+                        AlertUtils.displaySomethingWentWrong(globalGetContext()!!)
                     })
                 }, {
-                    AlertUtils.displaySomethingWentWrong(StillAliveLarpApplication.activity)
+                    AlertUtils.displaySomethingWentWrong(globalGetContext()!!)
                 })
             }
         })

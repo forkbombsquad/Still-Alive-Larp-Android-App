@@ -19,6 +19,7 @@ import com.forkbombsquad.stillalivelarp.CreateCharacterActivity
 import com.forkbombsquad.stillalivelarp.PreregActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.AnnouncementManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
@@ -44,6 +45,8 @@ import com.google.android.material.divider.MaterialDivider
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
+    // TODO get rid of all of the old data manger stuff an use the new stuff
+
     private val TAG = "HOME_FRAGMENT"
 
     private var eventIndex = 0
@@ -97,15 +100,13 @@ class HomeFragment : Fragment() {
     private fun preparePullToRefresh(v: View) {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.ANNOUNCEMENTS, OldDataManagerType.EVENTS, OldDataManagerType.AWARDS, OldDataManagerType.SKILLS), true, finishedStep = {
+
+            DataManager.shared.load(lifecycleScope, stepFinished = {
                 setupViews(v)
-            }) {
-                OldDataManager.shared.selectedChar = OldDataManager.shared.character?.getBaseModel()
-                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS, OldDataManagerType.SELECTED_CHARACTER_GEAR, OldDataManagerType.INTRIGUE), true) {
-                    setupViews(v)
-                    pullToRefresh.isRefreshing = false
-                }
-            }
+            }, finished = {
+                setupViews(v)
+                pullToRefresh.isRefreshing = false
+            })
             setupViews(v)
         }
     }

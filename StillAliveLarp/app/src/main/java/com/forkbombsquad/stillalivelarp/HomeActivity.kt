@@ -3,8 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.HomeFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
@@ -50,16 +49,8 @@ class HomeActivity : NoStatusBarActivity() {
     }
 
     private fun loadHomeFragServices() {
-        OldDataManager.shared.loadingEventPreregs = true
-        OldDataManager.shared.loadingSelectedCharacterGear = true
-        OldDataManager.shared.loadingIntrigue = true
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.ANNOUNCEMENTS, OldDataManagerType.EVENTS, OldDataManagerType.AWARDS, OldDataManagerType.SKILLS, OldDataManagerType.FEATURE_FLAGS, OldDataManagerType.ALL_CHARACTERS, OldDataManagerType.ALL_NPC_CHARACTERS), true, finishedStep = {
+        DataManager.shared.load(lifecycleScope) {
             loadHomeFrag()
-        }) {
-            OldDataManager.shared.selectedChar = OldDataManager.shared.character?.getBaseModel()
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS, OldDataManagerType.SELECTED_CHARACTER_GEAR, OldDataManagerType.INTRIGUE), true) {
-                loadHomeFrag()
-            }
         }
     }
 

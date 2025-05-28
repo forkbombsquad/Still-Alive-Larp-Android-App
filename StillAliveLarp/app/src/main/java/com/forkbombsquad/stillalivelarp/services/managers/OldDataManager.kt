@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.AwardService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
+import com.forkbombsquad.stillalivelarp.services.ContactRequestService
 import com.forkbombsquad.stillalivelarp.services.EventAttendeeService
 import com.forkbombsquad.stillalivelarp.services.EventPreregService
 import com.forkbombsquad.stillalivelarp.services.FeatureFlagService
@@ -369,7 +370,7 @@ class OldDataManager private constructor() {
                 OldDataManagerType.CONTACT_REQUESTS -> {
                     loadingContactRequests = true
                     if (contactRequests == null || forceDownloadIfApplicable) {
-                        val request = AdminService.GetAllContactRequests()
+                        val request = ContactRequestService.GetAllContactRequests()
                         lifecycleScope.launch {
                             request.successfulResponse().ifLet({
                                 contactRequests = it.contactRequests.toList()

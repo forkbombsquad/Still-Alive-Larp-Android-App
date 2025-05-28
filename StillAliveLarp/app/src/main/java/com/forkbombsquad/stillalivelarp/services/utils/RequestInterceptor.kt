@@ -58,8 +58,8 @@ object AuthInterceptor: Interceptor {
 object UAndPInterceptor: Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val em = UserAndPassManager.shared.getU(globalGetContext()) ?: ""
-        val pp = UserAndPassManager.shared.getP(globalGetContext()) ?: ""
+        val em = UserAndPassManager.shared.getU(globalGetContext()!!) ?: ""
+        val pp = UserAndPassManager.shared.getP(globalGetContext()!!) ?: ""
         val requestWithAuth = chain.request()
             .newBuilder()
             .header(

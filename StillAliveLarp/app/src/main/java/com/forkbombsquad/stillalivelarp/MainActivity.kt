@@ -11,6 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.UpdateTrackerService
 import com.forkbombsquad.stillalivelarp.services.VersionService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerLoadType
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerType
 import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
@@ -126,6 +129,8 @@ class MainActivity : NoStatusBarActivity() {
         }
 
         offlineModeButton.setOnClick {
+            DataManager.shared.setOfflineMode(true)
+            // TODO
             if (OldSharedPrefsManager.shared.getPlayer() == null) {
                 AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store your character and player for offline mode use")
             } else {
@@ -137,18 +142,17 @@ class MainActivity : NoStatusBarActivity() {
     }
 
     private fun signIn() {
-        logInButton.setLoadingWithText("Fetching Player Info...")
+        DataManager.shared.setOfflineMode(false)
         UserAndPassManager.shared.setUandP(this, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
         logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
         lifecycleScope.launch {
             service.successfulResponse().ifLet({ playerModel ->
-                                               // TODO Uncomment
-//                UserAndPassManager.shared.clearTemp(this@MainActivity)
-//                PlayerManager.shared.setPlayer(playerModel)
-//                val intent = Intent(this@MainActivity, HomeActivity::class.java)
-//                logInButton.setLoading(false)
-//                startActivity(intent)
+                DataManager.shared.setCurrentPlayerId(playerModel)
+                UserAndPassManager.shared.clearTemp(this@MainActivity)
+                val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                logInButton.setLoading(false)
+                startActivity(intent)
             }, {
                 logInButton.setLoading(false)
             })

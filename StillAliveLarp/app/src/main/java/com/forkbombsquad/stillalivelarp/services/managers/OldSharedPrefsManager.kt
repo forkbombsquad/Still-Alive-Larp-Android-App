@@ -157,8 +157,7 @@ class OldSharedPrefsManager private constructor() {
     }
 
     fun getSkills(): List<OldFullSkillModel> {
-        val type = object: TypeToken<List<OldFullSkillModel>>() {}.type
-        return globalFromJson(get(globalGetContext()!!, skillsKey) ?: "", type) ?: listOf()
+        return globalFromJson(get(globalGetContext()!!, skillsKey) ?: "") ?: listOf()
     }
 
     private data class NPCListModel(@JsonProperty("npcs") val npcs: Array<OldFullCharacterModel>
@@ -170,8 +169,7 @@ class OldSharedPrefsManager private constructor() {
     }
 
     fun getNPCs(): List<OldFullCharacterModel> {
-        val type = object: TypeToken<NPCListModel>() {}.type
-        return globalFromJson<NPCListModel>(get(globalGetContext()!!, npcsKey) ?: "", type)?.npcs?.toList() ?: listOf()
+        return globalFromJson<NPCListModel>(get(globalGetContext()!!, npcsKey) ?: "")?.npcs?.toList() ?: listOf()
     }
 
     private data class SkillCategoryListModel(@JsonProperty("cats") val cats: Array<SkillCategoryModel>
@@ -181,8 +179,7 @@ class OldSharedPrefsManager private constructor() {
         this.set(globalGetContext()!!, skillCategoriesKey, globalToJson(skilCatListModel))
     }
     fun getSkillCategories(): List<SkillCategoryModel> {
-        val type = object: TypeToken<SkillCategoryListModel>() {}.type
-        return globalFromJson<SkillCategoryListModel>(get(globalGetContext()!!, skillCategoriesKey) ?: "", type)?.cats?.toList() ?: listOf()
+        return globalFromJson<SkillCategoryListModel>(get(globalGetContext()!!, skillCategoriesKey) ?: "")?.cats?.toList() ?: listOf()
     }
 
     companion object {

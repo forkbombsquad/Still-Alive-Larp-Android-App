@@ -35,6 +35,7 @@ import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
+import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.utils.compress
@@ -72,6 +73,12 @@ enum class DataManagerLoadType {
 }
 
 class DataManager private constructor() {
+    // Global Settings
+    var offlineMode: Boolean = false
+        private set
+
+    var currentPlayerId: Int = -1
+        private set
 
     // Unchanged From Server
     var announcements: List<AnnouncementModel> = listOf()
@@ -87,10 +94,11 @@ class DataManager private constructor() {
     var players: List<FullPlayerModel> = listOf()
 
     // DM variables
-    var firstLoad: Boolean = false
+    private var firstLoad: Boolean = true
     var loading: Boolean = false
-    var currentLoadTask = ""
+    var loadingText = ""
     private var callbacks: MutableList<() -> Unit> = mutableListOf()
+    private var stepCallbacks: MutableList<() -> Unit> = mutableListOf()
     private var currentUpdateTracker: UpdateTrackerModel = UpdateTrackerModel.empty()
     private var updatesNeeded: MutableList<DataManagerType> = mutableListOf()
     private var updatesCompleted: MutableList<DataManagerType> = mutableListOf()
@@ -99,16 +107,37 @@ class DataManager private constructor() {
     private val mutexThreadLocker = Mutex()
     private val finishedCountMutexThreadLocker = Mutex()
 
-    fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType, finished: () -> Unit) {
+    fun setOfflineMode(enabled: Boolean) {
+        offlineMode = enabled
+    }
+
+    fun setCurrentPlayerId(id: Int) {
+        currentPlayerId = id
+    }
+
+    fun setCurrentPlayerId(player: PlayerModel) {
+        setCurrentPlayerId(player.id)
+    }
+
+    fun getCurrentPlayer(): FullPlayerModel? {
+        return players.firstOrNull { it.id == currentPlayerId }
+    }
+
+    fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
+        var modLoadType = loadType
+        if (offlineMode) {
+            modLoadType = DataManagerLoadType.OFFLINE
+        }
         lifecycleScope.launch {
             var previousLoading: Boolean
             mutexThreadLocker.withLock {
                 previousLoading = loading
+                stepCallbacks.add(stepFinished)
                 callbacks.add(finished)
                 loading = true
             }
             if (!previousLoading) {
-                when (loadType) {
+                when (modLoadType) {
                     DataManagerLoadType.OFFLINE -> loadOffline(lifecycleScope)
                     DataManagerLoadType.DOWNLOAD_IF_NECESSARY -> loadDownloadIfNecessary(lifecycleScope)
                     DataManagerLoadType.FORCE_DOWNLOAD_ALL -> loadForceDownloadAll(lifecycleScope)
@@ -128,11 +157,7 @@ class DataManager private constructor() {
                 this@DataManager.handleUpdates(lifecycleScope, updateTrackerModel)
             }, {
                 lifecycleScope.launch {
-                    mutexThreadLocker.withLock {
-                        callbacks.forEach { it() }
-                        callbacks = mutableListOf()
-                        loading = false
-                    }
+                    loadOffline(lifecycleScope)
                 }
             })
         }
@@ -141,6 +166,7 @@ class DataManager private constructor() {
     private fun loadForceDownloadAll(lifecycleScope: LifecycleCoroutineScope) {
         lifecycleScope.launch {
             mutexThreadLocker.withLock {
+                loadingText = "Force Clearing Data..."
                 firstLoad = true
                 LocalDataManager.shared.storeUpdateTracker(UpdateTrackerModel.empty())
             }
@@ -156,6 +182,12 @@ class DataManager private constructor() {
         if (updatesNeeded.isEmpty()) {
             populateLocalData(lifecycleScope, false)
         } else {
+            lifecycleScope.launch {
+                mutexThreadLocker.withLock {
+                    loadingText = generateLoadingText()
+                    stepCallbacks.forEach { it() }
+                }
+            }
             val updatesNeededCopy = updatesNeeded.toMutableList()
             updatesNeededCopy.forEach { updateType ->
                 when (updateType) {
@@ -435,6 +467,19 @@ class DataManager private constructor() {
         }
     }
 
+    private fun generateLoadingText(): String {
+        var text = "Loading: "
+        updatesNeeded.forEachIndexed { index, dmt ->
+            if (index > 0) {
+                text += ", "
+            }
+            text += dmt.name.lowercase()
+        }
+        text += "..."
+        text = text.replace("_", " ")
+        return text
+    }
+
     private suspend fun serviceFinished(lifecycleScope: LifecycleCoroutineScope, type: DataManagerType, succeeded: Boolean, localUpdatesNeeded: List<DataManagerType>) {
         finishedCountMutexThreadLocker.withLock {
             if (succeeded) {
@@ -442,6 +487,10 @@ class DataManager private constructor() {
                 updatesCompleted.add(type)
             }
             finishedCount += 1
+        }
+        mutexThreadLocker.withLock {
+            loadingText = generateLoadingText()
+            stepCallbacks.forEach { it() }
         }
         if (finishedCount == localUpdatesNeeded.count()) {
             LocalDataManager.shared.updatesSucceeded(currentUpdateTracker, updatesCompleted)
@@ -467,9 +516,12 @@ class DataManager private constructor() {
                     characters = LocalDataManager.shared.getFullCharacters()
                     players = LocalDataManager.shared.getFullPlayers()
                 }
+                loadingText = ""
+                loading = false
+                stepCallbacks.forEach { it() }
                 callbacks.forEach { it() }
                 callbacks = mutableListOf()
-                loading = false
+                stepCallbacks = mutableListOf()
             }
         }
     }

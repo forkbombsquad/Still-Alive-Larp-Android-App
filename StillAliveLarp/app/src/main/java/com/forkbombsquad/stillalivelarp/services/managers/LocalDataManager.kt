@@ -317,7 +317,7 @@ class LocalDataManager private constructor() {
     }
 
     fun determineWhichTypesNeedUpdates(newUpdateTracker: UpdateTrackerModel): List<DMT> {
-        return getUpdateTracker()?.getDifferences(newUpdateTracker) ?: return DMT.values().asList()
+        return getUpdateTracker()?.getDifferences(newUpdateTracker) ?: return DMT.values().filter { it != DataManagerType.UPDATE_TRACKER }
     }
 
     fun updatesSucceeded(newUpdateTracker: UpdateTrackerModel, successfulUpdates: List<DMT>) {
