@@ -6,15 +6,11 @@ import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.PlayerCreateSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
-import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
 import com.forkbombsquad.stillalivelarp.utils.ValidationResult
 import com.forkbombsquad.stillalivelarp.utils.ValidationType

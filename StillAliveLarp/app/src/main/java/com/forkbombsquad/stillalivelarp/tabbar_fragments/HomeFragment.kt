@@ -18,7 +18,6 @@ import com.forkbombsquad.stillalivelarp.CheckOutBarcodeActivity
 import com.forkbombsquad.stillalivelarp.CreateCharacterActivity
 import com.forkbombsquad.stillalivelarp.PreregActivity
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.services.managers.AnnouncementManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType

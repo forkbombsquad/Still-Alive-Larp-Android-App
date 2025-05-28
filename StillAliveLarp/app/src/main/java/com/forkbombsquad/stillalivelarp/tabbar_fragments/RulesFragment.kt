@@ -10,13 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
-import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
-import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
-import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class RulesFragment : Fragment() {

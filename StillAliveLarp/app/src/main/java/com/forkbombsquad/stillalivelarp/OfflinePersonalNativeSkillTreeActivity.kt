@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
 class OfflinePersonalNativeSkillTreeActivity : NoStatusBarActivity() {

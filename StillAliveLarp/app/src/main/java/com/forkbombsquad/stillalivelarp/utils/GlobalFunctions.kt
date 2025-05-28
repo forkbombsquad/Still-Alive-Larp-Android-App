@@ -5,16 +5,10 @@ import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
-import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {

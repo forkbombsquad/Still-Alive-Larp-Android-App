@@ -4,9 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
-import com.forkbombsquad.stillalivelarp.services.managers.SkillManager
-import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class OfflineMyAccountActivity : NoStatusBarActivity() {

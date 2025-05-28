@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
-import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.utils.UpdatePSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
