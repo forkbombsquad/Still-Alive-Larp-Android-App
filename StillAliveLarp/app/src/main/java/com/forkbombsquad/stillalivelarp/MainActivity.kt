@@ -143,13 +143,13 @@ class MainActivity : NoStatusBarActivity() {
 
     private fun signIn() {
         DataManager.shared.setOfflineMode(false)
-        UserAndPassManager.shared.setUandP(this, usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
+        UserAndPassManager.shared.setUandP(usernameField.text.toString(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
         logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
         lifecycleScope.launch {
             service.successfulResponse().ifLet({ playerModel ->
                 DataManager.shared.setCurrentPlayerId(playerModel)
-                UserAndPassManager.shared.clearTemp(this@MainActivity)
+                UserAndPassManager.shared.clearTemp()
                 val intent = Intent(this@MainActivity, HomeActivity::class.java)
                 logInButton.setLoading(false)
                 startActivity(intent)
@@ -161,12 +161,12 @@ class MainActivity : NoStatusBarActivity() {
 
     override fun onResume() {
         super.onResume()
-        var u = UserAndPassManager.shared.getTempU(this)
-        var p = UserAndPassManager.shared.getTempP(this)
+        var u = UserAndPassManager.shared.getTempU()
+        var p = UserAndPassManager.shared.getTempP()
 
-        if (u == null && p == null && UserAndPassManager.shared.getRemember(this)) {
-            u = UserAndPassManager.shared.getU(this)
-            p = UserAndPassManager.shared.getP(this)
+        if (u == null && p == null && UserAndPassManager.shared.getRemember()) {
+            u = UserAndPassManager.shared.getU()
+            p = UserAndPassManager.shared.getP()
         }
 
         usernameField.setText(u ?: "")

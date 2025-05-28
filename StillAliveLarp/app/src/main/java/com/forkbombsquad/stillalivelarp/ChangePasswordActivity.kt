@@ -51,7 +51,7 @@ class ChangePasswordActivity : NoStatusBarActivity() {
                             )).ifLet({
                                 OldDataManager.shared.player = it
                                 PlayerManager.shared.setPlayer(it)
-                                UserAndPassManager.shared.setUandP(this@ChangePasswordActivity, it.username, newPw.text.toString(), true)
+                                UserAndPassManager.shared.setUandP(it.username, newPw.text.toString(), true)
                                 AlertUtils.displayOkMessage(this@ChangePasswordActivity, "Success", "Password Updated") { _, _ ->
                                     finish()
                                 }
@@ -82,6 +82,6 @@ class ChangePasswordActivity : NoStatusBarActivity() {
 
     private fun checkOldPass(): Boolean {
         val current = currentPw.text.toString()
-        return current == UserAndPassManager.shared.getP(this)
+        return current == UserAndPassManager.shared.getP()
     }
 }

@@ -1,10 +1,8 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
@@ -25,19 +23,18 @@ import com.forkbombsquad.stillalivelarp.services.SkillService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.UpdateTrackerService
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
-import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
-import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.compress
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
@@ -45,6 +42,11 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 enum class DataManagerType(val localDataKey: String) {
     UPDATE_TRACKER("updateTracker_dm_sp_key"),
@@ -65,7 +67,9 @@ enum class DataManagerType(val localDataKey: String) {
     SKILLS("skills_dm_sp_key"),
     SKILL_CATEGORIES("skillCategories_dm_sp_key"),
     SKILL_PREREQS("skillPrereqs_dm_sp_key"),
-    XP_REDUCTIONS("xpReductions_dm_sp_key");
+    XP_REDUCTIONS("xpReductions_dm_sp_key"),
+    RULEBOOK("rulebook_dm_sp_key"),
+    TREATING_WOUNDS("treatingwounds_dm_sp_key");
 }
 
 enum class DataManagerLoadType {
@@ -462,6 +466,43 @@ class DataManager private constructor() {
                             })
                         }
                     }
+                    DataManagerType.RULEBOOK -> {
+                        lifecycleScope.launch {
+                            val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
+                                lifecycleScope.launch {
+                                    OldSharedPrefsManager.shared.storeRulebook(doc.toString())
+                                    LocalDataManager.shared.storeRulebook(Rulebook.parseWebDocumentAsRulebook(doc, updateTracker.rulebookVersion))
+                                    serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                }
+                            }
+                            jsoupAsyncTask.execute()
+                        }
+                    }
+                    DataManagerType.TREATING_WOUNDS -> {
+                        lifecycleScope.launch {
+                            val jsoupAsyncTask = JsoupAsyncTask("https://stillalivelarp.com/healing") { doc ->
+                                lifecycleScope.launch {
+                                    val imageElement = doc?.getElementById("image")
+                                    val imgPath = imageElement?.attr("src")
+                                    val url = URL(imgPath)
+                                    val connection = url.openConnection() as? HttpURLConnection
+                                    connection?.doInput = true
+                                    connection?.connect()
+                                    val responseCode = connection?.responseCode ?: -1
+                                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                                        val imageStream = connection?.inputStream
+                                        val bmp = BitmapFactory.decodeStream(imageStream)
+                                        imageStream?.close()
+                                        LocalDataManager.shared.storeTreatingWounds(bmp)
+                                        serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                    } else {
+                                        serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
+                                    }
+                                }
+                            }
+                            jsoupAsyncTask.execute()
+                        }
+                    }
                 }
             }
         }
@@ -531,9 +572,26 @@ class DataManager private constructor() {
             private set
 
         fun forceReset() {
-            // TODO
             shared = DataManager()
         }
     }
 
+}
+
+class JsoupAsyncTask(private val url: String, private val callback: (Document?) -> Unit) :
+    AsyncTask<Void, Void, Document>() {
+
+    override fun doInBackground(vararg params: Void?): Document? {
+        return try {
+            Jsoup.connect(url).get()
+        } catch (e: IOException) {
+            null
+        }
+    }
+
+    override fun onPostExecute(result: Document?) {
+        super.onPostExecute(result)
+
+        callback(result)
+    }
 }

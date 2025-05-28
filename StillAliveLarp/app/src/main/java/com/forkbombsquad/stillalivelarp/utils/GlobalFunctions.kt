@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldDataManager
 import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
 import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
@@ -66,10 +68,9 @@ fun globalCopyToClipboard(context: Context, string: String) {
     Toast.makeText(context, "Text copied to clipboard!", Toast.LENGTH_SHORT).show()
 }
 
-fun globalForceResetAllPlayerData(context: Context) {
-    OldDataManager.forceReset()
-    OldSharedPrefsManager.shared.clearAll(context)
-    UserAndPassManager.shared.clear(context)
+fun globalForceResetAllPlayerData() {
+    DataManager.forceReset()
+    LocalDataManager.clearAllLocalData()
     PlayerManager.shared.forceReset()
     CharacterManager.shared.forceReset()
 }

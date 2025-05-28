@@ -27,7 +27,9 @@ data class UpdateTrackerModel(
     @JsonProperty("skills") var skills: Int,
     @JsonProperty("skillCategories") var skillCategories: Int,
     @JsonProperty("skillPrereqs") var skillPrereqs: Int,
-    @JsonProperty("xpReductions") var xpReductions: Int
+    @JsonProperty("xpReductions") var xpReductions: Int,
+    @JsonProperty("xpReductions") var rulebookVersion: String,
+    @JsonProperty("xpReductions") var treatingWoundsVersion: String
 ) : Serializable {
     fun getDifferences(other: UpdateTrackerModel): List<DMT> {
         val updates: MutableList<DMT> = mutableListOf()
@@ -85,6 +87,12 @@ data class UpdateTrackerModel(
         if (other.xpReductions != this.xpReductions) {
             updates.add(DMT.XP_REDUCTIONS)
         }
+        if (other.rulebookVersion != this.rulebookVersion) {
+            updates.add(DMT.RULEBOOK)
+        }
+        if (other.treatingWoundsVersion != this.treatingWoundsVersion) {
+            updates.add(DMT.TREATING_WOUNDS)
+        }
         return updates
     }
 
@@ -110,6 +118,8 @@ data class UpdateTrackerModel(
                 DataManagerType.SKILL_CATEGORIES -> this.skillCategories = newTracker.skillCategories
                 DataManagerType.SKILL_PREREQS -> this.skillPrereqs = newTracker.skillPrereqs
                 DataManagerType.XP_REDUCTIONS -> this.xpReductions = newTracker.xpReductions
+                DataManagerType.RULEBOOK -> this.rulebookVersion = newTracker.rulebookVersion
+                DataManagerType.TREATING_WOUNDS -> this.treatingWoundsVersion = newTracker.treatingWoundsVersion
             }
         }
     }
@@ -122,7 +132,7 @@ data class UpdateTrackerModel(
 
     companion object {
         fun empty(): UpdateTrackerModel {
-            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)
+            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, "", "")
         }
     }
 

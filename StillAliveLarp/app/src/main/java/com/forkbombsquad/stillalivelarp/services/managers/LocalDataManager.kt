@@ -2,7 +2,10 @@ package com.forkbombsquad.stillalivelarp.services.managers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
+import com.forkbombsquad.stillalivelarp.services.models.AppVersionModel
 import com.forkbombsquad.stillalivelarp.services.models.AwardModel
 import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
@@ -31,6 +34,7 @@ import com.forkbombsquad.stillalivelarp.services.models.SkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillPrereqModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
+import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.addCreateListIfNecessary
 import com.forkbombsquad.stillalivelarp.utils.compress
 import com.forkbombsquad.stillalivelarp.utils.decompress
@@ -40,6 +44,8 @@ import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import java.io.ByteArrayOutputStream
+import java.util.Base64
 
 private typealias DMT = DataManagerType
 class LocalDataManager private constructor() {
@@ -47,22 +53,49 @@ class LocalDataManager private constructor() {
         var shared = LocalDataManager()
             private set
 
-        fun forceReset() {
-            // TODO
+        fun clearAllLocalData() {
+            UserAndPassManager.shared.clearAll()
+            LDMKeys.allKeys.forEach {
+                shared.clear(it)
+            }
+            DMT.values().forEach {
+                shared.clear(it)
+            }
         }
     }
 
     private class LDMKeys {
         companion object {
+            val unpSharedPrefsKey = "StillAliveLarpSharedPrefs"
             val sharedPrefsBaseKey = "StillAliveLarpLocalDataPrefBaseKey"
             val fullSkillsKey = "fullskills_LDMKEYS_dm_sp_key"
             val fullEventsKey = "fullevents_LDMKEYS_dm_sp_key"
             val fullCharactersKey = "fullcharacters_LDMKEYS_dm_sp_key"
             val fullPlayersKey = "fullplayers_LDMKEYS_dm_sp_key"
+
+            val allKeys: List<String> = listOf(fullSkillsKey, fullEventsKey, fullCharactersKey, fullPlayersKey)
         }
     }
 
+    private fun getUnPSharedPrefs(context: Context? = null): SharedPreferences {
+        return (context ?: globalGetContext())!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE)
+    }
 
+    private fun getUnPSharedPrefsEditor(): SharedPreferences.Editor {
+        return globalGetContext()!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE).edit()
+    }
+
+    fun setUnPRelatedObject(key: String, value: String) {
+        getUnPSharedPrefsEditor().putString(key, value).commit()
+    }
+
+    fun getUnPRelatedObject(context: Context? = null, key: String): String? {
+        return getUnPSharedPrefs(context).getString(key, null)
+    }
+
+    fun clearUnPRelatedObject(key: String) {
+        getUnPSharedPrefsEditor().remove(key).commit()
+    }
 
     private fun getSharedPrefs(): SharedPreferences {
         return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey, Context.MODE_PRIVATE)
@@ -70,6 +103,14 @@ class LocalDataManager private constructor() {
 
     private fun getSharedPrefsEditor(): SharedPreferences.Editor {
         return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey, Context.MODE_PRIVATE).edit()
+    }
+
+    private fun clear(key: String) {
+        getSharedPrefsEditor().remove(key).commit()
+    }
+
+    private fun clear(key: DMT) {
+        clear(key.localDataKey)
     }
 
     private fun store(obj: Any, key: String) {
@@ -316,6 +357,32 @@ class LocalDataManager private constructor() {
         return get(DMT.XP_REDUCTIONS) ?: mapOf()
     }
 
+    fun storeRulebook(rulebook: Rulebook) {
+        store(rulebook, DMT.RULEBOOK)
+    }
+
+    fun getRulebook(): Rulebook? {
+        return get(DMT.RULEBOOK)
+    }
+
+    fun storeTreatingWounds(treatingWoundsBmp: Bitmap) {
+        val baos = ByteArrayOutputStream()
+        treatingWoundsBmp.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        val encodedImage: String = Base64.getEncoder().encodeToString(b)
+        store(encodedImage, DMT.TREATING_WOUNDS)
+    }
+
+    fun getTreatingWounds(): Bitmap? {
+        val encodedImage: String? = get(DMT.TREATING_WOUNDS)
+        return if (encodedImage != null) {
+            val imageAsBytes = Base64.getDecoder().decode(encodedImage.toByteArray())
+            BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size)
+        } else {
+            null
+        }
+    }
+
     fun determineWhichTypesNeedUpdates(newUpdateTracker: UpdateTrackerModel): List<DMT> {
         return getUpdateTracker()?.getDifferences(newUpdateTracker) ?: return DMT.values().filter { it != DataManagerType.UPDATE_TRACKER }
     }
@@ -378,7 +445,6 @@ class LocalDataManager private constructor() {
                 preregs = preregs,
                 profileImages = getProfileImages()
             )
-            // TODO
         }
 
     }

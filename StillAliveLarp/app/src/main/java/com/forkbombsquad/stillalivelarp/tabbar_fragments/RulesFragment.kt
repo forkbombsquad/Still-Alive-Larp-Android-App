@@ -17,7 +17,6 @@ import com.forkbombsquad.stillalivelarp.services.managers.OldDataManagerType
 import com.forkbombsquad.stillalivelarp.services.managers.OldSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
-import com.forkbombsquad.stillalivelarp.utils.ImageDownloader
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class RulesFragment : Fragment() {
@@ -64,18 +63,6 @@ class RulesFragment : Fragment() {
             transaction.addToBackStack(TAG).commit()
         }
 
-        skillTreeDiagramNav.setOnClick {
-            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE.key)
-            val intent = Intent(v.context, SAImageViewActivity::class.java)
-            startActivity(intent)
-        }
-
-        skillTreeDiagramDarkNav.setOnClick {
-            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK.key)
-            val intent = Intent(v.context, SAImageViewActivity::class.java)
-            startActivity(intent)
-        }
-
         coreRulebookNav.setOnClick {
             coreRulebookNav.setLoading(true)
             OldDataManager.shared.unrelaltedUpdateCallback = {
@@ -86,9 +73,10 @@ class RulesFragment : Fragment() {
         }
 
         treatingWoundsNav.setOnClick {
-            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
-            val intent = Intent(v.context, SAImageViewActivity::class.java)
-            startActivity(intent)
+            // TODO
+//            OldDataManager.shared.passedBitmap = OldSharedPrefsManager.shared.getBitmap(v.context, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS.key)
+//            val intent = Intent(v.context, SAImageViewActivity::class.java)
+//            startActivity(intent)
         }
 
         nativeSkillTreeDiagramNav.setOnClick {
@@ -113,35 +101,13 @@ class RulesFragment : Fragment() {
         coreRulebookNav.isGone = !OldDataManager.shared.loadingRulebook && OldDataManager.shared.rulebook == null
         handleImages(v)
 
-        skillTreeDiagramNav.isGone = !FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()
-        skillTreeDiagramDarkNav.isGone = !FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()
+        skillTreeDiagramNav.isGone = true
+        skillTreeDiagramDarkNav.isGone = true
     }
 
     private fun handleImages(v: View) {
         treatingWoundsNav.setLoading(loadingTreatingWounds)
-
-        if (FeatureFlag.OLD_SKILL_TREE_IMAGE.isActive()) {
-            skillTreeDiagramNav.setLoading(loadingSkillTree)
-            skillTreeDiagramDarkNav.setLoading(loadingSkillTreeDark)
-            ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE) { success ->
-                activity?.runOnUiThread {
-                    skillTreeDiagramNav.isGone = !success
-                    skillTreeDiagramNav.setLoading(false)
-                }
-            }
-            ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.SKILL_TREE_DARK) { success ->
-                activity?.runOnUiThread {
-                    skillTreeDiagramDarkNav.isGone = !success
-                    skillTreeDiagramDarkNav.setLoading(false)
-                }
-            }
-        }
-        ImageDownloader.download(v.context, lifecycleScope, ImageDownloader.Companion.ImageKey.TREATING_WOUNDS) { success ->
-            activity?.runOnUiThread {
-                treatingWoundsNav.isGone = !success
-                treatingWoundsNav.setLoading(false)
-            }
-        }
+        // TODO
     }
 
     companion object {

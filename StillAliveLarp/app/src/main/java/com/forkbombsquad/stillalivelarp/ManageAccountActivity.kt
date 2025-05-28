@@ -175,7 +175,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
         deleteAccount.setLoadingWithText("")
         deleteAccount.setLoading(true)
         AlertUtils.displaySuccessMessage(this, "Your account and all associated data has been deleted!") { _, _ ->
-            globalForceResetAllPlayerData(this)
+            globalForceResetAllPlayerData()
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)

@@ -4,46 +4,58 @@ import android.content.Context
 
 class UserAndPassManager private constructor() {
 
-    val rememberKey = "remkey"
-    val ukey = "emanresu"
-    val pkey = "taxkey"
+    private val rememberKey = "remkey"
+    private val ukey = "emanresu"
+    private val pkey = "taxkey"
 
-    fun setTemp(context: Context, u: String, p: String) {
-        OldSharedPrefsManager.shared.setMultiple(context, mapOf("temp$ukey" to u, "temp$pkey" to p))
+    private val tempukey = "temp$ukey"
+    private val temppkey = "temp$pkey"
+
+    fun setTemp(u: String, p: String) {
+        LocalDataManager.shared.setUnPRelatedObject(tempukey, u)
+        LocalDataManager.shared.setUnPRelatedObject(temppkey, p)
     }
 
-    fun clearTemp(context: Context) {
-        OldSharedPrefsManager.shared.clear(context, "temp$ukey")
-        OldSharedPrefsManager.shared.clear(context, "temp$pkey")
+    fun clearTemp() {
+        LocalDataManager.shared.clearUnPRelatedObject(tempukey)
+        LocalDataManager.shared.clearUnPRelatedObject(temppkey)
     }
 
-    fun clear(context: Context) {
-        OldSharedPrefsManager.shared.clear(context, ukey)
-        OldSharedPrefsManager.shared.clear(context, pkey)
+    private fun clear() {
+        LocalDataManager.shared.clearUnPRelatedObject(ukey)
+        LocalDataManager.shared.clearUnPRelatedObject(pkey)
+        LocalDataManager.shared.clearUnPRelatedObject(rememberKey)
     }
 
-    fun setUandP(context: Context, u: String, p: String, remember: Boolean) {
-        OldSharedPrefsManager.shared.setMultiple(context, mapOf(ukey to u, pkey to p, rememberKey to remember.toString()))
+    fun clearAll() {
+        clear()
+        clearTemp()
     }
 
-    fun getU(context: Context): String? {
-        return OldSharedPrefsManager.shared.get(context, ukey)
+    fun setUandP(u: String, p: String, remember: Boolean) {
+        LocalDataManager.shared.setUnPRelatedObject(ukey, u)
+        LocalDataManager.shared.setUnPRelatedObject(pkey, p)
+        LocalDataManager.shared.setUnPRelatedObject(rememberKey, remember.toString())
     }
 
-    fun getP(context: Context): String? {
-        return OldSharedPrefsManager.shared.get(context, pkey)
+    fun getU(context: Context? = null): String? {
+        return LocalDataManager.shared.getUnPRelatedObject(context, ukey)
     }
 
-    fun getRemember(context: Context): Boolean {
-        return OldSharedPrefsManager.shared.get(context, rememberKey)?.toBoolean() ?: false
+    fun getP(context: Context? = null): String? {
+        return LocalDataManager.shared.getUnPRelatedObject(context, pkey)
     }
 
-    fun getTempU(context: Context): String? {
-        return OldSharedPrefsManager.shared.get(context, "temp$ukey")
+    fun getRemember(context: Context? = null): Boolean {
+        return LocalDataManager.shared.getUnPRelatedObject(context, rememberKey)?.toBoolean() ?: false
     }
 
-    fun getTempP(context: Context): String? {
-        return OldSharedPrefsManager.shared.get(context, "temp$pkey")
+    fun getTempU(context: Context? = null): String? {
+        return LocalDataManager.shared.getUnPRelatedObject(context, tempukey)
+    }
+
+    fun getTempP(context: Context? = null): String? {
+        return LocalDataManager.shared.getUnPRelatedObject(context, temppkey)
     }
 
     companion object {

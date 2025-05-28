@@ -43,7 +43,6 @@ import com.forkbombsquad.stillalivelarp.services.utils.CharactersForTypeWithIdSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
-import com.forkbombsquad.stillalivelarp.utils.RulebookManager
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import kotlinx.coroutines.launch
@@ -523,23 +522,23 @@ class OldDataManager private constructor() {
                     }
                 }
                 OldDataManagerType.RULEBOOK -> {
-                    loadingRulebook = true
-                    if (rulebook == null || forceDownloadIfApplicable) {
-                        RulebookManager.shared.getOnlineVersion(lifecycleScope) { rbop ->
-                            rbop.ifLet({ rb ->
-                                rulebook = rb
-                                loadingRulebook = false
-                                finishedRequest(currentLoadCountIndex)
-                            }, {
-                                loadingRulebook = false
-                                rulebook = null
-                                finishedRequest(currentLoadCountIndex)
-                            })
-                        }
-                    } else {
-                        loadingRulebook = false
-                        finishedRequest(currentLoadCountIndex)
-                    }
+//                    loadingRulebook = true
+//                    if (rulebook == null || forceDownloadIfApplicable) {
+//                        RulebookManager.shared.getOnlineVersion(lifecycleScope) { rbop ->
+//                            rbop.ifLet({ rb ->
+//                                rulebook = rb
+//                                loadingRulebook = false
+//                                finishedRequest(currentLoadCountIndex)
+//                            }, {
+//                                loadingRulebook = false
+//                                rulebook = null
+//                                finishedRequest(currentLoadCountIndex)
+//                            })
+//                        }
+//                    } else {
+//                        loadingRulebook = false
+//                        finishedRequest(currentLoadCountIndex)
+//                    }
                 }
                 OldDataManagerType.FEATURE_FLAGS -> {
                     loadingFeatureFlags = true
