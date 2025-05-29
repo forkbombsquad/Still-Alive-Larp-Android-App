@@ -589,7 +589,7 @@ class DataManager private constructor() {
     }
 
     fun getStartedEvent(): FullEventModel? {
-        return events.firstOrNull { it.isStarted } ?: events.firstOrNull { it.isToday() }
+        return events.firstOrNull { it.isStarted && !it.isFinished } ?: events.firstOrNull { it.isToday() }
     }
 
     fun getStartedOrTodayEvent(): FullEventModel? {

@@ -50,17 +50,60 @@ class HomeFragment : Fragment() {
     private var eventIndex = 0
     private var currentAnnouncementIndex = 0
 
-    private var prevButton = Button(globalGetContext())
-    private var nextButton = Button(globalGetContext())
-
-    private var eventPrevButton = Button(globalGetContext())
-    private var eventNextButton = Button(globalGetContext())
-
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
-    private lateinit var preregisterButton: NavArrowButtonBlue
+    private lateinit var loadingLayout: LinearLayout
+    private lateinit var loadingTextView: TextView
 
-    private lateinit var preregInfo: TextView
+    private lateinit var announcementsLayout: LinearLayout
+    private lateinit var announcementsViewTitle: TextView
+    private lateinit var announcementTitle: TextView
+    private lateinit var announcementDate: TextView
+    private lateinit var announcementDesc: TextView
+    private lateinit var announcementNextButton: Button
+    private lateinit var announcementPreviousButton: Button
+
+    private lateinit var intrigueLayout: LinearLayout
+    private lateinit var intrigueViewTitle: TextView
+    private lateinit var intrigueInvestigatorLayout: LinearLayout
+    private lateinit var intrigueInvestigator: TextView
+    private lateinit var intrigueInterrogatorLayout: LinearLayout
+    private lateinit var intrigueInterrogator: TextView
+
+    private lateinit var checkoutLayout: LinearLayout
+    private lateinit var checkoutButton: NavArrowButtonRed
+
+    private lateinit var currentCharacterLayout: LinearLayout
+    private lateinit var currentCharacterViewTitle: TextView
+    private lateinit var currentCharacterNameLayout: LinearLayout
+    private lateinit var currentCharacterNameText: TextView
+    private lateinit var currentCharacterNoneLayout: LinearLayout
+    private lateinit var createCharacterButton: LoadingButton
+
+    private lateinit var eventLayout: LinearLayout
+    private lateinit var eventTodayLayout: LinearLayout
+    private lateinit var eventTodayViewTitle: TextView
+    private lateinit var eventTodayTitle: TextView
+    private lateinit var eventTodayDate: TextView
+    private lateinit var eventTodayDesc: TextView
+    private lateinit var checkInAsCharButton: NavArrowButtonGreen
+    private lateinit var checkInAsNpcButton: NavArrowButtonBlue
+    private lateinit var checkedInAs: TextView
+
+    private lateinit var eventListLayout: LinearLayout
+    private lateinit var eventListViewTitle: TextView
+    private lateinit var eventListTitle: TextView
+    private lateinit var eventListDate: TextView
+    private lateinit var eventListDesc: TextView
+    private lateinit var preregButton: NavArrowButtonBlue
+    private lateinit var eventListPreregDesc: TextView
+    private lateinit var previousEventButton: Button
+    private lateinit var nextEventButton: Button
+
+    private lateinit var awardsLayout: LinearLayout
+    private lateinit var awardsTitle: TextView
+    private lateinit var awardsInnerLayout: LinearLayout
+    private lateinit var noAwardsLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,154 +117,75 @@ class HomeFragment : Fragment() {
 
     private fun setupViews(v: View) {
         // Pull To Refresh
-        preparePullToRefresh(v)
-
-        // Loading Stuff
-        prepareLoadingSection(v)
-
-        // Announcements
-        prepareAnnouncementsSection(v)
-
-        // Intrigue
-        prepareIntrigueSection(v)
-
-        // Checkout
-        prepareCheckoutSection(v)
-
-        // Current Char View
-        prepareCurrentCharSection(v)
-
-        // Events View
-        prepareEventsSection(v)
-
-        // Awards View
-        prepareAwardsSection(v)
-    }
-
-    private fun prepareLoadingSection(v: View) {
-        val loadingLayout = v.findViewById<LinearLayout>(R.id.loadingView)
-        val loadingTextView = v.findViewById<TextView>(R.id.loadingText)
-
-        loadingLayout.isGone = DataManager.shared.loading
-        loadingTextView.text = DataManager.shared.loadingText
-    }
-
-    private fun preparePullToRefresh(v: View) {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
 
             DataManager.shared.load(lifecycleScope, stepFinished = {
-                setupViews(v)
+                buildViews(v)
             }, finished = {
-                setupViews(v)
+                buildViews(v)
                 pullToRefresh.isRefreshing = false
             })
-            setupViews(v)
+            buildViews(v)
         }
-    }
 
-    private fun prepareAnnouncementsSection(v: View) {
-        val sectionTitle = v.findViewById<TextView>(R.id.announcement_section_title)
-        sectionTitle.text = DataManager.shared.offlineMode.ternary("Offline Announcements", "Announcements")
+        // Setup Loading View
+        loadingLayout = v.findViewById(R.id.loadingView)
+        loadingTextView = v.findViewById(R.id.loadingText)
 
-        val announcementsProgressBar = v.findViewById<ProgressBar>(R.id.announcement_list_progress_bar)
+        // Announcements
+        announcementsLayout = v.findViewById(R.id.announcementslayout)
+        announcementsViewTitle = v.findViewById(R.id.announcement_section_title)
 
-        val title = v.findViewById<TextView>(R.id.announcement_title)
-        val date = v.findViewById<TextView>(R.id.announcement_date)
-        val desc = v.findViewById<TextView>(R.id.announcement_desc)
-        prevButton = v.findViewById<Button>(R.id.announcement_prev_button)
-        nextButton = v.findViewById<Button>(R.id.announcement_next_button)
+        announcementTitle = v.findViewById(R.id.announcement_title)
+        announcementDate = v.findViewById(R.id.announcement_date)
+        announcementDesc = v.findViewById(R.id.announcement_desc)
+        announcementPreviousButton = v.findViewById(R.id.announcement_prev_button)
+        announcementNextButton = v.findViewById(R.id.announcement_next_button)
 
-        prevButton.setOnClickListener {
+        announcementPreviousButton.setOnClickListener {
             if (currentAnnouncementIndex > 0) {
                 currentAnnouncementIndex--
-                DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet { an ->
-                    title.text = an.title
-                    date.text = an.date.yyyyMMddToMonthDayYear()
-                    desc.text = an.text
-                    showHideAnnouncementNavButtons()
-                }
+                buildViews(v)
             }
         }
 
-        nextButton.setOnClickListener {
+        announcementNextButton.setOnClickListener {
             if (currentAnnouncementIndex + 1 < DataManager.shared.announcements.size) {
                 currentAnnouncementIndex++
-                DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet { an ->
-                    title.text = an.title
-                    date.text = an.date.yyyyMMddToMonthDayYear()
-                    desc.text = an.text
-                    showHideAnnouncementNavButtons()
-                }
+                buildViews(v)
             }
         }
 
-        DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet({
-            announcementsProgressBar.isGone = true
-            title.text = it.title
-            date.text = it.date.yyyyMMddToMonthDayYear()
-            desc.text = it.text
+        // Intrigue
+        intrigueLayout = v.findViewById(R.id.intrigueView)
+        intrigueViewTitle = v.findViewById(R.id.intriguetitle)
+        intrigueInvestigatorLayout = v.findViewById(R.id.intrigue_investigatorView)
+        intrigueInterrogatorLayout = v.findViewById(R.id.intrigue_interrogatorView)
 
-            title.isGone = false
-            date.isGone = false
-            desc.isGone = false
+        intrigueInvestigator = v.findViewById(R.id.intrigue_investigatorText)
+        intrigueInterrogator = v.findViewById(R.id.intrigue_interrogatorText)
 
-            showHideAnnouncementNavButtons()
-        }, {
-            announcementsProgressBar.isGone = false
-            title.isGone = true
-            date.isGone = true
-            desc.isGone = true
-            showHideAnnouncementNavButtons()
-        })
-    }
+        // Checkout
+        checkoutLayout = v.findViewById<LinearLayout>(R.id.checkoutView)
+        checkoutButton = v.findViewById<NavArrowButtonRed>(R.id.checkout_navarrow)
 
-    private fun prepareIntrigueSection(v: View) {
-        val intrigueSection = v.findViewById<LinearLayout>(R.id.intrigueView)
-        val investigatorView = v.findViewById<LinearLayout>(R.id.intrigue_investigatorView)
-        val interrogatorView = v.findViewById<LinearLayout>(R.id.intrigue_interrogatorView)
+        checkoutButton.setOnClick {
+            checkoutButton.setLoading(true)
+            DataManager.shared.load(lifecycleScope) {
+                DataManager.shared.getCurrentPlayer()?.eventAttendees?.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
+                    var char: CharacterBarcodeModel? = null
+                    var relevantSkills: Array<SkillBarcodeModel> = arrayOf()
 
-        val investigator = v.findViewById<TextView>(R.id.intrigue_investigatorText)
-        val interrogator = v.findViewById<TextView>(R.id.intrigue_interrogatorText)
-
-        DataManager.shared.getStartedOrTodayEvent()?.intrigue.ifLet({ intrigue ->
-            if (showIntrigue()) {
-                val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getIntrigueSkills() ?: listOf()
-                investigator.text = intrigue.investigatorMessage
-                interrogator.text = intrigue.interrogatorMessage
-                investigatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.investigator } == null
-                interrogatorView.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.interrogator } == null
-                intrigueSection.isGone = false
-            } else {
-                intrigueSection.isGone = true
-            }
-        }, {
-            intrigueSection.isGone = true
-        })
-    }
-
-    private fun prepareCheckoutSection(v: View) {
-        val checkoutSection = v.findViewById<LinearLayout>(R.id.checkoutView)
-        val checkoutButton = v.findViewById<NavArrowButtonRed>(R.id.checkout_navarrow)
-        if (showCheckout()) {
-            checkoutSection.isGone = false
-            checkoutButton.textView.text = "Checkout"
-            checkoutButton.setOnClick {
-                checkoutButton.setLoading(true)
-                DataManager.shared.load(lifecycleScope) {
-                    DataManager.shared.getCurrentPlayer()?.eventAttendees?.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
-                        var char: CharacterBarcodeModel? = null
-                        var relevantSkills: Array<SkillBarcodeModel> = arrayOf()
-
-                        if (!eventAttendee.asNpc.toBoolean()) {
-                            DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == eventAttendee.characterId }.ifLet { char ->
-                                // TODO
+                    if (!eventAttendee.asNpc.toBoolean()) {
+                        DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == eventAttendee.characterId }.ifLet { char ->
+                            // TODO
 //                              char = char.barcodeModel()
 //                              relevantSkills = char.getRelevantBarcodeSkills()
-                            }
                         }
+                    }
 
-                        // TODO
+                    // TODO
 //                        OldDataManager.shared.checkoutBarcodeModel = PlayerCheckOutBarcodeModel(
 //                            player = OldDataManager.shared.player!!.getBarcodeModel(),
 //                            character = char,
@@ -229,74 +193,214 @@ class HomeFragment : Fragment() {
 //                            eventId = it.eventId,
 //                            relevantSkills = relevantSkills
 //                        )
-                        // TODO
+                    // TODO
 //                        OldDataManager.shared.unrelaltedUpdateCallback = {
 //                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
-//                                setupViews(v)
+//                                buildViews(v)
 //                            }) {
-//                                setupViews(v)
+//                                buildViews(v)
 //                            }
-//                            setupViews(v)
+//                            buildViews(v)
 //                        }
-                        val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
-                        startActivity(intent)
-                    }, {
-                        checkoutButton.setLoading(false)
-                    })
-                }
-                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_ATTENDEES), true) {
+                    val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
+                    startActivity(intent)
+                }, {
                     checkoutButton.setLoading(false)
-                    OldDataManager.shared.eventAttendeesForPlayer.ifLet({ eventAttendees ->
-                        eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({
-
-                            var char: CharacterBarcodeModel? = null
-                            var relevantSkills: Array<SkillBarcodeModel> = arrayOf()
-
-                            if (!it.asNpc.toBoolean()) {
-                                char = OldDataManager.shared.character?.getBarcodeModel()
-                                relevantSkills = OldDataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf()
-                            }
-
-                            OldDataManager.shared.checkoutBarcodeModel = PlayerCheckOutBarcodeModel(
-                                player = OldDataManager.shared.player!!.getBarcodeModel(),
-                                character = char,
-                                eventAttendeeId = it.id,
-                                eventId = it.eventId,
-                                relevantSkills = relevantSkills
-                            )
-                            OldDataManager.shared.unrelaltedUpdateCallback = {
-                                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
-                                    setupViews(v)
-                                }) {
-                                    setupViews(v)
-                                }
-                                setupViews(v)
-                            }
-                            val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
-                            startActivity(intent)
-
-                        }, {
-                            checkoutButton.setLoading(true)
-                        })
-                    }, {
-                        checkoutButton.setLoading(true)
-                    })
-                }
+                })
             }
+        }
+
+        // Current Character View
+        currentCharacterLayout = v.findViewById(R.id.currentCharacterView)
+        currentCharacterViewTitle = v.findViewById(R.id.currentchartitle)
+        currentCharacterNameLayout = v.findViewById(R.id.currentCharNameView)
+        currentCharacterNameText = v.findViewById(R.id.currentCharNameText)
+        currentCharacterNoneLayout = v.findViewById(R.id.currentCharNoneView)
+        createCharacterButton = v.findViewById(R.id.currentCharCreateNewCharButton)
+
+        createCharacterButton.setOnClick {
+            // TODO
+//            OldDataManager.shared.unrelaltedUpdateCallback = {
+//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER), true) {
+//                    buildViews(v)
+//                }
+//                buildViews(v)
+//            }
+            val intent = Intent(v.context, CreateCharacterActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Events View
+        eventLayout = v.findViewById(R.id.eventView)
+        eventTodayLayout = v.findViewById(R.id.eventTodayView)
+        eventTodayViewTitle = v.findViewById(R.id.eventstodayviewtitle)
+        eventTodayTitle = v.findViewById(R.id.eventTodayTitle)
+        eventTodayDate = v.findViewById(R.id.eventTodayDate)
+        eventTodayDesc = v.findViewById(R.id.eventTodayDesc)
+        checkInAsCharButton = v.findViewById(R.id.checkInAsCharButton)
+        checkInAsNpcButton = v.findViewById(R.id.checkInAsNPCButton)
+        checkedInAs = v.findViewById(R.id.eventTodayCheckedInAs)
+
+        eventListLayout = v.findViewById(R.id.eventListView)
+        eventListViewTitle = v.findViewById(R.id.eventslistviewtitle)
+        eventListTitle = v.findViewById(R.id.eventTitle)
+        eventListDate = v.findViewById(R.id.eventDate)
+        eventListDesc = v.findViewById(R.id.eventDesc)
+        preregButton = v.findViewById(R.id.preregister_button)
+        eventListPreregDesc = v.findViewById(R.id.prereg_info)
+        previousEventButton = v.findViewById(R.id.event_prev_button)
+        nextEventButton = v.findViewById(R.id.event_next_button)
+
+        checkInAsCharButton.setOnClick {
+            // TODO
+//            OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
+//                player = OldDataManager.shared.player?.getBarcodeModel()!!,
+//                character = OldDataManager.shared.character?.getBarcodeModel(),
+//                event = it.barcodeModel(),
+//                relevantSkills = OldDataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
+//                gear = OldDataManager.shared.selectedCharacterGear?.firstOrNull()
+//            )
+//            OldDataManager.shared.unrelaltedUpdateCallback = {
+//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
+//                    buildViews(v)
+//                }) {
+//                    buildViews(v)
+//                }
+//                buildViews(v)
+//            }
+            val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+            startActivity(intent)
+        }
+        checkInAsNpcButton.setOnClick {
+            // TODO
+//            OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
+//                player = OldDataManager.shared.player?.getBarcodeModel()!!,
+//                character = null,
+//                event = it.barcodeModel(),
+//                relevantSkills = arrayOf(),
+//                gear = null
+//            )
+//            OldDataManager.shared.unrelaltedUpdateCallback = {
+//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.EVENTS), true) {
+//                    buildViews(v)
+//                }
+//                buildViews(v)
+//            }
+            val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+            startActivity(intent)
+        }
+
+        preregButton.setOnClick {
+            // TODO
+//            OldDataManager.shared.unrelaltedUpdateCallback = {
+//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS), true) {
+//                    buildViews(v)
+//                }
+//            }
+//            OldDataManager.shared.selectedEvent = ce
+            val intent = Intent(v.context, PreregActivity::class.java)
+            startActivity(intent)
+        }
+
+        previousEventButton.setOnClickListener {
+            if (eventIndex > 0) {
+                eventIndex--
+                buildViews(v)
+            }
+        }
+        nextEventButton.setOnClickListener {
+            if (eventIndex + 1 < DataManager.shared.events.count()) {
+                eventIndex++
+                buildViews(v)
+            }
+        }
+
+        // Awards
+        awardsLayout = v.findViewById(R.id.awardView)
+        awardsTitle = v.findViewById(R.id.awardsviewtitle)
+        awardsInnerLayout = v.findViewById(R.id.awardsContainerView)
+        noAwardsLayout = v.findViewById(R.id.noAwardsView)
+
+        buildViews(v)
+    }
+
+    private fun buildViews(v: View) {
+        // TODO this won't work because view aren't actually hidden, They're just redrawn here. Hide them in loading and show them when not
+        if (DataManager.shared.loading) {
+            // Loading Stuff
+            loadingLayout.isGone = false
+            announcementsLayout.isGone = true
+            intrigueLayout.isGone = true
+            checkoutLayout.isGone = true
+            currentCharacterLayout.isGone = true
+            eventLayout.isGone = true
+            awardsLayout.isGone = true
+            prepareLoadingSection()
         } else {
-            checkoutSection.isGone = true
+            loadingLayout.isGone = true
+            announcementsLayout.isGone = false
+            intrigueLayout.isGone = false
+            checkoutLayout.isGone = false
+            currentCharacterLayout.isGone = false
+            eventLayout.isGone = false
+            awardsLayout.isGone = false
+            // Announcements
+            prepareAnnouncementsSection()
+
+            // Intrigue
+            prepareIntrigueSection()
+
+            // Checkout
+            prepareCheckoutSection()
+
+            // Current Char View
+            prepareCurrentCharSection()
+
+            // Events View
+            prepareEventsSection()
+
+            // Awards View
+            prepareAwardsSection(v)
         }
     }
 
-    private fun prepareCurrentCharSection(v: View) {
-        val currentCharView = v.findViewById<LinearLayout>(R.id.currentCharacterView)
-        val currentCharLoadingView = v.findViewById<LinearLayout>(R.id.currentCharLoadingView)
-        val currentCharNameView = v.findViewById<LinearLayout>(R.id.currentCharNameView)
-        val currentCharNoneView = v.findViewById<LinearLayout>(R.id.currentCharNoneView)
+    private fun prepareLoadingSection() {
+        loadingTextView.text = DataManager.shared.loadingText
+    }
 
-        val currentCharNameText = v.findViewById<TextView>(R.id.currentCharNameText)
-        val charCreateButton = v.findViewById<LoadingButton>(R.id.currentCharCreateNewCharButton)
+    private fun prepareAnnouncementsSection() {
+        announcementsViewTitle.text = DataManager.shared.offlineMode.ternary("Offline Announcements", "Announcements")
 
+        DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet({
+            announcementTitle.text = it.title
+            announcementDate.text = it.date.yyyyMMddToMonthDayYear()
+            announcementDesc.text = it.text
+            announcementNextButton.isGone = currentAnnouncementIndex + 1 == DataManager.shared.announcements.size
+            announcementPreviousButton.isGone = currentAnnouncementIndex == 0
+        }, {
+            announcementsLayout.isGone = true
+        })
+    }
+
+    private fun prepareIntrigueSection() {
+        intrigueLayout.isGone = !showIntrigue()
+        intrigueViewTitle.text = DataManager.shared.offlineMode.ternary("Offline Intrigue", "Intrigue")
+
+        DataManager.shared.getStartedOrTodayEvent()?.intrigue.ifLet { intrigue ->
+            val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getIntrigueSkills() ?: listOf()
+            intrigueInvestigator.text = intrigue.investigatorMessage
+            intrigueInterrogator.text = intrigue.interrogatorMessage
+            intrigueInvestigatorLayout.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.investigator } == null
+            intrigueInterrogatorLayout.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.interrogator } == null
+        }
+    }
+
+    private fun prepareCheckoutSection() {
+        checkoutLayout.isGone = !showCheckout()
+    }
+
+    private fun prepareCurrentCharSection() {
+        // TODO
         if (showCurrentCharSection()) {
             currentCharView.isGone = false
             if (OldDataManager.shared.loadingCharacter) {
@@ -307,16 +411,7 @@ class HomeFragment : Fragment() {
                 currentCharLoadingView.isGone = true
                 currentCharNameView.isGone = true
                 currentCharNoneView.isGone = false
-                charCreateButton.setOnClick {
-                    OldDataManager.shared.unrelaltedUpdateCallback = {
-                        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER), true) {
-                            setupViews(v)
-                        }
-                        setupViews(v)
-                    }
-                    val intent = Intent(v.context, CreateCharacterActivity::class.java)
-                    startActivity(intent)
-                }
+
             } else {
                 currentCharLoadingView.isGone = true
                 currentCharNameView.isGone = false
@@ -329,31 +424,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun prepareEventsSection(v: View) {
-        val eventView = v.findViewById<LinearLayout>(R.id.eventView)
-        val eventLoadingView = v.findViewById<LinearLayout>(R.id.eventLoadingView)
-        val eventTodayView = v.findViewById<LinearLayout>(R.id.eventTodayView)
-        val eventListView = v.findViewById<LinearLayout>(R.id.eventListView)
-
-        val eventTodayTitle = v.findViewById<TextView>(R.id.eventTodayTitle)
-        val eventTodayDate = v.findViewById<TextView>(R.id.eventTodayDate)
-        val eventTodayDesc = v.findViewById<TextView>(R.id.eventTodayDesc)
-
-        val checkInAsCharButton = v.findViewById<NavArrowButtonGreen>(R.id.checkInAsCharButton)
-        val checkInAsNpcButton = v.findViewById<NavArrowButtonBlue>(R.id.checkInAsNPCButton)
-
-        val eventTodayCheckedInAs = v.findViewById<TextView>(R.id.eventTodayCheckedInAs)
-
-        val eventTitle = v.findViewById<TextView>(R.id.eventTitle)
-        val eventDate = v.findViewById<TextView>(R.id.eventDate)
-        val eventDesc = v.findViewById<TextView>(R.id.eventDesc)
-
-        eventPrevButton = v.findViewById(R.id.event_prev_button)
-        eventNextButton = v.findViewById(R.id.event_next_button)
-
-        preregisterButton = v.findViewById(R.id.preregister_button)
-
-        preregInfo = v.findViewById(R.id.prereg_info)
+    private fun prepareEventsSection() {
+        // TODO
 
         if (showEventsSection()) {
             eventView.isGone = false
@@ -378,42 +450,7 @@ class HomeFragment : Fragment() {
                             checkInAsCharButton.textView.text = "Check in as ${OldDataManager.shared.character?.fullName ?: ""}"
                             checkInAsNpcButton.isGone = false
                             eventTodayCheckedInAs.isGone = true
-                            checkInAsCharButton.setOnClick {
-                                OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-                                    player = OldDataManager.shared.player?.getBarcodeModel()!!,
-                                    character = OldDataManager.shared.character?.getBarcodeModel(),
-                                    event = it.barcodeModel(),
-                                    relevantSkills = OldDataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
-                                    gear = OldDataManager.shared.selectedCharacterGear?.firstOrNull()
-                                )
-                                OldDataManager.shared.unrelaltedUpdateCallback = {
-                                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
-                                        setupViews(v)
-                                    }) {
-                                        setupViews(v)
-                                    }
-                                    setupViews(v)
-                                }
-                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-                                startActivity(intent)
-                            }
-                            checkInAsNpcButton.setOnClick {
-                                OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-                                    player = OldDataManager.shared.player?.getBarcodeModel()!!,
-                                    character = null,
-                                    event = it.barcodeModel(),
-                                    relevantSkills = arrayOf(),
-                                    gear = null
-                                )
-                                OldDataManager.shared.unrelaltedUpdateCallback = {
-                                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.EVENTS), true) {
-                                        setupViews(v)
-                                    }
-                                    setupViews(v)
-                                }
-                                val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-                                startActivity(intent)
-                            }
+
                         } else if (!OldDataManager.shared.loadingCharacter) {
                             checkInAsCharButton.isGone = true
                             checkInAsNpcButton.isGone = true
@@ -445,48 +482,7 @@ class HomeFragment : Fragment() {
 
                     buildPreregSection(ce)
 
-                    preregisterButton.setOnClick {
-                        OldDataManager.shared.unrelaltedUpdateCallback = {
-                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS), true) {
-                                setupViews(v)
-                            }
-                        }
-                        OldDataManager.shared.selectedEvent = ce
-                        val intent = Intent(v.context, PreregActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
 
-                eventPrevButton.setOnClickListener {
-                    if (eventIndex > 0) {
-                        eventIndex--
-                        OldDataManager.shared.currentEvent = OldDataManager.shared.events?.inChronologicalOrder()?.get(eventIndex)
-
-                        OldDataManager.shared.currentEvent.ifLet {
-                            eventTitle.text = it.title
-                            eventDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
-                            eventDesc.text = it.description
-
-                            buildPreregSection(it)
-                        }
-
-                        showHideEventNavButtons()
-                    }
-                }
-                eventNextButton.setOnClickListener {
-                    if (eventIndex + 1 < (OldDataManager.shared.events?.inChronologicalOrder()?.size ?: 0)) {
-                        eventIndex++
-                        OldDataManager.shared.currentEvent = OldDataManager.shared.events?.inChronologicalOrder()?.get(eventIndex)
-
-                        OldDataManager.shared.currentEvent.ifLet {
-                            eventTitle.text = it.title
-                            eventDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
-                            eventDesc.text = it.description
-
-                            buildPreregSection(it)
-                        }
-                        showHideEventNavButtons()
-                    }
                 }
                 showHideEventNavButtons()
             }
@@ -520,9 +516,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareAwardsSection(v: View) {
-        val awardsLoadingView = v.findViewById<LinearLayout>(R.id.awardsLoadingView)
-        val awardsContainerView = v.findViewById<LinearLayout>(R.id.awardsContainerView)
-        val noAwardsView = v.findViewById<LinearLayout>(R.id.noAwardsView)
+        // TODO
 
         if (OldDataManager.shared.loadingAwards) {
             awardsLoadingView.isGone = false
@@ -579,55 +573,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun showIntrigue(): Boolean {
-        return OldDataManager.shared.player?.isCheckedIn.toBoolean() && !OldDataManager.shared.player?.isCheckedInAsNpc.toBoolean() && (OldDataManager.shared.character?.getIntrigueSkills()?.size ?: 0) > 0 && !OldDataManager.shared.loadingIntrigue && OldDataManager.shared.intrigue != null
+        return (DataManager.shared.getActiveCharacter()?.getIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getStartedOrTodayEvent()?.intrigue != null
     }
 
     private fun showCheckout(): Boolean {
-        return getCurrentEvent() == null && OldDataManager.shared.player?.isCheckedIn.toBoolean() && !OldDataManager.shared.loadingCharacter
+        return !DataManager.shared.offlineMode && DataManager.shared.getStartedEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
     }
 
     private fun showCurrentCharSection(): Boolean {
-        var value = true
-        OldDataManager.shared.player.ifLet{ player ->
-            if (player.isCheckedIn.toBoolean()) {
-                if (!OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null) {
-                    value = false
-                }
-            }
-        }
-        return value
+        return !(DataManager.shared.getCurrentPlayer()?.isCheckedIn ?: true)
     }
 
     private fun showEventsSection(): Boolean {
-        return OldDataManager.shared.loadingEvents || (OldDataManager.shared.events?.size ?: 0) > 0
-    }
-
-    private fun getCurrentEvent(): EventModel? {
-        OldDataManager.shared.events?.let {
-            return it.firstOrNull { ev -> ev.isStarted.toBoolean() && !ev.isFinished.toBoolean() }
-        } ?: run {
-            return null
-        }
-    }
-
-    private fun showHideAnnouncementNavButtons() {
-        if (OldDataManager.shared.currentAnnouncement != null) {
-            prevButton.isGone = currentAnnouncementIndex == 0
-            nextButton.isGone = currentAnnouncementIndex + 1 == (OldDataManager.shared.announcements?.size ?: 0)
-        } else {
-            prevButton.isGone = true
-            nextButton.isGone = true
-        }
-    }
-
-    private fun showHideEventNavButtons() {
-        if (OldDataManager.shared.currentEvent != null) {
-            eventPrevButton.isGone = eventIndex == 0
-            eventNextButton.isGone = eventIndex + 1 == (OldDataManager.shared.events?.inChronologicalOrder()?.size ?: 0)
-        } else {
-            eventPrevButton.isGone = true
-            eventNextButton.isGone = true
-        }
+        return  DataManager.shared.events.isNotEmpty()
     }
 
     companion object {

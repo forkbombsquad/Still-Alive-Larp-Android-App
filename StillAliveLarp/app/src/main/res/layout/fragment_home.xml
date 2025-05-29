@@ -61,7 +61,6 @@
                         android:text="Loading..."/>
 
                     <ProgressBar
-                        android:id="@+id/intriguemanagement_progressbar"
                         android:paddingTop="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -71,6 +70,7 @@
 
                 <!--            Announcements View-->
                 <LinearLayout
+                    android:id="@+id/announcementslayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -146,19 +146,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <ProgressBar
-                                android:id="@+id/announcement_list_progress_bar"
-                                style="?android:attr/progressBarStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                />
-                        </LinearLayout>
-
 
                     </LinearLayout>
 
@@ -177,6 +164,7 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/intriguetitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -292,31 +280,13 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/currentchartitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/currentchar"
                         android:textAlignment="center"
                         android:textSize="24sp" />
-
-                    <LinearLayout
-                        android:id="@+id/currentCharLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Loading Character Information..."/>
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/currentCharNameView"
@@ -373,42 +343,6 @@
                     android:paddingRight="16dp">
 
                     <LinearLayout
-                        android:id="@+id/eventLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/events"
-                            android:textAlignment="center"
-                            android:textSize="24sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="8dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ProgressBar
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Loading Events..."/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/eventTodayView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -417,6 +351,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/eventstodayviewtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -488,6 +423,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/eventslistviewtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -593,6 +529,7 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/awardsviewtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -601,34 +538,12 @@
                         android:textSize="24sp" />
 
                     <LinearLayout
-                        android:id="@+id/awardsLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Loading Awards..."/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/awardsContainerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
                         android:gravity="center"
                         android:orientation="vertical">
-
-
-
                     </LinearLayout>
 
                     <LinearLayout
