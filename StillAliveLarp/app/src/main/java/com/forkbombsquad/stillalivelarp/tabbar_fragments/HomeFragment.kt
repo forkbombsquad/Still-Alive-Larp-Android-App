@@ -117,17 +117,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViews(v: View) {
+        // Load
+        reload(v)
+
         // Pull To Refresh
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
         pullToRefresh.setOnRefreshListener {
-
-            DataManager.shared.load(lifecycleScope, stepFinished = {
-                buildViews(v)
-            }, finished = {
-                buildViews(v)
-                pullToRefresh.isRefreshing = false
-            })
-            buildViews(v)
+            reload(v)
         }
 
         // Setup Loading View
@@ -177,10 +173,10 @@ class HomeFragment : Fragment() {
                 DataManager.shared.getCurrentPlayer().ifLet { player ->
                     player.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
                         val barcodeModel = player.getCheckOutBarcodeModel(eventAttendee)
-                        DataManager.shared.setUpdateCallback(HomeFragment::class) {
-                            this@HomeFragment.buildViews(v)
+                        DataManager.shared.setUpdateCallback(this::class) {
+                            this@HomeFragment.reload(v)
                         }
-                        DataManager.shared.setPassedData(HomeFragment::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, barcodeModel)
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, barcodeModel)
                         val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
                         startActivity(intent)
                     }, {
@@ -199,13 +195,9 @@ class HomeFragment : Fragment() {
         createCharacterButton = v.findViewById(R.id.currentCharCreateNewCharButton)
 
         createCharacterButton.setOnClick {
-            // TODO
-//            OldDataManager.shared.unrelaltedUpdateCallback = {
-//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER), true) {
-//                    buildViews(v)
-//                }
-//                buildViews(v)
-//            }
+            DataManager.shared.setUpdateCallback(this::class) {
+                this@HomeFragment.reload(v)
+            }
             val intent = Intent(v.context, CreateCharacterActivity::class.java)
             startActivity(intent)
         }
@@ -233,54 +225,54 @@ class HomeFragment : Fragment() {
         eventShowbutton = v.findViewById(R.id.event_show_button)
 
         checkInAsCharButton.setOnClick {
-            // TODO
-//            OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-//                player = OldDataManager.shared.player?.getBarcodeModel()!!,
-//                character = OldDataManager.shared.character?.getBarcodeModel(),
-//                event = it.barcodeModel(),
-//                relevantSkills = OldDataManager.shared.character?.getRelevantBarcodeSkills() ?: arrayOf(),
-//                gear = OldDataManager.shared.selectedCharacterGear?.firstOrNull()
-//            )
-//            OldDataManager.shared.unrelaltedUpdateCallback = {
-//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
-//                    buildViews(v)
-//                }) {
-//                    buildViews(v)
-//                }
-//                buildViews(v)
-//            }
-            val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-            startActivity(intent)
+            checkInAsCharButton.setLoading(true)
+            DataManager.shared.load(lifecycleScope) {
+                checkInAsCharButton.setLoading(false)
+                val player = DataManager.shared.getCurrentPlayer()
+                val event = DataManager.shared.getOngoingEvent()
+                if (player != null && event != null) {
+                    val barcode = player.getCheckInBarcodeModel(true, event)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
+                    DataManager.shared.setUpdateCallback(this::class) {
+                        this@HomeFragment.buildViews(v)
+                    }
+                    val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
         checkInAsNpcButton.setOnClick {
-            // TODO
-//            OldDataManager.shared.checkinBarcodeModel = PlayerCheckInBarcodeModel(
-//                player = OldDataManager.shared.player?.getBarcodeModel()!!,
-//                character = null,
-//                event = it.barcodeModel(),
-//                relevantSkills = arrayOf(),
-//                gear = null
-//            )
-//            OldDataManager.shared.unrelaltedUpdateCallback = {
-//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.EVENTS), true) {
-//                    buildViews(v)
-//                }
-//                buildViews(v)
-//            }
-            val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
-            startActivity(intent)
+            checkInAsNpcButton.setLoading(true)
+            DataManager.shared.load(lifecycleScope) {
+                checkInAsNpcButton.setLoading(false)
+                val player = DataManager.shared.getCurrentPlayer()
+                val event = DataManager.shared.getOngoingEvent()
+                if (player != null && event != null) {
+                    val barcode = player.getCheckInBarcodeModel(false, event)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
+                    DataManager.shared.setUpdateCallback(this::class) {
+                        this@HomeFragment.buildViews(v)
+                    }
+                    val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
 
         preregButton.setOnClick {
-            // TODO
-//            OldDataManager.shared.unrelaltedUpdateCallback = {
-//                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.EVENT_PREREGS), true) {
-//                    buildViews(v)
-//                }
-//            }
-//            OldDataManager.shared.selectedEvent = ce
-            val intent = Intent(v.context, PreregActivity::class.java)
-            startActivity(intent)
+            preregButton.setLoading(true)
+            DataManager.shared.load(lifecycleScope) {
+                preregButton.setLoading(false)
+                showAllEvents.ternary(DataManager.shared.events, DataManager.shared.getRelevantEvents()).getOrNull(eventIndex).ifLet { event ->
+                    DataManager.shared.setUpdateCallback(this::class) {
+                        this@HomeFragment.buildViews(v)
+                    }
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_EVENT, event)
+                    val intent = Intent(v.context, PreregActivity::class.java)
+                    startActivity(intent)
+                }
+
+            }
         }
 
         previousEventButton.setOnClickListener {
@@ -311,7 +303,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun buildViews(v: View) {
-        // TODO this won't work because view aren't actually hidden, They're just redrawn here. Hide them in loading and show them when not
         if (DataManager.shared.loading) {
             // Loading Stuff
             loadingLayout.isGone = false
@@ -538,6 +529,16 @@ class HomeFragment : Fragment() {
         } else {
             DataManager.shared.getRelevantEvents().isNotEmpty()
         }
+    }
+
+    private fun reload(v: View) {
+        DataManager.shared.load(lifecycleScope, stepFinished = {
+            buildViews(v)
+        }, finished = {
+            buildViews(v)
+            pullToRefresh.isRefreshing = false
+        })
+        buildViews(v)
     }
 
     companion object {

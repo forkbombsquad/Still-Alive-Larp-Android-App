@@ -52,7 +52,8 @@ import kotlin.reflect.KClass
 
 enum class DataManagerPassedDataKey() {
     CHECKOUT_BARCODE,
-    CHECKIN_BARCODE
+    CHECKIN_BARCODE,
+    SELECTED_EVENT
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -623,6 +624,11 @@ class DataManager private constructor() {
         updateCallbacks[getFragmentOrActivityName(key)] = callback
     }
 
+    fun getUpdateCallback(key: KClass<*>): (() -> Unit)? {
+        return updateCallbacks[getFragmentOrActivityName(key)]
+    }
+
+
     fun clearUpdateCallback(key: KClass<*>) {
         updateCallbacks.remove(getFragmentOrActivityName(key))
     }
@@ -631,7 +637,6 @@ class DataManager private constructor() {
         passedData[getFragmentOrActivityName(key) + dataKey.toString()] = data
     }
 
-    // TODO still need to use this
     inline fun <reified T> getPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, clear: Boolean = true): T? {
         val data = passedData[getFragmentOrActivityName(key) + dataKey.toString()] as? T
         if (clear) {
