@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -19,10 +18,10 @@ import com.forkbombsquad.stillalivelarp.CreateCharacterActivity
 import com.forkbombsquad.stillalivelarp.PreregActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -30,7 +29,8 @@ import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
-import com.forkbombsquad.stillalivelarp.utils.globalGetContext
+import com.forkbombsquad.stillalivelarp.utils.fragmentName
+import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.inChronologicalOrder
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -43,11 +43,11 @@ import com.google.android.material.divider.MaterialDivider
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO get rid of all of the old data manger stuff an use the new stuff
 
     private val TAG = "HOME_FRAGMENT"
 
     private var eventIndex = 0
+    private var showAllEvents = false
     private var currentAnnouncementIndex = 0
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
@@ -99,6 +99,7 @@ class HomeFragment : Fragment() {
     private lateinit var eventListPreregDesc: TextView
     private lateinit var previousEventButton: Button
     private lateinit var nextEventButton: Button
+    private lateinit var eventShowbutton: Button
 
     private lateinit var awardsLayout: LinearLayout
     private lateinit var awardsTitle: TextView
@@ -173,40 +174,19 @@ class HomeFragment : Fragment() {
         checkoutButton.setOnClick {
             checkoutButton.setLoading(true)
             DataManager.shared.load(lifecycleScope) {
-                DataManager.shared.getCurrentPlayer()?.eventAttendees?.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
-                    var char: CharacterBarcodeModel? = null
-                    var relevantSkills: Array<SkillBarcodeModel> = arrayOf()
-
-                    if (!eventAttendee.asNpc.toBoolean()) {
-                        DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == eventAttendee.characterId }.ifLet { char ->
-                            // TODO
-//                              char = char.barcodeModel()
-//                              relevantSkills = char.getRelevantBarcodeSkills()
+                DataManager.shared.getCurrentPlayer().ifLet { player ->
+                    player.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
+                        val barcodeModel = player.getCheckOutBarcodeModel(eventAttendee)
+                        DataManager.shared.setUpdateCallback(HomeFragment::class) {
+                            this@HomeFragment.buildViews(v)
                         }
-                    }
-
-                    // TODO
-//                        OldDataManager.shared.checkoutBarcodeModel = PlayerCheckOutBarcodeModel(
-//                            player = OldDataManager.shared.player!!.getBarcodeModel(),
-//                            character = char,
-//                            eventAttendeeId = it.id,
-//                            eventId = it.eventId,
-//                            relevantSkills = relevantSkills
-//                        )
-                    // TODO
-//                        OldDataManager.shared.unrelaltedUpdateCallback = {
-//                            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.INTRIGUE, OldDataManagerType.EVENTS), true, finishedStep = {
-//                                buildViews(v)
-//                            }) {
-//                                buildViews(v)
-//                            }
-//                            buildViews(v)
-//                        }
-                    val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
-                    startActivity(intent)
-                }, {
-                    checkoutButton.setLoading(false)
-                })
+                        DataManager.shared.setPassedData(HomeFragment::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, barcodeModel)
+                        val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
+                        startActivity(intent)
+                    }, {
+                        checkoutButton.setLoading(false)
+                    })
+                }
             }
         }
 
@@ -250,6 +230,7 @@ class HomeFragment : Fragment() {
         eventListPreregDesc = v.findViewById(R.id.prereg_info)
         previousEventButton = v.findViewById(R.id.event_prev_button)
         nextEventButton = v.findViewById(R.id.event_next_button)
+        eventShowbutton = v.findViewById(R.id.event_show_button)
 
         checkInAsCharButton.setOnClick {
             // TODO
@@ -314,6 +295,11 @@ class HomeFragment : Fragment() {
                 buildViews(v)
             }
         }
+        eventShowbutton.setOnClickListener {
+            eventIndex = 0
+            showAllEvents = !showAllEvents
+            buildViews(v)
+        }
 
         // Awards
         awardsLayout = v.findViewById(R.id.awardView)
@@ -369,8 +355,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareAnnouncementsSection() {
-        announcementsViewTitle.text = DataManager.shared.offlineMode.ternary("Offline Announcements", "Announcements")
-
+        DataManager.shared.setTitleTextPotentiallyOffline(announcementsViewTitle, "Announcements")
         DataManager.shared.announcements.getOrNull(currentAnnouncementIndex).ifLet({
             announcementTitle.text = it.title
             announcementDate.text = it.date.yyyyMMddToMonthDayYear()
@@ -384,9 +369,9 @@ class HomeFragment : Fragment() {
 
     private fun prepareIntrigueSection() {
         intrigueLayout.isGone = !showIntrigue()
-        intrigueViewTitle.text = DataManager.shared.offlineMode.ternary("Offline Intrigue", "Intrigue")
+        DataManager.shared.setTitleTextPotentiallyOffline(intrigueViewTitle, "Intrigue")
 
-        DataManager.shared.getStartedOrTodayEvent()?.intrigue.ifLet { intrigue ->
+        DataManager.shared.getOngoingOrTodayEvent()?.intrigue.ifLet { intrigue ->
             val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getIntrigueSkills() ?: listOf()
             intrigueInvestigator.text = intrigue.investigatorMessage
             intrigueInterrogator.text = intrigue.interrogatorMessage
@@ -400,184 +385,147 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareCurrentCharSection() {
-        // TODO
-        if (showCurrentCharSection()) {
-            currentCharView.isGone = false
-            if (OldDataManager.shared.loadingCharacter) {
-                currentCharLoadingView.isGone = false
-                currentCharNameView.isGone = true
-                currentCharNoneView.isGone = true
-            } else if (OldDataManager.shared.character == null) {
-                currentCharLoadingView.isGone = true
-                currentCharNameView.isGone = true
-                currentCharNoneView.isGone = false
+        currentCharacterLayout.isGone = !showCurrentCharSection()
+        DataManager.shared.setTitleTextPotentiallyOffline(currentCharacterViewTitle, "Current Character")
 
-            } else {
-                currentCharLoadingView.isGone = true
-                currentCharNameView.isGone = false
-                currentCharNoneView.isGone = true
-
-                currentCharNameText.text = OldDataManager.shared.character?.fullName
-            }
-        } else {
-            currentCharView.isGone = true
-        }
+        DataManager.shared.getActiveCharacter().ifLet({ char ->
+            currentCharacterNameLayout.isGone = false
+            currentCharacterNoneLayout.isGone = true
+            createCharacterButton.isGone = true
+            currentCharacterNameText.text = char.fullName
+        }, {
+            currentCharacterNameLayout.isGone = true
+            currentCharacterNoneLayout.isGone = false
+            createCharacterButton.isGone = false
+        })
     }
 
     private fun prepareEventsSection() {
-        // TODO
+        eventLayout.isGone = !showEventsSection()
+        DataManager.shared.setTitleTextPotentiallyOffline(eventTodayViewTitle, "Event Today!")
+        DataManager.shared.setTitleTextPotentiallyOffline(eventListViewTitle, "Events")
 
-        if (showEventsSection()) {
-            eventView.isGone = false
-            val event = OldDataManager.shared.events?.firstOrNull { it.isToday() } ?: OldDataManager.shared.events?.firstOrNull { it.isStarted.toBoolean() && !it.isFinished.toBoolean() }
-            if (OldDataManager.shared.loadingEvents) {
-                eventLoadingView.isGone = false
-                eventTodayView.isGone = true
-                eventListView.isGone = true
-            } else if (event != null) {
-                eventLoadingView.isGone = true
-                eventTodayView.isGone = false
-                eventListView.isGone = true
+        DataManager.shared.getOngoingOrTodayEvent().ifLet({ event ->
+            eventTodayLayout.isGone = false
+            eventListLayout.isGone = true
+            eventTodayTitle.text = event.title
+            eventTodayDate.text = "${event.date.yyyyMMddToMonthDayYear()}\n${event.startTime} to ${event.endTime}"
+            eventTodayDesc.text = event.description
 
-                event.ifLet {
-                    eventTodayTitle.text = it.title
-                    eventTodayDate.text = "${it.date.yyyyMMddToMonthDayYear()}\n${it.startTime} to ${it.endTime}"
-                    eventTodayDesc.text = it.description
+            if (event.isOngoing()) {
 
-                    if (it.isStarted.toBoolean() && !it.isFinished.toBoolean()) {
-                        if (!OldDataManager.shared.player?.isCheckedIn.toBoolean()) {
-                            checkInAsCharButton.isGone = OldDataManager.shared.character == null
-                            checkInAsCharButton.textView.text = "Check in as ${OldDataManager.shared.character?.fullName ?: ""}"
-                            checkInAsNpcButton.isGone = false
-                            eventTodayCheckedInAs.isGone = true
-
-                        } else if (!OldDataManager.shared.loadingCharacter) {
-                            checkInAsCharButton.isGone = true
-                            checkInAsNpcButton.isGone = true
-                            eventTodayCheckedInAs.isGone = false
-                            var name = "NPC"
-                            if (!OldDataManager.shared.player?.isCheckedInAsNpc.toBoolean()) {
-                                name = OldDataManager.shared.character?.fullName ?: "UNKNOWN"
-                            }
-                            eventTodayCheckedInAs.text = "Checked in as $name"
-                        } else {
-                            eventTodayCheckedInAs.isGone = false
-                            eventTodayCheckedInAs.text = "Loading Check In Information..."
-                        }
-                    } else {
-                        checkInAsCharButton.isGone = true
-                        checkInAsNpcButton.isGone = true
-                        eventTodayCheckedInAs.isGone = true
+                if (DataManager.shared.getCurrentPlayer()?.isCheckedIn == true) {
+                    checkedInAs.isGone = false
+                    event.attendees.firstOrNull { it.playerId == DataManager.shared.getCurrentPlayer()?.id }.ifLet { attendee ->
+                        DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == attendee.characterId }.ifLet({ character ->
+                            checkedInAs.text = "Checked in as ${character.fullName}"
+                        }, {
+                            checkedInAs.text = "Checked in as NPC"
+                        })
                     }
+                } else {
+                    checkedInAs.isGone = true
+                    checkInAsCharButton.isGone = DataManager.shared.getActiveCharacter() == null
+                    checkInAsNpcButton.isGone = false
                 }
             } else {
-                eventLoadingView.isGone = true
-                eventTodayView.isGone = true
-                eventListView.isGone = false
-                OldDataManager.shared.currentEvent = OldDataManager.shared.events?.inChronologicalOrder()?.firstOrNull()
-                OldDataManager.shared.currentEvent.ifLet { ce ->
-                    eventTitle.text = ce.title
-                    eventDate.text = "${ce.date.yyyyMMddToMonthDayYear()}\n${ce.startTime} to ${ce.endTime}"
-                    eventDesc.text = ce.description
-
-                    buildPreregSection(ce)
-
-
-                }
-                showHideEventNavButtons()
+                checkInAsCharButton.isGone = true
+                checkInAsNpcButton.isGone = true
+                checkedInAs.isGone = true
             }
+        }, {
+            eventTodayLayout.isGone = false
+            eventListLayout.isGone = true
+            val events = showAllEvents.ternary(DataManager.shared.events, DataManager.shared.getRelevantEvents())
+            events.getOrNull(eventIndex).ifLet { event ->
+                eventListTitle.text = event.title
+                eventListDate.text = "${event.date.yyyyMMddToMonthDayYear()}\n${event.startTime} to ${event.endTime}"
+                eventListDesc.text = event.description
 
-        } else {
-            eventView.isGone = true
-        }
-    }
+                if (event.isRelevant()) {
+                    preregButton.isGone = false
+                    DataManager.shared.getCurrentPlayer()?.preregs?.firstOrNull { it.eventId == event.id }.ifLet({ prereg ->
+                        preregButton.textView.text = "Edit Your Pre-Registration"
 
-    private fun buildPreregSection(event: EventModel) {
-        preregisterButton.isGone = !event.isInFuture()
-        preregisterButton.setLoading(OldDataManager.shared.loadingEventPreregs)
-        if (OldDataManager.shared.loadingEventPreregs) {
-            preregisterButton.textView.text = "Loading Preregistrations..."
-            preregInfo.isGone = true
-        } else {
-            OldDataManager.shared.eventPreregs[event.id].ifLet({ preregs ->
-                preregs.firstOrNull { prereg -> prereg.playerId == OldDataManager.shared.player?.id }.ifLet({ eventPrereg ->
-                    preregisterButton.textView.text = "Edit Your Pre-Registration"
-                    preregInfo.isGone = false
-                    preregInfo.text = "You are pre-registered for this event as:\n\n${(eventPrereg.getCharId() == null).ternary("NPC", "${OldDataManager.shared.character?.fullName ?: ""}")} - ${eventPrereg.eventRegType()}"
-                }, {
-                    preregisterButton.textView.text = "Pre-Register\nFor This Event"
-                    preregInfo.isGone = true
-                })
-            }, {
-                preregInfo.isGone = true
-                preregisterButton.textView.text = "Pre-Register\nFor This Event"
-            })
-        }
+                        eventListPreregDesc.isGone = false
+                        val char = DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == prereg.getCharId() }
+                        val regType = prereg.eventRegType().getAttendingText()
+                        eventListPreregDesc.text = "You are pre-registered for this event as:\n\n${char?.fullName ?: "NPC"} - ${regType}"
+                    }, {
+                        preregButton.textView.text = "Pre-Register For This Event"
+                        eventListPreregDesc.isGone = true
+                    })
+                } else {
+                    preregButton.isGone = true
+                    eventListPreregDesc.isGone = true
+                }
+                eventShowbutton.text = showAllEvents.ternary("Show Only\nRelevant\nEvents", "Show\nAll\nEvents")
+            }
+            nextEventButton.isGone = eventIndex + 1 == events.size
+            previousEventButton.isGone = eventIndex == 0
+        })
     }
 
     private fun prepareAwardsSection(v: View) {
-        // TODO
+        val awards = DataManager.shared.getCurrentPlayer()?.getAwardsSorted() ?: listOf()
+        DataManager.shared.setTitleTextPotentiallyOffline(awardsTitle, "Awards")
+        awardsInnerLayout.isGone = awards.isEmpty()
+        noAwardsLayout.isGone = awards.isNotEmpty()
 
-        if (OldDataManager.shared.loadingAwards) {
-            awardsLoadingView.isGone = false
-            awardsContainerView.isGone = true
-            noAwardsView.isGone = true
-        } else if (OldDataManager.shared.awards?.isEmpty() == true) {
-            awardsLoadingView.isGone = true
-            awardsContainerView.isGone = true
-            noAwardsView.isGone = false
-        } else {
-            awardsLoadingView.isGone = true
-            awardsContainerView.isGone = false
-            noAwardsView.isGone = true
-            awardsContainerView.removeAllViews()
-
-            OldDataManager.shared.awards.ifLet {
-                it.forEachIndexed { index, awardModel ->
-                    if (index != 0) {
-                        val divider = MaterialDivider(v.context)
-                        divider.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                        awardsContainerView.addView(divider)
-                    }
-                    val horLayout = LinearLayout(v.context)
-                    horLayout.setPadding(0, 8, 0, 0)
-                    horLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    horLayout.orientation = LinearLayout.HORIZONTAL
-
-                    val dateView = TextView(v.context)
-                    dateView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                    dateView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
-                    dateView.text = awardModel.date.yyyyMMddToMonthDayYear()
-
-                    val amountView = TextView(v.context)
-                    amountView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                    amountView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
-                    amountView.text = "${awardModel.amount} ${awardModel.awardType}"
-
-                    horLayout.addView(dateView)
-                    horLayout.addView(amountView)
-
-                    val reasonView = TextView(v.context)
-                    reasonView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    reasonView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                    reasonView.setPadding(0, 0, 0, 8)
-                    reasonView.text = awardModel.reason
-
-                    awardsContainerView.addView(horLayout)
-                    awardsContainerView.addView(reasonView)
+        if (awards.isNotEmpty()) {
+            awardsInnerLayout.removeAllViews()
+            awards.forEachIndexed { index, award ->
+                if (index != 0) {
+                    val divider = MaterialDivider(v.context)
+                    divider.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    awardsInnerLayout.addView(divider)
                 }
+                val horLayout = LinearLayout(v.context)
+                horLayout.setPadding(0, 8, 0, 0)
+                horLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                horLayout.orientation = LinearLayout.HORIZONTAL
+
+                val nameView = TextView(v.context)
+                nameView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                nameView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
+                DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == award.characterId }.ifLet({ char ->
+                    nameView.text = char.fullName
+                }, {
+                    nameView.text = DataManager.shared.getCurrentPlayer()?.fullName ?: ""
+                })
+
+                val dateView = TextView(v.context)
+                dateView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                dateView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                dateView.text = award.date.yyyyMMddToMonthDayYear()
+
+                val amountView = TextView(v.context)
+                amountView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                amountView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
+                amountView.text = "${award.amount} ${award.getDisplayText()}"
+
+                horLayout.addView(nameView)
+                horLayout.addView(dateView)
+                horLayout.addView(amountView)
+
+                val reasonView = TextView(v.context)
+                reasonView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                reasonView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                reasonView.setPadding(0, 0, 0, 8)
+                reasonView.text = award.reason
+
+                awardsInnerLayout.addView(horLayout)
+                awardsInnerLayout.addView(reasonView)
             }
-
         }
-
     }
 
     private fun showIntrigue(): Boolean {
-        return (DataManager.shared.getActiveCharacter()?.getIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getStartedOrTodayEvent()?.intrigue != null
+        return (DataManager.shared.getActiveCharacter()?.getIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getOngoingOrTodayEvent()?.intrigue != null
     }
 
     private fun showCheckout(): Boolean {
-        return !DataManager.shared.offlineMode && DataManager.shared.getStartedEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
+        return !DataManager.shared.offlineMode && DataManager.shared.getOngoingEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
     }
 
     private fun showCurrentCharSection(): Boolean {
@@ -585,7 +533,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEventsSection(): Boolean {
-        return  DataManager.shared.events.isNotEmpty()
+        return if (showAllEvents) {
+            DataManager.shared.events.isNotEmpty()
+        } else {
+            DataManager.shared.getRelevantEvents().isNotEmpty()
+        }
     }
 
     companion object {

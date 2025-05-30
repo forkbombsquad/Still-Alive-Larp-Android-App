@@ -17,3 +17,7 @@ open class NoStatusBarActivity: AppCompatActivity() {
     }
 
 }
+
+inline fun <reified T : NoStatusBarActivity> activityName(): String {
+    return T::class.simpleName ?: "UnnamedActivity"
+}

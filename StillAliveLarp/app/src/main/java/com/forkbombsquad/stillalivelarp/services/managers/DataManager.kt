@@ -3,6 +3,7 @@ package com.forkbombsquad.stillalivelarp.services.managers
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
@@ -36,10 +37,9 @@ import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
-import com.forkbombsquad.stillalivelarp.utils.compress
-import com.forkbombsquad.stillalivelarp.utils.globalPrint
-import com.forkbombsquad.stillalivelarp.utils.globalToJson
+import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -48,6 +48,12 @@ import org.jsoup.nodes.Document
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.reflect.KClass
+
+enum class DataManagerPassedDataKey() {
+    CHECKOUT_BARCODE,
+    CHECKIN_BARCODE
+}
 
 enum class DataManagerType(val localDataKey: String) {
     UPDATE_TRACKER("updateTracker_dm_sp_key"),
@@ -84,6 +90,11 @@ class DataManager private constructor() {
 
     var currentPlayerId: Int = -1
         private set
+
+    var updateCallbacks: MutableMap<String, () -> Unit> = mutableMapOf()
+        private set
+
+    var passedData: MutableMap<String, Any> = mutableMapOf()
 
     // Unchanged From Server
     var announcements: List<AnnouncementModel> = listOf()
@@ -588,17 +599,52 @@ class DataManager private constructor() {
         return getCurrentPlayer()?.getActiveCharacter()
     }
 
-    fun getStartedEvent(): FullEventModel? {
-        return events.firstOrNull { it.isStarted && !it.isFinished } ?: events.firstOrNull { it.isToday() }
+    fun getOngoingEvent(): FullEventModel? {
+        return events.firstOrNull { it.isOngoing() }
     }
 
-    fun getStartedOrTodayEvent(): FullEventModel? {
-        return getStartedEvent() ?: getEventToday()
+    fun getOngoingOrTodayEvent(): FullEventModel? {
+        return getOngoingEvent() ?: getEventToday()
     }
 
     fun getEventToday(): FullEventModel? {
         return events.firstOrNull { it.isToday() }
     }
+
+    fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
+        tv.text = offlineMode.ternary("Offline $baseText", baseText)
+    }
+
+    fun getRelevantEvents(): List<FullEventModel> {
+        return events.filter { it.isRelevant() }
+    }
+
+    fun setUpdateCallback(key: KClass<*>, callback: () -> Unit) {
+        updateCallbacks[getFragmentOrActivityName(key)] = callback
+    }
+
+    fun clearUpdateCallback(key: KClass<*>) {
+        updateCallbacks.remove(getFragmentOrActivityName(key))
+    }
+
+    fun setPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, data: Any) {
+        passedData[getFragmentOrActivityName(key) + dataKey.toString()] = data
+    }
+
+    // TODO still need to use this
+    inline fun <reified T> getPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, clear: Boolean = true): T? {
+        val data = passedData[getFragmentOrActivityName(key) + dataKey.toString()] as? T
+        if (clear) {
+            clearPassedData(key, dataKey)
+        }
+        return data
+    }
+
+    fun clearPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey) {
+        passedData.remove(getFragmentOrActivityName(key) + dataKey.toString())
+    }
+
+
 
 }
 

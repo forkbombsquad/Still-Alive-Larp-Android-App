@@ -35,6 +35,10 @@ data class FullEventModel(
         intrigue
     )
 
+    fun isOngoing(): Boolean {
+        return isStarted && !isFinished
+    }
+
     fun isToday(): Boolean {
         val today = LocalDate.now()
         val eventDate = date.yyyyMMddtoDate()
@@ -46,6 +50,14 @@ data class FullEventModel(
         val today = LocalDate.now()
         val eventDate = date.yyyyMMddtoDate()
         return today < eventDate
+    }
+
+    fun isRelevant(): Boolean {
+        return isOngoing() || isToday() || isInFuture()
+    }
+
+    fun barcodeModel(): EventBarcodeModel {
+        return EventBarcodeModel(this)
     }
 
 }
@@ -108,6 +120,16 @@ data class EventBarcodeModel(
         event.endTime,
         event.isStarted,
         event.isFinished
+    )
+
+    constructor(event: FullEventModel): this(
+        event.id,
+        event.title,
+        event.date,
+        event.startTime,
+        event.endTime,
+        event.isStarted.toString(),
+        event.isFinished.toString()
     )
 }
 

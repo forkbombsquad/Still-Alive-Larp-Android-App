@@ -186,6 +186,19 @@ data class FullCharacterModel(
         return count
     }
 
+    fun barcodeModel(): CharacterBarcodeModel {
+        return CharacterBarcodeModel(this)
+    }
+
+    fun getRelevantBarcodeSkills(): Array<SkillBarcodeModel> {
+        val bskills = mutableListOf<SkillBarcodeModel>()
+        skills.forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
+                bskills.add(SkillBarcodeModel(it))
+            }
+        }
+        return bskills.toTypedArray()
+    }
 
 }
 
@@ -473,6 +486,26 @@ data class CharacterBarcodeModel(
         charModel.armor,
         charModel.unshakableResolveUses,
         charModel.mysteriousStrangerUses,
+        charModel.playerId
+    )
+
+    constructor(charModel: FullCharacterModel): this(
+        charModel.id,
+        charModel.fullName,
+        charModel.infection,
+        charModel.bullets.toString(),
+        charModel.megas.toString(),
+        charModel.rivals.toString(),
+        charModel.rockets.toString(),
+        charModel.bulletCasings.toString(),
+        charModel.clothSupplies.toString(),
+        charModel.woodSupplies.toString(),
+        charModel.metalSupplies.toString(),
+        charModel.techSupplies.toString(),
+        charModel.medicalSupplies.toString(),
+        charModel.armor,
+        charModel.unshakableResolveUses.toString(),
+        charModel.mysteriousStrangerUses.toString(),
         charModel.playerId
     )
 }

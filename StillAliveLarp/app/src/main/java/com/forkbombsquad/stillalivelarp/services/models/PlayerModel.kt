@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FullPlayerModel(
@@ -49,6 +51,64 @@ data class FullPlayerModel(
 
     fun getActiveCharacter(characterType: Int = Constants.CharacterTypes.standard): FullCharacterModel? {
         return characters.firstOrNull { it.characterTypeId == characterType && it.isAlive }
+    }
+
+    fun getAwardsSorted(): List<AwardModel> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }
+    }
+
+    fun getCheckInBarcodeModel(useChar: Boolean, event: FullEventModel): PlayerCheckInBarcodeModel {
+        val activeChar = getActiveCharacter()
+        return if (useChar && activeChar != null) {
+            PlayerCheckInBarcodeModel(
+                player = barcodeModel(),
+                character = activeChar.barcodeModel(),
+                event = event.barcodeModel(),
+                relevantSkills = activeChar.getRelevantBarcodeSkills(),
+                gear = activeChar.gear
+            )
+        } else {
+            PlayerCheckInBarcodeModel(
+                player = barcodeModel(),
+                character = null,
+                event = event.barcodeModel(),
+                relevantSkills = arrayOf(),
+                gear = null
+            )
+        }
+    }
+
+    fun getCheckOutBarcodeModel(eventAttendee: EventAttendeeModel): PlayerCheckOutBarcodeModel {
+        val char = characters.firstOrNull { it.id == eventAttendee.characterId }
+        return if (char != null) {
+            PlayerCheckOutBarcodeModel(
+                player = barcodeModel(),
+                character = char.barcodeModel(),
+                eventId = eventAttendee.eventId,
+                eventAttendeeId = eventAttendee.id,
+                relevantSkills = char.getRelevantBarcodeSkills()
+            )
+        } else {
+            PlayerCheckOutBarcodeModel(
+                player = barcodeModel(),
+                character = null,
+                eventId = eventAttendee.eventId,
+                eventAttendeeId = eventAttendee.id,
+                relevantSkills = arrayOf()
+            )
+        }
+    }
+
+    private fun barcodeModel(): PlayerBarcodeModel {
+        return PlayerBarcodeModel(
+            id = id,
+            fullName = fullName,
+            isCheckedIn = isCheckedIn.toString(),
+            lastCheckIn = lastCheckIn,
+            numEventsAttended = numEventsAttended.toString(),
+            numNpcEventsAttended = numNpcEventsAttended.toString()
+        )
     }
 }
 

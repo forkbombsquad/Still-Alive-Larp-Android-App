@@ -502,6 +502,17 @@
                                     android:layout_weight="3"/>
 
                                 <Button
+                                    android:id="@+id/event_show_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="Show Only\nRelevant\nEvents"/>
+
+                                <Space
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"/>
+
+                                <Button
                                     android:id="@+id/event_next_button"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"

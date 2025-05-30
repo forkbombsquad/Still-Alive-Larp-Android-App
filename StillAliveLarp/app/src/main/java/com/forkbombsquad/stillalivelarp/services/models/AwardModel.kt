@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.AwardCharType
 import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
+import com.forkbombsquad.stillalivelarp.utils.AwardType
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import java.io.Serializable
 import java.time.LocalDate
@@ -17,7 +18,17 @@ data class AwardModel(
     @JsonProperty("reason") val reason: String,
     @JsonProperty("date") val date: String,
     @JsonProperty("amount") val amount: String
-) : Serializable
+) : Serializable {
+
+    fun getAwardTypeEnum(): AwardType {
+        return AwardPlayerType.values().firstOrNull { it.text == awardType } ?: AwardCharType.values().firstOrNull { it.text == awardType } ?: AwardPlayerType.XP
+    }
+
+    fun getDisplayText(): String {
+        return "$amount ${getAwardTypeEnum().getDisplayText(amount.toInt() > 1)}"
+    }
+
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class AwardCreateModel(

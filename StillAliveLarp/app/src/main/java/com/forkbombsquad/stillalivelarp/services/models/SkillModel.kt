@@ -645,6 +645,9 @@ data class SkillBarcodeModel(
     @JsonProperty("name") val name: String
 ) : Serializable {
     constructor(oldFullSkillModel: OldFullSkillModel): this(oldFullSkillModel.id, oldFullSkillModel.name)
+    constructor(fullSkillModel: FullSkillModel): this(fullSkillModel.id, fullSkillModel.name)
+    constructor(fullSkillModel: FullCharacterModifiedSkillModel): this(fullSkillModel.id, fullSkillModel.skill.name)
+
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

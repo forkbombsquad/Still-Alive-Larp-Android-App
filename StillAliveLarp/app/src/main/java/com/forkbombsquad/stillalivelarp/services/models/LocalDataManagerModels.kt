@@ -9,19 +9,6 @@ data class LDAwardModels(
     @JsonProperty("characterAwards") val characterAwards: Map<Int, List<AwardModel>>
 ): Serializable {
 
-    fun getAllAwardsFor(playerId: Int, characterId: Int?): List<AwardModel> {
-        val list: MutableList<AwardModel> = mutableListOf()
-        playerAwards[playerId].ifLet {
-            list.addAll(it)
-        }
-        characterId.ifLet { charId ->
-            characterAwards[charId].ifLet {
-                list.addAll(it)
-            }
-        }
-        return list
-    }
-
     companion object {
         fun empty(): LDAwardModels {
             return LDAwardModels(mapOf(), mapOf())

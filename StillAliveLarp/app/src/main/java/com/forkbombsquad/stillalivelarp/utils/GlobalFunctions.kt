@@ -5,10 +5,13 @@ import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlin.reflect.KClass
 
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {
@@ -62,6 +65,15 @@ fun globalCopyToClipboard(context: Context, string: String) {
     Toast.makeText(context, "Text copied to clipboard!", Toast.LENGTH_SHORT).show()
 }
 
+fun getFragmentOrActivityName(kClass: KClass<*>): String {
+    return when {
+        Fragment::class.java.isAssignableFrom(kClass.java) ->
+            kClass.simpleName ?: "UnnamedFragment"
+        NoStatusBarActivity::class.java.isAssignableFrom(kClass.java) ->
+            kClass.simpleName ?: "UnnamedActivity"
+        else -> "UnknownComponent"
+    }
+}
 fun globalForceResetAllPlayerData() {
     DataManager.forceReset()
     LocalDataManager.clearAllLocalData()
