@@ -12,6 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.GearService
 import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 class ManageAccountActivity : NoStatusBarActivity() {
 
     private lateinit var changePass: NavArrowButtonBlack
+    private lateinit var deleteLocaldata: LoadingButton
     private lateinit var deleteAccount: LoadingButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,11 +36,21 @@ class ManageAccountActivity : NoStatusBarActivity() {
 
     private fun setupView() {
         changePass = findViewById(R.id.manageaccount_changePass)
+        deleteLocaldata = findViewById(R.id.manageaccount_deleteLocalData)
         deleteAccount = findViewById(R.id.manageaccount_deleteAccount)
 
         changePass.setOnClick {
             val intent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(intent)
+        }
+
+        deleteLocaldata.setOnClick {
+            deleteLocaldata.setLoading(true)
+            AlertUtils.displayDeleteLocalDataCancelMessage(this, onClickOk = { _, _ ->
+                this.startDeletingLocalData()
+            }, onClickCancel = { _, _ ->
+                deleteLocaldata.setLoading(false)
+            })
         }
 
         deleteAccount.setOnClick {
@@ -51,52 +63,80 @@ class ManageAccountActivity : NoStatusBarActivity() {
         }
     }
 
+    private fun startDeletingLocalData() {
+        globalForceResetAllPlayerData()
+        AlertUtils.displaySuccessMessage(this, "All local data has been deleted!") { _, _ ->
+            deleteLocaldata.setLoading(false)
+        }
+    }
+
     private fun deleteCharSkills() {
-        OldDataManager.shared.character.ifLet({ char ->
-            deleteAccount.setLoadingWithText("Deleting Skills")
+        val chars = DataManager.shared.getCurrentPlayer()?.characters ?: listOf()
+        var count = 0
+        chars.forEach { char ->
+            deleteAccount.setLoadingWithText("Deleting Skills For: ${char.fullName}")
             val deleteSkillsRequest = CharacterSkillService.DeleteCharacterSkills()
             lifecycleScope.launch {
                 deleteSkillsRequest.successfulResponse(IdSP(char.id)).ifLet({ _ ->
-                    this@ManageAccountActivity.deleteCharGear()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteCharGear()
+                    }
                 }, {
-                    this@ManageAccountActivity.deleteCharGear()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteCharGear()
+                    }
                 })
             }
-        }, {
+        }
+        if (chars.isEmpty()) {
             this.deleteEventAttendees()
-        })
+        }
     }
 
     private fun deleteCharGear() {
-        OldDataManager.shared.character.ifLet({ char ->
-            deleteAccount.setLoadingWithText("Deleting Gear")
+        val chars = DataManager.shared.getCurrentPlayer()?.characters ?: listOf()
+        var count = 0
+        chars.forEach { char ->
+            deleteAccount.setLoadingWithText("Deleting Gear For: ${char.fullName}")
             val deleteGearRequest = GearService.DeleteGear()
             lifecycleScope.launch {
                 deleteGearRequest.successfulResponse(IdSP(char.id)).ifLet({ _ ->
-                    this@ManageAccountActivity.deleteSpecialClassXpReductions()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteSpecialClassXpReductions()
+                    }
                 }, {
-                    this@ManageAccountActivity.deleteSpecialClassXpReductions()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteSpecialClassXpReductions()
+                    }
                 })
             }
-        }, {
-            this.deleteEventAttendees()
-        })
+        }
     }
 
     private fun deleteSpecialClassXpReductions() {
-        OldDataManager.shared.character.ifLet({ char ->
-            deleteAccount.setLoadingWithText("Deleting Xp Reductions")
+        val chars = DataManager.shared.getCurrentPlayer()?.characters ?: listOf()
+        var count = 0
+        chars.forEach { char ->
+            deleteAccount.setLoadingWithText("Deleting Xp Reductions For: ${char.fullName}")
             val deleteXpRedsRequest = SpecialClassXpReductionService.DeleteXpReductionsForCharacter()
             lifecycleScope.launch {
                 deleteXpRedsRequest.successfulResponse(IdSP(char.id)).ifLet({ _ ->
-                    this@ManageAccountActivity.deleteEventAttendees()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteEventAttendees()
+                    }
                 }, {
-                    this@ManageAccountActivity.deleteEventAttendees()
+                    count += 1
+                    if (count == chars.size) {
+                        this@ManageAccountActivity.deleteEventAttendees()
+                    }
                 })
             }
-        }, {
-            this.deleteEventAttendees()
-        })
+        }
     }
 
     private fun deleteEventAttendees() {
@@ -151,7 +191,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
         deleteAccount.setLoadingWithText("Deleting Profile Photos")
         val request = ProfileImageService.DeleteProfileImages()
         lifecycleScope.launch {
-            request.successfulResponse(IdSP(OldDataManager.shared.player?.id ?: -1)).ifLet({ _ ->
+            request.successfulResponse(IdSP(DataManager.shared.getCurrentPlayer()?.id ?: -1)).ifLet({ _ ->
                 this@ManageAccountActivity.deletePlayer()
             }, {
                 this@ManageAccountActivity.deletePlayer()

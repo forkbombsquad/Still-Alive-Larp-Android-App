@@ -10,13 +10,17 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.EventPreregService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
+import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.HomeFragment
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
@@ -36,6 +40,8 @@ class PreregActivity : NoStatusBarActivity() {
     private lateinit var entryType: KeyValuePickerView
     private lateinit var submit: LoadingButton
 
+    private lateinit var eventModel: FullEventModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_prereg)
@@ -43,6 +49,8 @@ class PreregActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        eventModel = DataManager.shared.getPassedData(HomeFragment::class, DataManagerPassedDataKey.SELECTED_EVENT)!!
+
         title = findViewById(R.id.prereg_title)
         loading = findViewById(R.id.prereg_loading)
         dataLayout = findViewById(R.id.prereg_dataLayout)
@@ -63,7 +71,7 @@ class PreregActivity : NoStatusBarActivity() {
                 position: Int,
                 id: Long
             ) {
-                // If free entry is selected, delesect the character.
+                // If free entry is selected, deselect the character.
                 if (position == 1) {
                     character.valuePickerView.setSelection(0)
                 }
@@ -76,10 +84,10 @@ class PreregActivity : NoStatusBarActivity() {
 
         submit.setOnClick {
             submit.setLoading(true)
-            val player = OldDataManager.shared.player
-            val char = OldDataManager.shared.character
-            val event = OldDataManager.shared.currentEvent
-            val existingPrereg = getExistingPrereg(event)
+            val player = DataManager.shared.getCurrentPlayer()
+            val char = DataManager.shared.getActiveCharacter()
+            val event = eventModel
+            val existingPrereg = event.preregs.firstOrNull { it.playerId == player?.id }
 
             existingPrereg.ifLet({
                 // Update
@@ -100,10 +108,10 @@ class PreregActivity : NoStatusBarActivity() {
                 val preregUpdateRequest = EventPreregService.UpdatePrereg()
                 lifecycleScope.launch {
                     preregUpdateRequest.successfulResponse(UpdateModelSP(preregUpdate)).ifLet({
+                        DataManager.shared.callUpdateCallback(HomeFragment::class)
                         AlertUtils.displayOkMessage(this@PreregActivity, "Preregistration Updated Successfully", "") { _, _ ->
                             finish()
                         }
-                        OldDataManager.shared.unrelaltedUpdateCallback()
                     }, {
                         submit.setLoading(false)
                     })
@@ -126,10 +134,10 @@ class PreregActivity : NoStatusBarActivity() {
                 val preregPlayerRequest = EventPreregService.PreregPlayer()
                 lifecycleScope.launch {
                     preregPlayerRequest.successfulResponse(CreateModelSP(preregCreate)).ifLet({
+                        DataManager.shared.callUpdateCallback(HomeFragment::class)
                         AlertUtils.displayOkMessage(this@PreregActivity, "Preregistration Successful!", "") { _, _ ->
                             finish()
                         }
-                        OldDataManager.shared.unrelaltedUpdateCallback()
                     }, {
                         submit.setLoading(false)
                     })
@@ -138,18 +146,19 @@ class PreregActivity : NoStatusBarActivity() {
 
         }
 
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.EVENT_PREREGS), false) {
+        DataManager.shared.load(lifecycleScope) {
             buildView()
         }
         buildView()
     }
 
     private fun buildView() {
-        val load = OldDataManager.shared.loadingPlayer || OldDataManager.shared.loadingCharacter || OldDataManager.shared.loadingEventPreregs || OldDataManager.shared.selectedEvent == null
-        loading.isGone = !load
-        dataLayout.isGone = load
+        loading.isGone = !DataManager.shared.loading
+        dataLayout.isGone = DataManager.shared.loading
 
-        OldDataManager.shared.character.ifLet({ char ->
+        val plr = DataManager.shared.getCurrentPlayer()!!
+
+        DataManager.shared.getActiveCharacter().ifLet ({ char ->
             val charSelectionAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("NPC", char.fullName))
             character.valuePickerView.adapter = charSelectionAdapter
             character.valuePickerView.setSelection(1)
@@ -159,42 +168,25 @@ class PreregActivity : NoStatusBarActivity() {
             character.valuePickerView.setSelection(0)
         })
 
-        OldDataManager.shared.player.ifLet {
-            player.set(it.fullName)
-        }
+        player.set(plr.fullName)
 
-        OldDataManager.shared.selectedEvent.ifLet { ev ->
-            event.set(ev.title)
-            getExistingPrereg(ev).ifLet({ existingPrereg ->
-                title.text = "Update Preregistration"
-                submit.textView.text = "Update"
-                character.valuePickerView.setSelection((existingPrereg.getCharId() != null).ternary(1, 0))
+        event.set(eventModel.title)
+        eventModel.preregs.firstOrNull { it.playerId == plr.id }.ifLet({ existingPrereg ->
+            title.text = "Update Preregistration"
+            submit.textView.text = "Update"
+            character.valuePickerView.setSelection((existingPrereg.getCharId() != null).ternary(1, 0))
 
-                var entrySelect = when (existingPrereg.eventRegType()) {
-                    EventRegType.NOT_PREREGED -> 0
-                    EventRegType.FREE -> 1
-                    EventRegType.BASIC -> 2
-                    EventRegType.PREMIUM -> 3
-                }
-                entryType.valuePickerView.setSelection(entrySelect)
-
-            }, {
-                title.text = "Preregistration"
-                submit.textView.text = "Submit"
-            })
-        }
-    }
-
-    private fun getExistingPrereg(ev: EventModel?): EventPreregModel? {
-        ev?.let { event ->
-            OldDataManager.shared.eventPreregs[event.id]?.let {
-                return it.firstOrNull { prereg -> prereg.playerId == (OldDataManager.shared.player?.id ?: -1) }
-            } ?: run {
-                return null
+            val entrySelect = when (existingPrereg.eventRegType()) {
+                EventRegType.NOT_PREREGED -> 0
+                EventRegType.FREE -> 1
+                EventRegType.BASIC -> 2
+                EventRegType.PREMIUM -> 3
             }
-        } ?: run {
-            return null
-        }
+            entryType.valuePickerView.setSelection(entrySelect)
+        }, {
+            title.text = "Preregistration"
+            submit.textView.text = "Submit"
+        })
     }
 
     private fun getRegType(): EventRegType {

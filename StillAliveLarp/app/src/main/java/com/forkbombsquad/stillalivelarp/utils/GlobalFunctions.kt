@@ -77,6 +77,4 @@ fun getFragmentOrActivityName(kClass: KClass<*>): String {
 fun globalForceResetAllPlayerData() {
     DataManager.forceReset()
     LocalDataManager.clearAllLocalData()
-    PlayerManager.shared.forceReset()
-    CharacterManager.shared.forceReset()
 }

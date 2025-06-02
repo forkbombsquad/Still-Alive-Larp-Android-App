@@ -15,8 +15,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.R
-
-import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.SkillSortType
@@ -88,14 +88,13 @@ class SkillListFragment : Fragment() {
                 createViews(v)
             }
         }
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            createViews(v)
-        }
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SKILLS), false) {
+        DataManager.shared.load(lifecycleScope) {
             lifecycleScope.launch(Dispatchers.IO) {
                 createViews(v)
             }
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            createViews(v)
         }
     }
 
@@ -107,7 +106,7 @@ class SkillListFragment : Fragment() {
         }
         skillCells = mutableListOf()
 
-        getFilteredSkills(OldDataManager.shared.skills ?: listOf()).forEachIndexed { index, it ->
+        getFilteredSkills(DataManager.shared.skills).forEachIndexed { index, it ->
             val cell = SkillCell(v.context)
             cell.setup(it)
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -132,7 +131,7 @@ class SkillListFragment : Fragment() {
         }
     }
 
-    private fun getFilteredSkills(skills: List<OldFullSkillModel>): List<OldFullSkillModel> {
+    private fun getFilteredSkills(skills: List<FullSkillModel>): List<FullSkillModel> {
         var filteredSkills = skills
         val text = searchBar.text.toString().trim().lowercase()
         if (text.isNotEmpty() || currentFilter != SkillFilterType.NONE) {
@@ -141,13 +140,13 @@ class SkillListFragment : Fragment() {
         return getSortedSkills(filteredSkills)
     }
 
-    private fun getSortedSkills(skills: List<OldFullSkillModel>): List<OldFullSkillModel> {
+    private fun getSortedSkills(skills: List<FullSkillModel>): List<FullSkillModel> {
         var sorted = skills
         sorted = when (currentSort) {
             SkillSortType.AZ -> skills.sortedWith(compareBy { it.name })
             SkillSortType.ZA -> skills.sortedWith(compareByDescending { it.name })
-            SkillSortType.XPASC -> skills.sortedWith(compareBy({ it.xpCost.toInt() }, { it.name }))
-            SkillSortType.XPDESC -> skills.sortedWith(compareByDescending { it.xpCost.toInt() })
+            SkillSortType.XPASC -> skills.sortedWith(compareBy({ it.xpCost }, { it.name }))
+            SkillSortType.XPDESC -> skills.sortedWith(compareByDescending { it.xpCost })
             SkillSortType.TYPEASC -> skills.sortedWith(compareBy({ it.getTypeText() }, { it.name }))
             SkillSortType.TYPEDESC -> skills.sortedWith(compareByDescending { it.getTypeText() })
         }

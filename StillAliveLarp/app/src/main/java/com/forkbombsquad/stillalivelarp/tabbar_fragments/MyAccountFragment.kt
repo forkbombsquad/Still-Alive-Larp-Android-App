@@ -15,7 +15,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.CharacterPlannerActivity
 import com.forkbombsquad.stillalivelarp.EditProfileImageActivity
 import com.forkbombsquad.stillalivelarp.ManageAccountActivity
-import com.forkbombsquad.stillalivelarp.PersonalSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.SpecialClassXpReductionsActivity
 import com.forkbombsquad.stillalivelarp.ViewBioActivity

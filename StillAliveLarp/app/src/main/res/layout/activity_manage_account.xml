@@ -36,6 +36,15 @@ tools:context=".ManageAccountActivity">
             app:text="Change Password"
             app:showLoading="false"/>
 
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/manageaccount_deleteLocalData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:buttontext="Delete Local data"
+            />
+
         <com.forkbombsquad.stillalivelarp.utils.LoadingButton
             android:id="@+id/manageaccount_deleteAccount"
             android:layout_width="match_parent"

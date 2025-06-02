@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isGone
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.HomeFragment
 
 import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
@@ -15,6 +19,7 @@ class CheckInBarcodeActivity : NoStatusBarActivity() {
     private lateinit var kvView: KeyValueView
     private lateinit var image: ImageView
 
+    private var barcode: PlayerCheckInBarcodeModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_in_barcode)
@@ -25,11 +30,12 @@ class CheckInBarcodeActivity : NoStatusBarActivity() {
         title = findViewById(R.id.checkinbarcode_title)
         kvView = findViewById(R.id.checkinbarcode_keyvalueview)
         image = findViewById(R.id.checkinbarcode_image)
+        barcode = DataManager.shared.getPassedData(HomeFragment::class, DataManagerPassedDataKey.CHECKIN_BARCODE)
         buildView()
     }
 
     private fun buildView() {
-        OldDataManager.shared.checkinBarcodeModel.ifLet({
+        barcode.ifLet({
             kvView.isGone = false
             image.isGone = false
 
@@ -44,7 +50,7 @@ class CheckInBarcodeActivity : NoStatusBarActivity() {
     }
 
     override fun onBackPressed() {
-        OldDataManager.shared.unrelaltedUpdateCallback()
+        DataManager.shared.callUpdateCallback(HomeFragment::class)
         super.onBackPressed()
     }
 }

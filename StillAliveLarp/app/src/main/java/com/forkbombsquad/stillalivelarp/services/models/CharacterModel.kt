@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
@@ -94,6 +95,38 @@ data class FullCharacterModel(
             }
         }
         this.skills = fcmSkills
+    }
+
+    fun getAllSkillsAsCharacterModified(): List<FullCharacterModifiedSkillModel> {
+        val allSkills = DataManager.shared.skills.filter { skl -> skills.firstOrNull { skl.id == it.id } == null }
+        val cmfs: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
+        cmfs += skills
+        allSkills.forEach { skill ->
+            val xpRed = xpReductions.firstOrNull { it.skillId == skill.id }
+            cmfs.add(
+                FullCharacterModifiedSkillModel(
+                    skill = skill,
+                    charSkillModel = null,
+                    xpReduction =  xpRed,
+                    costOfCombatSkills(),
+                    costOfProfessionSkills(),
+                    costOfTalentSkills(),
+                    costOf50InfectSkills(),
+                    costOf75InfectSkills()
+                )
+            )
+        }
+        return cmfs
+    }
+
+    fun hasAllPrereqsForSkill(skill: FullCharacterModifiedSkillModel): Boolean {
+        var hasAll = true
+        skill.prereqs().forEach { skillModel ->
+            if (skills.firstOrNull { it.id == skillModel.id }?.alreadyPurchased() == false) {
+                hasAll = false
+            }
+        }
+        return hasAll
     }
 
     fun getIntrigueSkills(): List<Int> {
@@ -203,169 +236,6 @@ data class FullCharacterModel(
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class OldFullCharacterModel(
-    val id: Int,
-    val fullName: String,
-    val startDate: String,
-    val isAlive: String,
-    val deathDate: String,
-    val infection: String,
-    var bio: String,
-    val approvedBio: String,
-    val bullets: String,
-    val megas: String,
-    val rivals: String,
-    val rockets: String,
-    val bulletCasings: String,
-    val clothSupplies: String,
-    val woodSupplies: String,
-    val metalSupplies: String,
-    val techSupplies: String,
-    val medicalSupplies: String,
-    val armor: String,
-    val unshakableResolveUses: String,
-    val mysteriousStrangerUses: String,
-    val playerId: Int,
-    val characterTypeId: Int,
-    var skills: Array<OldFullSkillModel>
-) : Serializable {
-    constructor(charModel: CharacterModel): this(
-        charModel.id,
-        charModel.fullName,
-        charModel.startDate,
-        charModel.isAlive,
-        charModel.deathDate,
-        charModel.infection,
-        charModel.bio,
-        charModel.approvedBio,
-        charModel.bullets,
-        charModel.megas,
-        charModel.rivals,
-        charModel.rockets,
-        charModel.bulletCasings,
-        charModel.clothSupplies,
-        charModel.woodSupplies,
-        charModel.metalSupplies,
-        charModel.techSupplies,
-        charModel.medicalSupplies,
-        charModel.armor,
-        charModel.unshakableResolveUses,
-        charModel.mysteriousStrangerUses,
-        charModel.playerId,
-        charModel.characterTypeId,
-        arrayOf()
-    )
-
-    fun getBaseModel(): CharacterModel {
-        return CharacterModel(this)
-    }
-
-    fun getBarcodeModel(): CharacterBarcodeModel {
-        return CharacterBarcodeModel(this)
-    }
-
-    fun getIntrigueSkills(): IntArray {
-        val list = mutableListOf<Int>()
-        val filteredSkills = skills.filter { sk ->
-            sk.id.equalsAnyOf(Constants.SpecificSkillIds.investigatorTypeSkills)
-        }
-        filteredSkills.forEach {
-            list.add(it.id)
-        }
-        return list.toIntArray()
-    }
-
-    fun getChooseOneSkills(): Array<OldFullSkillModel> {
-        return skills.filter {
-            it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
-        }.toTypedArray()
-    }
-
-    fun costOfCombatSkills(): Int {
-        skills.forEach {
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allCombatReducingSkills)) {
-                return -1
-            }
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allCombatIncreasingSkills)) {
-                return 1
-            }
-        }
-        return 0
-    }
-
-    fun costOfProfessionSkills(): Int {
-        skills.forEach {
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allProfessionReducingSkills)) {
-                return -1
-            }
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allProfessionIncreasingSkills)) {
-                return 1
-            }
-        }
-        return 0
-    }
-
-    fun costOfTalentSkills(): Int {
-        skills.forEach {
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allTalentReducingSkills)) {
-                return -1
-            }
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allTalentIncreasingSkills)) {
-                return 1
-            }
-        }
-        return 0
-    }
-
-    fun costOf50InfectSkills(): Int {
-        skills.forEach {
-            if (it.id == Constants.SpecificSkillIds.adaptable) {
-                return 25
-            }
-        }
-        return 50
-    }
-
-    fun costOf75InfectSkills(): Int {
-        skills.forEach {
-            if (it.id == Constants.SpecificSkillIds.extremelyAdaptable) {
-                return 50
-            }
-        }
-        return 75
-    }
-
-    fun getRelevantBarcodeSkills(): Array<SkillBarcodeModel> {
-        val bskills = mutableListOf<SkillBarcodeModel>()
-        skills.forEach {
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
-                bskills.add(SkillBarcodeModel(it))
-            }
-        }
-        return bskills.toTypedArray()
-    }
-
-    fun hasUnshakableResolve(): Boolean {
-        skills.forEach {
-            if (it.id == Constants.SpecificSkillIds.unshakableResolve) {
-                return true
-            }
-        }
-        return false
-    }
-
-    fun mysteriousStrangerCount(): Int {
-        var count = 0
-        skills.forEach {
-            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.mysteriousStrangerTypeSkills)) {
-                count++
-            }
-        }
-        return count
-    }
-}
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class CharacterModel(
     @JsonProperty("id") val id: Int,
     @JsonProperty("fullName") val fullName: String,
@@ -391,32 +261,6 @@ data class CharacterModel(
     @JsonProperty("playerId") val playerId: Int,
     @JsonProperty("characterTypeId") val characterTypeId: Int
 ) : Serializable {
-
-    constructor(charModel: OldFullCharacterModel): this(
-        charModel.id,
-        charModel.fullName,
-        charModel.startDate,
-        charModel.isAlive,
-        charModel.deathDate,
-        charModel.infection,
-        charModel.bio,
-        charModel.approvedBio,
-        charModel.bullets,
-        charModel.megas,
-        charModel.rivals,
-        charModel.rockets,
-        charModel.bulletCasings,
-        charModel.clothSupplies,
-        charModel.woodSupplies,
-        charModel.metalSupplies,
-        charModel.techSupplies,
-        charModel.medicalSupplies,
-        charModel.armor,
-        charModel.unshakableResolveUses,
-        charModel.mysteriousStrangerUses,
-        charModel.playerId,
-        charModel.characterTypeId
-    )
 
     fun getAllXpSpent(lifecycleScope: LifecycleCoroutineScope, callback: (xp: Int) -> Unit) {
         val charSkillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
@@ -469,25 +313,6 @@ data class CharacterBarcodeModel(
     val mysteriousStrangerUses: String,
     val playerId: Int
 ) : Serializable {
-    constructor(charModel: OldFullCharacterModel): this(
-        charModel.id,
-        charModel.fullName,
-        charModel.infection,
-        charModel.bullets,
-        charModel.megas,
-        charModel.rivals,
-        charModel.rockets,
-        charModel.bulletCasings,
-        charModel.clothSupplies,
-        charModel.woodSupplies,
-        charModel.metalSupplies,
-        charModel.techSupplies,
-        charModel.medicalSupplies,
-        charModel.armor,
-        charModel.unshakableResolveUses,
-        charModel.mysteriousStrangerUses,
-        charModel.playerId
-    )
 
     constructor(charModel: FullCharacterModel): this(
         charModel.id,

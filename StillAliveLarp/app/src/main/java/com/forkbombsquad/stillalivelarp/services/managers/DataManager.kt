@@ -624,8 +624,8 @@ class DataManager private constructor() {
         updateCallbacks[getFragmentOrActivityName(key)] = callback
     }
 
-    fun getUpdateCallback(key: KClass<*>): (() -> Unit)? {
-        return updateCallbacks[getFragmentOrActivityName(key)]
+    fun callUpdateCallback(key: KClass<*>) {
+        updateCallbacks[getFragmentOrActivityName(key)]?.let { it() }
     }
 
 

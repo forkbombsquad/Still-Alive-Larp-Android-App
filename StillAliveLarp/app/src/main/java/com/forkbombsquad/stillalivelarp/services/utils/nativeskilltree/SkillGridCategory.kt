@@ -1,19 +1,19 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
-import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 
-class SkillGridCategory(skills: List<OldFullSkillModel>, skillCategoryId: Int, skillCategoryName: String, allSkills: List<OldFullSkillModel>) {
-    val allSkills: List<OldFullSkillModel>
-    var skills: List<OldFullSkillModel>
+class SkillGridCategory(skills: List<FullSkillModel>, skillCategoryId: Int, skillCategoryName: String, allSkills: List<FullSkillModel>) {
+    val allSkills: List<FullSkillModel>
+    var skills: List<FullSkillModel>
     val skillCategoryId: Int
     val skillCategoryName: String
 
-    val zeroCost: MutableList<OldFullSkillModel> = mutableListOf()
-    val oneCost: MutableList<OldFullSkillModel> = mutableListOf()
-    val twoCost: MutableList<OldFullSkillModel> = mutableListOf()
-    val threeCost: MutableList<OldFullSkillModel> = mutableListOf()
-    val fourCost: MutableList<OldFullSkillModel> = mutableListOf()
+    val zeroCost: MutableList<FullSkillModel> = mutableListOf()
+    val oneCost: MutableList<FullSkillModel> = mutableListOf()
+    val twoCost: MutableList<FullSkillModel> = mutableListOf()
+    val threeCost: MutableList<FullSkillModel> = mutableListOf()
+    val fourCost: MutableList<FullSkillModel> = mutableListOf()
 
     val branches: MutableList<SkillBranch> = mutableListOf()
     private var isEdgeCaseLeft = false
@@ -53,7 +53,7 @@ class SkillGridCategory(skills: List<OldFullSkillModel>, skillCategoryId: Int, s
         skills.forEach {
             isEdgeCaseLeft = false
             isEdgeCaseRight = false
-            val skillList: MutableList<OldFullSkillModel> = mutableListOf()
+            val skillList: MutableList<FullSkillModel> = mutableListOf()
             buildBranchRec(it, skillList)
             if (skillList.isNotEmpty()) {
                 if (isEdgeCaseLeft) {
@@ -73,30 +73,30 @@ class SkillGridCategory(skills: List<OldFullSkillModel>, skillCategoryId: Int, s
         }
     }
 
-    private fun buildBranchRec(skill: OldFullSkillModel?, list: MutableList<OldFullSkillModel>, isPrereq: Boolean = false) {
+    private fun buildBranchRec(skill: FullSkillModel?, list: MutableList<FullSkillModel>, isPrereq: Boolean = false) {
         if (skill != null) {
             if (branchesAlreadyContain(skill.id) || list.firstOrNull { it.id == skill.id } != null || edgeCaseLeft?.skills?.firstOrNull { it.id == skill.id } != null || edgeCaseRight?.skills?.firstOrNull { it.id == skill.id } != null) { return }
-            if (skillCategoryId > skill.skillCategoryId.toInt()) {
+            if (skillCategoryId > skill.skillCategoryId) {
                 isEdgeCaseLeft = true
                 return
             }
-            if (skillCategoryId < skill.skillCategoryId.toInt()) {
+            if (skillCategoryId < skill.skillCategoryId) {
                 isEdgeCaseRight = true
                 return
             }
             list.add(skill)
             if (!isPrereq) {
                 skill.postreqs.forEach {
-                    buildBranchRec(getSkill(it), list)
+                    buildBranchRec(getSkill(it.id), list)
                 }
             }
             skill.prereqs.forEach {
-                buildBranchRec(it, list, true)
+                buildBranchRec(getSkill(it.id), list, true)
             }
         }
     }
 
-    private fun getSkill(skillId: Int): OldFullSkillModel? {
+    private fun getSkill(skillId: Int): FullSkillModel? {
         return allSkills.firstOrNull { it.id == skillId }
     }
 

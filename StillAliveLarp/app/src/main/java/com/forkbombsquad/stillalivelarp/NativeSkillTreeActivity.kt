@@ -17,12 +17,13 @@ import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
-class NativeSkillTreeActivity : NoStatusBarActivity() {
+open class NativeSkillTreeActivity : NoStatusBarActivity() {
 
-    private lateinit var img: TouchImageView
+    lateinit var img: TouchImageView
     private lateinit var paint: Paint
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,18 +32,8 @@ class NativeSkillTreeActivity : NoStatusBarActivity() {
         setupView()
     }
 
-    private var scaleFactor = 1f
-    private var minScale = 0.1f
-    private var maxScale = 100f
-
-    private var lastTouchX = 0f
-    private var lastTouchY = 0f
-    private var posX = 0f
-    private var posY = 0f
-    private var activePointerId = -1
-
     @SuppressLint("ClickableViewAccessibility")
-    private fun setupView() {
+    fun setupView() {
         img = findViewById(R.id.nativeskilltree_img)
 
         paint = Paint()
@@ -52,18 +43,77 @@ class NativeSkillTreeActivity : NoStatusBarActivity() {
         renderSkills()
     }
 
-    private fun renderSkills() {
+    open fun setImageUpdateDrawables() {
         img.updateDrawables(
             SkillGrid(
-                OldDataManager.shared.skills!!,
-                OldDataManager.shared.skillCategories!!.asList()
+                DataManager.shared.skills,
+                personal = false,
+                allowPurchase = false,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = null
             ),
             lifecycleScope
         )
+    }
+
+    private fun renderSkills() {
+        setImageUpdateDrawables()
         img.invalidate()
+    }
+}
+
+class PersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
+    override fun setImageUpdateDrawables() {
+        img.updateDrawables(
+            SkillGrid(
+                DataManager.shared.skills,
+                personal = true,
+                allowPurchase = !DataManager.shared.offlineMode,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = DataManager.shared.getActiveCharacter()!!
+            ),
+            lifecycleScope
+        )
     }
 
 }
+
+class PlannedCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
+    override fun setImageUpdateDrawables() {
+        // TODO get planned character from stored data
+        img.updateDrawables(
+            SkillGrid(
+                DataManager.shared.skills,
+                personal = true,
+                allowPurchase = !DataManager.shared.offlineMode,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+            ),
+            lifecycleScope
+        )
+    }
+
+}
+
+class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
+
+    override fun setImageUpdateDrawables() {
+        // TODO get character from stored data
+        img.updateDrawables(
+            SkillGrid(
+                DataManager.shared.skills,
+                personal = true,
+                allowPurchase = false,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+            ),
+            lifecycleScope
+        )
+    }
+
+}
+
+
 
 @SuppressLint("ClickableViewAccessibility")
 class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageView(context, attrs),

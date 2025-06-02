@@ -117,6 +117,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViews(v: View) {
+        DataManager.shared.setUpdateCallback(this::class) {
+            DataManager.shared.load(lifecycleScope) {
+                this@HomeFragment.buildViews(v)
+            }
+            this@HomeFragment.buildViews(v)
+        }
+
         // Load
         reload(v)
 
@@ -173,9 +180,6 @@ class HomeFragment : Fragment() {
                 DataManager.shared.getCurrentPlayer().ifLet { player ->
                     player.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
                         val barcodeModel = player.getCheckOutBarcodeModel(eventAttendee)
-                        DataManager.shared.setUpdateCallback(this::class) {
-                            this@HomeFragment.reload(v)
-                        }
                         DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, barcodeModel)
                         val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
                         startActivity(intent)
@@ -195,9 +199,6 @@ class HomeFragment : Fragment() {
         createCharacterButton = v.findViewById(R.id.currentCharCreateNewCharButton)
 
         createCharacterButton.setOnClick {
-            DataManager.shared.setUpdateCallback(this::class) {
-                this@HomeFragment.reload(v)
-            }
             val intent = Intent(v.context, CreateCharacterActivity::class.java)
             startActivity(intent)
         }
@@ -233,9 +234,6 @@ class HomeFragment : Fragment() {
                 if (player != null && event != null) {
                     val barcode = player.getCheckInBarcodeModel(true, event)
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
-                    DataManager.shared.setUpdateCallback(this::class) {
-                        this@HomeFragment.buildViews(v)
-                    }
                     val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
                     startActivity(intent)
                 }
@@ -250,9 +248,6 @@ class HomeFragment : Fragment() {
                 if (player != null && event != null) {
                     val barcode = player.getCheckInBarcodeModel(false, event)
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
-                    DataManager.shared.setUpdateCallback(this::class) {
-                        this@HomeFragment.buildViews(v)
-                    }
                     val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
                     startActivity(intent)
                 }
@@ -264,9 +259,6 @@ class HomeFragment : Fragment() {
             DataManager.shared.load(lifecycleScope) {
                 preregButton.setLoading(false)
                 showAllEvents.ternary(DataManager.shared.events, DataManager.shared.getRelevantEvents()).getOrNull(eventIndex).ifLet { event ->
-                    DataManager.shared.setUpdateCallback(this::class) {
-                        this@HomeFragment.buildViews(v)
-                    }
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_EVENT, event)
                     val intent = Intent(v.context, PreregActivity::class.java)
                     startActivity(intent)
@@ -387,7 +379,7 @@ class HomeFragment : Fragment() {
         }, {
             currentCharacterNameLayout.isGone = true
             currentCharacterNoneLayout.isGone = false
-            createCharacterButton.isGone = false
+            createCharacterButton.isGone = DataManager.shared.offlineMode
         })
     }
 
@@ -434,7 +426,7 @@ class HomeFragment : Fragment() {
                 eventListDesc.text = event.description
 
                 if (event.isRelevant()) {
-                    preregButton.isGone = false
+                    preregButton.isGone = DataManager.shared.offlineMode
                     DataManager.shared.getCurrentPlayer()?.preregs?.firstOrNull { it.eventId == event.id }.ifLet({ prereg ->
                         preregButton.textView.text = "Edit Your Pre-Registration"
 
@@ -516,7 +508,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showCheckout(): Boolean {
-        return !DataManager.shared.offlineMode && DataManager.shared.getOngoingEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
+        return DataManager.shared.getOngoingEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
     }
 
     private fun showCurrentCharSection(): Boolean {

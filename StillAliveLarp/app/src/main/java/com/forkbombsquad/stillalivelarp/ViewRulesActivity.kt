@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.utils.Heading
 import com.forkbombsquad.stillalivelarp.utils.HeadingView
@@ -48,11 +49,6 @@ class ViewRulesActivity : NoStatusBarActivity() {
         setupView()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        OldDataManager.shared.unrelaltedUpdateCallback()
-    }
-
     private fun setupView() {
         title = findViewById(R.id.viewrules_title)
         search = findViewById(R.id.viewrules_searchview)
@@ -62,7 +58,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
         val allFilters: MutableList<String> = mutableListOf()
         allFilters.add("No Filter")
-        OldDataManager.shared.rulebook.ifLet {
+        DataManager.shared.rulebook.ifLet {
             allFilters.addAll(it.getAllFilterableHeadingNames())
         }
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allFilters)
@@ -88,13 +84,18 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
     @Synchronized
     private fun createViews() {
-        loadingView = true
+        loadingView = DataManager.shared.loading
+        DataManager.shared.load(lifecycleScope) {
+            runOnUiThread {
+                buildView()
+            }
+        }
         runOnUiThread {
             buildView()
         }
         headings = mutableListOf()
-        filterSpinner.isGone = OldDataManager.shared.loadingRulebook
-        OldDataManager.shared.rulebook.ifLet { rulebook ->
+        filterSpinner.isGone = DataManager.shared.loading
+        DataManager.shared.rulebook.ifLet { rulebook ->
             for (heading in filterHeadings(rulebook)) {
                 val headingView = HeadingView(this)
                 headingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -119,18 +120,16 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
                 headings.add(headingView)
             }
-            loadingView = false
-            runOnUiThread {
-                buildView()
-            }
+            loadingView = DataManager.shared.loading
         }
     }
 
     private fun buildView() {
-        OldDataManager.shared.rulebook.ifLet { rulebook ->
+        DataManager.shared.rulebook.ifLet { rulebook ->
             title.text = "Rulebook v${rulebook.version}"
         }
         layout.removeAllViews()
+        loadingView = DataManager.shared.loading
         progressBar.isGone = !loadingView
         if (!loadingView) {
             for (heading in headings) {
