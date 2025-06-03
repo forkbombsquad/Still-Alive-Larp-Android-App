@@ -6,23 +6,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NPCListActivity
 import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.utils.Constants
 
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.toBitmap
+import com.forkbombsquad.stillalivelarp.utils.underline
 
 class CommunityFragment : Fragment() {
-
     private val TAG = "COMMUNITY_FRAGMENT"
 
     private lateinit var allPlayersButton: NavArrowButtonBlack
     private lateinit var campStatusButton: NavArrowButtonBlack
     private lateinit var allNPCsButton: NavArrowButtonBlack
     private lateinit var researchProjects: NavArrowButtonBlack
+
+    private lateinit var contentLayout: LinearLayout
+    private lateinit var loadingLayout: LinearLayout
+    private lateinit var loadingText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +44,10 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        contentLayout = v.findViewById(R.id.contentlayout)
+        loadingLayout = v.findViewById(R.id.loadingView)
+        loadingText = v.findViewById(R.id.loadingText)
+
         allPlayersButton = v.findViewById(R.id.community_allPlayersButton)
         campStatusButton = v.findViewById(R.id.community_campStatusButton)
         allNPCsButton = v.findViewById(R.id.community_npcsButton)
@@ -51,23 +65,38 @@ class CommunityFragment : Fragment() {
         }
 
         researchProjects.setOnClick {
-            researchProjects.setLoading(true)
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.RESEARCH_PROJECTS), true) {
-                researchProjects.setLoading(false)
-                val intent = Intent(v.context, ViewResearchProjectsActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(v.context, ViewResearchProjectsActivity::class.java)
+            startActivity(intent)
         }
 
-        campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()
-
         allNPCsButton.setOnClick {
-            allNPCsButton.setLoading(true)
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_NPC_CHARACTERS)) {
-                allNPCsButton.setLoading(false)
-                val intent = Intent(v.context, NPCListActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(v.context, NPCListActivity::class.java)
+            startActivity(intent)
+        }
+
+        reload()
+    }
+
+    private fun reload() {
+        DataManager.shared.load(lifecycleScope, stepFinished = {
+            buildView()
+        }, finished = {
+            buildView()
+        })
+        buildView()
+    }
+
+    private fun buildView() {
+        if (DataManager.shared.loading) {
+            contentLayout.isGone = true
+            loadingLayout.isGone = false
+            loadingText.text = DataManager.shared.loadingText
+
+        } else {
+            contentLayout.isGone = false
+            loadingLayout.isGone = true
+
+            campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()
         }
     }
 

@@ -13,7 +13,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 
 class PlayerStatsFragment : Fragment() {
-
+    // TODO convert to Activity
     private lateinit var name: KeyValueView
     private lateinit var email: KeyValueView
     private lateinit var startDate: KeyValueView

@@ -53,6 +53,14 @@ data class FullPlayerModel(
         return characters.firstOrNull { it.characterType() == CharacterType.STANDARD && it.isAlive }
     }
 
+    fun getInactiveCharacters(): List<FullCharacterModel> {
+        return characters.filter { it.characterType() == CharacterType.STANDARD && !it.isAlive }
+    }
+
+    fun getPlannedCharacters(): List<FullCharacterModel> {
+        return characters.filter { it.characterType() == CharacterType.PLANNER }
+    }
+
     fun getAwardsSorted(): List<AwardModel> {
         val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
         return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }

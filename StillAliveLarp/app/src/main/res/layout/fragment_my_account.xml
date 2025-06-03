@@ -33,167 +33,146 @@
                     android:textSize="32sp"
                     android:textAlignment="center"/>
 
-                <FrameLayout
+                <LinearLayout
+                    android:id="@+id/loadingView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Getting Content..."
+                        android:textAlignment="center"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/loadingText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:textAlignment="center"
+                        android:text="Loading..."/>
+
+                    <ProgressBar
+                        android:paddingTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contentlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/myAccountProfileImage"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/blankprofile"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintWidth_percent="0.5"
-                            app:layout_constraintDimensionRatio="1:1" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                    <ProgressBar
-                        android:id="@+id/myAccountProfileImageLoadingBar"
+                            <ImageView
+                                android:id="@+id/myAccountProfileImage"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/blankprofile"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintWidth_percent="0.5"
+                                app:layout_constraintDimensionRatio="1:1" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <ProgressBar
+                            android:id="@+id/myAccountProfileImageLoadingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="gone"/>
+
+                        <com.forkbombsquad.stillalivelarp.utils.SmallLoadingButton
+                            android:layout_width="48dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-8dp"
+                            android:layout_gravity="center_horizontal"
+                            app:buttontext="Edit"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/myAccountPlayerName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
-
-                    <com.forkbombsquad.stillalivelarp.utils.SmallLoadingButton
-                        android:layout_width="48dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-8dp"
                         android:layout_gravity="center_horizontal"
-                        app:buttontext="Edit"/>
+                        android:textAlignment="center"
+                        android:textSize="24sp" />
 
-                </FrameLayout>
+                    <com.forkbombsquad.stillalivelarp.utils.CharacterPanel
+                        android:id="@+id/myaccount_charPanel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:id="@+id/myAccountPlayerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:textSize="24sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account"
+                        android:paddingTop="24dp"
+                        android:textStyle="bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/black"
+                        android:textAlignment="textStart"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Character"
-                    android:textStyle="bold"
-                    android:textSize="24sp"
-                    android:textColor="@color/black"
-                    android:textAlignment="textStart"/>
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/myaccount_playerStatsNavArrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Player Stats"
+                        app:showLoading="false"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_characterStatsNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Character Stats"
-                    app:showLoading="false"/>
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/myaccount_manageAccountNavArrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Manage Account"
+                        app:showLoading="false"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_skillManagementNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Skill Management"
-                    app:showLoading="false"/>
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+                        android:id="@+id/myaccount_adminToolsNavArrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Admin Tools"
+                        app:showLoading="false"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_personalSkillTree"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Personal Skill Tree Diagram"
-                    app:showLoading="false"/>
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+                        android:id="@+id/myaccount_debugButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Debug Button"
+                        app:showLoading="false"
+                        android:visibility="gone"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_bioNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Bio"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_gearNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Gear"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_specialClassXpReductionsNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Special Class Xp Reductions"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
-                    android:id="@+id/myaccount_characterPlannerNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Character Planner"
-                    app:showLoading="false"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Account"
-                    android:paddingTop="24dp"
-                    android:textStyle="bold"
-                    android:textSize="24sp"
-                    android:textColor="@color/black"
-                    android:textAlignment="textStart"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_playerStatsNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Player Stats"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/myaccount_manageAccountNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Manage Account"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
-                    android:id="@+id/myaccount_adminToolsNavArrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Admin Tools"
-                    app:showLoading="false"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
-                    android:id="@+id/myaccount_debugButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Debug Button"
-                    app:showLoading="false"
-                    android:visibility="gone"/>
-
-                <com.forkbombsquad.stillalivelarp.utils.LoadingButton
-                    android:id="@+id/myaccount_signOutButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="32dp"
-                    android:paddingBottom="32dp"
-                    app:buttontext="Sign Out"/>
+                    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                        android:id="@+id/myaccount_signOutButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="32dp"
+                        android:paddingBottom="32dp"
+                        app:buttontext="Sign Out"/>
+                </LinearLayout>
 
             </LinearLayout> <!-- BEFORE THIS ONE-->
 

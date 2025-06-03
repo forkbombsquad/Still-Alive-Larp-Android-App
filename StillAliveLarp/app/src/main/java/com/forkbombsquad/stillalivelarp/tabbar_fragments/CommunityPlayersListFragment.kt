@@ -19,6 +19,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class CommunityPlayersListFragment : Fragment() {
+    // TODO convert to activity
     private val TAG = "COMMUNITY_PLAYERS_LIST_FRAGMENT"
     private lateinit var progressBar: ProgressBar
     private lateinit var layout: LinearLayout

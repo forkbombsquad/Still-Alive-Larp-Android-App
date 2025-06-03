@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SkillManagementFragment : Fragment() {
+    // TODO convert to activity
     private val TAG = "SKILL_MANAGEMENT_FRAGMENT"
 
     private lateinit var title: TextView

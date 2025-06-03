@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SkillListFragment : Fragment() {
+    // TODO convert to activity
     private val TAG = "SKILL_LIST_FRAGMENT"
 
     private var currentSort: SkillSortType = SkillSortType.AZ

@@ -33,37 +33,78 @@
                     android:textSize="32sp"
                     android:textAlignment="center"/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/community_allPlayersButton"
+                <LinearLayout
+                    android:id="@+id/loadingView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="All Players"
-                    app:showLoading="false"/>
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/community_campStatusButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Camp Status"
-                    app:showLoading="false"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Getting Content..."
+                        android:textAlignment="center"
+                        android:textSize="24sp" />
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/community_npcsButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="All NPCs"
-                    app:showLoading="false"/>
+                    <TextView
+                        android:id="@+id/loadingText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:textAlignment="center"
+                        android:text="Loading..."/>
 
-                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                    android:id="@+id/community_researchProjects"
+                    <ProgressBar
+                        android:paddingTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contentlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    app:text="Research Projects"
-                    app:showLoading="false"/>
+                    android:orientation="vertical">
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/community_allPlayersButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="All Players"
+                        app:showLoading="false"/>
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/community_campStatusButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Camp Status"
+                        app:showLoading="false"/>
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/community_npcsButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="All NPCs"
+                        app:showLoading="false"/>
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/community_researchProjects"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="Research Projects"
+                        app:showLoading="false"/>
+
+                </LinearLayout>
+
 
             </LinearLayout> <!-- BEFORE THIS ONE-->
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
@@ -15,15 +16,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.CharacterPlannerActivity
 import com.forkbombsquad.stillalivelarp.EditProfileImageActivity
 import com.forkbombsquad.stillalivelarp.ManageAccountActivity
+import com.forkbombsquad.stillalivelarp.PersonalNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.SpecialClassXpReductionsActivity
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin.AdminPanelFragment
+import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -39,27 +43,24 @@ import com.forkbombsquad.stillalivelarp.utils.underline
  * create an instance of this fragment.
  */
 class MyAccountFragment : Fragment() {
-
     private val TAG = "MY_ACCOUNT_FRAGMENT"
 
     private lateinit var profileImage: ImageView
-    private lateinit var profileImageProgressBar: ProgressBar
     private lateinit var playerNameText: TextView
+    private lateinit var characterPanel: CharacterPanel
+
     private lateinit var playerStatsNav: NavArrowButtonBlack
-    private lateinit var charStatsNav: NavArrowButtonBlack
-    private lateinit var skillManagementNav: NavArrowButtonBlack
-    private lateinit var specialClassXpRedNav: NavArrowButtonBlack
-    private lateinit var bioNav: NavArrowButtonBlack
-    private lateinit var gearNav: NavArrowButtonBlack
-    private lateinit var characterPlannerNav: NavArrowButtonBlue
+
     private lateinit var manageAccountNav: NavArrowButtonBlack
     private lateinit var adminToolsNav: NavArrowButtonRed
     private lateinit var debugButton: NavArrowButtonRed
     private lateinit var signOutButton: LoadingButton
 
-    private lateinit var personalSkillTree: NavArrowButtonBlack
-
     private lateinit var pullToRefresh: SwipeRefreshLayout
+
+    private lateinit var contentLayout: LinearLayout
+    private lateinit var loadingLayout: LinearLayout
+    private lateinit var loadingText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,95 +72,81 @@ class MyAccountFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        contentLayout = v.findViewById(R.id.contentlayout)
+        loadingLayout = v.findViewById(R.id.loadingView)
+        loadingText = v.findViewById(R.id.loadingText)
+
         profileImage = v.findViewById(R.id.myAccountProfileImage)
-        profileImageProgressBar = v.findViewById(R.id.myAccountProfileImageLoadingBar)
         playerNameText = v.findViewById(R.id.myAccountPlayerName)
         playerStatsNav = v.findViewById(R.id.myaccount_playerStatsNavArrow)
-        charStatsNav = v.findViewById(R.id.myaccount_characterStatsNavArrow)
-        skillManagementNav = v.findViewById(R.id.myaccount_skillManagementNavArrow)
-        specialClassXpRedNav = v.findViewById(R.id.myaccount_specialClassXpReductionsNavArrow)
-        bioNav = v.findViewById(R.id.myaccount_bioNavArrow)
-        gearNav = v.findViewById(R.id.myaccount_gearNavArrow)
-        characterPlannerNav = v.findViewById(R.id.myaccount_characterPlannerNavArrow)
+        characterPanel = v.findViewById(R.id.myaccount_charPanel)
+
         manageAccountNav = v.findViewById(R.id.myaccount_manageAccountNavArrow)
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
-        personalSkillTree = v.findViewById(R.id.myaccount_personalSkillTree)
         debugButton = v.findViewById(R.id.myaccount_debugButton)
 
         profileImage.setOnClickListener {
-            OldDataManager.shared.unrelaltedUpdateCallback = {
-                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PROFILE_IMAGE), true) {
-                    buildView()
-                }
-                buildView()
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
             }
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
             val intent = Intent(v.context, EditProfileImageActivity::class.java)
             startActivity(intent)
         }
         playerStatsNav.setOnClick {
-            // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
+            // TODO convert this to an activity
             val frag = PlayerStatsFragment.newInstance()
             val transaction = parentFragmentManager.beginTransaction()
             transaction.add(R.id.container, frag)
             transaction.addToBackStack(TAG).commit()
         }
-        charStatsNav.setOnClick {
-            // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-            OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
-            val frag = CharacterStatsFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
-        }
-        skillManagementNav.setOnClick {
-            // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-            OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
-            val frag = SkillManagementFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
-        }
-        personalSkillTree.setOnClick {
-            personalSkillTree.setLoading(true)
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.XP_REDUCTIONS), false) {
-                OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-                OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
-                OldDataManager.shared.unrelaltedUpdateCallback = {
-                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER), true, {}, {})
-                    buildView()
+        characterPanel.setOnClicks(
+            viewStatsCallback = {
+                // TODO convert this to an activity
+                val frag = CharacterStatsFragment.newInstance()
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.add(R.id.container, frag)
+                transaction.addToBackStack(TAG).commit()
+            },
+            viewSkillsTreeCallback = {
+                DataManager.shared.setUpdateCallback(this::class) {
+                    reload()
                 }
-                val intent = Intent(v.context, PersonalSkillTreeActivity::class.java)
+                val intent = Intent(v.context, PersonalNativeSkillTreeActivity::class.java)
                 startActivity(intent)
-                personalSkillTree.setLoading(false)
+            },
+            viewSkillsListCallback = {
+                // TODO convert to activity
+                DataManager.shared.setUpdateCallback(this::class) {
+                    reload()
+                }
+                val frag = SkillManagementFragment.newInstance()
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.add(R.id.container, frag)
+                transaction.addToBackStack(TAG).commit()
+            },
+            viewBioCallback = {
+                DataManager.shared.setUpdateCallback(this::class) {
+                    reload()
+                }
+                val intent = Intent(v.context, ViewBioActivity::class.java)
+                startActivity(intent)
+            },
+            viewGearCallback = {
+                val intent = Intent(v.context, ViewGearActivity::class.java)
+                startActivity(intent)
+            },
+            viewAwardsCallback = {
+                // TODO
+            },
+            viewInactiveCharsCallback = {
+                // TODO
+            },
+            viewPlannedCharsCallback = {
+                val intent = Intent(v.context, CharacterPlannerActivity::class.java)
+                startActivity(intent)
             }
-
-        }
-        specialClassXpRedNav.setOnClick {
-            val intent = Intent(v.context, SpecialClassXpReductionsActivity::class.java)
-            startActivity(intent)
-        }
-        bioNav.setOnClick {
-            // Set info in data manager so that things populate correctly
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-            OldDataManager.shared.charForSelectedPlayer = OldDataManager.shared.character
-            val intent = Intent(v.context, ViewBioActivity::class.java)
-            startActivity(intent)
-        }
-        gearNav.setOnClick {
-            // set info in datamanager so things populate
-            OldDataManager.shared.selectedChar = OldDataManager.shared.character?.getBaseModel()
-            val intent = Intent(v.context, ViewGearActivity::class.java)
-            startActivity(intent)
-        }
-        characterPlannerNav.setOnClick {
-            val intent = Intent(v.context, CharacterPlannerActivity::class.java)
-            startActivity(intent)
-        }
+        )
         manageAccountNav.setOnClick {
             val intent = Intent(v.context, ManageAccountActivity::class.java)
             startActivity(intent)
@@ -171,84 +158,53 @@ class MyAccountFragment : Fragment() {
             transaction.addToBackStack(TAG).commit()
         }
         signOutButton.setOnClick {
-            OldDataManager.forceReset()
+            DataManager.forceReset()
             activity?.finish()
         }
 
         pullToRefresh = v.findViewById(R.id.pulltorefresh_account)
         pullToRefresh.setOnRefreshListener {
-            OldDataManager.shared.loadingProfileImage = true
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.SKILL_CATEGORIES), true) {
-                OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-                OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PROFILE_IMAGE), true) {
-                    buildView()
-                    pullToRefresh.isRefreshing = false
-                }
-                if (OldDataManager.shared.character != null) {
-                    OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.XP_REDUCTIONS), true) {
-                        buildView()
-                    }
-                }
-                buildView()
-            }
-            buildView()
+            reload()
         }
 
         debugButton.setOnClick {
             doDebugStuff()
         }
 
-        OldDataManager.shared.loadingProfileImage = true
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PLAYER, OldDataManagerType.CHARACTER, OldDataManagerType.SKILL_CATEGORIES), false) {
-            OldDataManager.shared.selectedPlayer = OldDataManager.shared.player
-            OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.PROFILE_IMAGE), false) {
-                buildView()
-            }
+        reload()
+    }
+
+    private fun reload() {
+        DataManager.shared.load(lifecycleScope, stepFinished = {
             buildView()
-        }
+        }, finished = {
+            buildView()
+            pullToRefresh.isRefreshing = false
+        })
         buildView()
     }
 
     private fun buildView() {
-        OldDataManager.shared.player.ifLet({
-            playerNameText.text = it.fullName.underline()
-            adminToolsNav.isGone = !it.isAdmin.toBoolean()
-        }, {
-            playerNameText.text = ""
-            adminToolsNav.isGone = true
-        })
+        if (DataManager.shared.loading) {
+            contentLayout.isGone = true
+            loadingLayout.isGone = false
+            loadingText.text = DataManager.shared.loadingText
 
-        profileImageProgressBar.isGone = !OldDataManager.shared.loadingProfileImage
+        } else {
+            contentLayout.isGone = false
+            loadingLayout.isGone = true
 
-        OldDataManager.shared.profileImage.ifLet {
-            if (it.playerId == OldDataManager.shared.selectedPlayer?.id) {
+            val player = DataManager.shared.getCurrentPlayer()!!
+            characterPanel.setValuesAndHideViews(DataManager.shared.getActiveCharacter(), player)
+            playerNameText.text = player.fullName.underline()
+            adminToolsNav.isGone = !player.isAdmin
+
+            player.profileImage.ifLet {
                 profileImage.setImageBitmap(it.image.toBitmap())
             }
+
+            debugButton.isGone = !Constants.Logging.showDebugButtonInAccountView
         }
-
-        playerStatsNav.isGone = !OldDataManager.shared.loadingPlayer && OldDataManager.shared.player == null
-        manageAccountNav.isGone = !OldDataManager.shared.loadingPlayer && OldDataManager.shared.player == null
-
-        playerStatsNav.setLoading(OldDataManager.shared.loadingPlayer)
-        manageAccountNav.setLoading(OldDataManager.shared.loadingPlayer)
-        personalSkillTree.setLoading(OldDataManager.shared.loadingCharacter)
-
-        charStatsNav.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-        skillManagementNav.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-        specialClassXpRedNav.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-        bioNav.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-        gearNav.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-        personalSkillTree.isGone = !OldDataManager.shared.loadingCharacter && OldDataManager.shared.character == null
-
-        charStatsNav.setLoading(OldDataManager.shared.loadingCharacter)
-        skillManagementNav.setLoading(OldDataManager.shared.loadingCharacter)
-        specialClassXpRedNav.setLoading(OldDataManager.shared.loadingCharacter)
-        bioNav.setLoading(OldDataManager.shared.loadingCharacter)
-        gearNav.setLoading(OldDataManager.shared.loadingCharacter)
-
-        characterPlannerNav.setLoading(OldDataManager.shared.loadingPlayer || OldDataManager.shared.loadingCharacter)
-
-        debugButton.isGone = !Constants.Logging.showDebugButtonInAccountView
     }
 
     private fun doDebugStuff() {

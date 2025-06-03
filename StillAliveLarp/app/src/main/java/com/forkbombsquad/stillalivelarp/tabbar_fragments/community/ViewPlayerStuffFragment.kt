@@ -23,6 +23,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.toBitmap
 
 class ViewPlayerStuffFragment : Fragment() {
+    // TODO convert to Fragment
     private val TAG = "VIEW_PLAYER_STUFF_FRAGMENT"
 
     private lateinit var profileImage: ImageView

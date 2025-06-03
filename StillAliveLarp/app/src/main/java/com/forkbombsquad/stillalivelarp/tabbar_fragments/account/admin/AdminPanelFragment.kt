@@ -43,6 +43,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
 class AdminPanelFragment : Fragment() {
+    // TODO convert to activity
     private val TAG = "ADMIN_PANEL_FRAGMENT"
 
     private lateinit var v: View
