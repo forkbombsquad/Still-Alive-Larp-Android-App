@@ -1,17 +1,38 @@
 package com.forkbombsquad.stillalivelarp.services.models
 
+import android.content.DialogInterface
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
+import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.utils.AlertButton
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.ButtonType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
+
+enum class CharacterType(val id: Int) {
+    STANDARD(1),
+    NPC(2),
+    PLANNER(3),
+    HIDDEN(4);
+
+    companion object {
+        private val map = values().associateBy(CharacterType::id)
+        fun fromId(id: Int): CharacterType? = map[id]
+    }
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FullCharacterModel(
@@ -45,7 +66,7 @@ data class FullCharacterModel(
     val xpReductions: List<XpReductionModel>
 ) : Serializable {
 
-    var skills: List<FullCharacterModifiedSkillModel> = listOf()
+    private var skills: List<FullCharacterModifiedSkillModel> = listOf()
         private set
 
     constructor(charModel: CharacterModel, allSkills: List<FullSkillModel>, charSkills: List<CharacterSkillModel>, gear: GearModel?, awards: List<AwardModel>, eventAttendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>, xpReductions: List<XpReductionModel>): this(
@@ -79,50 +100,228 @@ data class FullCharacterModel(
         xpReductions
     ) {
         val fcmSkills: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
-        charSkills.forEach { charSkill ->
-            allSkills.firstOrNull { it.id == charSkill.skillId }.ifLet {  baseFullSkill ->
-                val xpRed = xpReductions.firstOrNull { it.skillId == baseFullSkill.id }
-                fcmSkills.add(FullCharacterModifiedSkillModel(
-                    skill = baseFullSkill,
-                    charSkillModel = charSkills.firstOrNull { it.skillId == baseFullSkill.id },
-                    xpReduction =  xpRed,
-                    costOfCombatSkills(),
-                    costOfProfessionSkills(),
-                    costOfTalentSkills(),
-                    costOf50InfectSkills(),
-                    costOf75InfectSkills()
-                ))
-            }
+        allSkills.forEach { baseFullSkill ->
+            val xpRed = xpReductions.firstOrNull { it.skillId == baseFullSkill.id }
+            val charSkill = charSkills.first { it.skillId == baseFullSkill.id }
+            fcmSkills.add(FullCharacterModifiedSkillModel(
+                skill = baseFullSkill,
+                charSkillModel = charSkill,
+                xpReduction =  xpRed,
+                costOfCombatSkills(),
+                costOfProfessionSkills(),
+                costOfTalentSkills(),
+                costOf50InfectSkills(),
+                costOf75InfectSkills()
+            ))
         }
         this.skills = fcmSkills
     }
 
-    fun getAllSkillsAsCharacterModified(): List<FullCharacterModifiedSkillModel> {
-        val allSkills = DataManager.shared.skills.filter { skl -> skills.firstOrNull { skl.id == it.id } == null }
-        val cmfs: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
-        cmfs += skills
-        allSkills.forEach { skill ->
-            val xpRed = xpReductions.firstOrNull { it.skillId == skill.id }
-            cmfs.add(
-                FullCharacterModifiedSkillModel(
-                    skill = skill,
-                    charSkillModel = null,
-                    xpReduction =  xpRed,
-                    costOfCombatSkills(),
-                    costOfProfessionSkills(),
-                    costOfTalentSkills(),
-                    costOf50InfectSkills(),
-                    costOf75InfectSkills()
-                )
-            )
+    fun getSkill(id: Int): FullCharacterModifiedSkillModel? {
+        return skills.firstOrNull { it.id == id }
+    }
+    fun allSkillsWithCharacterModifications(): List<FullCharacterModifiedSkillModel> {
+        return skills
+    }
+    fun allPurchasedSkills(): List<FullCharacterModifiedSkillModel> {
+        return skills.filter { it.isPurchased() }
+    }
+
+    fun allNonPurchasedSkills(): List<FullCharacterModifiedSkillModel> {
+        return skills.filter { !it.isPurchased() }
+    }
+
+    fun attemptToPurchaseSkill(lifecycleScope: LifecycleCoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {
+        if (allPurchaseableSkills().firstOrNull { it.id == skill.id } != null) {
+            askToPurchase(skill) { cscm ->
+                cscm.ifLet({ charSkillCreateModel ->
+                    when (characterType()) {
+                        CharacterType.STANDARD -> { // Standard Characters
+                            val request = CharacterSkillService.TakeCharacterSkill()
+                            lifecycleScope.launch {
+                                request.successfulResponse(CharacterSkillCreateSP(playerId, charSkillCreateModel)).ifLet({ _ ->
+                                    AlertUtils.displayOkMessage(globalGetContext()!!, "Skill Successfully Purchased!", "$fullName now has possesses the skill ${skill.name}.") { _, _ -> }
+                                    completion(true)
+                                }, {
+                                    completion(false)
+                                })
+                            }
+                        }
+                        CharacterType.NPC, CharacterType.PLANNER -> { // NPC and Planned Characters
+                            val request = CharacterSkillService.TakePlannedCharacterSkill()
+                            lifecycleScope.launch {
+                                request.successfulResponse(CreateModelSP(charSkillCreateModel)).ifLet({ _ ->
+                                    AlertUtils.displayOkMessage(globalGetContext()!!, (characterType() == CharacterType.PLANNER).ternary("Skill Successfully Planned!", "Skill Successfully Added to NPC!"), "$fullName now has possesses the skill ${skill.name}.") { _, _ -> }
+                                    completion(true)
+                                }, {
+                                    completion(false)
+                                })
+                            }
+                        }
+                        CharacterType.HIDDEN -> {
+                            completion(false)
+                        }
+                    }
+                }, {
+                    completion(false)
+                })
+            }
+        } else {
+            completion(false)
         }
-        return cmfs
+    }
+
+    private fun askToPurchase(skill: FullCharacterModifiedSkillModel, completion: (char: CharacterSkillCreateModel?) -> Unit) {
+        var freeSkillPrompt = ""
+        var purchaseTitle = ""
+        var purchaseText = ""
+        when (characterType()) {
+            CharacterType.STANDARD -> {
+                freeSkillPrompt = "Use 1 Free Tier-1 Skill?"
+                purchaseText = "Purchase ${skill.name}"
+                purchaseTitle = "Confirm Purchase?"
+            }
+            CharacterType.NPC -> {
+                freeSkillPrompt = "Use NPC 1 Free Tier-1 Skill?"
+                purchaseText = "Purchase ${skill.name} For NPC"
+                purchaseTitle = "Confirm NPC Purchase?"
+            }
+            CharacterType.PLANNER -> {
+                freeSkillPrompt = "Plan to use 1 Free Tier-1 Skill?"
+                purchaseText = "Plan to purchase ${skill.name}"
+                purchaseTitle = "Confirm Planned Purchase?"
+            }
+            CharacterType.HIDDEN -> {
+                completion(null)
+                return
+            }
+        }
+        if (skill.canUseFreeSkill()) {
+            promptToUseFT1S(freeSkillPrompt) { useFT1S ->
+                useFT1S.ifLet({ useFreeSkill ->
+                    promptToPurchase(purchaseTitle, purchaseText, useFreeSkill, skill, completion)
+                }, {
+                    completion(null)
+                })
+            }
+        } else {
+            promptToPurchase(purchaseTitle, purchaseText, false, skill, completion)
+        }
+    }
+
+    private fun promptToUseFT1S(title: String, completion: (useFT1S: Boolean?) -> Unit) {
+        AlertUtils.displayChoiceMessage(globalGetContext()!!, title, arrayOf("Use Xp", "Use Free Tier-1 Skill")) { index ->
+            if (index == -1) {
+                // User hit cancel
+                completion(null)
+            } else {
+                completion(index == 1)
+            }
+
+        }
+    }
+
+    private fun promptToPurchase(title: String, purchaseText: String, useFreeSkill: Boolean, skill: FullCharacterModifiedSkillModel, completion: (charSkill: CharacterSkillCreateModel?) -> Unit) {
+        var message = "$purchaseText using:\n"
+
+        message += if (useFreeSkill) {
+            "1 Free Tier-1 Skill point"
+        } else {
+            "${skill.modXpCost()} Experience Point"
+        }
+
+        if (skill.usesPrestige()) {
+            message += " and ${skill.prestigeCost()} Prestige Point"
+        }
+        message += "?"
+
+        AlertUtils.displayOkCancelMessage(globalGetContext()!!, title, message, onClickOk = { _, _ ->
+            completion(
+                CharacterSkillCreateModel(
+                id,
+                skill.id,
+                useFreeSkill.ternary(0, skill.modXpCost()),
+                useFreeSkill.ternary(1, 0),
+                skill.prestigeCost()
+            ))
+        }, onClickCancel = { _, _ ->
+            completion(null)
+        })
+    }
+
+    fun allPurchaseableSkills(): List<FullCharacterModifiedSkillModel> {
+        val charSkills = allNonPurchasedSkills()
+        val player = DataManager.shared.players.first { it.id == playerId }
+
+        // Remove all skills you don't have prereqs for
+        var newSkillList = charSkills.filter { skillToKeep -> hasAllPrereqsForSkill(skillToKeep) }
+
+        // Planned and NPC characters don't require Prestige Points
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+            // Filter out pp skills you don't qualify for
+            newSkillList = newSkillList.filter { skillToKeep ->
+                skillToKeep.prestigeCost() <= player.prestigePoints
+            }
+        }
+
+
+        // Remove Choose One Skills that can't be chosen
+        val cskills: List<FullCharacterModifiedSkillModel> = getChooseOneSkills()
+        if (cskills.isEmpty()) { // Has none
+            // Remove all level 2 cskills if the character doesn't have a level 1 cskill.
+            newSkillList = newSkillList.filter { skillToKeep ->
+                !skillToKeep.id.equalsAnyOf(Constants.SpecificSkillIds.allLevel2SpecialistSkills)
+            }
+        } else if (cskills.count() == 2) { // Has 2
+            // Remove all cskills if a character already has taken 2
+            newSkillList = newSkillList.filter { skillToKeep ->
+                !skillToKeep.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
+            }
+        } else if (cskills.count() == 1) { // Has 1
+            val cskill = cskills.first()
+            var idsToRemove: Array<Int> = arrayOf()
+            when (cskill.id) {
+                Constants.SpecificSkillIds.expertCombat -> idsToRemove =
+                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertCombat
+
+                Constants.SpecificSkillIds.expertProfession -> idsToRemove =
+                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertProfession
+
+                Constants.SpecificSkillIds.expertTalent -> idsToRemove =
+                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertTalent
+            }
+            // Remove cskills not under your expert skill
+            newSkillList = newSkillList.filter { skillToKeep ->
+                !skillToKeep.id.equalsAnyOf(idsToRemove)
+            }
+        }
+
+        // Planned and NPC characters don't require xp, free skills, or infection
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+            // Filter out skills that you don't have enough xp, fs, or inf for
+            newSkillList = newSkillList.filter { skillToKeep ->
+                val keep = if (skillToKeep.modInfectionCost() > infection.toInt()) {
+                    false
+                } else if (skillToKeep.canUseFreeSkill() && player.freeTier1Skills > 0) {
+                    true
+                } else if (skillToKeep.modXpCost() > player.experience) {
+                    false
+                } else {
+                    false
+                }
+                keep
+            }
+        }
+        return newSkillList
+    }
+    fun characterType(): CharacterType {
+        return CharacterType.fromId(characterTypeId) ?: CharacterType.STANDARD
     }
 
     fun hasAllPrereqsForSkill(skill: FullCharacterModifiedSkillModel): Boolean {
         var hasAll = true
         skill.prereqs().forEach { skillModel ->
-            if (skills.firstOrNull { it.id == skillModel.id }?.alreadyPurchased() == false) {
+            if (skills.firstOrNull { it.id == skillModel.id }?.isPurchased() == false) {
                 hasAll = false
             }
         }

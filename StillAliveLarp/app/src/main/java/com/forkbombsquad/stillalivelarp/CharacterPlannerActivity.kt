@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
@@ -152,7 +153,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             unshakableResolveUses = "0",
             mysteriousStrangerUses = "0",
             playerId = OldDataManager.shared.player?.id ?: 0,
-            characterTypeId = Constants.CharacterTypes.Planner
+            characterTypeId = CharacterType.PLANNER.id
         )
 
         val request = CharacterService.CreatePlannedCharacter()

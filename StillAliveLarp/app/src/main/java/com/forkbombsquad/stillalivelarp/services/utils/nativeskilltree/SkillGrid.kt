@@ -19,6 +19,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
@@ -42,7 +43,6 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
     private var character: FullCharacterModel?
 
     private val skills: List<FullSkillModel>
-    private var allCMSkills: List<FullCharacterModifiedSkillModel> = listOf()
     private var purchaseableSkills: List<FullCharacterModifiedSkillModel> = listOf()
     private val gridCategories: MutableList<SkillGridCategory> = mutableListOf()
     private var trueGrid: List<GridSkill> = listOf()
@@ -324,68 +324,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         trueGrid = calculateTrueGrid()
 
         if (personal && allowPurchase) {
-            purchaseableSkills = getAvailableSkills()
-        }
-        allCMSkills = character?.getAllSkillsAsCharacterModified() ?: listOf()
-    }
-
-    private fun getAvailableSkills(): List<FullCharacterModifiedSkillModel> {
-        val charSkills = character?.skills?.filter { !it.alreadyPurchased() } ?: listOf()
-
-        // Remove all skills you don't have prereqs for
-        var newSkillList = charSkills.filter { skillToKeep ->
-            character?.hasAllPrereqsForSkill(skillToKeep) ?: false
-        }
-
-        // Filter out pp skills you don't qualify for
-        newSkillList = newSkillList.filter { skillToKeep ->
-            skillToKeep.prestigeCost() <= player.prestigePoints
-        }
-
-        // Remove Choose One Skills that can't be chosen
-        val cskills: List<FullCharacterModifiedSkillModel> = character?.getChooseOneSkills() ?: listOf()
-        if (cskills.isEmpty()) {
-            // Remove all level 2 cskills
-            newSkillList = newSkillList.filter { skillToKeep ->
-                !skillToKeep.id.equalsAnyOf(Constants.SpecificSkillIds.allLevel2SpecialistSkills)
-            }
-        } else if (cskills.count() == 2) {
-            // Remove all cskills
-            newSkillList = newSkillList.filter { skillToKeep ->
-                !skillToKeep.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
-            }
-        } else if (cskills.firstOrNull() != null) {
-            val cskill = cskills.first()
-            var idsToRemove: Array<Int> = arrayOf()
-            when (cskill.id) {
-                Constants.SpecificSkillIds.expertCombat -> idsToRemove =
-                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertCombat
-
-                Constants.SpecificSkillIds.expertProfession -> idsToRemove =
-                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertProfession
-
-                Constants.SpecificSkillIds.expertTalent -> idsToRemove =
-                    Constants.SpecificSkillIds.allSpecalistsNotUnderExpertTalent
-            }
-            // Remove cskills not under your exper skill
-            newSkillList = newSkillList.filter { skillToKeep ->
-                !skillToKeep.id.equalsAnyOf(idsToRemove)
-            }
-        }
-
-        // Filter out skills that you don't have enough xp, fs, or inf for
-        return newSkillList.filter { skillToKeep ->
-            var keep = true
-            keep = if (skillToKeep.modInfectionCost() > (character?.infection?.toInt() ?: 0)) {
-                false
-            } else if (skillToKeep.canUseFreeSkill() && player.freeTier1Skills > 0) {
-                true
-            } else if (skillToKeep.modXpCost() > player.experience) {
-                false
-            } else {
-                false
-            }
-            keep
+            purchaseableSkills = character?.allPurchaseableSkills() ?: listOf()
         }
     }
 
@@ -393,39 +332,39 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         var gradient: LinearGradient? = null
         when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> {
-                if ((personal && character?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
                     // Normal Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRed, darkRed, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRed, darkRed, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
                     // Dull Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRedDull, darkRedDull, Shader.TileMode.CLAMP)
-                } else if (personal) {
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRedDull, darkRedDull, Shader.TileMode.CLAMP)
+                } else {
                     // Grayscale
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
                 }
             }
             Constants.SkillTypes.profession -> {
-                if ((personal && character?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
                     // Normal Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreen, darkGreen, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreen, darkGreen, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
                     // Dull Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreenDull, darkGreenDull, Shader.TileMode.CLAMP)
-                } else if (personal) {
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreenDull, darkGreenDull, Shader.TileMode.CLAMP)
+                } else {
                     // Grayscale
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
                 }
             }
             Constants.SkillTypes.talent -> {
-                if ((personal && character?.skills?.firstOrNull { it.id == skill.id } != null) || !personal) {
+                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
                     // Normal Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlue, darkBlue, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlue, darkBlue, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
                     // Dull Color
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlueDull, darkBlueDull, Shader.TileMode.CLAMP)
-                } else if (personal) {
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlueDull, darkBlueDull, Shader.TileMode.CLAMP)
+                } else {
                     // Grayscale
-                    gradient = LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
+                    LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGrayDull, darkGrayDull, Shader.TileMode.CLAMP)
                 }
             }
         }
@@ -744,8 +683,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 heightSoFar += lineHeight + sectionSpacing
 
                 // Cost
-                val fcmSkill = allCMSkills.firstOrNull { fcm -> fcm.id == skill.id }
-                text = fcmSkill?.getFullCostText() ?: ""
+                text = character?.allSkillsWithCharacterModifications()?.firstOrNull { fcmsk -> fcmsk.id == it.skill.id }?.getFullCostText() ?: it.skill.getFullCostText()
 
                 outlineLayout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1103,7 +1041,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         if (!makingPurchase) {
             val pb = purchaseButton?.copy()
             if (pb != null && pb.rect.contains(x, y) && couldPurchaseSkill(pb.skill)) {
-                purchaseSkill(pb, context, lifecycleScope)
+                purchaseSkill(pb, lifecycleScope)
             } else {
                 val index = trueGrid.indexOfFirst { it.rect.contains(x, y) }
                 if (index == -1) { return }
@@ -1118,65 +1056,30 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         }
     }
 
-    private fun purchaseSkill(pb: TappablePurchaseButton, context: Context, lifecycleScope: LifecycleCoroutineScope) {
+    private fun purchaseSkill(pb: TappablePurchaseButton, lifecycleScope: LifecycleCoroutineScope) {
         makingPurchase = true
         dotHandler.post(dotRunnable)
-        var msgStr = "It will cost you "
-        val skl = pb.skill
-        var xpSpent = 0
-        var fsSpent = 0
-        var ppSpent = 0
-        if (skl.canUseFreeSkill() && player.freeTier1Skills > 0) {
-            msgStr += "1 Free Tier-1 Skill point (you have ${player.freeTier1Skills} FT1S)"
-            fsSpent = 1
-        } else {
-            msgStr += "${skl.modXpCost()}xp (you have ${player.experience}xp)"
-            xpSpent = skl.modXpCost()
-        }
+        val char = character!!
 
-        if (skl.usesPrestige()) {
-            msgStr += " and 1 Prestige point (you have ${player.prestigePoints}pp)"
-            ppSpent = 1
-        }
-        AlertUtils.displayOkCancelMessage(context, "Are you sure you want to purchase ${skl.name}?", msgStr, onClickOk = { _, _ ->
-            val charSkill = CharacterSkillCreateModel(
-                characterId = character!!.id,
-                skillId = skl.id,
-                xpSpent = xpSpent,
-                fsSpent = fsSpent,
-                ppSpent = ppSpent
-            )
-
-            val charTakeSkillRequest = CharacterSkillService.TakeCharacterSkill()
-            lifecycleScope.launch {
-                charTakeSkillRequest.successfulResponse(CharacterSkillCreateSP(player.id, charSkill)).ifLet({
-                    DataManager.shared.load(lifecycleScope) {
-                        AlertUtils.displayOkMessage(context, "${skl.name} Purchased!", "") { _, _ -> }
-                        player = DataManager.shared.getCurrentPlayer()!!
-                        if (character != null) {
-                            character = DataManager.shared.characters.firstOrNull { character!!.id == it.id }
-                            allCMSkills = character?.getAllSkillsAsCharacterModified() ?: listOf()
-                        }
-                        purchaseableSkills = getAvailableSkills()
-                        trueGrid = calculateTrueGrid()
-                        recalculateDottedLines()
-                        // TODO do I need to call an update callback?
-                        makingPurchase = false
-                        dotHandler.removeCallbacks(dotRunnable)
-                        invalidate()
-                    }
-                }, {
-                    AlertUtils.displaySomethingWentWrong(context)
+        char.attemptToPurchaseSkill(lifecycleScope, pb.skill) { successful ->
+            if (successful) {
+                DataManager.shared.load(lifecycleScope) {
+                    player = DataManager.shared.getCurrentPlayer()!!
+                    character = DataManager.shared.getCharacter(character!!.id)
+                    purchaseableSkills = character?.allPurchaseableSkills() ?: listOf()
+                    trueGrid = calculateTrueGrid()
+                    recalculateDottedLines()
+                    // TODO do I need to call an update callback?
                     makingPurchase = false
                     dotHandler.removeCallbacks(dotRunnable)
                     invalidate()
-                })
+                }
+            } else {
+                makingPurchase = false
+                dotHandler.removeCallbacks(dotRunnable)
+                invalidate()
             }
-        }, onClickCancel = { _, _ ->
-            makingPurchase = false
-            dotHandler.removeCallbacks(dotRunnable)
-            invalidate()
-        })
+        }
     }
 
     fun getExapnded(): GridSkill? {
@@ -1215,8 +1118,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         // Plus dividing line
         totalHeight += lineHeight + sectionSpacing
 
-        val fcmSkill = allCMSkills.firstOrNull { fcm -> fcm.id == skill.id }
-        text = fcmSkill?.getFullCostText() ?: ""
+        text = character?.allSkillsWithCharacterModifications()?.firstOrNull { fcmsk -> fcmsk.id == skill.id }?.getFullCostText() ?: skill.getFullCostText()
         layout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
             .setLineSpacing(1.5f, 1f)

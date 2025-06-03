@@ -33,15 +33,6 @@ class Constants {
         }
     }
 
-    class CharacterTypes {
-        companion object {
-            const val standard = 1
-            const val NPC = 2
-            const val Planner = 3
-            const val Hidden = 4
-        }
-    }
-
     class SpecificSkillCategories {
         companion object {
             const val BEGINNER_SKILLS = 1

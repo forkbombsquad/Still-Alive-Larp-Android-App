@@ -149,7 +149,7 @@ data class FullCharacterModifiedSkillModel(
         return skill.prereqs
     }
 
-    fun alreadyPurchased(): Boolean {
+    fun isPurchased(): Boolean {
         return charSkillModel != null
     }
 
@@ -304,17 +304,31 @@ data class FullSkillModel(
         }
         return when (filterType) {
             SkillFilterType.NONE -> true
-            SkillFilterType.COMBAT -> skillTypeId.toInt() == Constants.SkillTypes.combat
-            SkillFilterType.PROFESSION -> skillTypeId.toInt() == Constants.SkillTypes.profession
-            SkillFilterType.TALENT -> skillTypeId.toInt() == Constants.SkillTypes.talent
-            SkillFilterType.XP0 -> xpCost.toInt() == 0
-            SkillFilterType.XP1 -> xpCost.toInt() == 1
-            SkillFilterType.XP2 -> xpCost.toInt() == 2
-            SkillFilterType.XP3 -> xpCost.toInt() == 3
-            SkillFilterType.XP4 -> xpCost.toInt() == 4
-            SkillFilterType.PP -> prestigeCost.toInt() > 0
-            SkillFilterType.INF -> minInfection.toInt() > 0
+            SkillFilterType.COMBAT -> skillTypeId == Constants.SkillTypes.combat
+            SkillFilterType.PROFESSION -> skillTypeId == Constants.SkillTypes.profession
+            SkillFilterType.TALENT -> skillTypeId == Constants.SkillTypes.talent
+            SkillFilterType.XP0 -> xpCost == 0
+            SkillFilterType.XP1 -> xpCost == 1
+            SkillFilterType.XP2 -> xpCost == 2
+            SkillFilterType.XP3 -> xpCost == 3
+            SkillFilterType.XP4 -> xpCost == 4
+            SkillFilterType.PP -> prestigeCost > 0
+            SkillFilterType.INF -> minInfection > 0
         }
+    }
+
+    fun getFullCostText(): String {
+        var text = ""
+        text += "${xpCost}xp"
+        if (minInfection > 0) {
+            text += "\n"
+            text += "${minInfection}% Inf Threshold"
+        }
+        if (prestigeCost > 0) {
+            text += "\n"
+            text += "${prestigeCost}pp"
+        }
+        return text
     }
 
 }

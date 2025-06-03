@@ -7,6 +7,7 @@ import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.services.models.CharacterCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
@@ -77,7 +78,7 @@ class CreateCharacterActivity : NoStatusBarActivity() {
                                     unshakableResolveUses = "0",
                                     mysteriousStrangerUses = "0",
                                     playerId = player?.id ?: -1,
-                                    characterTypeId = Constants.CharacterTypes.standard
+                                    characterTypeId = CharacterType.STANDARD.id
                                 )
                             )
                         ).ifLet({

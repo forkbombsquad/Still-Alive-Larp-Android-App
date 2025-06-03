@@ -49,8 +49,8 @@ data class FullPlayerModel(
         profileImage
     )
 
-    fun getActiveCharacter(characterType: Int = Constants.CharacterTypes.standard): FullCharacterModel? {
-        return characters.firstOrNull { it.characterTypeId == characterType && it.isAlive }
+    fun getActiveCharacter(): FullCharacterModel? {
+        return characters.firstOrNull { it.characterType() == CharacterType.STANDARD && it.isAlive }
     }
 
     fun getAwardsSorted(): List<AwardModel> {

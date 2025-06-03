@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
@@ -45,7 +46,7 @@ class ViewBioActivity : NoStatusBarActivity() {
         val player = OldDataManager.shared.selectedPlayer
         val char = OldDataManager.shared.charForSelectedPlayer
 
-        edit.isGone = !(player?.id == OldDataManager.shared.player?.id && char?.characterTypeId == Constants.CharacterTypes.standard)
+        edit.isGone = !(player?.id == OldDataManager.shared.player?.id && char?.characterTypeId == CharacterType.STANDARD.id)
 
         title.text = "${char?.fullName ?: ""}'s\nBio"
         text.text = char?.bio ?: ""

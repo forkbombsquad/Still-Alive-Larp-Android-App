@@ -25,6 +25,7 @@ import com.forkbombsquad.stillalivelarp.services.SkillService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.UpdateTrackerService
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
@@ -107,7 +108,7 @@ class DataManager private constructor() {
     // Built Models that combine lots of different sub models
     var skills: List<FullSkillModel> = listOf()
     var events: List<FullEventModel> = listOf()
-    var characters: List<FullCharacterModel> = listOf()
+    private var characters: List<FullCharacterModel> = listOf()
     var players: List<FullPlayerModel> = listOf()
     var rulebook: Rulebook? = null
     var treatingWounds: Bitmap? = null
@@ -577,7 +578,9 @@ class DataManager private constructor() {
         }
     }
 
-    // Utility Methods
+    //
+    // Utility Functions
+    //
 
     fun setOfflineMode(enabled: Boolean) {
         offlineMode = enabled
@@ -592,12 +595,52 @@ class DataManager private constructor() {
         setCurrentPlayerId(player.id)
     }
 
+    fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
+        tv.text = offlineMode.ternary("Offline $baseText", baseText)
+    }
+
+    fun setUpdateCallback(key: KClass<*>, callback: () -> Unit) {
+        updateCallbacks[getFragmentOrActivityName(key)] = callback
+    }
+
+    fun clearUpdateCallback(key: KClass<*>) {
+        updateCallbacks.remove(getFragmentOrActivityName(key))
+    }
+
+    fun setPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, data: Any) {
+        passedData[getFragmentOrActivityName(key) + dataKey.toString()] = data
+    }
+
+    fun clearPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey) {
+        passedData.remove(getFragmentOrActivityName(key) + dataKey.toString())
+    }
+
+    //
+    // Getters
+    //
+
     fun getCurrentPlayer(): FullPlayerModel? {
         return players.firstOrNull { it.id == currentPlayerId }
     }
 
     fun getActiveCharacter(): FullCharacterModel? {
         return getCurrentPlayer()?.getActiveCharacter()
+    }
+
+    fun getAllCharacters(type: CharacterType): List<FullCharacterModel> {
+        return getAllCharacters(listOf(type))
+    }
+
+    fun getAllCharacters(types: List<CharacterType>): List<FullCharacterModel> {
+        return characters.filter { types.contains(it.characterType()) }
+    }
+
+    fun getAllCharacters(): List<FullCharacterModel> {
+        return getAllCharacters(CharacterType.values().toList())
+    }
+
+    fun getCharacter(id: Int): FullCharacterModel? {
+        return characters.firstOrNull { it.id == id }
     }
 
     fun getOngoingEvent(): FullEventModel? {
@@ -608,33 +651,16 @@ class DataManager private constructor() {
         return getOngoingEvent() ?: getEventToday()
     }
 
-    fun getEventToday(): FullEventModel? {
+    private fun getEventToday(): FullEventModel? {
         return events.firstOrNull { it.isToday() }
-    }
-
-    fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
-        tv.text = offlineMode.ternary("Offline $baseText", baseText)
     }
 
     fun getRelevantEvents(): List<FullEventModel> {
         return events.filter { it.isRelevant() }
     }
 
-    fun setUpdateCallback(key: KClass<*>, callback: () -> Unit) {
-        updateCallbacks[getFragmentOrActivityName(key)] = callback
-    }
-
     fun callUpdateCallback(key: KClass<*>) {
         updateCallbacks[getFragmentOrActivityName(key)]?.let { it() }
-    }
-
-
-    fun clearUpdateCallback(key: KClass<*>) {
-        updateCallbacks.remove(getFragmentOrActivityName(key))
-    }
-
-    fun setPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, data: Any) {
-        passedData[getFragmentOrActivityName(key) + dataKey.toString()] = data
     }
 
     inline fun <reified T> getPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, clear: Boolean = true): T? {
@@ -644,12 +670,6 @@ class DataManager private constructor() {
         }
         return data
     }
-
-    fun clearPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey) {
-        passedData.remove(getFragmentOrActivityName(key) + dataKey.toString())
-    }
-
-
 
 }
 

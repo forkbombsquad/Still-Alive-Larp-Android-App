@@ -113,6 +113,24 @@ class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() 
 
 }
 
+class NPCPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
+
+    override fun setImageUpdateDrawables() {
+        // TODO get character from stored data
+        img.updateDrawables(
+            SkillGrid(
+                DataManager.shared.skills,
+                personal = true,
+                allowPurchase = false,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+            ),
+            lifecycleScope
+        )
+    }
+
+}
+
 
 
 @SuppressLint("ClickableViewAccessibility")
