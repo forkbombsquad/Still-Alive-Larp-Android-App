@@ -69,6 +69,7 @@ class CommunityPlayersListFragment : Fragment() {
                 arrow.setLoading(false)
                 arrow.setOnClick {
                     OldDataManager.shared.selectedPlayer = player
+                    // TODO convert to activity
                     val frag = ViewPlayerStuffFragment.newInstance()
                     val transaction = parentFragmentManager.beginTransaction()
                     transaction.add(R.id.container, frag)

@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 
@@ -98,14 +99,13 @@ class PlannedCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity(
 class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
 
     override fun setImageUpdateDrawables() {
-        // TODO get character from stored data
         img.updateDrawables(
             SkillGrid(
                 DataManager.shared.skills,
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
-                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+                character = DataManager.shared.getPassedData(ViewPlayerActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )
@@ -123,7 +123,7 @@ class NPCPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
-                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+                character = DataManager.shared.getPassedData(ViewNPCStuffActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )

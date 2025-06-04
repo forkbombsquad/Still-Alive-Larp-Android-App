@@ -2,13 +2,16 @@ package com.forkbombsquad.stillalivelarp
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.utils.ResearchProjectCell
 
 class ViewResearchProjectsActivity : NoStatusBarActivity() {
 
     private lateinit var innerLayout: LinearLayout
+    private lateinit var title: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,16 +21,14 @@ class ViewResearchProjectsActivity : NoStatusBarActivity() {
 
     private fun setupView() {
         innerLayout = findViewById(R.id.rp_innerLayout)
-
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.RESEARCH_PROJECTS), false) {
-            buildView()
-        }
+        title = findViewById(R.id.rp_title)
         buildView()
     }
 
     private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "Research Projects")
         innerLayout.removeAllViews()
-        val projects = OldDataManager.shared.researchProjects?.sortedByDescending { it.id } ?: listOf()
+        val projects = DataManager.shared.researchProjects.sortedByDescending { it.id }
         projects.forEach { rp ->
             val rpCell = ResearchProjectCell(this)
             rpCell.setup(rp)

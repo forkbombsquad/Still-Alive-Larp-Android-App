@@ -51,10 +51,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.reflect.KClass
 
-enum class DataManagerPassedDataKey() {
+enum class DataManagerPassedDataKey {
     CHECKOUT_BARCODE,
     CHECKIN_BARCODE,
-    SELECTED_EVENT
+    SELECTED_EVENT,
+    SELECTED_PLAYER,
+    SELECTED_CHARACTER,
+    AWARDS_LIST
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -669,6 +672,16 @@ class DataManager private constructor() {
             clearPassedData(key, dataKey)
         }
         return data
+    }
+
+    inline fun <reified T> getPassedData(keys: List<KClass<*>>, dataKey: DataManagerPassedDataKey, clear: Boolean = true): T? {
+        keys.forEach { key ->
+            val data = getPassedData<T>(key, dataKey, clear)
+            if (data != null) {
+                return data
+            }
+        }
+        return null
     }
 
 }

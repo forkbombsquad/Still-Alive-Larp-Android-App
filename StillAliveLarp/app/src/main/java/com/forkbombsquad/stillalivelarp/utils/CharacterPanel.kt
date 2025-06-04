@@ -59,7 +59,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
                     }
                 }
                 CharacterType.NPC -> {
-                    acText = "(NPC)"
+                    acText = "(NPC${character.isAlive.ternary("", " - Dead")})"
                 }
                 CharacterType.PLANNER -> {
                     acText = "(Planned Character)"

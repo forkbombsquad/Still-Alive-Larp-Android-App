@@ -16,6 +16,9 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".ViewPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewResearchProjectsActivity"
             android:exported="false" />
         <activity

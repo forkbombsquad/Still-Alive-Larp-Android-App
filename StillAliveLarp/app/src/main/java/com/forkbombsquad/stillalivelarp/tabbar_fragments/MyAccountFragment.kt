@@ -22,6 +22,7 @@ import com.forkbombsquad.stillalivelarp.SpecialClassXpReductionsActivity
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
@@ -45,11 +46,13 @@ import com.forkbombsquad.stillalivelarp.utils.underline
 class MyAccountFragment : Fragment() {
     private val TAG = "MY_ACCOUNT_FRAGMENT"
 
+    private lateinit var accountTitle: TextView
+
     private lateinit var profileImage: ImageView
     private lateinit var playerNameText: TextView
-    private lateinit var characterPanel: CharacterPanel
-
     private lateinit var playerStatsNav: NavArrowButtonBlack
+    private lateinit var playerAwardsNav: NavArrowButtonBlack
+    private lateinit var characterPanel: CharacterPanel
 
     private lateinit var manageAccountNav: NavArrowButtonBlack
     private lateinit var adminToolsNav: NavArrowButtonRed
@@ -76,6 +79,9 @@ class MyAccountFragment : Fragment() {
         loadingLayout = v.findViewById(R.id.loadingView)
         loadingText = v.findViewById(R.id.loadingText)
 
+        accountTitle = v.findViewById(R.id.account_title)
+        playerAwardsNav = v.findViewById(R.id.myaccount_viewAwards)
+
         profileImage = v.findViewById(R.id.myAccountProfileImage)
         playerNameText = v.findViewById(R.id.myAccountPlayerName)
         playerStatsNav = v.findViewById(R.id.myaccount_playerStatsNavArrow)
@@ -95,14 +101,21 @@ class MyAccountFragment : Fragment() {
         }
         playerStatsNav.setOnClick {
             // TODO convert this to an activity
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
             val frag = PlayerStatsFragment.newInstance()
             val transaction = parentFragmentManager.beginTransaction()
             transaction.add(R.id.container, frag)
             transaction.addToBackStack(TAG).commit()
         }
+        playerAwardsNav.setOnClick {
+            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, DataManager.shared.getCurrentPlayer()!!.awards)
+
+        }
         characterPanel.setOnClicks(
             viewStatsCallback = {
                 // TODO convert this to an activity
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
                 val frag = CharacterStatsFragment.newInstance()
                 val transaction = parentFragmentManager.beginTransaction()
                 transaction.add(R.id.container, frag)
@@ -120,6 +133,7 @@ class MyAccountFragment : Fragment() {
                 DataManager.shared.setUpdateCallback(this::class) {
                     reload()
                 }
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
                 val frag = SkillManagementFragment.newInstance()
                 val transaction = parentFragmentManager.beginTransaction()
                 transaction.add(R.id.container, frag)
@@ -129,20 +143,25 @@ class MyAccountFragment : Fragment() {
                 DataManager.shared.setUpdateCallback(this::class) {
                     reload()
                 }
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
                 val intent = Intent(v.context, ViewBioActivity::class.java)
                 startActivity(intent)
             },
             viewGearCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
                 val intent = Intent(v.context, ViewGearActivity::class.java)
                 startActivity(intent)
             },
             viewAwardsCallback = {
                 // TODO
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, DataManager.shared.getActiveCharacter()!!.awards)
             },
             viewInactiveCharsCallback = {
                 // TODO
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
             },
             viewPlannedCharsCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
                 val intent = Intent(v.context, CharacterPlannerActivity::class.java)
                 startActivity(intent)
             }
@@ -185,6 +204,7 @@ class MyAccountFragment : Fragment() {
     }
 
     private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(accountTitle, "My Account")
         if (DataManager.shared.loading) {
             contentLayout.isGone = true
             loadingLayout.isGone = false

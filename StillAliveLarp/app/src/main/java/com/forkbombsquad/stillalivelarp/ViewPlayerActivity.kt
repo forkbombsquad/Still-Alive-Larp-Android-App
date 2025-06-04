@@ -1,0 +1,96 @@
+package com.forkbombsquad.stillalivelarp
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityPlayersListFragment
+import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.toBitmap
+
+class ViewPlayerActivity : NoStatusBarActivity() {
+
+    private lateinit var title: TextView
+    private lateinit var profileImage: ImageView
+    private lateinit var playerStats: NavArrowButtonBlack
+    private lateinit var playerAwards: NavArrowButtonBlack
+    private lateinit var characterPanel: CharacterPanel
+
+    private lateinit var player: FullPlayerModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_view_player)
+        setupView()
+    }
+
+    private fun setupView() {
+        // TODO change this to be the player list activity
+        player = DataManager.shared.getPassedData(CommunityPlayersListFragment::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
+
+        title = findViewById(R.id.viewplayer_title)
+        profileImage = findViewById(R.id.playerview_profileImage)
+        playerStats = findViewById(R.id.playerview_stats)
+        playerAwards = findViewById(R.id.playerview_viewAwards)
+        characterPanel = findViewById(R.id.playerview_charPanel)
+
+        playerStats.setOnClick {
+            // TODO view stats activity
+        }
+
+        playerAwards.setOnClick {
+            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.awards)
+        }
+
+        characterPanel.setOnClicks(
+            viewStatsCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                // TODO view stats activity
+            },
+            viewSkillsTreeCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                val intent = Intent(this, OtherCharacterPersonalNativeSkillTreeActivity::class.java)
+                startActivity(intent)
+            },
+            viewSkillsListCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                // TODO view skills activity
+            },
+            viewBioCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                val intent = Intent(this, ViewBioActivity::class.java)
+                startActivity(intent)
+            },
+            viewGearCallback = {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                val intent = Intent(this, ViewGearActivity::class.java)
+                startActivity(intent)
+            },
+            viewAwardsCallback = {
+                // TODO
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getActiveCharacter()!!.awards)
+            },
+            viewInactiveCharsCallback = {
+                // TODO
+            },
+            viewPlannedCharsCallback = {
+                // TODO
+            }
+        )
+
+        buildView()
+    }
+
+    private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(title, player.fullName)
+        player.profileImage.ifLet {
+            profileImage.setImageBitmap(it.image.toBitmap())
+        }
+        characterPanel.setValuesAndHideViews(player.getActiveCharacter(), player)
+    }
+}

@@ -50,6 +50,10 @@ import java.util.Base64
 private typealias DMT = DataManagerType
 class LocalDataManager private constructor() {
     companion object {
+
+        // TODO update this number if any of the models change between releases
+        const val LOCAL_DATA_VERSION = "1"
+
         var shared = LocalDataManager()
             private set
 
@@ -99,11 +103,11 @@ class LocalDataManager private constructor() {
     }
 
     private fun getSharedPrefs(): SharedPreferences {
-        return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey, Context.MODE_PRIVATE)
+        return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE)
     }
 
     private fun getSharedPrefsEditor(): SharedPreferences.Editor {
-        return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey, Context.MODE_PRIVATE).edit()
+        return globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE).edit()
     }
 
     private fun clear(key: String) {

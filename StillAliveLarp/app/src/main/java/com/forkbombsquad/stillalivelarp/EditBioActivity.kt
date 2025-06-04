@@ -3,6 +3,9 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.CharacterService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -16,6 +19,8 @@ class EditBioActivity : NoStatusBarActivity() {
     private lateinit var text: TextInputEditText
     private lateinit var updateButton: LoadingButton
 
+    private lateinit var character: FullCharacterModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_bio)
@@ -23,27 +28,28 @@ class EditBioActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        character = DataManager.shared.getPassedData(ViewBioActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         text = findViewById(R.id.editbio_text)
         updateButton = findViewById(R.id.editbio_update)
 
         updateButton.setOnClick {
-            OldDataManager.shared.character.ifLet({
-                updateButton.setLoading(true)
-                val char = it.getBaseModel()
-                char.bio = text.text.toString()
-                char.approvedBio = "FALSE"
-                val updateBioRequest = CharacterService.UpdateCharacterBio()
-                lifecycleScope.launch {
-                    updateBioRequest.successfulResponse(CharacterSP(char)).ifLet({
+            updateButton.setLoading(true)
+            val char = character.baseModel()
+            char.bio = text.text.toString()
+            char.approvedBio = "FALSE"
+            val updateBioRequest = CharacterService.UpdateCharacterBio()
+            lifecycleScope.launch {
+                updateBioRequest.successfulResponse(CharacterSP(char)).ifLet({ _ ->
+                    DataManager.shared.load(lifecycleScope) {
+                        DataManager.shared.callUpdateCallback(ViewBioActivity::class)
                         AlertUtils.displayOkMessage(this@EditBioActivity, "Success", "${char.fullName}'s bio was updated!") { _, _ ->
                             finish()
                         }
-                        OldDataManager.shared.unrelaltedUpdateCallback()
-                    }, {
-                        updateButton.setLoading(false)
-                    })
-                }
-            },{})
+                    }
+                }, {
+                    updateButton.setLoading(false)
+                })
+            }
         }
 
         buildView()
@@ -51,11 +57,7 @@ class EditBioActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         text.hint = "Bio\n(Optional, but if your bio is approved, you will earn 1 additional experience)"
-        text.setText(OldDataManager.shared.character?.bio ?: "")
+        text.setText(character.bio)
     }
 
-    override fun onBackPressed() {
-        OldDataManager.shared.unrelaltedUpdateCallback()
-        super.onBackPressed()
-    }
 }

@@ -25,6 +25,8 @@ import com.forkbombsquad.stillalivelarp.utils.underline
 class CommunityFragment : Fragment() {
     private val TAG = "COMMUNITY_FRAGMENT"
 
+    private lateinit var communityTitle: TextView
+
     private lateinit var allPlayersButton: NavArrowButtonBlack
     private lateinit var campStatusButton: NavArrowButtonBlack
     private lateinit var allNPCsButton: NavArrowButtonBlack
@@ -48,12 +50,15 @@ class CommunityFragment : Fragment() {
         loadingLayout = v.findViewById(R.id.loadingView)
         loadingText = v.findViewById(R.id.loadingText)
 
+        communityTitle = v.findViewById(R.id.community_title)
+
         allPlayersButton = v.findViewById(R.id.community_allPlayersButton)
         campStatusButton = v.findViewById(R.id.community_campStatusButton)
         allNPCsButton = v.findViewById(R.id.community_npcsButton)
         researchProjects = v.findViewById(R.id.community_researchProjects)
 
         allPlayersButton.setOnClick {
+            // TODO convert to activity
             val frag = CommunityPlayersListFragment.newInstance()
             val transaction = parentFragmentManager.beginTransaction()
             transaction.add(R.id.container, frag)
@@ -87,6 +92,7 @@ class CommunityFragment : Fragment() {
     }
 
     private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(communityTitle, "Community")
         if (DataManager.shared.loading) {
             contentLayout.isGone = true
             loadingLayout.isGone = false

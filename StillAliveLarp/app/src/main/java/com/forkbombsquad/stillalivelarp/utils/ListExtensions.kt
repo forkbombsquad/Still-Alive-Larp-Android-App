@@ -4,8 +4,8 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
-import com.forkbombsquad.stillalivelarp.services.models.OldFullCharacterModel
-import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 
 fun <T> List<T>.doesNotContain(value: T): Boolean {
@@ -32,7 +32,7 @@ fun List<CharacterModel>.alphabetized(): List<CharacterModel> {
 }
 
 @JvmName("alphabetizedFullCharacterModel")
-fun List<OldFullCharacterModel>.alphabetized(): List<OldFullCharacterModel> {
+fun List<FullCharacterModel>.alphabetized(): List<FullCharacterModel> {
     return this.sortedWith(compareBy { it.fullName })
 }
 
@@ -41,7 +41,7 @@ fun List<EventModel>.inChronologicalOrder(): List<EventModel> {
 }
 
 @JvmName("alphabetizedFullSkillsModel")
-fun List<OldFullSkillModel>.alphabetized(): List<OldFullSkillModel> {
+fun List<FullSkillModel>.alphabetized(): List<FullSkillModel> {
     return this.sortedWith(compareBy { it.name })
 }
 

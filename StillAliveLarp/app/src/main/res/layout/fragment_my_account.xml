@@ -25,6 +25,7 @@
                 android:paddingRight="16dp">
 
                 <TextView
+                    android:id="@+id/account_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -117,6 +118,22 @@
                         android:textAlignment="center"
                         android:textSize="24sp" />
 
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/myaccount_playerStatsNavArrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="View Player Stats"
+                        app:showLoading="false"/>
+
+                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                        android:id="@+id/myaccount_viewAwards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        app:text="View Player Awards"
+                        app:showLoading="false"/>
+
                     <com.forkbombsquad.stillalivelarp.utils.CharacterPanel
                         android:id="@+id/myaccount_charPanel"
                         android:layout_width="match_parent"
@@ -131,14 +148,6 @@
                         android:textSize="24sp"
                         android:textColor="@color/black"
                         android:textAlignment="textStart"/>
-
-                    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                        android:id="@+id/myaccount_playerStatsNavArrow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        app:text="Player Stats"
-                        app:showLoading="false"/>
 
                     <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                         android:id="@+id/myaccount_manageAccountNavArrow"

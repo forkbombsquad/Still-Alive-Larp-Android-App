@@ -9,14 +9,19 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 
 import com.forkbombsquad.stillalivelarp.utils.GearCell
 
 class ViewGearActivity : NoStatusBarActivity() {
 
     private lateinit var title: TextView
-    private lateinit var progressbar: ProgressBar
     private lateinit var layout: LinearLayout
+
+    private lateinit var character: FullCharacterModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,45 +31,34 @@ class ViewGearActivity : NoStatusBarActivity() {
 
     private fun setupView() {
         title = findViewById(R.id.gear_title)
-        progressbar = findViewById(R.id.gear_progressbar)
         layout = findViewById(R.id.gear_layout)
 
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SELECTED_CHARACTER_GEAR), true) {
-            buildView()
-        }
+        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         buildView()
     }
 
     private fun buildView() {
-        title.text = "${OldDataManager.shared.selectedChar?.fullName ?: ""}'s Gear"
-        if (OldDataManager.shared.loadingSelectedCharacterGear) {
-            progressbar.isGone = false
-            layout.isGone = true
-        } else {
-            progressbar.isGone = true
-            layout.isGone = false
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s Gear")
+        layout.removeAllViews()
+        val gearList = character.getGearOrganized()
+        gearList.forEach { (key, list) ->
+            val textView = TextView(this)
+            val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            tvParams.setMargins(0, 8, 0, 8)
+            textView.layoutParams = tvParams
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+            textView.setTypeface(null, Typeface.BOLD)
+            textView.setTextColor(Color.BLACK)
+            textView.text = key
+            layout.addView(textView)
 
-            layout.removeAllViews()
-            val gearList = OldDataManager.shared.getGearOrganzied()
-            gearList.forEach { (key, list) ->
-                val textView = TextView(this)
-                val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                tvParams.setMargins(0, 8, 0, 8)
-                textView.layoutParams = tvParams
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-                textView.setTypeface(null, Typeface.BOLD)
-                textView.setTextColor(Color.BLACK)
-                textView.text = key
-                layout.addView(textView)
-
-                list.forEach { g ->
-                    val gearCell = GearCell(this)
-                    gearCell.setup(g)
-                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    params.setMargins(0, 8, 0, 8)
-                    gearCell.layoutParams = params
-                    layout.addView(gearCell)
-                }
+            list.forEach { g ->
+                val gearCell = GearCell(this)
+                gearCell.setup(g)
+                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                params.setMargins(0, 8, 0, 8)
+                gearCell.layoutParams = params
+                layout.addView(gearCell)
             }
         }
     }
