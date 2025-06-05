@@ -11,7 +11,9 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.NPCListActivity
+import com.forkbombsquad.stillalivelarp.PlayersListActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -26,6 +28,8 @@ class CommunityFragment : Fragment() {
     private val TAG = "COMMUNITY_FRAGMENT"
 
     private lateinit var communityTitle: TextView
+
+    private lateinit var pullToRefresh: SwipeRefreshLayout
 
     private lateinit var allPlayersButton: NavArrowButtonBlack
     private lateinit var campStatusButton: NavArrowButtonBlack
@@ -46,6 +50,8 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
+        pullToRefresh = v.findViewById(R.id.pulltorefresh_community)
+
         contentLayout = v.findViewById(R.id.contentlayout)
         loadingLayout = v.findViewById(R.id.loadingView)
         loadingText = v.findViewById(R.id.loadingText)
@@ -57,12 +63,13 @@ class CommunityFragment : Fragment() {
         allNPCsButton = v.findViewById(R.id.community_npcsButton)
         researchProjects = v.findViewById(R.id.community_researchProjects)
 
+        pullToRefresh.setOnRefreshListener {
+            reload()
+        }
+
         allPlayersButton.setOnClick {
-            // TODO convert to activity
-            val frag = CommunityPlayersListFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
+            val intent = Intent(v.context, PlayersListActivity::class.java)
+            startActivity(intent)
         }
 
         campStatusButton.setOnClick {
@@ -87,6 +94,7 @@ class CommunityFragment : Fragment() {
             buildView()
         }, finished = {
             buildView()
+            pullToRefresh.isRefreshing = false
         })
         buildView()
     }

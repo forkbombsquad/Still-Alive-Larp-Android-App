@@ -15,8 +15,6 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
 
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.CharacterStatsFragment
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.PlayerStatsFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet

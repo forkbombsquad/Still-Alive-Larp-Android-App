@@ -21,6 +21,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:gravity="start|center_vertical"
+            android:layout_gravity="center_vertical"
             android:text="This is the Key "/>
 
         <TextView
@@ -34,7 +35,8 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:gravity="end|center_vertical"
-            android:text="This is the value"/>
+            android:layout_gravity="center_vertical"
+            android:text="This is the value\nwith a new line"/>
 
     </LinearLayout>
 

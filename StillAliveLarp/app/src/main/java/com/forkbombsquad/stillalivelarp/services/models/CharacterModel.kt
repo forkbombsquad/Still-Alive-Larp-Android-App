@@ -121,6 +121,18 @@ data class FullCharacterModel(
         return CharacterModel(this)
     }
 
+    fun getSpentXp(): Int {
+        return allPurchasedSkills().sumOf { it.spentXp() }
+    }
+
+    fun getSpentFt1s(): Int {
+        return allPurchasedSkills().sumOf { it.spentFt1s() }
+    }
+
+    fun getSpentPp(): Int {
+        return allPurchasedSkills().sumOf { it.spentPp() }
+    }
+
     fun getSkill(id: Int): FullCharacterModifiedSkillModel? {
         return skills.firstOrNull { it.id == id }
     }

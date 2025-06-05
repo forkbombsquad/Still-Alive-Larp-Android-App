@@ -26,6 +26,18 @@ data class FullCharacterModifiedSkillModel(
     val skillTypeId = skill.skillTypeId
     val description = skill.description
 
+    fun spentXp(): Int {
+        return charSkillModel?.xpSpent ?: 0
+    }
+
+    fun spentFt1s(): Int {
+        return charSkillModel?.fsSpent ?: 0
+    }
+
+    fun spentPp(): Int {
+        return charSkillModel?.ppSpent ?: 0
+    }
+
     fun prestigeCost(): Int {
         return skill.prestigeCost
     }

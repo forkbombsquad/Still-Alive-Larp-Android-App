@@ -46,6 +46,10 @@ class KeyValueView(context: Context, attrs: AttributeSet): LinearLayout(context,
         set(keyView.text.toString(), value, !div.isGone)
     }
 
+    fun set(value: Int) {
+        set(value.toString())
+    }
+
     fun setAndHideIfEmpty(value: String) {
         set(keyView.text.toString(), value, !div.isGone)
         this.isGone = value.isEmpty()

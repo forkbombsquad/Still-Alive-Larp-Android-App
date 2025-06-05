@@ -46,6 +46,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.select.Evaluator.Id
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -616,6 +617,14 @@ class DataManager private constructor() {
 
     fun clearPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey) {
         passedData.remove(getFragmentOrActivityName(key) + dataKey.toString())
+    }
+
+    fun playerIsCurrentPlayer(id: Int): Boolean {
+        return id == currentPlayerId
+    }
+
+    fun playerIsCurrentPlayer(player: FullPlayerModel): Boolean {
+        return playerIsCurrentPlayer(player.id)
     }
 
     //

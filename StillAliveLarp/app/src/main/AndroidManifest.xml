@@ -16,6 +16,15 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".ViewCharacterStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewPlayerStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlayersListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewPlayerActivity"
             android:exported="false" />
         <activity

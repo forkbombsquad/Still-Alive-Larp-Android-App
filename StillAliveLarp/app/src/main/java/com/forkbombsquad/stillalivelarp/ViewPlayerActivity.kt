@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityPlayersListFragment
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -29,8 +28,7 @@ class ViewPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        // TODO change this to be the player list activity
-        player = DataManager.shared.getPassedData(CommunityPlayersListFragment::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
+        player = DataManager.shared.getPassedData(PlayersListActivity::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
 
         title = findViewById(R.id.viewplayer_title)
         profileImage = findViewById(R.id.playerview_profileImage)
@@ -39,7 +37,9 @@ class ViewPlayerActivity : NoStatusBarActivity() {
         characterPanel = findViewById(R.id.playerview_charPanel)
 
         playerStats.setOnClick {
-            // TODO view stats activity
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, player)
+            val intent = Intent(this, ViewPlayerStatsActivity::class.java)
+            startActivity(intent)
         }
 
         playerAwards.setOnClick {
@@ -50,7 +50,8 @@ class ViewPlayerActivity : NoStatusBarActivity() {
         characterPanel.setOnClicks(
             viewStatsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
-                // TODO view stats activity
+                val intent = Intent(this, ViewCharacterStatsActivity::class.java)
+                startActivity(intent)
             },
             viewSkillsTreeCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)

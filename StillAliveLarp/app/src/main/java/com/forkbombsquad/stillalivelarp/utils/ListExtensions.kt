@@ -5,6 +5,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 
@@ -20,6 +21,12 @@ fun <T> List<T>.doesNotContain(values: List<T>): Boolean {
     }
     return true
 }
+
+@JvmName("alphabetizedFullPlayerModel")
+fun List<FullPlayerModel>.alphabetized(): List<FullPlayerModel> {
+    return this.sortedWith(compareBy { it.fullName })
+}
+
 
 @JvmName("alphabetizedPlayerModel")
 fun List<PlayerModel>.alphabetized(): List<PlayerModel> {

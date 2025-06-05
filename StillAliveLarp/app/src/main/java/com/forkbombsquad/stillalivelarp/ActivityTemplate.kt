@@ -14,9 +14,6 @@ class ActivityTemplate : NoStatusBarActivity() {
 
     private fun setupView() {
 
-        OldDataManager.shared.load(lifecycleScope, listOf(), false) {
-            buildView()
-        }
         buildView()
     }
 

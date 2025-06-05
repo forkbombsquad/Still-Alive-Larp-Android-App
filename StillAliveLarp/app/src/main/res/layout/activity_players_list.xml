@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".tabbar_fragments.CommunityPlayersListFragment">
-
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/pulltorefresh_community"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    tools:context=".PlayersListActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,6 +20,7 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/playerslist_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -33,28 +30,13 @@
                 android:textAlignment="center"/>
 
             <LinearLayout
+                android:id="@+id/playerslist_innerlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ProgressBar
-                    android:id="@+id/community_loadingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
-
-                <LinearLayout
-                    android:id="@+id/community_playerlistlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-            </LinearLayout>
+                android:orientation="vertical"/>
 
         </LinearLayout> <!-- BEFORE THIS ONE-->
 
     </ScrollView>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
