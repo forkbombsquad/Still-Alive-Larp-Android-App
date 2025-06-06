@@ -19,6 +19,7 @@ import com.forkbombsquad.stillalivelarp.PersonalNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
+import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
@@ -124,15 +125,12 @@ class MyAccountFragment : Fragment() {
                 startActivity(intent)
             },
             viewSkillsListCallback = {
-                // TODO convert to activity
                 DataManager.shared.setUpdateCallback(this::class) {
                     reload()
                 }
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
-                val frag = SkillManagementFragment.newInstance()
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.add(R.id.container, frag)
-                transaction.addToBackStack(TAG).commit()
+                val intent = Intent(v.context, ViewSkillsActivity::class.java)
+                startActivity(intent)
             },
             viewBioCallback = {
                 DataManager.shared.setUpdateCallback(this::class) {

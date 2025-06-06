@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
@@ -50,18 +51,20 @@ class SkillCell(context: Context): LinearLayout(context) {
         purchaseButton = findViewById(R.id.skillcell_purchaseButton)
     }
 
-    fun setup(skill: FullSkillModel) {
+    fun setup(skill: FullCharacterModifiedSkillModel) {
         title.text = skill.name
         type.text = skill.getTypeText()
 
         infoLayout.isGone = false
+        purchaseButton.isGone = true
+        purchaseLayout.isGone = true
 
-        xp.text = "${skill.xpCost}xp"
-        pp.text = "${skill.prestigeCost}pp"
-        inf.text = "${skill.minInfection}% Inf Threshold"
+        xp.text = skill.getXpCostText()
+        pp.text = "and ${skill.getPrestigeCostText()}"
+        inf.text = skill.getInfCostText()
 
-        pp.isGone = skill.prestigeCost == 0
-        inf.isGone = skill.minInfection == 0
+        pp.isGone = skill.prestigeCost() == 0
+        inf.isGone = skill.modInfectionCost() == 0
 
         when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> type.setTextColor(context.getColor(R.color.bright_red))
@@ -69,13 +72,11 @@ class SkillCell(context: Context): LinearLayout(context) {
             Constants.SkillTypes.talent -> type.setTextColor(context.getColor(R.color.blue))
         }
 
-        prereqLayout.isGone = skill.prereqs.isEmpty()
+        prereqLayout.isGone = skill.prereqs().isEmpty()
         prereqs.text = skill.getPrereqNames()
 
         desc.text = skill.description
 
-        purchaseButton.isGone = true
-        purchaseLayout.isGone = true
     }
 
     fun setupForXpReduction(skill: FullCharacterModifiedSkillModel, buttonCallback: (skill: FullCharacterModifiedSkillModel) -> Unit) {
@@ -83,6 +84,7 @@ class SkillCell(context: Context): LinearLayout(context) {
         type.text = skill.getTypeText()
 
         infoLayout.isGone = false
+        purchaseLayout.isGone = true
 
         xp.text = skill.getXpCostText()
         pp.text = skill.getPrestigeCostText()
@@ -110,49 +112,41 @@ class SkillCell(context: Context): LinearLayout(context) {
                 buttonCallback(skill)
             }
         }
-
-        purchaseLayout.isGone = true
     }
 
-    fun setupForPurchase(skill: FullCharacterModifiedSkillModel, player: PlayerModel, buttonCallback: (skill: FullCharacterModifiedSkillModel) -> Unit) {
+    fun setupForPurchase(skill: FullCharacterModifiedSkillModel, player: FullPlayerModel, forPlannedCharacterOrNPC: Boolean = false, buttonCallback: (skill: FullCharacterModifiedSkillModel) -> Unit) {
         title.text = skill.name
         type.text = skill.getTypeText()
 
         purchaseLayout.isGone = false
         purchaseButton.isGone = false
+        infoLayout.isGone = true
 
         purchaseButton.setOnClick {
             buttonCallback(skill)
         }
 
-        if (skill.canUseFreeSkill() && player.freeTier1Skills.toInt() > 0) {
-            purchaseCost.text = "Cost: 1 Free Tier-1 Skill"
+        val xpText = skill.getXpCostText(player.freeTier1Skills > 0 && !forPlannedCharacterOrNPC)
+        purchaseCost.text = xpText
+        if (xpText.containsIgnoreCase("free")) {
             purchaseCost.setTextColor(context.getColor(R.color.green))
         } else if (skill.hasModCost()) {
-            purchaseCost.text = skill.getXpCostText()
             purchaseCost.setTextColor(getColorForXp(skill))
         } else {
-            purchaseCost.text = skill.getXpCostText()
             purchaseCost.setTextColor(context.getColor(R.color.black))
         }
 
+        purchasePpCost.text = skill.getPrestigeCostText()
+        purchasePpCost.setTextColor(context.getColor(R.color.blue))
         purchasePpCost.isGone = !skill.usesPrestige()
 
-        if (skill.usesPrestige()) {
-            purchasePpCost.text = "and ${skill.prestigeCost()}pp"
-            purchasePpCost.setTextColor(context.getColor(R.color.blue))
+        purchaseInfThreshold.text = "${forPlannedCharacterOrNPC.ternary("Will Require: ", "Your Infection Rating meets the required")} ${skill.getInfCostText()}"
+        if (skill.hasModInfCost()) {
+            purchaseInfThreshold.setTextColor(getColorForInf(skill))
+        } else {
+            purchaseInfThreshold.setTextColor(context.getColor(R.color.black))
         }
-
         purchaseInfThreshold.isGone = !skill.usesInfection()
-        if (skill.usesInfection()) {
-            if (skill.hasModInfCost()) {
-                purchaseInfThreshold.text = "Your infection rating meets the required ${skill.getInfCostText()}"
-                purchaseInfThreshold.setTextColor(getColorForInf(skill))
-            } else {
-                purchaseInfThreshold.text = "Your infection rating meets the required ${skill.getInfCostText()}"
-                purchaseInfThreshold.setTextColor(context.getColor(R.color.black))
-            }
-        }
 
         when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> type.setTextColor(context.getColor(R.color.bright_red))
@@ -160,64 +154,10 @@ class SkillCell(context: Context): LinearLayout(context) {
             Constants.SkillTypes.talent -> type.setTextColor(context.getColor(R.color.blue))
         }
 
-        prereqLayout.isGone = !skill.hasPrereqs()
         prereqs.text = skill.getPrereqNames()
-        desc.text = skill.description
-
-        infoLayout.isGone = true
-    }
-
-    fun setupForPlannedPurchase(skill: FullCharacterModifiedSkillModel, buttonCallback: (skill: FullCharacterModifiedSkillModel) -> Unit) {
-        title.text = skill.name
-        type.text = skill.getTypeText()
-
-        purchaseLayout.isGone = false
-        purchaseButton.isGone = false
-
-        purchaseButton.setOnClick {
-            buttonCallback(skill)
-        }
-
-        if (skill.canUseFreeSkill()) {
-            purchaseCost.text = "Cost: 1 Free Tier-1 Skill or ${skill.getXpCostText()}"
-            purchaseCost.setTextColor(context.getColor(R.color.green))
-        } else if (skill.hasModCost()) {
-            purchaseCost.text = skill.getXpCostText()
-            purchaseCost.setTextColor(getColorForXp(skill))
-        } else {
-            purchaseCost.text = skill.getXpCostText()
-            purchaseCost.setTextColor(context.getColor(R.color.black))
-        }
-
-        purchasePpCost.isGone = !skill.usesPrestige()
-
-        if (skill.usesPrestige()) {
-            purchasePpCost.text = "and ${skill.prestigeCost()}pp"
-            purchasePpCost.setTextColor(context.getColor(R.color.blue))
-        }
-
-        purchaseInfThreshold.isGone = !skill.usesInfection()
-        if (skill.usesInfection()) {
-            if (skill.hasModInfCost()) {
-                purchaseInfThreshold.text = "Requires ${skill.getInfCostText()}"
-                purchaseInfThreshold.setTextColor(getColorForInf(skill))
-            } else {
-                purchaseInfThreshold.text = "Requires ${skill.getInfCostText()}"
-                purchaseInfThreshold.setTextColor(context.getColor(R.color.black))
-            }
-        }
-
-        when (skill.skillTypeId) {
-            Constants.SkillTypes.combat -> type.setTextColor(context.getColor(R.color.bright_red))
-            Constants.SkillTypes.profession -> type.setTextColor(context.getColor(R.color.green))
-            Constants.SkillTypes.talent -> type.setTextColor(context.getColor(R.color.blue))
-        }
-
         prereqLayout.isGone = !skill.hasPrereqs()
-        prereqs.text = skill.getPrereqNames()
-        desc.text = skill.description
 
-        infoLayout.isGone = true
+        desc.text = skill.description
     }
 
     private fun getColorForXp(skill: FullCharacterModifiedSkillModel): Int {

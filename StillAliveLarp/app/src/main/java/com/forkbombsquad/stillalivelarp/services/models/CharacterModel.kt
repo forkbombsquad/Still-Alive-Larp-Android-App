@@ -14,6 +14,7 @@ import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonType
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -533,6 +534,10 @@ data class FullCharacterModel(
         } else {
             return mapOf()
         }
+    }
+
+    fun getPurchasedSkillsFiltered(searchText: String, filter: SkillFilterType): List<FullCharacterModifiedSkillModel> {
+        return allPurchasedSkills().filter { it.includeInFilter(searchText, filter) }
     }
 
 }

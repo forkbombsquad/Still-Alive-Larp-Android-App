@@ -675,6 +675,12 @@ class DataManager private constructor() {
         updateCallbacks[getFragmentOrActivityName(key)]?.let { it() }
     }
 
+    fun callUpdateCallbacks(keys: List<KClass<*>>) {
+        keys.forEach { key ->
+            updateCallbacks[getFragmentOrActivityName(key)]?.let { it() }
+        }
+    }
+
     inline fun <reified T> getPassedData(key: KClass<*>, dataKey: DataManagerPassedDataKey, clear: Boolean = true): T? {
         val data = passedData[getFragmentOrActivityName(key) + dataKey.toString()] as? T
         if (clear) {

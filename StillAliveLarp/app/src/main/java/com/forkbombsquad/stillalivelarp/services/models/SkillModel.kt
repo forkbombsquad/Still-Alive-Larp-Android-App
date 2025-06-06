@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import java.io.Serializable
 import kotlin.math.max
 
@@ -135,9 +136,11 @@ data class FullCharacterModifiedSkillModel(
     fun includeInFilter(seachText: String, filterType: SkillFilterType): Boolean {
         val text = seachText.trim().lowercase()
         if (text.isNotEmpty()) {
-            if (!skill.name.lowercase().contains(text) && !getTypeText().lowercase()
-                    .contains(text) && !skill.description.lowercase()
-                    .contains(text) && !getPrereqNames().lowercase().contains(text)
+            if (!skill.name.lowercase().contains(text) &&
+                !getTypeText().lowercase().contains(text) &&
+                !skill.description.lowercase().contains(text) &&
+                !getPrereqNames().lowercase().contains(text) &&
+                !skill.category.name.lowercase().contains(text)
             ) {
                 return false
             }
@@ -165,32 +168,41 @@ data class FullCharacterModifiedSkillModel(
         return charSkillModel != null
     }
 
-    fun getXpCostText(): String {
+    fun getXpCostText(allowFreeSkillUse: Boolean = false): String {
         var text = ""
+        var usedFreeSKill = false
         charSkillModel.ifLet({ cs ->
             // Already Purchased
             text += "Already Purchased With:\n"
-            text += "${cs.xpSpent}xp"
             if (cs.fsSpent > 0) {
-                text += "\n${cs.fsSpent} Free Tier 1 Skills"
+                text += "${cs.fsSpent} Free Tier 1 Skill${(cs.fsSpent > 1).ternary("s", "")}"
+                usedFreeSKill = true
+            } else {
+                text += "${cs.xpSpent}xp"
             }
         }, {
             // Not purchased yet
-            text += "${modXpCost()}xp"
-            if (hasModCost()) {
-                text += "(changed from ${baseXpCost()}xp with:"
-                if (getRelevantSpecCostChange() != 0) {
-                    text += " ${getRelevantSpecCostChange()} from ${getTypeText()} Specialization"
-                }
-                if (getRelevantSpecCostChange() != 0 && hasXpReduction()) {
-                    text += " and"
-                }
-                if (hasXpReduction()) {
-                    text += "  ${xpReduction?.xpReduction?.toInt() ?: 0} from Special Class Xp Reductions"
-                }
-                text += ")"
+            if (allowFreeSkillUse && canUseFreeSkill()) {
+                text += "1 Free Tier-1 Skill"
+                usedFreeSKill = true
+            } else {
+                text += "${modXpCost()}xp"
             }
         })
+
+        if (hasModCost() && !usedFreeSKill) {
+            text += " (changed from ${baseXpCost()}xp with:"
+            if (getRelevantSpecCostChange() != 0) {
+                text += " ${getRelevantSpecCostChange()} from ${getTypeText()} Specialization"
+            }
+            if (getRelevantSpecCostChange() != 0 && hasXpReduction()) {
+                text += " and"
+            }
+            if (hasXpReduction()) {
+                text += " ${xpReduction?.xpReduction?.toInt() ?: 0} from Special Class Xp Reductions"
+            }
+            text += ")"
+        }
         return text
     }
 

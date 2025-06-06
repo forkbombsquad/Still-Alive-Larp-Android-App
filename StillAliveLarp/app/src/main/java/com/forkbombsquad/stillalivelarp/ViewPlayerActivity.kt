@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
@@ -50,6 +51,9 @@ class ViewPlayerActivity : NoStatusBarActivity() {
         characterPanel.setOnClicks(
             viewStatsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
+                DataManager.shared.setUpdateCallback(this::class) {
+                    buildView()
+                }
                 val intent = Intent(this, ViewCharacterStatsActivity::class.java)
                 startActivity(intent)
             },
@@ -60,7 +64,8 @@ class ViewPlayerActivity : NoStatusBarActivity() {
             },
             viewSkillsListCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
-                // TODO view skills activity
+                val intent = Intent(this, ViewSkillsActivity::class.java)
+                startActivity(intent)
             },
             viewBioCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
