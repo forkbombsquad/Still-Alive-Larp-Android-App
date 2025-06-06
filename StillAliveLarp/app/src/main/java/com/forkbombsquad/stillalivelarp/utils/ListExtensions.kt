@@ -5,6 +5,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
@@ -20,6 +21,18 @@ fun <T> List<T>.doesNotContain(values: List<T>): Boolean {
         }
     }
     return true
+}
+
+@JvmName("sortSkills")
+fun List<FullCharacterModifiedSkillModel>.sort(sortType: SkillSortType): List<FullCharacterModifiedSkillModel> {
+    return when (sortType) {
+        SkillSortType.AZ -> this.sortedWith(compareBy { it.name })
+        SkillSortType.ZA -> this.sortedWith(compareByDescending { it.name })
+        SkillSortType.XPASC -> this.sortedWith(compareBy({ it.modXpCost() }, { it.name }))
+        SkillSortType.XPDESC -> this.sortedWith(compareByDescending { it.modXpCost() })
+        SkillSortType.TYPEASC -> this.sortedWith(compareBy({ it.getTypeText() }, { it.name }))
+        SkillSortType.TYPEDESC -> this.sortedWith(compareByDescending { it.getTypeText() })
+    }
 }
 
 @JvmName("alphabetizedFullPlayerModel")

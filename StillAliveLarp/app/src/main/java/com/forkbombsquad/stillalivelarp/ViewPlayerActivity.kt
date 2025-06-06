@@ -82,7 +82,12 @@ class ViewPlayerActivity : NoStatusBarActivity() {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getActiveCharacter()!!.awards)
             },
             viewInactiveCharsCallback = {
-                // TODO
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, player.getInactiveCharacters())
+                // TODO change the below line to ViewCharacterActivity::class
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewPlayerActivity::class)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "${player.fullName}'s Inactive Characters")
+                val intent = Intent(this, CharactersListActivity::class.java)
+                startActivity(intent)
             },
             viewPlannedCharsCallback = {
                 // TODO

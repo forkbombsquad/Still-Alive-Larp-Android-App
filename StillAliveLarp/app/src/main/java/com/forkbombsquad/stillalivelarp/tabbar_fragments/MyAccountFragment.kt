@@ -23,7 +23,6 @@ import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.SkillManagementFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin.AdminPanelFragment
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.Constants

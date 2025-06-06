@@ -67,7 +67,6 @@ class ViewSkillsActivity : NoStatusBarActivity() {
             }
             val intent = Intent(this, AddSkillActivity::class.java)
             startActivity(intent)
-            // TODO modify the add skills view
         }
 
         searchBar.addTextChangedListener {
@@ -104,6 +103,9 @@ class ViewSkillsActivity : NoStatusBarActivity() {
             skillListLayout.isGone = false
 
             addNewButton.isGone = !DataManager.shared.playerIsCurrentPlayer(character.playerId)
+            if (DataManager.shared.offlineMode) {
+                addNewButton.isGone = true
+            }
 
             skillListLayout.removeAllViews()
             skills.forEachIndexed { index, skill ->

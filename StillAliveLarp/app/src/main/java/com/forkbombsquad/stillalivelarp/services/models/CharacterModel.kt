@@ -266,7 +266,7 @@ data class FullCharacterModel(
         })
     }
 
-    fun allPurchaseableSkills(): List<FullCharacterModifiedSkillModel> {
+    fun allPurchaseableSkills(searchText: String = "", filter: SkillFilterType = SkillFilterType.NONE): List<FullCharacterModifiedSkillModel> {
         val charSkills = allNonPurchasedSkills()
         val player = DataManager.shared.players.first { it.id == playerId }
 
@@ -329,7 +329,7 @@ data class FullCharacterModel(
                 keep
             }
         }
-        return newSkillList
+        return newSkillList.filter { it.includeInFilter(searchText, filter) }
     }
     fun characterType(): CharacterType {
         return CharacterType.fromId(characterTypeId) ?: CharacterType.STANDARD

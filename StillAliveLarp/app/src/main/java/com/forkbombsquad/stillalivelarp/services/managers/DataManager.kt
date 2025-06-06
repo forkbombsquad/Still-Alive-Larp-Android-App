@@ -58,7 +58,10 @@ enum class DataManagerPassedDataKey {
     SELECTED_EVENT,
     SELECTED_PLAYER,
     SELECTED_CHARACTER,
-    AWARDS_LIST
+    AWARDS_LIST,
+    CHARACTER_LIST,
+    DESTINATION_CLASS,
+    VIEW_TITLE
 }
 
 enum class DataManagerType(val localDataKey: String) {
