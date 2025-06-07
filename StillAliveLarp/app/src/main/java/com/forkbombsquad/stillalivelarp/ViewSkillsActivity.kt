@@ -46,7 +46,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         skills = character.allPurchasedSkills().sortedBy { it.name }
 
         loadingLayout = findViewById(R.id.loadingView)
@@ -102,7 +102,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
             searchBar.isGone = false
             skillListLayout.isGone = false
 
-            addNewButton.isGone = !DataManager.shared.playerIsCurrentPlayer(character.playerId)
+            addNewButton.isGone = !(DataManager.shared.playerIsCurrentPlayer(character.playerId) && character.isAlive)
             if (DataManager.shared.offlineMode) {
                 addNewButton.isGone = true
             }

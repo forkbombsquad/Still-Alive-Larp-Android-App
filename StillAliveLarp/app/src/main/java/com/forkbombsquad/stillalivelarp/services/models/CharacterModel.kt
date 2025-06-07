@@ -22,6 +22,8 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 enum class CharacterType(val id: Int) {
     STANDARD(1),
@@ -120,6 +122,15 @@ data class FullCharacterModel(
 
     fun baseModel(): CharacterModel {
         return CharacterModel(this)
+    }
+
+    fun getPostText(): String {
+        return when (characterType()) {
+            CharacterType.STANDARD -> isAlive.ternary("Active", "Inactive")
+            CharacterType.NPC -> isAlive.ternary("NPC", "NPC - Deceased")
+            CharacterType.PLANNER -> "Planned"
+            CharacterType.HIDDEN -> ""
+        }
     }
 
     fun getSpentXp(): Int {
@@ -538,6 +549,11 @@ data class FullCharacterModel(
 
     fun getPurchasedSkillsFiltered(searchText: String, filter: SkillFilterType): List<FullCharacterModifiedSkillModel> {
         return allPurchasedSkills().filter { it.includeInFilter(searchText, filter) }
+    }
+
+    fun getAwardsSorted(): List<AwardModel> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }
     }
 
 }

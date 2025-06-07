@@ -19,6 +19,7 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/plannedchars_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -26,11 +27,6 @@
                 android:textStyle="bold"
                 android:textSize="32sp"
                 android:textAlignment="center"/>
-
-            <ProgressBar
-                android:id="@+id/characterplanner_loading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:id="@+id/characterplanner_loadingstufflayout"
@@ -57,6 +53,16 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/characterplanner_instructions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="*Swipe right on a Planned Character to delete it*"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textAlignment="center"/>
 
             <LinearLayout
                 android:id="@+id/characterplanner_layout"

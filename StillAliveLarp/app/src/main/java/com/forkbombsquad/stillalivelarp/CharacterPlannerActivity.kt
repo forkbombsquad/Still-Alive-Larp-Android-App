@@ -28,15 +28,13 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class CharacterPlannerActivity : NoStatusBarActivity() {
+    // TODO need to figure out swipe to delete
 
-    private lateinit var progressBar: ProgressBar
+    private lateinit var title: TextView
     private lateinit var layout: LinearLayout
-    private var allPersonalChars: List<CharacterModel>? = null
 
     private lateinit var loadingStuffLayout: LinearLayout
     private lateinit var loadingStuffText: TextView
-
-    private var loading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

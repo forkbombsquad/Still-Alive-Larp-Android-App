@@ -29,7 +29,7 @@ class ViewBioActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewNPCStuffActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewNPCStuffActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.bio_title)
         edit = findViewById(R.id.bio_edit)
@@ -50,7 +50,7 @@ class ViewBioActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s Bio")
-        edit.isGone = (character.id != DataManager.shared.getCurrentPlayer()?.id) || DataManager.shared.offlineMode || character.characterType() != CharacterType.STANDARD
+        edit.isGone = !(DataManager.shared.playerIsCurrentPlayer(character.id) && character.isAlive) || DataManager.shared.offlineMode || character.characterType() != CharacterType.STANDARD
         text.text = character.bio
     }
 }

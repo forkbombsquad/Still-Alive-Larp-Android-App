@@ -81,14 +81,13 @@ class PersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
 
 class PlannedCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
     override fun setImageUpdateDrawables() {
-        // TODO get planned character from stored data
         img.updateDrawables(
             SkillGrid(
                 DataManager.shared.skills,
                 personal = true,
                 allowPurchase = !DataManager.shared.offlineMode,
                 player = DataManager.shared.getCurrentPlayer()!!,
-                character = DataManager.shared.getActiveCharacter()!! // TODO << Replace with char passed in from stored data
+                character = DataManager.shared.getPassedData(listOf(ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )
@@ -105,7 +104,7 @@ class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() 
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
-                character = DataManager.shared.getPassedData(ViewPlayerActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+                character = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )
@@ -123,7 +122,7 @@ class NPCPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
-                character = DataManager.shared.getPassedData(ViewNPCStuffActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+                character = DataManager.shared.getPassedData(listOf(ViewNPCStuffActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )

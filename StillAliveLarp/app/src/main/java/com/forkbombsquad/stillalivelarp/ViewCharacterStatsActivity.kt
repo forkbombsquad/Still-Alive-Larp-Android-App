@@ -54,7 +54,7 @@ class ViewCharacterStatsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(ViewPlayerActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.charstats_title)
         name = findViewById(R.id.charstats_name)

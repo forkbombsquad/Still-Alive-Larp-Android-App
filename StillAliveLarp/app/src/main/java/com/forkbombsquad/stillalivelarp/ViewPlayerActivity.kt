@@ -44,8 +44,9 @@ class ViewPlayerActivity : NoStatusBarActivity() {
         }
 
         playerAwards.setOnClick {
-            // TODO
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.awards)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getAwardsSorted())
+            val intent = Intent(this, ViewAwardsActivity::class.java)
+            startActivity(intent)
         }
 
         characterPanel.setOnClicks(
@@ -78,19 +79,27 @@ class ViewPlayerActivity : NoStatusBarActivity() {
                 startActivity(intent)
             },
             viewAwardsCallback = {
-                // TODO
-                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getActiveCharacter()!!.awards)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getActiveCharacter()!!.getAwardsSorted())
+                val intent = Intent(this, ViewAwardsActivity::class.java)
+                startActivity(intent)
             },
             viewInactiveCharsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, player.getInactiveCharacters())
-                // TODO change the below line to ViewCharacterActivity::class
-                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewPlayerActivity::class)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewCharacterActivity::class)
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "${player.fullName}'s Inactive Characters")
                 val intent = Intent(this, CharactersListActivity::class.java)
                 startActivity(intent)
             },
             viewPlannedCharsCallback = {
-                // TODO
+                if (DataManager.shared.playerIsCurrentPlayer(player)) {
+                    // TODO
+                } else {
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, player.getPlannedCharacters())
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewCharacterActivity::class)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "${player.fullName}'s Planned Characters")
+                    val intent = Intent(this, CharactersListActivity::class.java)
+                    startActivity(intent)
+                }
             }
         )
 

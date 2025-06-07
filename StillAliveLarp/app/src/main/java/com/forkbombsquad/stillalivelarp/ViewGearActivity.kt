@@ -33,7 +33,7 @@ class ViewGearActivity : NoStatusBarActivity() {
         title = findViewById(R.id.gear_title)
         layout = findViewById(R.id.gear_layout)
 
-        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         buildView()
     }
 
