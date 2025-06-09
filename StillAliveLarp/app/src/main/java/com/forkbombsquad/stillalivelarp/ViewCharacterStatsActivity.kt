@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -54,7 +55,7 @@ class ViewCharacterStatsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class, MyAccountFragment::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.charstats_title)
         name = findViewById(R.id.charstats_name)

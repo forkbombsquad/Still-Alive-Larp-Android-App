@@ -13,17 +13,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.CharacterPlannerActivity
+import com.forkbombsquad.stillalivelarp.CharactersListActivity
 import com.forkbombsquad.stillalivelarp.EditProfileImageActivity
 import com.forkbombsquad.stillalivelarp.ManageAccountActivity
 import com.forkbombsquad.stillalivelarp.PersonalNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.ViewAwardsActivity
 import com.forkbombsquad.stillalivelarp.ViewBioActivity
+import com.forkbombsquad.stillalivelarp.ViewCharacterActivity
+import com.forkbombsquad.stillalivelarp.ViewCharacterStatsActivity
 import com.forkbombsquad.stillalivelarp.ViewGearActivity
+import com.forkbombsquad.stillalivelarp.ViewPlayerStatsActivity
 import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.admin.AdminPanelFragment
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
@@ -95,26 +99,21 @@ class MyAccountFragment : Fragment() {
             startActivity(intent)
         }
         playerStatsNav.setOnClick {
-            // TODO convert this to an activity
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
-            val frag = PlayerStatsFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
+            val intent = Intent(v.context, ViewPlayerStatsActivity::class.java)
+            startActivity(intent)
         }
         playerAwardsNav.setOnClick {
-            // TODO
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, DataManager.shared.getCurrentPlayer()!!.awards)
+            val intent = Intent(v.context, ViewAwardsActivity::class.java)
+            startActivity(intent)
 
         }
         characterPanel.setOnClicks(
             viewStatsCallback = {
-                // TODO convert this to an activity
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, DataManager.shared.getActiveCharacter()!!)
-                val frag = CharacterStatsFragment.newInstance()
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.add(R.id.container, frag)
-                transaction.addToBackStack(TAG).commit()
+                val intent = Intent(v.context, ViewCharacterStatsActivity::class.java)
+                startActivity(intent)
             },
             viewSkillsTreeCallback = {
                 DataManager.shared.setUpdateCallback(this::class) {
@@ -145,12 +144,16 @@ class MyAccountFragment : Fragment() {
                 startActivity(intent)
             },
             viewAwardsCallback = {
-                // TODO
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, DataManager.shared.getActiveCharacter()!!.awards)
+                val intent = Intent(v.context, ViewAwardsActivity::class.java)
+                startActivity(intent)
             },
             viewInactiveCharsCallback = {
-                // TODO
-                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getCurrentPlayer()!!.getInactiveCharacters())
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewCharacterActivity::class)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "${DataManager.shared.getCurrentPlayer()!!.fullName}'s Inactive Characters")
+                val intent = Intent(v.context, CharactersListActivity::class.java)
+                startActivity(intent)
             },
             viewPlannedCharsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)

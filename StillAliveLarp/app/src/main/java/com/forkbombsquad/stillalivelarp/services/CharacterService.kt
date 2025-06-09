@@ -67,6 +67,11 @@ interface DeleteCharactersRequest {
     suspend fun makeRequest(): Response<CharacterListFullModel>
 }
 
+interface DeleteCharacterRequest {
+    @HTTP(method ="DELETE", path = "characters/delete/{characterId}")
+    suspend fun makeRequest(@Path("characterTypeId") characterTypeId: Int): Response<CharacterModel>
+}
+
 
 class CharacterService {
     class GetCharacter: UAndPServiceInterface<GetCharacterRequest, CharacterModel, IdSP> {
@@ -156,6 +161,15 @@ class CharacterService {
 
         override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
             return request.makeRequest()
+        }
+    }
+
+    class DeleteCharacter: UAndPServiceInterface<DeleteCharacterRequest, CharacterModel, IdSP> {
+        override val request: DeleteCharacterRequest
+            get() = retrofit.create(DeleteCharacterRequest::class.java)
+
+        override suspend fun getResponse(payload: IdSP): Response<CharacterModel> {
+            return request.makeRequest(payload.id())
         }
     }
 }

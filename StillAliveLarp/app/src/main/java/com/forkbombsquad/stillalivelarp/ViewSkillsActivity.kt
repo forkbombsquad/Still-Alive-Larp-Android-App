@@ -16,6 +16,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
@@ -46,7 +47,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         skills = character.allPurchasedSkills().sortedBy { it.name }
 
         loadingLayout = findViewById(R.id.loadingView)
@@ -62,7 +63,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
                 DataManager.shared.load(lifecycleScope) {
-                    DataManager.shared.callUpdateCallbacks(listOf(MyAccountFragment::class, ViewPlayerActivity::class))
+                    DataManager.shared.callUpdateCallbacks(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class))
                 }
             }
             val intent = Intent(this, AddSkillActivity::class.java)
@@ -72,7 +73,6 @@ class ViewSkillsActivity : NoStatusBarActivity() {
         searchBar.addTextChangedListener {
             buildView()
         }
-
         reload()
     }
 
@@ -89,7 +89,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s Skills")
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s${(character.characterType() == CharacterType.PLANNER).ternary(" Planned", "")} Skills")
 
         if (DataManager.shared.loading) {
             searchBar.isGone = true

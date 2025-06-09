@@ -5,7 +5,9 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
+import com.forkbombsquad.stillalivelarp.services.DeleteCharacterRequest
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -62,7 +64,7 @@ data class FullCharacterModel(
     val mysteriousStrangerUses: Int,
     val playerId: Int,
     val characterTypeId: Int,
-    val gear: GearModel?,
+    var gear: GearModel?,
     val awards: List<AwardModel>,
     val eventAttendees: List<EventAttendeeModel>,
     val preregs: List<EventPreregModel>,
@@ -554,6 +556,28 @@ data class FullCharacterModel(
     fun getAwardsSorted(): List<AwardModel> {
         val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
         return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }
+    }
+
+    fun deleteSkillsDESTRUCTIVE(lifecycleScope: LifecycleCoroutineScope, completion: (success: Boolean) -> Unit) {
+        val deleteSkillsRequest = CharacterSkillService.DeleteCharacterSkills()
+        lifecycleScope.launch {
+            deleteSkillsRequest.successfulResponse(IdSP(id)).ifLet({ _ ->
+                completion(true)
+            }, {
+                completion(false)
+            })
+        }
+    }
+
+    fun deleteCharacterDESTRUCTIVE(lifecycleScope: LifecycleCoroutineScope, completion: (success: Boolean) -> Unit) {
+        val request = CharacterService.DeleteCharacter()
+        lifecycleScope.launch {
+            request.successfulResponse(IdSP(id)).ifLet({ _ ->
+                completion(true)
+            }, {
+                completion(false)
+            })
+        }
     }
 
 }

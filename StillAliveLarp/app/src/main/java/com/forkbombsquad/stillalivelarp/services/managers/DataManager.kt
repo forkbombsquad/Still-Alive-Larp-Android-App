@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.services.managers
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -32,6 +33,8 @@ import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
+import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
@@ -133,6 +136,15 @@ class DataManager private constructor() {
 
     private val mutexThreadLocker = Mutex()
     private val finishedCountMutexThreadLocker = Mutex()
+
+    private var activitiesToClose: MutableList<Activity> = mutableListOf()
+
+    //
+    // Editable in place Variables
+    //
+
+    var characterToEdit: FullCharacterModel? = null
+    var gearToEdit: GearJsonModel? = null
 
     fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
         var modLoadType = loadType
@@ -603,7 +615,7 @@ class DataManager private constructor() {
     }
 
     fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
-        tv.text = offlineMode.ternary("Offline $baseText", baseText)
+        tv.text = offlineMode.ternary("[Offline] $baseText", baseText)
     }
 
     fun setUpdateCallback(key: KClass<*>, callback: () -> Unit) {
@@ -628,6 +640,19 @@ class DataManager private constructor() {
 
     fun playerIsCurrentPlayer(player: FullPlayerModel): Boolean {
         return playerIsCurrentPlayer(player.id)
+    }
+
+    fun addActivityToClose(activity: Activity, resetListFirst: Boolean = true) {
+        if (resetListFirst) {
+            activitiesToClose.clear()
+        }
+        activitiesToClose.add(activity)
+    }
+
+    fun closeActiviesToClose() {
+        while (activitiesToClose.isNotEmpty()) {
+            activitiesToClose.removeFirstOrNull()?.finish()
+        }
     }
 
     //
@@ -700,6 +725,10 @@ class DataManager private constructor() {
             }
         }
         return null
+    }
+
+    fun getCharactersWhoNeedBiosApproved(): List<FullCharacterModel> {
+        return characters.filter { !it.approvedBio && it.bio.isNotEmpty() }
     }
 
 }

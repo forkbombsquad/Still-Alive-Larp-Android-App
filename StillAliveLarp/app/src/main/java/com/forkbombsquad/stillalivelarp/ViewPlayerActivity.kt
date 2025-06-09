@@ -52,9 +52,6 @@ class ViewPlayerActivity : NoStatusBarActivity() {
         characterPanel.setOnClicks(
             viewStatsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, player.getActiveCharacter()!!)
-                DataManager.shared.setUpdateCallback(this::class) {
-                    buildView()
-                }
                 val intent = Intent(this, ViewCharacterStatsActivity::class.java)
                 startActivity(intent)
             },
@@ -92,7 +89,9 @@ class ViewPlayerActivity : NoStatusBarActivity() {
             },
             viewPlannedCharsCallback = {
                 if (DataManager.shared.playerIsCurrentPlayer(player)) {
-                    // TODO
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, player)
+                    val intent = Intent(this, CharacterPlannerActivity::class.java)
+                    startActivity(intent)
                 } else {
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, player.getPlannedCharacters())
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewCharacterActivity::class)

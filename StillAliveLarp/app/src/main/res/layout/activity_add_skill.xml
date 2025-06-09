@@ -33,6 +33,7 @@
         android:text="*Only skills you qualify for are shown below"/>
 
     <LinearLayout
+        android:id="@+id/amountsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"

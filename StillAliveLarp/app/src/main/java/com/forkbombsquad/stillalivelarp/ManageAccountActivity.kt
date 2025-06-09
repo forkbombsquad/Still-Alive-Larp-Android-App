@@ -75,19 +75,11 @@ class ManageAccountActivity : NoStatusBarActivity() {
         var count = 0
         chars.forEach { char ->
             deleteAccount.setLoadingWithText("Deleting Skills For: ${char.fullName}")
-            val deleteSkillsRequest = CharacterSkillService.DeleteCharacterSkills()
-            lifecycleScope.launch {
-                deleteSkillsRequest.successfulResponse(IdSP(char.id)).ifLet({ _ ->
-                    count += 1
-                    if (count == chars.size) {
-                        this@ManageAccountActivity.deleteCharGear()
-                    }
-                }, {
-                    count += 1
-                    if (count == chars.size) {
-                        this@ManageAccountActivity.deleteCharGear()
-                    }
-                })
+            char.deleteSkillsDESTRUCTIVE(lifecycleScope) { _ ->
+                count += 1
+                if (count == chars.size) {
+                    this@ManageAccountActivity.deleteCharGear()
+                }
             }
         }
         if (chars.isEmpty()) {

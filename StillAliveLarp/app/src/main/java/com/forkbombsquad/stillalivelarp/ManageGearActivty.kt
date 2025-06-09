@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -40,6 +43,8 @@ class ManageGearActivty : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        DataManager.shared.characterToEdit = DataManager.shared.getPassedData(CharactersListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+
         title = findViewById(R.id.managegear_title)
         progressbar = findViewById(R.id.managegear_progressbar)
         innerLayout = findViewById(R.id.managegear_innerLayout)
@@ -48,8 +53,8 @@ class ManageGearActivty : NoStatusBarActivity() {
         submitButton = findViewById(R.id.gear_submitButton)
 
         addNew.setOnClick {
-            OldDataManager.shared.gearToEdit = null
-            OldDataManager.shared.unrelaltedUpdateCallback = {
+            DataManager.shared.gearToEdit = null
+            DataManager.shared.setUpdateCallback(this::class) {
                 gearModified = true
                 buildView()
             }
@@ -60,7 +65,7 @@ class ManageGearActivty : NoStatusBarActivity() {
         submitButton.setOnClick {
             if (gearModified) {
                 submitButton.setLoadingWithText("Organizing Gear...")
-                val gear = OldDataManager.shared.selectedCharacterGear?.firstOrNull()
+                val gear = DataManager.shared.characterToEdit!!.gear
                 if (gear != null) {
                     if (gear.id == -1) {
                         // Create New List
@@ -69,7 +74,8 @@ class ManageGearActivty : NoStatusBarActivity() {
                         submitButton.setLoadingWithText("Creating Gear Listing...")
                         lifecycleScope.launch {
                             request.successfulResponse(CreateModelSP(createModel)).ifLet { newGearModel ->
-                                OldDataManager.shared.selectedCharacterGear = arrayOf(newGearModel)
+                                DataManager.shared.characterToEdit!!.gear = newGearModel
+                                DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                                 AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Listing Created!") { _, _ ->
                                     submitButton.setLoading(false)
                                     gearModified = false
@@ -83,7 +89,8 @@ class ManageGearActivty : NoStatusBarActivity() {
                         submitButton.setLoadingWithText("Updating Gear...")
                         lifecycleScope.launch {
                             request.successfulResponse(UpdateModelSP(gear)).ifLet { updatedGearModel ->
-                                OldDataManager.shared.selectedCharacterGear = arrayOf(updatedGearModel)
+                                DataManager.shared.characterToEdit!!.gear = updatedGearModel
+                                DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                                 AlertUtils.displaySuccessMessage(this@ManageGearActivty, "Gear Changes Committed!") { _, _ ->
                                     submitButton.setLoading(false)
                                     gearModified = false
@@ -96,15 +103,21 @@ class ManageGearActivty : NoStatusBarActivity() {
             }
         }
 
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.SELECTED_CHARACTER_GEAR), false) {
+        reload()
+    }
+
+    private fun reload() {
+        DataManager.shared.load(lifecycleScope, stepFinished = {
             buildView()
-        }
+        }, finished = {
+            buildView()
+        })
         buildView()
     }
 
     private fun buildView() {
-        title.text = "Manage Gear For ${OldDataManager.shared.selectedChar?.fullName ?: ""}"
-        if (OldDataManager.shared.loadingSelectedCharacterGear) {
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "Manage Gear For ${DataManager.shared.characterToEdit!!.fullName}")
+        if (DataManager.shared.loading) {
             progressbar.isGone = false
             outerLayout.isGone = true
             submitButton.isGone = true
@@ -115,7 +128,7 @@ class ManageGearActivty : NoStatusBarActivity() {
             submitButton.isGone = !gearModified
 
             innerLayout.removeAllViews()
-            val gearList = OldDataManager.shared.getGearOrganzied()
+            val gearList = DataManager.shared.characterToEdit!!.getGearOrganized()
             gearList.forEach { (key, list) ->
                 val textView = TextView(this)
                 val tvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -133,14 +146,16 @@ class ManageGearActivty : NoStatusBarActivity() {
                     val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                     params.setMargins(0, 8, 0, 8)
                     gearCell.layoutParams = params
-                    gearCell.setOnClick {
-                        OldDataManager.shared.gearToEdit = g
-                        OldDataManager.shared.unrelaltedUpdateCallback = {
-                            gearModified = true
-                            buildView()
+                    if (!DataManager.shared.offlineMode) {
+                        gearCell.setOnClick {
+                            DataManager.shared.gearToEdit = g
+                            DataManager.shared.setUpdateCallback(this::class) {
+                                gearModified = true
+                                reload()
+                            }
+                            val intent = Intent(this, AddEditGearActivity::class.java)
+                            startActivity(intent)
                         }
-                        val intent = Intent(this, AddEditGearActivity::class.java)
-                        startActivity(intent)
                     }
                     innerLayout.addView(gearCell)
                 }
@@ -151,9 +166,13 @@ class ManageGearActivty : NoStatusBarActivity() {
     override fun onBackPressed() {
         if (gearModified) {
             AlertUtils.displayYesNoMessage(this, "Are You Sure?", "You have unsaved changes. Are you sure you want to exit?", { _, _ ->
+                DataManager.shared.characterToEdit = null
+                DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                 super.onBackPressed()
             }, { _, _ -> })
         } else {
+            DataManager.shared.characterToEdit = null
+            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
             super.onBackPressed()
         }
     }

@@ -8,8 +8,11 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.AwardCharType
@@ -31,6 +34,8 @@ class AwardCharacterActivity : NoStatusBarActivity() {
     private lateinit var secondaryMaterialAdapter: ArrayAdapter<String>
     private lateinit var secondaryAmmoAdapter: ArrayAdapter<String>
 
+    private lateinit var character: FullCharacterModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_award_character)
@@ -38,6 +43,8 @@ class AwardCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        character = DataManager.shared.getPassedData(CharactersListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+
         title = findViewById(R.id.awardchar_title)
         awardType = findViewById(R.id.awardchar_awardTypeKVPicker)
         awardSecondaryType = findViewById(R.id.awardchar_awardSecondaryTypeKVPicker)
@@ -79,25 +86,24 @@ class AwardCharacterActivity : NoStatusBarActivity() {
         }
 
         submitButton.setOnClick {
-            OldDataManager.shared.selectedChar.ifLet { character ->
-                submitButton.setLoading(true)
-                val awardCreateModel = AwardCreateModel.createCharacterAward(
-                    char = character,
-                    awardType = getAwardType(),
-                    reason = reason.text.toString(),
-                    amount = amount.text.toString()
-                )
-                val awardCharRequest = AdminService.AwardCharacter()
-                lifecycleScope.launch {
-                    awardCharRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
-                        AlertUtils.displaySuccessMessage(this@AwardCharacterActivity, "Successfully Awarded ${character.fullName}!") { _, _ ->
-                            OldDataManager.shared.activityToClose?.finish()
-                            finish()
-                        }
-                    }, {
-                        submitButton.setLoading(false)
-                    })
-                }
+            submitButton.setLoading(true)
+            val awardCreateModel = AwardCreateModel.createCharacterAward(
+                char = character.baseModel(),
+                awardType = getAwardType(),
+                reason = reason.text.toString(),
+                amount = amount.text.toString()
+            )
+            val awardCharRequest = AdminService.AwardCharacter()
+            lifecycleScope.launch {
+                awardCharRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
+                    AlertUtils.displaySuccessMessage(this@AwardCharacterActivity, "Successfully Awarded ${character.fullName}!") { _, _ ->
+                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.closeActiviesToClose()
+                        finish()
+                    }
+                }, {
+                    submitButton.setLoading(false)
+                })
             }
         }
 
@@ -105,9 +111,7 @@ class AwardCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        OldDataManager.shared.selectedChar.ifLet {
-            title.text = "Give Award To ${it.fullName}"
-        }
+        title.text = "Give Award To ${character.fullName}"
     }
 
     private fun getAwardType(): AwardCharType {

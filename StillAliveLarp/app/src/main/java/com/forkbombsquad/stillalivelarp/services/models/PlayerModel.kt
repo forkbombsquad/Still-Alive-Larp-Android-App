@@ -3,6 +3,7 @@ package com.forkbombsquad.stillalivelarp.services.models
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -118,6 +119,16 @@ data class FullPlayerModel(
             numNpcEventsAttended = numNpcEventsAttended.toString()
         )
     }
+
+    fun getUniqueCharacterNameRec(name: String, incrementalCount: Int? = null): String {
+        val fName = "$name${(incrementalCount == null).ternary("", " ${incrementalCount!!}")}"
+        return if (characters.firstOrNull { it.fullName == fName } == null) {
+            fName
+        } else {
+            getUniqueCharacterNameRec(name, (incrementalCount == null).ternary(1, incrementalCount!! + 1))
+        }
+    }
+
 }
 
 

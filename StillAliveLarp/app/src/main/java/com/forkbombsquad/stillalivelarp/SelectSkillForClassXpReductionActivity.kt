@@ -10,7 +10,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 
-import com.forkbombsquad.stillalivelarp.services.models.OldFullSkillModel
 import com.forkbombsquad.stillalivelarp.services.utils.TakeClassSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.max
 
 class SelectSkillForClassXpReductionActivity : NoStatusBarActivity() {
-
+    // TODO setup SelectSkillForClassXpReductionActivity like the CharactersList one
     private lateinit var title: TextView
     private lateinit var searchView: EditText
     private lateinit var layout: LinearLayout

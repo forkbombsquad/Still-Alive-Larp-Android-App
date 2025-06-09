@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
@@ -15,6 +16,7 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
@@ -27,11 +29,14 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class AddSkillActivity : NoStatusBarActivity() {
 
+    // TODO add skill deleting for PLANNED characters and maybe NPC characters
+
     private var currentSort: SkillSortType = SkillSortType.AZ
     private var currentFilter: SkillFilterType = SkillFilterType.NONE
 
     private lateinit var title: TextView
 
+    private lateinit var amountsLayout: LinearLayout
     private lateinit var xp: TextView
     private lateinit var pp: TextView
     private lateinit var ft1s: TextView
@@ -109,12 +114,15 @@ class AddSkillActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.setTitleTextPotentiallyOffline(title, "Add Skills")
+        val isPlanned = character.characterType() == CharacterType.PLANNER
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "Add${isPlanned.ternary(" Planned", "")} Skills")
 
         xp.text = "Experience\n${player.experience}"
         pp.text = "Prestige\n${player.prestigePoints}"
         ft1s.text = "Free T1 Skills\n${player.freeTier1Skills}"
         inf.text = "Infection\n${character.infection}%"
+
+        amountsLayout.isGone = isPlanned
 
         layout.removeAllViews()
 

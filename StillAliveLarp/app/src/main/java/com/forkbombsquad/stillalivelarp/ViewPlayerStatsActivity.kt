@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
@@ -37,7 +38,7 @@ class ViewPlayerStatsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        player = DataManager.shared.getPassedData(ViewPlayerActivity::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
+        player = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, MyAccountFragment::class), DataManagerPassedDataKey.SELECTED_PLAYER)!!
 
         title = findViewById(R.id.playerstats_title)
         name = findViewById(R.id.playerstats_name)

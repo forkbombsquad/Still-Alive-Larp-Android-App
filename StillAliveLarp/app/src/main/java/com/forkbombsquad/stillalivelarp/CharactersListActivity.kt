@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -32,7 +33,7 @@ class CharactersListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class)
+        val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
         destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS)!!
         characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST)!!
         viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
@@ -55,6 +56,7 @@ class CharactersListActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
                 val intent = Intent(this, destClass.java)
                 startActivity(intent)

@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.AwardModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.google.android.material.divider.MaterialDivider
@@ -28,7 +29,7 @@ class ViewAwardsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        awards = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.AWARDS_LIST)!!
+        awards = DataManager.shared.getPassedData(listOf(ViewPlayerActivity::class, ViewCharacterActivity::class, MyAccountFragment::class), DataManagerPassedDataKey.AWARDS_LIST)!!
 
         title = findViewById(R.id.awards_title)
         awardsLayout = findViewById(R.id.awardsInnerLayout)
