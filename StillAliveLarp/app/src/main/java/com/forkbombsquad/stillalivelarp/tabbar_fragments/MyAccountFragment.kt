@@ -12,6 +12,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.forkbombsquad.stillalivelarp.AdminPanelActivity
 import com.forkbombsquad.stillalivelarp.CharacterPlannerActivity
 import com.forkbombsquad.stillalivelarp.CharactersListActivity
 import com.forkbombsquad.stillalivelarp.EditProfileImageActivity
@@ -31,6 +32,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -61,8 +63,8 @@ class MyAccountFragment : Fragment() {
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
     private lateinit var contentLayout: LinearLayout
-    private lateinit var loadingLayout: LinearLayout
-    private lateinit var loadingText: TextView
+
+    private lateinit var loadingLayout: LoadingLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,8 +77,7 @@ class MyAccountFragment : Fragment() {
 
     private fun setupView(v: View) {
         contentLayout = v.findViewById(R.id.contentlayout)
-        loadingLayout = v.findViewById(R.id.loadingView)
-        loadingText = v.findViewById(R.id.loadingText)
+        loadingLayout = v.findViewById(R.id.loadinglayout)
 
         accountTitle = v.findViewById(R.id.account_title)
         playerAwardsNav = v.findViewById(R.id.myaccount_viewAwards)
@@ -166,10 +167,8 @@ class MyAccountFragment : Fragment() {
             startActivity(intent)
         }
         adminToolsNav.setOnClick {
-            val frag = AdminPanelFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
+            val intent = Intent(v.context, AdminPanelActivity::class.java)
+            startActivity(intent)
         }
         signOutButton.setOnClick {
             DataManager.forceReset()
@@ -200,15 +199,7 @@ class MyAccountFragment : Fragment() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(accountTitle, "My Account")
-        if (DataManager.shared.loading) {
-            contentLayout.isGone = true
-            loadingLayout.isGone = false
-            loadingText.text = DataManager.shared.loadingText
-
-        } else {
-            contentLayout.isGone = false
-            loadingLayout.isGone = true
-
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {
             val player = DataManager.shared.getCurrentPlayer()!!
             characterPanel.setValuesAndHideViews(DataManager.shared.getActiveCharacter(), player)
             playerNameText.text = player.fullName.underline()

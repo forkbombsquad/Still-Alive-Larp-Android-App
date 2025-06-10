@@ -34,37 +34,10 @@
                     android:textSize="32sp"
                     android:textAlignment="center"/>
 
-                <LinearLayout
-                    android:id="@+id/loadingView"
+                <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                    android:id="@+id/loadinglayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Getting Content..."
-                        android:textAlignment="center"
-                        android:textSize="24sp" />
-
-                    <TextView
-                        android:id="@+id/loadingText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:textAlignment="center"
-                        android:text="Loading..."/>
-
-                    <ProgressBar
-                        android:paddingTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:id="@+id/contentlayout"

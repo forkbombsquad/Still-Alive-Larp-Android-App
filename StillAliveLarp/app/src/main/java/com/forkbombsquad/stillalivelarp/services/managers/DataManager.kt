@@ -4,7 +4,10 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
@@ -40,6 +43,7 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -653,6 +657,17 @@ class DataManager private constructor() {
     fun closeActiviesToClose() {
         while (activitiesToClose.isNotEmpty()) {
             activitiesToClose.removeFirstOrNull()?.finish()
+        }
+    }
+
+    fun handleLoadingTextAndHidingViews(loadingLayout: LoadingLayout, thingsToHideWhileLoading: List<View> = listOf(), runIfNotLoading: () -> Unit) {
+        if (loading) {
+            loadingLayout.setLoadingText(loadingText)
+            thingsToHideWhileLoading.forEach { it.isGone = true }
+        } else {
+            loadingLayout.setLoading(false)
+            thingsToHideWhileLoading.forEach { it.isGone = false }
+            runIfNotLoading()
         }
     }
 

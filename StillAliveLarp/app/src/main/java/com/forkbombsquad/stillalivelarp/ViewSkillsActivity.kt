@@ -21,6 +21,7 @@ import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.account.AddSkillActivity
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.ternary
@@ -35,8 +36,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     private lateinit var addNewButton: Button
     private lateinit var skillListLayout: LinearLayout
 
-    private lateinit var loadingLayout: LinearLayout
-    private lateinit var loadingText: TextView
+    private lateinit var loadingLayout: LoadingLayout
 
     private lateinit var character: FullCharacterModel
     private lateinit var skills: List<FullCharacterModifiedSkillModel>
@@ -53,8 +53,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
         character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         skills = character.allPurchasedSkills().sortedBy { it.name }
 
-        loadingLayout = findViewById(R.id.loadingView)
-        loadingText = findViewById(R.id.loadingText)
+        loadingLayout = findViewById(R.id.loadinglayout)
 
         title = findViewById(R.id.skills_title)
         searchBar = findViewById(R.id.skills_searchview)
@@ -93,18 +92,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s${(character.characterType() == CharacterType.PLANNER).ternary(" Planned", "")} Skills")
-
-        if (DataManager.shared.loading) {
-            searchBar.isGone = true
-            addNewButton.isGone = true
-            skillListLayout.isGone = true
-            loadingLayout.isGone = false
-            loadingText.text = DataManager.shared.loadingText
-        } else {
-            loadingLayout.isGone = true
-            searchBar.isGone = false
-            skillListLayout.isGone = false
-
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(searchBar, addNewButton, skillListLayout)) {
             addNewButton.isGone = !(DataManager.shared.playerIsCurrentPlayer(character.playerId) && character.isAlive)
             if (DataManager.shared.offlineMode) {
                 addNewButton.isGone = true

@@ -25,6 +25,7 @@ import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueSwipeable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
@@ -39,13 +40,9 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     private lateinit var instText: TextView
     private lateinit var layout: LinearLayout
 
-    private lateinit var loadingView: LinearLayout
-    private lateinit var gettingContentView: TextView
-    private lateinit var loadingText: TextView
-
     private lateinit var player: FullPlayerModel
 
-    private var loading = false
+    private lateinit var loadingLayout: LoadingLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +53,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     private fun setupView() {
         player = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class), DataManagerPassedDataKey.SELECTED_PLAYER)!!
 
-        loadingView = findViewById(R.id.loadingView)
-        gettingContentView = findViewById(R.id.loadingContentTitle)
-        loadingText = findViewById(R.id.loadingText)
+        loadingLayout = findViewById(R.id.loadinglayout)
 
         title = findViewById(R.id.plannedchars_title)
         instText = findViewById(R.id.characterplanner_instructions)
@@ -80,16 +75,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "${player.fullName}'s Planned Characters")
-
-        if (DataManager.shared.loading) {
-            loadingView.isGone = false
-            loadingText.text = DataManager.shared.loadingText
-            gettingContentView.isGone = false
-            instText.isGone = true
-            layout.isGone = true
-        } else {
-            loadingView.isGone = !loading
-            gettingContentView.isGone = true
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(instText, layout)) {
             if (DataManager.shared.offlineMode) {
                 instText.isGone = DataManager.shared.playerIsCurrentPlayer(player)
             } else {
@@ -175,14 +161,12 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     }
 
     private fun setLoading(boolean: Boolean) {
-        loading = boolean
-        loadingView.isGone = !boolean
-        gettingContentView.isGone = true
+        loadingLayout.setLoading(boolean)
     }
 
     private fun setLoading(text: String) {
         setLoading(true)
-        loadingText.text = text
+        loadingLayout.setLoadingText(text, showGettingContent = false)
     }
 
     private fun createNew(name: String, selectedChar: FullCharacterModel?) {
@@ -227,13 +211,13 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
             request.successfulResponse(CharacterCreateSP(createModel)).ifLet { createdChar ->
                 selectedChar.ifLet({ oldChar ->
                     addSkillsFromExisting(createdChar, oldChar) {
-                        this@CharacterPlannerActivity.loading = false
+                        this@CharacterPlannerActivity.setLoading(false)
                         this@CharacterPlannerActivity.reload {
                             loadExisting(player.characters.first {it.id == createdChar.id })
                         }
                     }
                 }, {
-                    this@CharacterPlannerActivity.loading = false
+                    this@CharacterPlannerActivity.setLoading(false)
                     this@CharacterPlannerActivity.reload {
                         loadExisting(player.characters.first {it.id == createdChar.id })
                     }
@@ -243,43 +227,38 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     }
 
     private fun addSkillsFromExisting(newChar: CharacterModel, existingChar: FullCharacterModel, finished: () -> Unit) {
-        loading = true
-        val request = CharacterSkillService.GetAllCharacterSkillsForCharacter()
-        lifecycleScope.launch {
-            request.successfulResponse(IdSP(existingChar.id)).ifLet {  list ->
-                val nonZeros = list.charSkills.filter { it.xpSpent > 0 || it.fsSpent > 0 }.toList()
-                var count = 0
-                setLoading("Populating Skills (0 / ${nonZeros.size})...")
-                nonZeros.forEach { nzs ->
-                    val charSkill = CharacterSkillCreateModel(
-                        characterId = newChar.id,
-                        skillId = nzs.skillId,
-                        xpSpent = nzs.xpSpent,
-                        fsSpent = nzs.fsSpent,
-                        ppSpent = nzs.ppSpent
-                    )
-                    val csRequest = CharacterSkillService.TakePlannedCharacterSkill()
-                    lifecycleScope.launch {
-                        csRequest.successfulResponse(CreateModelSP(charSkill)).ifLet { _ ->
-                            count ++
-                            setLoading("Populating Skills (${count} / ${nonZeros.size})...")
-                            if (count == nonZeros.size) {
-                                finished()
-                            }
-                        }
+        val nonZeros = existingChar.allPurchasedSkills().filter { it.spentXp() > 0 || it.spentFt1s() > 0 }.toList()
+        var count = 0
+        setLoading("Populating Skills (0 / ${nonZeros.size})...")
+        nonZeros.forEach { nzs ->
+            val charSkill = CharacterSkillCreateModel(
+                characterId = newChar.id,
+                skillId = nzs.id,
+                xpSpent = nzs.spentXp(),
+                fsSpent = nzs.spentFt1s(),
+                ppSpent = nzs.spentPp()
+            )
+            val csRequest = CharacterSkillService.TakePlannedCharacterSkill()
+            lifecycleScope.launch {
+                csRequest.successfulResponse(CreateModelSP(charSkill)).ifLet { _ ->
+                    count ++
+                    setLoading("Populating Skills (${count} / ${nonZeros.size})...")
+                    if (count == nonZeros.size) {
+                        finished()
                     }
                 }
             }
         }
     }
     private fun loadExisting(character: FullCharacterModel) {
-        loading = false
-        buildView()
-        DataManager.shared.setUpdateCallback(this::class) {
-            reload()
+        setLoading(false)
+        reload {
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+            }
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
+            val intent = Intent(this, ViewSkillsActivity::class.java)
+            startActivity(intent)
         }
-        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
-        val intent = Intent(this, ViewSkillsActivity::class.java)
-        startActivity(intent)
     }
 }

@@ -25,6 +25,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.toBitmap
@@ -43,8 +44,8 @@ class CommunityFragment : Fragment() {
     private lateinit var researchProjects: NavArrowButtonBlack
 
     private lateinit var contentLayout: LinearLayout
-    private lateinit var loadingLayout: LinearLayout
-    private lateinit var loadingText: TextView
+
+    private lateinit var loadingLayout: LoadingLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,8 +60,7 @@ class CommunityFragment : Fragment() {
         pullToRefresh = v.findViewById(R.id.pulltorefresh_community)
 
         contentLayout = v.findViewById(R.id.contentlayout)
-        loadingLayout = v.findViewById(R.id.loadingView)
-        loadingText = v.findViewById(R.id.loadingText)
+        loadingLayout = v.findViewById(R.id.loadinglayout)
 
         communityTitle = v.findViewById(R.id.community_title)
 
@@ -113,15 +113,7 @@ class CommunityFragment : Fragment() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(communityTitle, "Community")
-        if (DataManager.shared.loading) {
-            contentLayout.isGone = true
-            loadingLayout.isGone = false
-            loadingText.text = DataManager.shared.loadingText
-
-        } else {
-            contentLayout.isGone = false
-            loadingLayout.isGone = true
-
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {
             campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()
         }
     }

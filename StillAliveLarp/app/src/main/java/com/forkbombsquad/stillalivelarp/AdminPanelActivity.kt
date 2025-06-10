@@ -15,6 +15,7 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeMode
 import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
@@ -26,9 +27,6 @@ import com.journeyapps.barcodescanner.ScanOptions
 class AdminPanelActivity : NoStatusBarActivity() {
 
     // TODO make sure all activities that are shown while offline don't have internet enabled features
-
-    private lateinit var loadingLayout: LinearLayout
-    private lateinit var loadingText: TextView
 
     private lateinit var title: TextView
     private lateinit var prereg: NavArrowButtonBlack
@@ -50,6 +48,8 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var researchProjects: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
+
+    private lateinit var loadingLayout: LoadingLayout
 
     private var checkInOutState = 0
 
@@ -98,8 +98,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        loadingLayout = findViewById(R.id.loadingView)
-        loadingText = findViewById(R.id.loadingText)
+        loadingLayout = findViewById(R.id.loadinglayout)
 
         title = findViewById(R.id.adminpanel_title)
         prereg = findViewById(R.id.adminpanel_viewPrereg)
@@ -294,13 +293,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "Admin Panel")
-
-        if (DataManager.shared.loading) {
-            loadingLayout.isGone = false
-            loadingText.text = DataManager.shared.loadingText
-        } else {
-            loadingLayout.isGone = true
-        }
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout) {}
 
         val offline = DataManager.shared.offlineMode
 
