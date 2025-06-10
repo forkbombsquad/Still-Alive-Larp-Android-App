@@ -8,6 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
@@ -15,6 +17,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlin.reflect.KClass
 
 class NPCListActivity : NoStatusBarActivity() {
 
@@ -23,6 +26,12 @@ class NPCListActivity : NoStatusBarActivity() {
     private lateinit var rewardReduction: KeyValueView
     private lateinit var layout: LinearLayout
 
+    private lateinit var destClass: KClass<*>
+    private lateinit var characters: List<FullCharacterModel>
+    private lateinit var viewTitle: String
+
+    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_npclist)
@@ -30,6 +39,10 @@ class NPCListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS)!!
+        characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST)!!
+        viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
+
         title = findViewById(R.id.npcs_title)
         livingNPCs = findViewById(R.id.npcs_total)
         rewardReduction = findViewById(R.id.npcs_lootRatio)
@@ -39,11 +52,10 @@ class NPCListActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.setTitleTextPotentiallyOffline(title, "All NPCs")
+        DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         layout.removeAllViews()
 
-        val chars = DataManager.shared.getAllCharacters(CharacterType.NPC)
-        val living = chars.filter { it.isAlive }
+        val living = characters.filter { it.isAlive }
 
         livingNPCs.set("${living.count()} / 10")
         rewardReduction.set("${(10 - living.count()) * 10}%")
@@ -56,13 +68,14 @@ class NPCListActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, char)
-                val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
+                val intent = Intent(this, destClass.java)
                 startActivity(intent)
             }
             layout.addView(arrow)
         }
-        chars.filter { !it.isAlive }.alphabetized().forEachIndexed { index, char ->
+        characters.filter { !it.isAlive }.alphabetized().forEachIndexed { index, char ->
             val arrow = NavArrowButtonRedBuildable(this)
             arrow.textView.text = "${char.fullName} (Dead)"
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -70,8 +83,9 @@ class NPCListActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, char)
-                val intent = Intent(this@NPCListActivity, ViewNPCStuffActivity::class.java)
+                val intent = Intent(this, destClass.java)
                 startActivity(intent)
             }
             layout.addView(arrow)

@@ -26,6 +26,7 @@ import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 class ViewSkillsActivity : NoStatusBarActivity() {
 
@@ -40,6 +41,8 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     private lateinit var character: FullCharacterModel
     private lateinit var skills: List<FullCharacterModifiedSkillModel>
 
+    private val sourceClasses: List<KClass<*>> = listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class, ManageNPCActivity::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_skills)
@@ -47,7 +50,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         skills = character.allPurchasedSkills().sortedBy { it.name }
 
         loadingLayout = findViewById(R.id.loadingView)
@@ -63,7 +66,7 @@ class ViewSkillsActivity : NoStatusBarActivity() {
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
                 DataManager.shared.load(lifecycleScope) {
-                    DataManager.shared.callUpdateCallbacks(listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class))
+                    DataManager.shared.callUpdateCallbacks(sourceClasses)
                 }
             }
             val intent = Intent(this, AddSkillActivity::class.java)

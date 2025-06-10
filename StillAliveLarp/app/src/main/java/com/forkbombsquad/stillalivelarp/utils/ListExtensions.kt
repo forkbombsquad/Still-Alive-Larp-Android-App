@@ -61,7 +61,7 @@ fun List<EventModel>.inChronologicalOrder(): List<EventModel> {
 }
 
 @JvmName("alphabetizedFullSkillsModel")
-fun List<FullSkillModel>.alphabetized(): List<FullSkillModel> {
+fun List<FullCharacterModifiedSkillModel>.alphabetized(): List<FullCharacterModifiedSkillModel> {
     return this.sortedWith(compareBy { it.name })
 }
 

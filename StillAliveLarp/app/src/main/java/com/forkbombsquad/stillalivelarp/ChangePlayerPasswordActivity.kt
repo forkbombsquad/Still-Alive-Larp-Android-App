@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.UpdatePSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -23,6 +26,8 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
     private lateinit var confirmPw: TextInputEditText
     private lateinit var submit: LoadingButton
 
+    private lateinit var player: FullPlayerModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_player_password)
@@ -30,12 +35,12 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        player = DataManager.shared.getPassedData(PlayersListActivity::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
+
         title = findViewById(R.id.changeplayerpw_title)
         newPw = findViewById(R.id.changeplayerpw_new)
         confirmPw = findViewById(R.id.changeplayerpw_confirm)
         submit = findViewById(R.id.changeplayerpw_submit)
-
-        title.text = "Change Password For ${OldDataManager.shared.selectedPlayer?.fullName}"
 
         submit.setOnClick {
             if (checkPasswordsMatch()) {
@@ -45,12 +50,13 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
                     val updatePRequest = AdminService.UpdatePAdmin()
                     lifecycleScope.launch {
                         updatePRequest.successfulResponse(UpdatePSP(
-                            playerId = OldDataManager.shared.selectedPlayer?.id ?: -1,
+                            playerId = player.id,
                             p = newPw.text.toString()
                         ))
                         .ifLet({
-                            AlertUtils.displaySuccessMessage(this@ChangePlayerPasswordActivity, "Password Successfully Updated For ${OldDataManager.shared.selectedPlayer?.fullName ?: ""}") { _, _ ->
-                                OldDataManager.shared.activityToClose?.finish()
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            AlertUtils.displaySuccessMessage(this@ChangePlayerPasswordActivity, "Password Successfully Updated For ${player.fullName}") { _, _ ->
+                                DataManager.shared.closeActiviesToClose()
                                 finish()
                             }
                         }, {
@@ -65,6 +71,12 @@ class ChangePlayerPasswordActivity : NoStatusBarActivity() {
                 AlertUtils.displayValidationError(this, "Passwords do not match")
             }
         }
+
+        buildView()
+    }
+
+    private fun buildView() {
+        title.text = "Change Password For ${player.fullName}"
     }
 
     private fun validateFields(): ValidationResult {

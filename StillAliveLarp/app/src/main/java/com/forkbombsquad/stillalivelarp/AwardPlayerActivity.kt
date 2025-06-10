@@ -5,8 +5,11 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
@@ -24,6 +27,8 @@ class AwardPlayerActivity : NoStatusBarActivity() {
     private lateinit var reason: TextInputEditText
     private lateinit var submitButton: LoadingButton
 
+    private lateinit var player: FullPlayerModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_award_player)
@@ -31,6 +36,8 @@ class AwardPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        player = DataManager.shared.getPassedData(PlayersListActivity::class, DataManagerPassedDataKey.SELECTED_PLAYER)!!
+
         title = findViewById(R.id.awardplayer_title)
         awardType = findViewById(R.id.awardplayer_awardTypeKVPicker)
         amount = findViewById(R.id.awardplayer_amount)
@@ -42,25 +49,24 @@ class AwardPlayerActivity : NoStatusBarActivity() {
         awardType.valuePickerView.setSelection(0)
 
         submitButton.setOnClick {
-            OldDataManager.shared.selectedPlayer.ifLet { player ->
-                submitButton.setLoading(true)
-                val awardCreateModel = AwardCreateModel.createPlayerAward(
-                    player = player,
-                    awardType = getAwardType(),
-                    reason = reason.text.toString(),
-                    amount = amount.text.toString()
-                )
-                val awardPlayerRequest = AdminService.AwardPlayer()
-                lifecycleScope.launch {
-                    awardPlayerRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
-                        AlertUtils.displaySuccessMessage(this@AwardPlayerActivity, "Successfully Awarded ${player.fullName}!") { _, _ ->
-                            OldDataManager.shared.activityToClose?.finish()
-                            finish()
-                        }
-                    }, {
-                        submitButton.setLoading(false)
-                    })
-                }
+            submitButton.setLoading(true)
+            val awardCreateModel = AwardCreateModel.createPlayerAward(
+                player = player.baseModel(),
+                awardType = getAwardType(),
+                reason = reason.text.toString(),
+                amount = amount.text.toString()
+            )
+            val awardPlayerRequest = AdminService.AwardPlayer()
+            lifecycleScope.launch {
+                awardPlayerRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
+                    DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                    AlertUtils.displaySuccessMessage(this@AwardPlayerActivity, "Successfully Awarded ${player.fullName}!") { _, _ ->
+                        DataManager.shared.closeActiviesToClose()
+                        finish()
+                    }
+                }, {
+                    submitButton.setLoading(false)
+                })
             }
         }
 
@@ -68,9 +74,7 @@ class AwardPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        OldDataManager.shared.selectedPlayer.ifLet {
-            title.text = "Give Award To ${it.fullName}"
-        }
+        title.text = "Give Award To ${player.fullName}"
     }
 
     private fun getAwardType(): AwardPlayerType {

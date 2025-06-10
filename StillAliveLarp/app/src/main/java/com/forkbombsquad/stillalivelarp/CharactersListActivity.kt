@@ -26,6 +26,8 @@ class CharactersListActivity : NoStatusBarActivity() {
     private lateinit var characters: List<FullCharacterModel>
     private lateinit var viewTitle: String
 
+    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_characters_list)
@@ -33,7 +35,6 @@ class CharactersListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
         destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS)!!
         characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST)!!
         viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!

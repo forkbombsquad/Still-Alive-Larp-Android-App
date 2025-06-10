@@ -6,14 +6,25 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityFragment
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlin.reflect.KClass
 
 class PlayersListActivity : NoStatusBarActivity() {
 
     private lateinit var title: TextView
     private lateinit var innerLayout: LinearLayout
+
+    private lateinit var destClass: KClass<*>
+    private lateinit var players: List<FullPlayerModel>
+    private lateinit var viewTitle: String
+
+    private val sourceClasses: List<KClass<*>> = listOf(CommunityFragment::class, AdminPanelActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +33,10 @@ class PlayersListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS)!!
+        players = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.PLAYER_LIST)!!
+        viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
+
         title = findViewById(R.id.playerslist_title)
         innerLayout = findViewById(R.id.playerslist_innerlayout)
 
@@ -29,7 +44,7 @@ class PlayersListActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.setTitleTextPotentiallyOffline(title, "All Players")
+        DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         innerLayout.removeAllViews()
         DataManager.shared.players.alphabetized().forEachIndexed { index, player ->
             val arrow = NavArrowButtonBlackBuildable(this)
@@ -39,8 +54,9 @@ class PlayersListActivity : NoStatusBarActivity() {
             arrow.layoutParams = params
             arrow.setLoading(false)
             arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, player)
-                val intent = Intent(this, ViewPlayerActivity::class.java)
+                val intent = Intent(this, destClass.java)
                 startActivity(intent)
             }
             innerLayout.addView(arrow)

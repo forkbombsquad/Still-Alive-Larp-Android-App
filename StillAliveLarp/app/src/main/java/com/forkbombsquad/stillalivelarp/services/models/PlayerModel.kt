@@ -120,6 +120,28 @@ data class FullPlayerModel(
         )
     }
 
+    fun baseModel(): PlayerModel {
+        return PlayerModel(this)
+    }
+
+    fun baseModelWithModifications(xpChange: Int, ft1sChange: Int, ppChange: Int): PlayerModel {
+        return PlayerModel(
+            this.id,
+            this.username,
+            this.fullName,
+            this.startDate,
+            (this.experience + xpChange).toString(),
+            (this.freeTier1Skills + ft1sChange).toString(),
+            (this.prestigePoints + ppChange).toString(),
+            this.isCheckedIn.toString().uppercase(),
+            this.isCheckedInAsNpc.toString().uppercase(),
+            this.lastCheckIn,
+            this.numEventsAttended.toString(),
+            this.numNpcEventsAttended.toString(),
+            this.isAdmin.toString().uppercase()
+        )
+    }
+
     fun getUniqueCharacterNameRec(name: String, incrementalCount: Int? = null): String {
         val fName = "$name${(incrementalCount == null).ternary("", " ${incrementalCount!!}")}"
         return if (characters.firstOrNull { it.fullName == fName } == null) {
@@ -148,6 +170,23 @@ data class PlayerModel(
     @JsonProperty("numNpcEventsAttended") val numNpcEventsAttended: String,
     @JsonProperty("isAdmin") val isAdmin: String
 ) : Serializable {
+
+    constructor(p: FullPlayerModel): this(
+        p.id,
+        p.username,
+        p.fullName,
+        p.startDate,
+        p.experience.toString(),
+        p.freeTier1Skills.toString(),
+        p.prestigePoints.toString(),
+        p.isCheckedIn.toString().uppercase(),
+        p.isCheckedInAsNpc.toString().uppercase(),
+        p.lastCheckIn,
+        p.numEventsAttended.toString(),
+        p.numNpcEventsAttended.toString(),
+        p.isAdmin.toString().uppercase()
+    )
+
     fun getBarcodeModel(): PlayerBarcodeModel {
         return PlayerBarcodeModel(this)
     }

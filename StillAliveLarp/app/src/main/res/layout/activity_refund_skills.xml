@@ -29,20 +29,43 @@
                 android:textAlignment="center"/>
 
             <LinearLayout
+                android:id="@+id/loadingView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/gettingcontent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Getting Content..."
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/loadingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:textAlignment="center"
+                    android:text="Loading..."/>
+
                 <ProgressBar
-                    android:id="@+id/refundskills_progressbar"
-                    style="?android:attr/progressBarStyle"
+                    android:paddingTop="16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-                <LinearLayout
-                    android:id="@+id/refundskills_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/refundskills_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
         </LinearLayout> <!-- BEFORE THIS ONE-->
 

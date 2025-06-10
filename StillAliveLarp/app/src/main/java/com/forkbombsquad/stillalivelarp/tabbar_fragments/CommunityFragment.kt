@@ -12,10 +12,16 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.forkbombsquad.stillalivelarp.AwardCharacterActivity
 import com.forkbombsquad.stillalivelarp.NPCListActivity
 import com.forkbombsquad.stillalivelarp.PlayersListActivity
 import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.RefundSkillsActivity
+import com.forkbombsquad.stillalivelarp.ViewNPCStuffActivity
+import com.forkbombsquad.stillalivelarp.ViewPlayerActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 
 import com.forkbombsquad.stillalivelarp.utils.FeatureFlag
@@ -68,6 +74,9 @@ class CommunityFragment : Fragment() {
         }
 
         allPlayersButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.PLAYER_LIST, DataManager.shared.players)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewPlayerActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "All Players")
             val intent = Intent(v.context, PlayersListActivity::class.java)
             startActivity(intent)
         }
@@ -82,6 +91,9 @@ class CommunityFragment : Fragment() {
         }
 
         allNPCsButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.NPC))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewNPCStuffActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "All NPCs")
             val intent = Intent(v.context, NPCListActivity::class.java)
             startActivity(intent)
         }

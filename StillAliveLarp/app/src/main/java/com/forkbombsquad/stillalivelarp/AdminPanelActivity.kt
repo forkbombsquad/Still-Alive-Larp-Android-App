@@ -167,11 +167,13 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         awardPlayer.setOnClick {
-            // TODO set up like characters list activity
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.PLAYER_LIST, DataManager.shared.players)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, AwardPlayerActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Player To Award")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectPlayerToAwardActivity::class.java)
+            val intent = Intent(this, PlayersListActivity::class.java)
             startActivity(intent)
         }
         awardChar.setOnClick {
@@ -231,11 +233,13 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         updatePass.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.PLAYER_LIST, DataManager.shared.players)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ChangePlayerPasswordActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Player To Change Password For")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectPlayerToChangePassActivity::class.java)
+            val intent = Intent(this, PlayersListActivity::class.java)
             startActivity(intent)
         }
         featureFlagManagement.setOnClick {
@@ -247,19 +251,23 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         refundSkills.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, RefundSkillsActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character to Refund Skills For")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectCharacterToRefundSkillsActivity::class.java)
+            val intent = Intent(this, CharactersListActivity::class.java)
             startActivity(intent)
         }
         manageNPCs.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.NPC))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ManageNPCActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select NPC To Manage")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectNPCToManageActivity::class.java)
+            val intent = Intent(this, NPCListActivity::class.java)
             startActivity(intent)
         }
         researchProjects.setOnClick {
