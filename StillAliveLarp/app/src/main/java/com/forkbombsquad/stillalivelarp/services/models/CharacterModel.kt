@@ -21,6 +21,7 @@ import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -452,101 +453,44 @@ data class FullCharacterModel(
         return CharacterBarcodeModel(this)
     }
 
+    private fun getLastAttendedEvent(): FullEventModel? {
+        if (eventAttendees.isEmpty()) {
+            return null
+        }
+        // Map event IDs to Event objects for quick lookup
+        val eventMap = DataManager.shared.events.associateBy { it.id }
+        val eventsWithAttendees = eventAttendees.mapNotNull { eventMap[it.eventId] }
+
+        // Find the event with the latest date from those
+        return eventsWithAttendees.maxByOrNull { it.date.yyyyMMddtoDate() }
+
+    }
+
+    fun getSkillsTakenSinceLastEvent(): List<SkillBarcodeModel> {
+        var skillsTaken: List<SkillBarcodeModel> = listOf()
+        getLastAttendedEvent().ifLet { event ->
+            // Only add skills that have been added since the last event they attended.
+            // If they've never attended an event, then don't need to add any skills.
+            skillsTaken = allPurchasedSkills().filter { skill -> skill.purchaseDate()?.yyyyMMddtoDate()?.isAfter(event.date.yyyyMMddtoDate())?: false }.map { it.barcodeModel(true) }
+        }
+        return skillsTaken
+    }
+
+
+    // TODO newly taken skills show up in this list now. Make sure they show up on checkin
     fun getRelevantBarcodeSkills(): Array<SkillBarcodeModel> {
-        val bskills = mutableListOf<SkillBarcodeModel>()
+        val baseBarcodeSkills = mutableListOf<SkillBarcodeModel>()
         skills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
-                bskills.add(SkillBarcodeModel(it))
+                baseBarcodeSkills.add(it.barcodeModel(false))
             }
         }
-        return bskills.toTypedArray()
+        // Remove duplicates, but keep the ones that are marked as .isNew so that they can show up in both places.
+        return (baseBarcodeSkills + getSkillsTakenSinceLastEvent()).groupBy { it.id }.mapValues { (_, duplicates) -> duplicates.find { it.isNew } ?: duplicates.first() }.values.toTypedArray()
     }
 
     fun getGearOrganized(): Map<String, List<GearJsonModel>> {
-        val gear = this.gear?.jsonModels
-        if (gear != null) {
-            var firearms: MutableList<GearJsonModel> = mutableListOf()
-            var melee: MutableList<GearJsonModel> = mutableListOf()
-            val clothing: MutableList<GearJsonModel> = mutableListOf()
-            var accessory: MutableList<GearJsonModel> = mutableListOf()
-            var bag: MutableList<GearJsonModel> = mutableListOf()
-            val other: MutableList<GearJsonModel> = mutableListOf()
-            gear.forEach { jg ->
-                when (jg.gearType) {
-                    Constants.GearTypes.firearm -> firearms.add(jg)
-                    Constants.GearTypes.meleeWeapon -> melee.add(jg)
-                    Constants.GearTypes.clothing -> clothing.add(jg)
-                    Constants.GearTypes.accessory -> accessory.add(jg)
-                    Constants.GearTypes.bag -> bag.add(jg)
-                    Constants.GearTypes.other -> other.add(jg)
-                }
-            }
-
-            // Sorting
-            firearms = firearms.sortedWith(
-                compareBy(
-                    { if (it.isPrimaryFirearm()) 0 else 1 },
-                    {
-                        when (it.primarySubtype) {
-                            Constants.GearPrimarySubtype.lightFirearm -> 0
-                            Constants.GearPrimarySubtype.mediumFirearm -> 1
-                            Constants.GearPrimarySubtype.heavyFirearm -> 2
-                            Constants.GearPrimarySubtype.advancedFirearm -> 3
-                            Constants.GearPrimarySubtype.militaryGradeFirearm -> 4
-                            else -> Int.MAX_VALUE
-                        }
-                    }
-                )
-            ).toMutableList()
-
-            melee = melee.sortedWith(
-                compareBy {
-                    when (it.primarySubtype) {
-                        Constants.GearPrimarySubtype.superLightMeleeWeapon -> 0
-                        Constants.GearPrimarySubtype.lightMeleeWeapon -> 1
-                        Constants.GearPrimarySubtype.mediumMeleeWeapon -> 2
-                        Constants.GearPrimarySubtype.heavyMeleeWeapon -> 3
-                        else -> Int.MAX_VALUE
-                    }
-                }
-            ).toMutableList()
-
-            accessory = accessory.sortedWith(
-                compareBy {
-                    when (it.primarySubtype) {
-                        Constants.GearPrimarySubtype.blacklightFlashlight -> 0
-                        Constants.GearPrimarySubtype.flashlight -> 1
-                        Constants.GearPrimarySubtype.other -> 2
-                        else -> Int.MAX_VALUE
-                    }
-                }
-            ).toMutableList()
-
-            bag = bag.sortedWith(
-                compareBy {
-                    when (it.primarySubtype) {
-                        Constants.GearPrimarySubtype.smallBag -> 0
-                        Constants.GearPrimarySubtype.mediumBag -> 1
-                        Constants.GearPrimarySubtype.largeBag -> 2
-                        Constants.GearPrimarySubtype.extraLargeBag -> 3
-                        else -> Int.MAX_VALUE
-                    }
-                }
-            ).toMutableList()
-
-            // Adding to map
-            return mapOf(
-                Pair(Constants.GearTypes.firearm, firearms),
-                Pair(Constants.GearTypes.meleeWeapon, melee),
-                Pair(Constants.GearTypes.clothing, clothing),
-                Pair(Constants.GearTypes.accessory, accessory),
-                Pair(Constants.GearTypes.bag, bag),
-                Pair(Constants.GearTypes.other, other)
-            )
-
-        } else {
-            return mapOf()
-        }
+        return gear?.getGearOrganized() ?: mapOf()
     }
 
     fun getPurchasedSkillsFiltered(searchText: String, filter: SkillFilterType): List<FullCharacterModifiedSkillModel> {

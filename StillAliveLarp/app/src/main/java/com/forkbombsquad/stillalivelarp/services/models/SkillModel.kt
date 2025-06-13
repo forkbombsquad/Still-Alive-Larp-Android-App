@@ -27,6 +27,10 @@ data class FullCharacterModifiedSkillModel(
     val skillTypeId = skill.skillTypeId
     val description = skill.description
 
+    fun purchaseDate(): String? {
+        return charSkillModel?.date
+    }
+
     fun spentXp(): Int {
         return charSkillModel?.xpSpent ?: 0
     }
@@ -249,6 +253,10 @@ data class FullCharacterModifiedSkillModel(
         return text
     }
 
+    fun barcodeModel(isNew: Boolean): SkillBarcodeModel {
+        return SkillBarcodeModel(this, isNew)
+    }
+
 }
 
 data class FullSkillModel(
@@ -372,10 +380,11 @@ data class SkillModel(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class SkillBarcodeModel(
     @JsonProperty("id") val id: Int,
-    @JsonProperty("name") val name: String
+    @JsonProperty("name") val name: String,
+    @JsonProperty("isNew") val isNew: Boolean
 ) : Serializable {
-    constructor(fullSkillModel: FullSkillModel): this(fullSkillModel.id, fullSkillModel.name)
-    constructor(fullSkillModel: FullCharacterModifiedSkillModel): this(fullSkillModel.id, fullSkillModel.name)
+    constructor(fullSkillModel: FullSkillModel, isNew: Boolean): this(fullSkillModel.id, fullSkillModel.name, isNew)
+    constructor(fullSkillModel: FullCharacterModifiedSkillModel, isNew: Boolean): this(fullSkillModel.id, fullSkillModel.name, isNew)
 
 }
 

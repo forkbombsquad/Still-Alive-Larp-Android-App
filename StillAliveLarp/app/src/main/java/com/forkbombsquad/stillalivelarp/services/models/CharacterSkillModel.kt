@@ -11,7 +11,8 @@ data class CharacterSkillModel(
     @JsonProperty("skillId") val skillId: Int,
     @JsonProperty("xpSpent") val xpSpent: Int,
     @JsonProperty("fsSpent") val fsSpent: Int,
-    @JsonProperty("ppSpent") val ppSpent: Int
+    @JsonProperty("ppSpent") val ppSpent: Int,
+    @JsonProperty("date") val date: String
 ) : Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)

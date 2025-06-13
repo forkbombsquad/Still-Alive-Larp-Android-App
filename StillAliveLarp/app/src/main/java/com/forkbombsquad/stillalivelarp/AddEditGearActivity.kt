@@ -148,7 +148,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
                         val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
                         DataManager.shared.characterToEdit!!.gear = updatedGearModel
-                        DataManager.shared.callUpdateCallback(ManageGearActivty::class)
+                        DataManager.shared.callUpdateCallbacks(listOf(ManageGearActivty::class, CheckInPlayerActivity::class))
                         finish()
                     } else {
                         // Create New Gear json list
@@ -166,7 +166,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
                         val newGearModel = GearModel(-1, char.id, toJson)
                         DataManager.shared.characterToEdit!!.gear = newGearModel
-                        DataManager.shared.callUpdateCallback(ManageGearActivty::class)
+                        DataManager.shared.callUpdateCallbacks(listOf(ManageGearActivty::class, CheckInPlayerActivity::class))
                         finish()
                     }
                 }

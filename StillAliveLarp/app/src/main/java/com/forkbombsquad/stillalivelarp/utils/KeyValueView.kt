@@ -79,6 +79,15 @@ class KeyValueViewBuildable(context: Context): LinearLayout(context) {
         div = findViewById(R.id.keyvalueview_div)
     }
 
+    fun setColor(keyColor: Int, valueColor: Int) {
+        keyView.setTextColor(context.getColor(keyColor))
+        valueView.setTextColor(context.getColor(valueColor))
+    }
+
+    fun setColor(valueColor: Int) {
+        valueView.setTextColor(context.getColor(valueColor))
+    }
+
     fun set(key: String, value: String, showDiv: Boolean) {
         keyView.text = key
         valueView.text = value

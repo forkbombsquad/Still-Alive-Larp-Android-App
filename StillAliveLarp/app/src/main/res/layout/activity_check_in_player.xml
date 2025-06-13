@@ -396,6 +396,30 @@ tools:context=".CheckInPlayerActivity">
                     app:showDiv="true"
                     app:value="Bullets: &lt;= 25\nMegas: &lt;= 8\nMilitaries: &lt;= 5\nRockets: &lt;= 2" />
 
+                <LinearLayout
+                    android:id="@+id/checkinplayer_newSkillsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="New Skills Since Last Event"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="italic" />
+
+                    <LinearLayout
+                        android:id="@+id/checkinplayer_newSkillsInnerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
