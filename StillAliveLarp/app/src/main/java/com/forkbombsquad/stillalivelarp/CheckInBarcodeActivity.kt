@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.HomeFragment
 
 import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
@@ -19,7 +19,7 @@ class CheckInBarcodeActivity : NoStatusBarActivity() {
     private lateinit var kvView: KeyValueView
     private lateinit var image: ImageView
 
-    private var barcode: PlayerCheckInBarcodeModel? = null
+    private lateinit var barcode: CheckInOutBarcodeModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_in_barcode)
@@ -30,18 +30,20 @@ class CheckInBarcodeActivity : NoStatusBarActivity() {
         title = findViewById(R.id.checkinbarcode_title)
         kvView = findViewById(R.id.checkinbarcode_keyvalueview)
         image = findViewById(R.id.checkinbarcode_image)
-        barcode = DataManager.shared.getPassedData(HomeFragment::class, DataManagerPassedDataKey.CHECKIN_BARCODE)
+        barcode = DataManager.shared.getPassedData(HomeFragment::class, DataManagerPassedDataKey.BARCODE)!!
         buildView()
     }
 
     private fun buildView() {
-        barcode.ifLet({
+        val player = DataManager.shared.players.firstOrNull { it.id == barcode.playerId }
+        val character = DataManager.shared.getCharacter(barcode.characterId ?: -1)
+        player.ifLet({
             kvView.isGone = false
             image.isGone = false
 
-            title.text = "Check In\n${it.player.fullName}"
-            kvView.set("Checking In As", it.character?.fullName ?: "NPC")
-            image.setImageBitmap(BarcodeGenerator.generateCheckInBarcode(it))
+            title.text = "Check In\n${it.fullName}"
+            kvView.set("Checking In As ", character?.fullName ?: "NPC")
+            image.setImageBitmap(BarcodeGenerator.generateCheckInBarcode(barcode))
         }, {
             title.text = "Error Generating Barcode"
             kvView.isGone = true

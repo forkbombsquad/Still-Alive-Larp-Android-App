@@ -24,7 +24,7 @@ tools:context=".ViewPreregsForEventActivity">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Preregistration For\nEvent"
+            android:text="Preregistrations For\nEvent"
             android:textStyle="bold"
             android:textSize="32sp"
             android:textAlignment="center"/>
@@ -68,16 +68,7 @@ tools:context=".ViewPreregsForEventActivity">
             android:id="@+id/viewpreregview_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ProgressBar
-                android:id="@+id/viewpreregview_progressbar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
+            android:orientation="vertical"/>
 
     </LinearLayout> <!-- BEFORE THIS ONE-->
 

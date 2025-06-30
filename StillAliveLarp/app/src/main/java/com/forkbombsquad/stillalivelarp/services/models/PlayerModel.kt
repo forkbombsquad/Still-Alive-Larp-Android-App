@@ -67,57 +67,37 @@ data class FullPlayerModel(
         return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }
     }
 
-    fun getCheckInBarcodeModel(useChar: Boolean, event: FullEventModel): PlayerCheckInBarcodeModel {
+    fun getCheckInBarcodeModel(useChar: Boolean, event: FullEventModel): CheckInOutBarcodeModel {
         val activeChar = getActiveCharacter()
         return if (useChar && activeChar != null) {
-            PlayerCheckInBarcodeModel(
-                player = barcodeModel(),
-                character = activeChar.barcodeModel(),
-                event = event.barcodeModel(),
-                relevantSkills = activeChar.getRelevantBarcodeSkills(),
-                gear = activeChar.gear
+            CheckInOutBarcodeModel(
+                playerId = id,
+                characterId = activeChar.id,
+                eventId = event.id
             )
         } else {
-            PlayerCheckInBarcodeModel(
-                player = barcodeModel(),
-                character = null,
-                event = event.barcodeModel(),
-                relevantSkills = arrayOf(),
-                gear = null
+            CheckInOutBarcodeModel(
+                playerId = id,
+                characterId = null,
+                eventId = event.id
             )
         }
     }
 
-    fun getCheckOutBarcodeModel(eventAttendee: EventAttendeeModel): PlayerCheckOutBarcodeModel {
-        val char = characters.firstOrNull { it.id == eventAttendee.characterId }
-        return if (char != null) {
-            PlayerCheckOutBarcodeModel(
-                player = barcodeModel(),
-                character = char.barcodeModel(),
-                eventId = eventAttendee.eventId,
-                eventAttendeeId = eventAttendee.id,
-                relevantSkills = char.getRelevantBarcodeSkills()
+    fun getCheckOutBarcodeModel(eventAttendee: EventAttendeeModel): CheckInOutBarcodeModel {
+        return if (characters.firstOrNull { it.id == eventAttendee.characterId } != null) {
+            CheckInOutBarcodeModel(
+                playerId = eventAttendee.playerId,
+                characterId = eventAttendee.characterId,
+                eventId = eventAttendee.eventId
             )
         } else {
-            PlayerCheckOutBarcodeModel(
-                player = barcodeModel(),
-                character = null,
-                eventId = eventAttendee.eventId,
-                eventAttendeeId = eventAttendee.id,
-                relevantSkills = arrayOf()
+            CheckInOutBarcodeModel(
+                playerId = eventAttendee.playerId,
+                characterId = null,
+                eventId = eventAttendee.eventId
             )
         }
-    }
-
-    private fun barcodeModel(): PlayerBarcodeModel {
-        return PlayerBarcodeModel(
-            id = id,
-            fullName = fullName,
-            isCheckedIn = isCheckedIn.toString(),
-            lastCheckIn = lastCheckIn,
-            numEventsAttended = numEventsAttended.toString(),
-            numNpcEventsAttended = numNpcEventsAttended.toString()
-        )
     }
 
     fun baseModel(): PlayerModel {
@@ -186,10 +166,6 @@ data class PlayerModel(
         p.numNpcEventsAttended.toString(),
         p.isAdmin.toString().uppercase()
     )
-
-    fun getBarcodeModel(): PlayerBarcodeModel {
-        return PlayerBarcodeModel(this)
-    }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -213,22 +189,3 @@ data class PlayerCreateModel(
 data class PlayerListModel(
     @JsonProperty("players") val players: Array<PlayerModel>
 ) : Serializable
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class PlayerBarcodeModel(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("fullName") val fullName: String,
-    @JsonProperty("isCheckedIn") val isCheckedIn: String,
-    @JsonProperty("lastCheckIn") val lastCheckIn: String,
-    @JsonProperty("numEventsAttended") val numEventsAttended: String,
-    @JsonProperty("numNpcEventsAttended") val numNpcEventsAttended: String,
-) : Serializable {
-    constructor(playerModel: PlayerModel): this(
-        playerModel.id,
-        playerModel.fullName,
-        playerModel.isCheckedIn,
-        playerModel.lastCheckIn,
-        playerModel.numEventsAttended,
-        playerModel.numNpcEventsAttended
-    )
-}

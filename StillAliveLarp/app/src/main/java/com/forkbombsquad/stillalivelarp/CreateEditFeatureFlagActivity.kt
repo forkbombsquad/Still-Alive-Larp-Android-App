@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
@@ -29,6 +31,8 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
     private lateinit var save: LoadingButton
     private lateinit var delete: LoadingButton
 
+    private var featureFlag: FeatureFlagModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_edit_feature_flag)
@@ -36,6 +40,8 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        featureFlag = DataManager.shared.getPassedData(FeatureFlagManagementActivity::class, DataManagerPassedDataKey.SELECTED_FEATURE_FLAG)
+
         title = findViewById(R.id.featureflag_title)
         name = findViewById(R.id.featureflag_flagName)
         desc = findViewById(R.id.featureflag_description)
@@ -48,7 +54,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
 
         save.setOnClick {
             save.setLoading(true)
-            OldDataManager.shared.selectedFeatureFlag.ifLet({ flag ->
+            featureFlag.ifLet({ flag ->
                 val updatedFlag = FeatureFlagModel(
                     id = flag.id,
                     name = this.name.text.toString(),
@@ -58,14 +64,17 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
                 )
                 val request = AdminService.UpdateFeatureFlag()
                 lifecycleScope.launch {
-                    request.successfulResponse(UpdateModelSP(updatedFlag)).ifLet({ newFlag ->
-                        OldDataManager.shared.unrelaltedUpdateCallback()
+                    request.successfulResponse(UpdateModelSP(updatedFlag)).ifLet({ _ ->
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Updated feature flag!") { _, _ ->
                             save.setLoading(false)
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            DataManager.shared.closeActiviesToClose()
                             finish()
                         }
                     }, {
                         save.setLoading(false)
+                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.closeActiviesToClose()
                         AlertUtils.displaySomethingWentWrong(this@CreateEditFeatureFlagActivity)
                     })
                 }
@@ -78,14 +87,17 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
                 )
                 val request = AdminService.CreateFeatureFlag()
                 lifecycleScope.launch {
-                    request.successfulResponse(CreateModelSP(featureFlagCreateModel)).ifLet({ newFlag ->
-                        OldDataManager.shared.unrelaltedUpdateCallback()
+                    request.successfulResponse(CreateModelSP(featureFlagCreateModel)).ifLet({ _ ->
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Created feature flag!") { _, _ ->
                             save.setLoading(false)
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            DataManager.shared.closeActiviesToClose()
                             finish()
                         }
                     }, {
                         save.setLoading(false)
+                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.closeActiviesToClose()
                         AlertUtils.displaySomethingWentWrong(this@CreateEditFeatureFlagActivity)
                     })
                 }
@@ -93,14 +105,15 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
         }
 
         delete.setOnClick {
-            OldDataManager.shared.selectedFeatureFlag.ifLet {
+            featureFlag.ifLet {
                 delete.setLoading(true)
                 val request = AdminService.DeleteFeatureFlag()
                 lifecycleScope.launch {
                     request.successfulResponse(IdSP(it.id)).ifLet({
-                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@CreateEditFeatureFlagActivity, "Deleted feature flag!") { _, _ ->
                             delete.setLoading(false)
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            DataManager.shared.closeActiviesToClose()
                             finish()
                         }
                     }, {
@@ -115,7 +128,7 @@ class CreateEditFeatureFlagActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        OldDataManager.shared.selectedFeatureFlag.ifLet({ flag ->
+        featureFlag.ifLet({ flag ->
             title.text = "Edit Feature Flag"
             name.setText(flag.name)
             desc.setText(flag.description)

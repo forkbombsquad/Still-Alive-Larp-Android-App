@@ -449,10 +449,6 @@ data class FullCharacterModel(
         return count
     }
 
-    fun barcodeModel(): CharacterBarcodeModel {
-        return CharacterBarcodeModel(this)
-    }
-
     private fun getLastAttendedEvent(): FullEventModel? {
         if (eventAttendees.isEmpty()) {
             return null
@@ -466,27 +462,24 @@ data class FullCharacterModel(
 
     }
 
-    fun getSkillsTakenSinceLastEvent(): List<SkillBarcodeModel> {
-        var skillsTaken: List<SkillBarcodeModel> = listOf()
+    fun getSkillsTakenSinceLastEvent(): List<FullCharacterModifiedSkillModel> {
+        var skillsTaken: List<FullCharacterModifiedSkillModel> = listOf()
         getLastAttendedEvent().ifLet { event ->
             // Only add skills that have been added since the last event they attended.
             // If they've never attended an event, then don't need to add any skills.
-            skillsTaken = allPurchasedSkills().filter { skill -> skill.purchaseDate()?.yyyyMMddtoDate()?.isAfter(event.date.yyyyMMddtoDate())?: false }.map { it.barcodeModel(true) }
+            skillsTaken = allPurchasedSkills().filter { skill -> skill.isNew(event) }
         }
         return skillsTaken
     }
 
-
-    // TODO newly taken skills show up in this list now. Make sure they show up on checkin
-    fun getRelevantBarcodeSkills(): Array<SkillBarcodeModel> {
-        val baseBarcodeSkills = mutableListOf<SkillBarcodeModel>()
+    fun getRelevantBarcodeSkills(): List<FullCharacterModifiedSkillModel> {
+        val baseBarcodeSkills = mutableListOf<FullCharacterModifiedSkillModel>()
         skills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
-                baseBarcodeSkills.add(it.barcodeModel(false))
+                baseBarcodeSkills.add(it)
             }
         }
-        // Remove duplicates, but keep the ones that are marked as .isNew so that they can show up in both places.
-        return (baseBarcodeSkills + getSkillsTakenSinceLastEvent()).groupBy { it.id }.mapValues { (_, duplicates) -> duplicates.find { it.isNew } ?: duplicates.first() }.values.toTypedArray()
+        return baseBarcodeSkills
     }
 
     fun getGearOrganized(): Map<String, List<GearJsonModel>> {
@@ -522,6 +515,14 @@ data class FullCharacterModel(
                 completion(false)
             })
         }
+    }
+
+    fun getAllXpSpent(): Int {
+        return allPurchasedSkills().sumOf { it.spentXp() }
+    }
+
+    fun getAllSpentPrestigePoints(): Int {
+        return allPurchasedSkills().sumOf { it.spentPp() }
     }
 
 }
@@ -577,78 +578,6 @@ data class CharacterModel(
         c.mysteriousStrangerUses.toString(),
         c.playerId,
         c.characterTypeId
-    )
-
-    fun getAllXpSpent(lifecycleScope: LifecycleCoroutineScope, callback: (xp: Int) -> Unit) {
-        val charSkillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
-        lifecycleScope.launch {
-            charSkillRequest.successfulResponse(IdSP(id)).ifLet({
-                var cost = 0
-                it.charSkills.forEach { skl ->
-                    cost += skl.xpSpent
-                }
-                callback(cost)
-            }, {
-                callback(0)
-            })
-        }
-    }
-
-    fun getAllPrestigePointsSpent(lifecycleScope: LifecycleCoroutineScope, callback: (xp: Int) -> Unit) {
-        val charSkillRequest = CharacterSkillService.GetAllCharacterSkillsForCharacter()
-        lifecycleScope.launch {
-            charSkillRequest.successfulResponse(IdSP(id)).ifLet({
-                var cost = 0
-                it.charSkills.forEach { skl ->
-                    cost += skl.ppSpent
-                }
-                callback(cost)
-            }, {
-                callback(0)
-            })
-        }
-    }
-}
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class CharacterBarcodeModel(
-    val id: Int,
-    val fullName: String,
-    val infection: String,
-    var bullets: String,
-    val megas: String,
-    val rivals: String,
-    val rockets: String,
-    val bulletCasings: String,
-    val clothSupplies: String,
-    val woodSupplies: String,
-    val metalSupplies: String,
-    val techSupplies: String,
-    val medicalSupplies: String,
-    val armor: String,
-    val unshakableResolveUses: String,
-    val mysteriousStrangerUses: String,
-    val playerId: Int
-) : Serializable {
-
-    constructor(charModel: FullCharacterModel): this(
-        charModel.id,
-        charModel.fullName,
-        charModel.infection,
-        charModel.bullets.toString(),
-        charModel.megas.toString(),
-        charModel.rivals.toString(),
-        charModel.rockets.toString(),
-        charModel.bulletCasings.toString(),
-        charModel.clothSupplies.toString(),
-        charModel.woodSupplies.toString(),
-        charModel.metalSupplies.toString(),
-        charModel.techSupplies.toString(),
-        charModel.medicalSupplies.toString(),
-        charModel.armor,
-        charModel.unshakableResolveUses.toString(),
-        charModel.mysteriousStrangerUses.toString(),
-        charModel.playerId
     )
 }
 

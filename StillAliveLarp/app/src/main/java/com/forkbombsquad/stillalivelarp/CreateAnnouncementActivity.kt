@@ -49,6 +49,7 @@ class CreateAnnouncementActivity : NoStatusBarActivity() {
                 lifecycleScope.launch {
                     createAnnouncementRequest.successfulResponse(CreateModelSP(announcementCreateModel)).ifLet({ _ ->
                         AlertUtils.displaySuccessMessage(this@CreateAnnouncementActivity, "Announcement Created") { _, _ ->
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                             finish()
                         }
                     }, {

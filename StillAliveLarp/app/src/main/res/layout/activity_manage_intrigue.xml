@@ -29,12 +29,6 @@ tools:context=".ManageIntrigueActivity">
             android:textSize="32sp"
             android:textAlignment="center"/>
 
-        <ProgressBar
-            android:id="@+id/intriguemanagement_progressbar"
-            android:paddingTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
         <LinearLayout
             android:id="@+id/intriguemanagement_layout"
             android:layout_width="match_parent"

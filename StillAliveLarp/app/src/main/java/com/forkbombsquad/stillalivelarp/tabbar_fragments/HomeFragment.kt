@@ -19,20 +19,13 @@ import com.forkbombsquad.stillalivelarp.PreregActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
-
-import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.EventModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
-import com.forkbombsquad.stillalivelarp.utils.fragmentName
-import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.ifLet
-import com.forkbombsquad.stillalivelarp.utils.inChronologicalOrder
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.google.android.material.divider.MaterialDivider
@@ -52,8 +45,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
-    private lateinit var loadingLayout: LinearLayout
-    private lateinit var loadingTextView: TextView
+    private lateinit var loadingLayout: LoadingLayout
 
     private lateinit var announcementsLayout: LinearLayout
     private lateinit var announcementsViewTitle: TextView
@@ -134,8 +126,7 @@ class HomeFragment : Fragment() {
         }
 
         // Setup Loading View
-        loadingLayout = v.findViewById(R.id.loadingView)
-        loadingTextView = v.findViewById(R.id.loadingText)
+        loadingLayout = v.findViewById(R.id.loadinglayout)
 
         // Announcements
         announcementsLayout = v.findViewById(R.id.announcementslayout)
@@ -180,7 +171,7 @@ class HomeFragment : Fragment() {
                 DataManager.shared.getCurrentPlayer().ifLet { player ->
                     player.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }.ifLet({ eventAttendee ->
                         val barcodeModel = player.getCheckOutBarcodeModel(eventAttendee)
-                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, barcodeModel)
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, barcodeModel)
                         val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
                         startActivity(intent)
                     }, {
@@ -233,7 +224,7 @@ class HomeFragment : Fragment() {
                 val event = DataManager.shared.getOngoingEvent()
                 if (player != null && event != null) {
                     val barcode = player.getCheckInBarcodeModel(true, event)
-                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, barcode)
                     val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
                     startActivity(intent)
                 }
@@ -247,7 +238,7 @@ class HomeFragment : Fragment() {
                 val event = DataManager.shared.getOngoingEvent()
                 if (player != null && event != null) {
                     val barcode = player.getCheckInBarcodeModel(false, event)
-                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, barcode)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, barcode)
                     val intent = Intent(v.context, CheckInBarcodeActivity::class.java)
                     startActivity(intent)
                 }
@@ -334,7 +325,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareLoadingSection() {
-        loadingTextView.text = DataManager.shared.loadingText
+        loadingLayout.setLoadingText(DataManager.shared.loadingText)
     }
 
     private fun prepareAnnouncementsSection() {

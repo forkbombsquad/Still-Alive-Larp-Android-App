@@ -67,7 +67,7 @@ fun List<FullCharacterModifiedSkillModel>.alphabetized(): List<FullCharacterModi
 
 data class PreregNumbers(val premium: Int, val premiumNpc: Int, val basic: Int, val basicNpc: Int, val free: Int, val notAttending: Int)
 
-fun Array<EventPreregModel>.getRegNumbers(): PreregNumbers {
+fun List<EventPreregModel>.getRegNumbers(): PreregNumbers {
     var prem = 0
     var premNpc = 0
     var basic = 0

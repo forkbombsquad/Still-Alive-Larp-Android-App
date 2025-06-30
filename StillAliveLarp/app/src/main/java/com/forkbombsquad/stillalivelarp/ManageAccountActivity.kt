@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AwardService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
-import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.EventAttendeeService
 import com.forkbombsquad.stillalivelarp.services.EventPreregService
 import com.forkbombsquad.stillalivelarp.services.GearService
@@ -40,6 +39,7 @@ class ManageAccountActivity : NoStatusBarActivity() {
         deleteAccount = findViewById(R.id.manageaccount_deleteAccount)
 
         changePass.setOnClick {
+            DataManager.shared.addActivityToClose(this)
             val intent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(intent)
         }

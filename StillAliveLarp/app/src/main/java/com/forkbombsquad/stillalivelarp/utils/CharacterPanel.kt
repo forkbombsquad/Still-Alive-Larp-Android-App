@@ -22,6 +22,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
     val viewSkillsList: NavArrowButtonBlack
     val viewBio: NavArrowButtonBlack
     val viewGear: NavArrowButtonBlack
+    val viewXpReductions: NavArrowButtonBlack
     val viewAwards: NavArrowButtonBlack
 
     val otherCharsTitle: TextView
@@ -39,6 +40,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
         viewSkillsList = findViewById(R.id.charpanel_viewSkillsList)
         viewBio = findViewById(R.id.charpanel_viewBio)
         viewGear = findViewById(R.id.charpanel_viewGear)
+        viewXpReductions = findViewById(R.id.charpanel_viewXpReductions)
         viewAwards = findViewById(R.id.charpanel_viewAwards)
 
         otherCharsTitle = findViewById(R.id.charpanel_otherCharacters)
@@ -80,6 +82,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
 
             if (charIsStandard) {
                 viewBio.isGone = !character.approvedBio
+                viewXpReductions.isGone = false
                 viewInactiveChars.isGone = player.getInactiveCharacters().isEmpty() == true
                 viewPlannedChars.isGone = player.getPlannedCharacters().isEmpty() == true
                 if (isOwnedByPlayer) {
@@ -96,6 +99,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
                 }
             } else {
                 viewBio.isGone = character.characterType() == CharacterType.NPC
+                viewXpReductions.isGone = true
             }
         }, {
             activeCharTitle.isGone = true
@@ -111,6 +115,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
         viewSkillsListCallback: () -> Unit,
         viewBioCallback: () -> Unit,
         viewGearCallback: () -> Unit,
+        viewXpReductionsCallback: () -> Unit,
         viewAwardsCallback: () -> Unit,
         viewInactiveCharsCallback: () -> Unit,
         viewPlannedCharsCallback: () -> Unit
@@ -120,6 +125,7 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
         viewSkillsList.setOnClick(viewSkillsListCallback)
         viewBio.setOnClick(viewBioCallback)
         viewGear.setOnClick(viewGearCallback)
+        viewXpReductions.setOnClick(viewXpReductionsCallback)
         viewAwards.setOnClick(viewAwardsCallback)
         viewInactiveChars.setOnClick(viewInactiveCharsCallback)
         viewPlannedChars.setOnClick(viewPlannedCharsCallback)

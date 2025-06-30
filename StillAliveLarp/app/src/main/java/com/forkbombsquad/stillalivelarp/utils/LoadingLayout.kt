@@ -21,7 +21,7 @@ class LoadingLayout(context: Context): LinearLayout(context) {
     val progressBar: ProgressBar
 
     init {
-        inflate(context, R.layout.LoadingLayout, this)
+        inflate(context, R.layout.loading_layout, this)
 
         layout = findViewById(R.id.loadingLayout_layout)
         gettingContentText = findViewById(R.id.loadinglayout_gettingContentText)

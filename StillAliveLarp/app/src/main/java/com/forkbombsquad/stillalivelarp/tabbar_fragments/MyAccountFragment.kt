@@ -144,6 +144,9 @@ class MyAccountFragment : Fragment() {
                 val intent = Intent(v.context, ViewGearActivity::class.java)
                 startActivity(intent)
             },
+            viewXpReductionsCallback = {
+                // TODO
+            },
             viewAwardsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, DataManager.shared.getActiveCharacter()!!.awards)
                 val intent = Intent(v.context, ViewAwardsActivity::class.java)
@@ -163,6 +166,9 @@ class MyAccountFragment : Fragment() {
             }
         )
         manageAccountNav.setOnClick {
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+            }
             val intent = Intent(v.context, ManageAccountActivity::class.java)
             startActivity(intent)
         }
@@ -211,6 +217,8 @@ class MyAccountFragment : Fragment() {
 
             debugButton.isGone = !Constants.Logging.showDebugButtonInAccountView
         }
+        manageAccountNav.isGone = DataManager.shared.offlineMode
+        signOutButton.isGone = DataManager.shared.offlineMode
     }
 
     private fun doDebugStuff() {

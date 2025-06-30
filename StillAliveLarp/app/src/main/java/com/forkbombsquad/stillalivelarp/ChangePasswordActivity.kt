@@ -3,9 +3,11 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.PlayerService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.utils.UpdatePSP
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
@@ -45,13 +47,13 @@ class ChangePasswordActivity : NoStatusBarActivity() {
                         val updatePRequest = PlayerService.UpdateP()
                         lifecycleScope.launch {
                             updatePRequest.successfulResponse(UpdatePSP(
-                                playerId = OldDataManager.shared.player?.id ?: -1,
+                                playerId = DataManager.shared.currentPlayerId,
                                 p = newPw.text.toString()
                             )).ifLet({
-                                OldDataManager.shared.player = it
-                                PlayerManager.shared.setPlayer(it)
                                 UserAndPassManager.shared.setUandP(it.username, newPw.text.toString(), true)
                                 AlertUtils.displayOkMessage(this@ChangePasswordActivity, "Success", "Password Updated") { _, _ ->
+                                    DataManager.shared.callUpdateCallback(MyAccountFragment::class)
+                                    DataManager.shared.closeActiviesToClose()
                                     finish()
                                 }
                             }, {

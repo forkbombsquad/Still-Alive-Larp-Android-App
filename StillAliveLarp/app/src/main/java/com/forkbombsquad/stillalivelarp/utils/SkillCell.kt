@@ -76,7 +76,34 @@ class SkillCell(context: Context): LinearLayout(context) {
         prereqs.text = skill.getPrereqNames()
 
         desc.text = skill.description
+    }
 
+    fun setup(skill: FullSkillModel) {
+        val skl = FullCharacterModifiedSkillModel(skill, null, null, 0, 0, 0, 0, 0)
+        title.text = skill.name
+        type.text = skill.getTypeText()
+
+        infoLayout.isGone = false
+        purchaseButton.isGone = true
+        purchaseLayout.isGone = true
+
+        xp.text = skl.getXpCostText()
+        pp.text = "and ${skl.getPrestigeCostText()}"
+        inf.text = skl.getInfCostText()
+
+        pp.isGone = skl.prestigeCost() == 0
+        inf.isGone = skl.modInfectionCost() == 0
+
+        when (skill.skillTypeId) {
+            Constants.SkillTypes.combat -> type.setTextColor(context.getColor(R.color.bright_red))
+            Constants.SkillTypes.profession -> type.setTextColor(context.getColor(R.color.green))
+            Constants.SkillTypes.talent -> type.setTextColor(context.getColor(R.color.blue))
+        }
+
+        prereqLayout.isGone = skl.prereqs().isEmpty()
+        prereqs.text = skill.getPrereqNames()
+
+        desc.text = skill.description
     }
 
     fun setupForXpReduction(skill: FullCharacterModifiedSkillModel, buttonCallback: (skill: FullCharacterModifiedSkillModel) -> Unit) {

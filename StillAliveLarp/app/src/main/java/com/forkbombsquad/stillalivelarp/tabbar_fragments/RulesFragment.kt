@@ -46,6 +46,7 @@ class RulesFragment : Fragment() {
         nativeSkillTreeDiagramNav = v.findViewById(R.id.rules_skillTreeDiagramNativeNav)
 
         skillListNav.setOnClick {
+            // TODO convert to activity
             val frag = SkillListFragment.newInstance()
             val transaction = parentFragmentManager.beginTransaction()
             transaction.add(R.id.container, frag)

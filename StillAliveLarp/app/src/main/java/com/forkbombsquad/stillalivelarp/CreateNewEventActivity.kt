@@ -3,6 +3,7 @@ package com.forkbombsquad.stillalivelarp
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 import com.forkbombsquad.stillalivelarp.services.models.EventCreateModel
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
@@ -55,8 +56,9 @@ class CreateNewEventActivity : NoStatusBarActivity() {
                 val createEventRequest = AdminService.CreateEvent()
                 lifecycleScope.launch {
                     createEventRequest.successfulResponse(CreateModelSP(eventCreateModel)).ifLet({ _ ->
-                        OldDataManager.shared.unrelaltedUpdateCallback()
                         AlertUtils.displaySuccessMessage(this@CreateNewEventActivity,"Event Created!") { _, _ ->
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            DataManager.shared.closeActiviesToClose()
                             finish()
                         }
                     }, {

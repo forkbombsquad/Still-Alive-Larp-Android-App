@@ -2,7 +2,6 @@ package com.forkbombsquad.stillalivelarp
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
@@ -11,13 +10,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.journeyapps.barcodescanner.ScanContract
@@ -61,10 +58,8 @@ class AdminPanelActivity : NoStatusBarActivity() {
     ) { result ->
         if(result.contents != null) {
             if (checkInOutState == CHECKIN_STATE) {
-                globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
-                    // TODO
-                    // TODO do callback if necessary
-                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKIN_BARCODE, it)
+                globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, it)
                     DataManager.shared.setUpdateCallback(this::class) {
                         reload()
                     }
@@ -74,10 +69,8 @@ class AdminPanelActivity : NoStatusBarActivity() {
                     AlertUtils.displayError(this, "Unable to parse barcode data!")
                 })
             } else if (checkInOutState == CHECKOUT_STATE) {
-                globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
-                    // TODO
-                    // TODO do callback if necessary
-                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHECKOUT_BARCODE, it)
+                globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, it)
                     DataManager.shared.setUpdateCallback(this::class) {
                         reload()
                     }
@@ -125,16 +118,21 @@ class AdminPanelActivity : NoStatusBarActivity() {
         }
 
         prereg.setOnClick {
-            // TODO set this up like character list activity
-            val intent = Intent(this, SelectEventForPreregViewActivity::class.java)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.EVENT_LIST, DataManager.shared.events)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewPreregsForEventActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Event To View PreRegistrations")
+            val intent = Intent(this, EventsListActivity::class.java)
             startActivity(intent)
         }
         eventManagement.setOnClick {
-            // TODO set this up like character list activity
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.EVENT_LIST, DataManager.shared.events)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ManageEventActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ADDITIONAL_DESTINATION_CLASS, CreateNewEventActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Event Management")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectEventForEventManagementActivity::class.java)
+            val intent = Intent(this, EventsListActivity::class.java)
             startActivity(intent)
         }
         playerCheckIn.setOnClick {
@@ -154,14 +152,12 @@ class AdminPanelActivity : NoStatusBarActivity() {
             barcodeScanner.launch(sc)
         }
         giveClassXpRed.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, SelectSkillForClassXpReductionActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character for Xp Reduction")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
-            // TODO setup SelectSkillForClassXpReductionActivity like the CharactersList one
-            // TODO add callback after service call to reload
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, SelectSkillForClassXpReductionActivity::class)
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character for Xp Reduction")
             val intent = Intent(this, CharactersListActivity::class.java)
             startActivity(intent)
         }
@@ -200,7 +196,6 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         createAnnouncement.setOnClick {
-            // TODO
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
@@ -208,23 +203,27 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         manageIntrigue.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.EVENT_LIST, DataManager.shared.events)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ManageIntrigueActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Event To Manage Intrigue")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, SelectEventForIntrigueActivty::class.java)
+            val intent = Intent(this, EventsListActivity::class.java)
             startActivity(intent)
         }
         approveBios.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD).filter { !it.approvedBio && it.bio.trim().isNotEmpty() })
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ApproveBioActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character To Approve Bio For")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
-            val intent = Intent(this, CharacterBioListActivity::class.java)
+            val intent = Intent(this, CharactersListActivity::class.java)
             startActivity(intent)
         }
         contactRequests.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CONTACT_REQUEST_LIST, DataManager.shared.contactRequests)
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
@@ -242,7 +241,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         featureFlagManagement.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.FEATURE_FLAG_LIST, DataManager.shared.featureFlags)
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
@@ -270,7 +269,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         researchProjects.setOnClick {
-            // TODO
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.RESEARCH_PROJECT_LIST, DataManager.shared.researchProjects)
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }

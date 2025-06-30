@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -22,6 +25,8 @@ class ContactDetailsActivity : NoStatusBarActivity() {
     private lateinit var message: TextView
     private lateinit var markAsRead: LoadingButton
 
+    private lateinit var contactRequest: ContactRequestModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_details)
@@ -29,6 +34,8 @@ class ContactDetailsActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        contactRequest = DataManager.shared.getPassedData(ContactListActivity::class, DataManagerPassedDataKey.SELECTED_CONTACT_REQUEST)!!
+
         name = findViewById(R.id.contactrequestdetails_name)
         email = findViewById(R.id.contactrequestdetails_email)
         postal = findViewById(R.id.contactrequestdetails_postalCode)
@@ -45,21 +52,19 @@ class ContactDetailsActivity : NoStatusBarActivity() {
         }
 
         markAsRead.setOnClick {
-            OldDataManager.shared.selectedContactRequest.ifLet {
-                markAsRead.setLoading(true)
-                val cr = it
-                cr.read = it.read.toBoolean().ternary("FALSE", "TRUE")
-                val updateContactRequest = AdminService.UpdateContactRequest()
-                lifecycleScope.launch {
-                    updateContactRequest.successfulResponse(UpdateModelSP(cr)).ifLet({
-                        OldDataManager.shared.unrelaltedUpdateCallback()
-                        AlertUtils.displaySuccessMessage(this@ContactDetailsActivity, "Marked as ${cr.read.toBoolean().ternary("read", "unread")}") { _, _ ->
-                            finish()
-                        }
-                    }, {
-                        markAsRead.setLoading(false)
-                    })
-                }
+            markAsRead.setLoading(true)
+            contactRequest.read = contactRequest.read.toBoolean().ternary("FALSE", "TRUE")
+            val updateContactRequest = AdminService.UpdateContactRequest()
+            lifecycleScope.launch {
+                updateContactRequest.successfulResponse(UpdateModelSP(contactRequest)).ifLet({
+                    AlertUtils.displaySuccessMessage(this@ContactDetailsActivity, "Marked as ${contactRequest.read.toBoolean().ternary("read", "unread")}") { _, _ ->
+                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.closeActiviesToClose()
+                        finish()
+                    }
+                }, {
+                    markAsRead.setLoading(false)
+                })
             }
         }
 
@@ -67,14 +72,12 @@ class ContactDetailsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        OldDataManager.shared.selectedContactRequest.ifLet {
-            name.set(it.fullName)
-            email.set(it.emailAddress)
-            postal.set(it.postalCode)
-            message.text = it.message
+        name.set(contactRequest.fullName)
+        email.set(contactRequest.emailAddress)
+        postal.set(contactRequest.postalCode)
+        message.text = contactRequest.message
 
-            markAsRead.set(it.read.toBoolean().ternary("Mark as Unread", "Mark as Read"))
-        }
+        markAsRead.set(contactRequest.read.toBoolean().ternary("Mark as Unread", "Mark as Read"))
     }
 
 }

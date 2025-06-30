@@ -16,6 +16,9 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".EventsListActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminPanelActivity"
             android:exported="false" />
         <activity
@@ -49,43 +52,13 @@
             android:name=".ManageResearchProjectsActivity"
             android:exported="false" />
         <activity
-            android:name=".OtherCharacterNativeSkillTreeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddEditGearFromBarcodeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineNPCListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineNativeSkillTreeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflinePersonalNativeSkillTreeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PersonalSkillTreeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NPCSkillListActivity"
-            android:exported="false" />
-        <activity
             android:name=".ManageNPCActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectNPCToManageActivity"
             android:exported="false" />
         <activity
             android:name=".ViewNPCStuffActivity"
             android:exported="false" />
         <activity
             android:name=".NPCListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddPlannedSkillActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CharacterPlannerSkillListActivity"
             android:exported="false" />
         <activity
             android:name=".CharacterPlannerActivity"
@@ -97,9 +70,6 @@
             android:name=".ViewEventAttendeesActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineViewAllSkillsActivity"
-            android:exported="false" />
-        <activity
             android:name=".SAImageViewActivity"
             android:exported="false" />
         <activity
@@ -107,9 +77,6 @@
             android:exported="false" />
         <activity
             android:name=".RefundSkillsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectCharacterToRefundSkillsActivity"
             android:exported="false" />
         <activity
             android:name=".EditProfileImageActivity"
@@ -121,9 +88,6 @@
             android:name=".ViewRulesActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineViewGearActivity"
-            android:exported="false" />
-        <activity
             android:name=".ViewGearActivity"
             android:exported="false" />
         <activity
@@ -131,9 +95,6 @@
             android:exported="false" />
         <activity
             android:name=".ManageGearActivty"
-            android:exported="false" />
-        <activity
-            android:name=".SelectCharacterToManageGearActivity"
             android:exported="false" />
         <activity
             android:name=".EditEventActivity"
@@ -145,19 +106,10 @@
             android:name=".CreateNewEventActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectEventForEventManagementActivity"
-            android:exported="false" />
-        <activity
             android:name=".ChangePlayerPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectPlayerToChangePassActivity"
-            android:exported="false" />
-        <activity
             android:name=".ManageIntrigueActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectEventForIntrigueActivty"
             android:exported="false" />
         <activity
             android:name=".CreateAnnouncementActivity"
@@ -166,19 +118,10 @@
             android:name=".AwardCharacterActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectCharacterToAwardActivity"
-            android:exported="false" />
-        <activity
             android:name=".AwardPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectPlayerToAwardActivity"
-            android:exported="false" />
-        <activity
             android:name=".SelectSkillForClassXpReductionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectCharacterForClassXpReductionActivity"
             android:exported="false" />
         <activity
             android:name=".CheckOutPlayerActivity"
@@ -202,9 +145,6 @@
             android:name=".ApproveBioActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterBioListActivity"
-            android:exported="false" />
-        <activity
             android:name=".SpecialClassXpReductionsActivity"
             android:exported="false" />
         <activity
@@ -215,9 +155,6 @@
             android:exported="false" />
         <activity
             android:name=".EditBioActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineViewBioActivity"
             android:exported="false" />
         <activity
             android:name=".ViewBioActivity"
@@ -232,9 +169,6 @@
             android:name=".ActivityTemplate"
             android:exported="false" />
         <activity
-            android:name=".SelectEventForPreregViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".CreateCharacterActivity"
             android:exported="false" />
         <activity
@@ -242,18 +176,6 @@
             android:exported="false" />
         <activity
             android:name=".CheckInBarcodeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineViewSkillsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineCharacterStatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflinePlayerStatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineMyAccountActivity"
             android:exported="false" />
         <activity
             android:name=".tabbar_fragments.account.AddSkillActivity"

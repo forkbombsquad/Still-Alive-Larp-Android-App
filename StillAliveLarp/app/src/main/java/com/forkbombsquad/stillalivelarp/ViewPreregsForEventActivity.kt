@@ -6,6 +6,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.PreregCell
@@ -16,12 +19,13 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
 
     private lateinit var layout: LinearLayout
     private lateinit var title: TextView
-    private lateinit var loading: ProgressBar
 
     private lateinit var premium: KeyValueView
     private lateinit var basic: KeyValueView
     private lateinit var free: KeyValueView
     private lateinit var notAttending: KeyValueView
+
+    private lateinit var event: FullEventModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,76 +34,59 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        event = DataManager.shared.getPassedData(listOf(EventsListActivity::class), DataManagerPassedDataKey.SELECTED_EVENT)!!
+
         layout = findViewById(R.id.viewpreregview_layout)
         title = findViewById(R.id.viewpreregview_title)
-        loading = findViewById(R.id.viewpreregview_progressbar)
 
         premium = findViewById(R.id.viewpreregview_premium)
         basic = findViewById(R.id.viewpreregview_basic)
         free = findViewById(R.id.viewpreregview_free)
         notAttending = findViewById(R.id.viewpreregview_notAttending)
 
-        OldDataManager.shared.load(lifecycleScope, listOf(OldDataManagerType.ALL_PLAYERS, OldDataManagerType.ALL_CHARACTERS), false) {
-            buildView()
-        }
         buildView()
     }
 
     private fun buildView() {
         layout.removeAllViews()
-        loading.isGone = false
-        OldDataManager.shared.selectedEvent.ifLet({ event ->
-            title.text = "Pre-Registration For\n${event.title}"
+        title.text = "Pre-Registration For\n${event.title}"
 
-            if (OldDataManager.shared.loadingAllCharacters || OldDataManager.shared.loadingAllPlayers) {
-                loading.isGone = false
+        val count = event.preregs.count()
+        if (count > 0) {
+            event.preregs.forEach {
+                val preregCell = PreregCell(this)
 
-            } else {
-                loading.isGone = true
-                val count = OldDataManager.shared.eventPreregs[event.id]?.count() ?: 0
-                if (count > 0) {
-                    OldDataManager.shared.eventPreregs[event.id].ifLet { preregs ->
+                preregCell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                preregCell.setPadding(8, 16, 8, 16)
+                preregCell.set(it)
 
-                        preregs.forEach {
-                            val preregCell = PreregCell(this)
-
-                            preregCell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                            preregCell.setPadding(8, 16, 8, 16)
-                            preregCell.set(it)
-
-                            layout.addView(preregCell)
-                        }
-                        val regNums = preregs.getRegNumbers()
-                        premium.isGone = false
-                        premium.set("${regNums.premium} Total (${regNums.premiumNpc} NPCs)")
-
-                        basic.isGone = false
-                        basic.set("${regNums.basic} Total (${regNums.basicNpc} NPCs)")
-
-                        free.isGone = false
-                        free.set("${regNums.free} Total (All Are NPCs)")
-
-                        notAttending.isGone = false
-                        notAttending.set("${regNums.notAttending}")
-                    }
-                } else {
-                    premium.isGone = true
-                    basic.isGone = true
-                    free.isGone = true
-                    notAttending.isGone = true
-
-                    val textView = TextView(this)
-
-                    textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    textView.setPadding(8, 16, 8, 16)
-                    textView.text = "There are no Pre-Registrations for this event yet"
-
-                    layout.addView(textView)
-                }
+                layout.addView(preregCell)
             }
+            val regNums = event.preregs.getRegNumbers()
+            premium.isGone = false
+            premium.set("${regNums.premium} Total (${regNums.premiumNpc} NPCs)")
 
-        }, {
-            title.text = "Error"
-        })
+            basic.isGone = false
+            basic.set("${regNums.basic} Total (${regNums.basicNpc} NPCs)")
+
+            free.isGone = false
+            free.set("${regNums.free} Total (All Are NPCs)")
+
+            notAttending.isGone = false
+            notAttending.set("${regNums.notAttending}")
+        } else {
+            premium.isGone = true
+            basic.isGone = true
+            free.isGone = true
+            notAttending.isGone = true
+
+            val textView = TextView(this)
+
+            textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            textView.setPadding(8, 16, 8, 16)
+            textView.text = "There are no Pre-Registrations for this event yet"
+
+            layout.addView(textView)
+        }
     }
 }

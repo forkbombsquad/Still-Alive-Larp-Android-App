@@ -7,6 +7,7 @@ import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
 import java.io.Serializable
 import kotlin.math.max
 
@@ -26,6 +27,10 @@ data class FullCharacterModifiedSkillModel(
     val name = skill.name
     val skillTypeId = skill.skillTypeId
     val description = skill.description
+
+    fun isNew(event: FullEventModel): Boolean {
+        return purchaseDate()?.yyyyMMddtoDate()?.isAfter(event.date.yyyyMMddtoDate())?: true
+    }
 
     fun purchaseDate(): String? {
         return charSkillModel?.date
@@ -49,6 +54,10 @@ data class FullCharacterModifiedSkillModel(
 
     fun hasXpReduction(): Boolean {
         return xpReduction != null
+    }
+
+    fun getXpReductionModel(): XpReductionModel? {
+        return xpReduction
     }
 
     fun baseXpCost(): Int {
@@ -253,10 +262,6 @@ data class FullCharacterModifiedSkillModel(
         return text
     }
 
-    fun barcodeModel(isNew: Boolean): SkillBarcodeModel {
-        return SkillBarcodeModel(this, isNew)
-    }
-
 }
 
 data class FullSkillModel(
@@ -376,17 +381,6 @@ data class SkillModel(
     @JsonProperty("skillTypeId") val skillTypeId: String,
     @JsonProperty("skillCategoryId") val skillCategoryId: String
 ) : Serializable
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class SkillBarcodeModel(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("name") val name: String,
-    @JsonProperty("isNew") val isNew: Boolean
-) : Serializable {
-    constructor(fullSkillModel: FullSkillModel, isNew: Boolean): this(fullSkillModel.id, fullSkillModel.name, isNew)
-    constructor(fullSkillModel: FullCharacterModifiedSkillModel, isNew: Boolean): this(fullSkillModel.id, fullSkillModel.name, isNew)
-
-}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class SkillListModel(

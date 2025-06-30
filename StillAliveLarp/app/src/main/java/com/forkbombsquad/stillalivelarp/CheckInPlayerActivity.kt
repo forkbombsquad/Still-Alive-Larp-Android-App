@@ -13,18 +13,16 @@ import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 
 import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckInBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.GiveCharacterCheckInRewardsSP
@@ -107,11 +105,10 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
     private var gearModified = false
 
-    private lateinit var barcodeModel: PlayerCheckInBarcodeModel
+    private lateinit var barcodeModel: CheckInOutBarcodeModel
     private lateinit var player: FullPlayerModel
     private var character: FullCharacterModel? = null
     private lateinit var event: FullEventModel
-    private lateinit var passedSkills: List<FullCharacterModifiedSkillModel>
     private var gear: GearModel? = null
     private lateinit var gearList: Map<String, List<GearJsonModel>>
     private var isNpc: Boolean = false
@@ -120,7 +117,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         ScanContract()
     ) { result ->
         if(result.contents != null) {
-            globalFromJson<PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
+            globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
                 barcodeModel = it
                 recalculateModels()
                 buildView()
@@ -137,25 +134,25 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun recalculateModels() {
-        player = DataManager.shared.players.first { it.id == player.id }
-        barcodeModel.character.ifLet({ char ->
-            this.character = DataManager.shared.getCharacter(char.id)
+        player = DataManager.shared.players.first { it.id == barcodeModel.playerId }
+        barcodeModel.characterId.ifLet({ charId ->
+            this.character = DataManager.shared.getCharacter(charId)
             DataManager.shared.characterToEdit = character
-            passedSkills = this.character?.allPurchasedSkills()?.filter { barcodeModel.relevantSkills.any { ns -> ns.id == it.id } } ?: listOf()
-            gear = barcodeModel.gear
+            gear = character?.gear
             gearList = gear?.getGearOrganized() ?: mapOf()
             isNpc = false
         }, {
+            this.character = null
             DataManager.shared.characterToEdit = null
-            passedSkills = listOf()
             gear = null
             gearList = mapOf()
             isNpc = true
         })
+        event = DataManager.shared.events.first { it.id == barcodeModel.eventId }
     }
 
     private fun setupView() {
-        barcodeModel = DataManager.shared.getPassedData(AdminPanelActivity::class, DataManagerPassedDataKey.CHECKIN_BARCODE)!!
+        barcodeModel = DataManager.shared.getPassedData(AdminPanelActivity::class, DataManagerPassedDataKey.BARCODE)!!
         recalculateModels()
 
         playerName = findViewById(R.id.checkinplayer_playerName)
@@ -281,7 +278,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             checkInPlayerRequest.successfulResponse(CreateModelSP(eventAttendeeCreate)).ifLet({ _ ->
                 character.ifLet({ char ->
                     checkInButton.setLoadingWithText("Adding Bullets...")
-                    var bullets = getAdditionalBulletCount()
+                    var bullets = getAdditionalBulletCount(getRelevantSkills())
                     bullets += char.bullets
                     val giveCharCheckInRewardsRequest = AdminService.GiveCharacterCheckInRewards()
                     lifecycleScope.launch {
@@ -336,6 +333,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                     restartScanner()
                 }, ButtonType.POSITIVE),
                 AlertButton("Finished", { _, _ ->
+                    DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                     finish()
                 }, ButtonType.NEGATIVE),
             )
@@ -374,7 +372,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             } else {
                 infectionThreshold.isGone = true
             }
-            bullets.set("${char.bullets}+${getAdditionalBulletCount()}")
+            bullets.set("${char.bullets}+${getAdditionalBulletCount(getRelevantSkills())}")
             megas.set(char.megas)
             rivals.set(char.rivals)
             rockets.set(char.rockets)
@@ -416,17 +414,19 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             newSkillsLayout.isGone = !hasNewSkills
             newSkillsInnerLayout.removeAllViews()
 
-            ammoSkills.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.deepPocketTypeSkills.toList()))
+            val relevantSkills = getRelevantSkills()
 
-            intrigueSkills.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.investigatorTypeSkills.toList()))
+            ammoSkills.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.deepPocketTypeSkills.toList()))
 
-            regularArmorSkills.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.toughSkinTypeSkillsWithoutScaledSkin.toList()))
-            val regularArmorBeads = getToughSkinBlueBeadCount()
+            intrigueSkills.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.investigatorTypeSkills.toList()))
+
+            regularArmorSkills.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.toughSkinTypeSkillsWithoutScaledSkin.toList()))
+            val regularArmorBeads = getToughSkinBlueBeadCount(relevantSkills)
             regularArmorSkillBeadCount.isGone = regularArmorBeads == 0
             regularArmorSkillBeadCount.set(regularArmorBeads.toString())
             regularArmorSkillBeadCount.valueView.setTextColor(getColor(R.color.blue))
 
-            val scaledSkin = getScaledSkin()
+            val scaledSkin = getScaledSkin(relevantSkills)
             scaledSkin.ifLet({ ss ->
                 bulletproofArmorSkills.isGone = false
                 bulletproofArmorSkillBeadCount.isGone = false
@@ -437,7 +437,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 bulletproofArmorSkillBeadCount.isGone = true
             })
 
-            val plotArmor = getPlotArmor()
+            val plotArmor = getPlotArmor(relevantSkills)
             plotArmor.ifLet({ pa ->
                 plotArmorSkills.isGone = false
                 plotArmorSkillBeadCount.isGone = false
@@ -447,22 +447,22 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 plotArmorSkillBeadCount.isGone = true
             })
 
-            disguiseSkills.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.walkLikeAZombieTypeSkills.toList()))
-            val disguiseBeads = getDisguiseGreenBeadCount()
+            disguiseSkills.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.walkLikeAZombieTypeSkills.toList()))
+            val disguiseBeads = getDisguiseGreenBeadCount(relevantSkills)
             disguiseSkillBeadCount.isGone = disguiseBeads == 0
             disguiseSkillBeadCount.set(disguiseBeads.toString())
             disguiseSkillBeadCount.valueView.setTextColor(getColor(R.color.green))
 
-            gamblerSkills.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.gamblerTypeSkills.toList()))
-            val raffleTickets = getBonusRaffleTicketCount()
+            gamblerSkills.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.gamblerTypeSkills.toList()))
+            val raffleTickets = getBonusRaffleTicketCount(relevantSkills)
             gamblerSkillRaffleTicketCount.isGone = raffleTickets == 0
             gamblerSkillRaffleTicketCount.set(raffleTickets.toString())
             gamblerSkillRaffleTicketCount.valueView.setTextColor(getColor(R.color.green))
 
-            fortuneSkill.setAndHideIfEmpty(getSkillNames(Constants.SpecificSkillIds.fortuneSkills.toList()))
-            fortuneSkillBonusMaterials.setAndHideIfEmpty(getFortuneText())
+            fortuneSkill.setAndHideIfEmpty(getSkillNames(relevantSkills, Constants.SpecificSkillIds.fortuneSkills.toList()))
+            fortuneSkillBonusMaterials.setAndHideIfEmpty(getFortuneText(relevantSkills))
 
-            val fullyLoaded = getFullyLoaded()
+            val fullyLoaded = getFullyLoaded(relevantSkills)
             fullyLoaded.ifLet({ fl ->
                 fullyLoadedSkill.isGone = false
                 gear?.getPrimaryFirearm().ifLet({ pf ->
@@ -536,20 +536,24 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun getNewSkills(): List<FullCharacterModifiedSkillModel> {
-        return passedSkills.filter { ps -> barcodeModel.relevantSkills.any { rs -> rs.id == ps.id && rs.isNew } }
+        return character?.getSkillsTakenSinceLastEvent() ?: listOf()
+    }
+
+    private fun getRelevantSkills(): List<FullCharacterModifiedSkillModel> {
+        return character?.getRelevantBarcodeSkills() ?: listOf()
     }
 
     private fun hasRelevantSkills(): Boolean {
-        return passedSkills.firstOrNull { it.id.equalsAnyOf(Constants.SpecificSkillIds.checkInRelevantSkillsOnly) } != null
+        return getRelevantSkills().isNotEmpty()
     }
 
     private fun hasNewSkills(): Boolean {
         return getNewSkills().isNotEmpty()
     }
 
-    private fun getAdditionalBulletCount(): Int {
+    private fun getAdditionalBulletCount(relevantSkills: List<FullCharacterModifiedSkillModel>): Int {
         var bullets = 2
-        for (sk in passedSkills) {
+        for (sk in relevantSkills) {
             if (sk.id.equalsAnyOf(Constants.SpecificSkillIds.deepPocketTypeSkills)) {
                 bullets += 2
             }
@@ -557,9 +561,9 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         return bullets
     }
 
-    private fun getToughSkinBlueBeadCount(): Int {
+    private fun getToughSkinBlueBeadCount(relevantSkills: List<FullCharacterModifiedSkillModel>): Int {
         var count = 0
-        for (sk in passedSkills) {
+        for (sk in relevantSkills) {
             if (sk.id.equalsAnyOf(Constants.SpecificSkillIds.toughSkinTypeSkillsWithoutScaledSkin)) {
                 count++
             }
@@ -567,9 +571,9 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         return count
     }
 
-    private fun getDisguiseGreenBeadCount(): Int {
+    private fun getDisguiseGreenBeadCount(relevantSkills: List<FullCharacterModifiedSkillModel>): Int {
         var count = 0
-        for (sk in passedSkills) {
+        for (sk in relevantSkills) {
             if (sk.id.equalsAnyOf(Constants.SpecificSkillIds.walkLikeAZombieTypeSkills)) {
                 count = 1
             }
@@ -577,9 +581,9 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         return count
     }
 
-    private fun getBonusRaffleTicketCount(): Int {
+    private fun getBonusRaffleTicketCount(relevantSkills: List<FullCharacterModifiedSkillModel>): Int {
         var count = 0
-        for (sk in passedSkills) {
+        for (sk in relevantSkills) {
             if (sk.id.equalsAnyOf(Constants.SpecificSkillIds.gamblerTypeSkills)) {
                 count++
             }
@@ -587,30 +591,30 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         return count
     }
 
-    private fun getScaledSkin(): FullCharacterModifiedSkillModel? {
-        return passedSkills.firstOrNull { it.id == Constants.SpecificSkillIds.scaledSkin }
+    private fun getScaledSkin(relevantSkills: List<FullCharacterModifiedSkillModel>): FullCharacterModifiedSkillModel? {
+        return relevantSkills.firstOrNull { it.id == Constants.SpecificSkillIds.scaledSkin }
     }
 
-    private fun getPlotArmor(): FullCharacterModifiedSkillModel? {
-        return passedSkills.firstOrNull { it.id == Constants.SpecificSkillIds.plotArmor }
+    private fun getPlotArmor(relevantSkills: List<FullCharacterModifiedSkillModel>): FullCharacterModifiedSkillModel? {
+        return relevantSkills.firstOrNull { it.id == Constants.SpecificSkillIds.plotArmor }
     }
 
-    private fun getFullyLoaded(): FullCharacterModifiedSkillModel? {
-        return passedSkills.firstOrNull { it.id == Constants.SpecificSkillIds.fullyLoaded }
+    private fun getFullyLoaded(relevantSkills: List<FullCharacterModifiedSkillModel>): FullCharacterModifiedSkillModel? {
+        return relevantSkills.firstOrNull { it.id == Constants.SpecificSkillIds.fullyLoaded }
     }
 
-    private fun getSkillNames(skillIds: List<Int>): String {
-        return passedSkills.mapNotNull { if (skillIds.contains(it.id)) { it.name } else { null } }.joinToString(", ")
+    private fun getSkillNames(relevantSkills: List<FullCharacterModifiedSkillModel>, skillIds: List<Int>): String {
+        return relevantSkills.mapNotNull { if (skillIds.contains(it.id)) { it.name } else { null } }.joinToString(", ")
     }
 
-    private fun getSkillName(skillId: Int): String {
-        return getSkillNames(listOf(skillId))
+    private fun getSkillName(relevantSkills: List<FullCharacterModifiedSkillModel>, skillId: Int): String {
+        return getSkillNames(relevantSkills, listOf(skillId))
     }
 
-    private fun getFortuneText(): String {
-        val first = getSkillName(Constants.SpecificSkillIds.prosperousDiscovery)
+    private fun getFortuneText(relevantSkills: List<FullCharacterModifiedSkillModel>,): String {
+        val first = getSkillName(relevantSkills, Constants.SpecificSkillIds.prosperousDiscovery)
         return if (first.isEmpty()) {
-            if (getSkillName(Constants.SpecificSkillIds.fortunateFind).isNotEmpty()) {
+            if (getSkillName(relevantSkills, Constants.SpecificSkillIds.fortunateFind).isNotEmpty()) {
                 "Roll Randomly for 1d4 Wood/Cloth/Metal or 1 Tech/Medical"
             } else {
                 ""

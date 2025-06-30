@@ -7,18 +7,19 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AdminService
-import com.forkbombsquad.stillalivelarp.services.CharacterService
-import com.forkbombsquad.stillalivelarp.services.PlayerService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
-import com.forkbombsquad.stillalivelarp.services.models.CharacterBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
-import com.forkbombsquad.stillalivelarp.services.models.PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
-import com.forkbombsquad.stillalivelarp.services.models.SkillBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
-import com.forkbombsquad.stillalivelarp.services.utils.IdSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
@@ -34,7 +35,6 @@ import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
 import com.forkbombsquad.stillalivelarp.utils.ValidationResult
 import com.forkbombsquad.stillalivelarp.utils.ValidationType
 import com.forkbombsquad.stillalivelarp.utils.Validator
-import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -76,12 +76,20 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
     private lateinit var checkoutButton: LoadingButton
 
+    private lateinit var barcodeModel: CheckInOutBarcodeModel
+    private lateinit var player: FullPlayerModel
+    private var character: FullCharacterModel? = null
+    private var isNpc = false
+    private lateinit var event: FullEventModel
+    private lateinit var eventAttendeeModel: EventAttendeeModel
+
     private val barcodeScanner: ActivityResultLauncher<ScanOptions> = registerForActivityResult(
         ScanContract()
     ) { result ->
         if(result.contents != null) {
-            globalFromJson<PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
-                OldDataManager.shared.playerCheckOutModel = it
+            globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
+                barcodeModel = it
+                recalculateModels()
                 buildView()
             }, {
                 AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ ->
@@ -98,7 +106,22 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         setupView()
     }
 
+    private fun recalculateModels() {
+        player = DataManager.shared.players.first { it.id == barcodeModel.playerId }
+        barcodeModel.characterId.ifLet({ charId ->
+            this.character = DataManager.shared.getCharacter(charId)
+            isNpc = false
+        }, {
+            this.character = null
+            isNpc = true
+        })
+        event = DataManager.shared.events.first { it.id == barcodeModel.eventId }
+        eventAttendeeModel = event.attendees.first { it.playerId == barcodeModel.playerId }
+    }
+
     private fun setupView() {
+        barcodeModel = DataManager.shared.getPassedData(AdminPanelActivity::class, DataManagerPassedDataKey.BARCODE)!!
+        recalculateModels()
 
         playerName = findViewById(R.id.checkoutplayer_playerName)
         totalEventsAttended = findViewById(R.id.checkoutplayer_totalEvents)
@@ -133,292 +156,224 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         isAlive.valuePickerView.setSelection(0)
 
         checkoutButton.setOnClick {
-            OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
-                val player = barcodeModel.player
-                val character = barcodeModel.character
-                val eventId = barcodeModel.eventId
-                val relevantSkills = barcodeModel.relevantSkills
-                val isNpc = character == null
-
-                val valResult = validateFields()
-                if (!valResult.hasError) {
-                    character.ifLet({ char ->
-                        if (isPassedThreshold(char) && isAlive.valuePickerView.selectedItemPosition == 0) {
-                            AlertUtils.displayMessage(
-                                context = this,
-                                title = "Warning!",
-                                message = "${char.fullName} has pased an infeciton threshold! Make sure to make the check to see if they turn into a zombie!\n\n${getThresholdCheckSkillsList(relevantSkills, char)}",
-                                buttons = arrayOf(
-                                    AlertButton(
-                                        text = "Check Passed!",
-                                        onClick = { _, _ ->
-                                            checkoutStepOne()
-                                        },
-                                        buttonType = ButtonType.POSITIVE
-                                    ),
-                                    AlertButton(
-                                        text = "Go Back",
-                                        onClick = { _, _ -> },
-                                        buttonType = ButtonType.NEUTRAL
-                                    )
+            val valResult = validateFields()
+            if (!valResult.hasError) {
+                character.ifLet({ char ->
+                    if (isPassedThreshold() && isAlive.valuePickerView.selectedItemPosition == 0) {
+                        AlertUtils.displayMessage(
+                            context = this,
+                            title = "Warning!",
+                            message = "${char.fullName} has passed an infection threshold! Make sure to make the check to see if they turn into a zombie!\n\n${getThresholdCheckSkillsList(char.getRelevantBarcodeSkills())}",
+                            buttons = arrayOf(
+                                AlertButton(
+                                    text = "Check Passed!",
+                                    onClick = { _, _ ->
+                                        checkoutStepOne()
+                                    },
+                                    buttonType = ButtonType.POSITIVE
+                                ),
+                                AlertButton(
+                                    text = "Go Back",
+                                    onClick = { _, _ -> },
+                                    buttonType = ButtonType.NEUTRAL
                                 )
                             )
-                        } else {
-                            checkoutStepOne()
-                        }
-                    }, {
+                        )
+                    } else {
                         checkoutStepOne()
-                    })
-                } else {
-                    AlertUtils.displayValidationError(this, valResult.getErrorMessages())
-                }
+                    }
+                }, {
+                    checkoutStepOne()
+                })
+            } else {
+                AlertUtils.displayValidationError(this, valResult.getErrorMessages())
             }
         }
         buildView()
     }
 
     private fun checkoutStepOne() {
-        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
-            val isNpc = barcodeModel.character == null
-            val relevantSkills = barcodeModel.relevantSkills
-
-            if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
-                AlertUtils.displayMessage(
-                    context = this,
-                    title = "Warning!",
-                    message = "${barcodeModel.character?.fullName ?: ""} has seemingly perished, but they still have a chance! Make sure you roll 1d10 to see if they miraculously survive (by rolling a 10)!\n\n${getDeathCheckSkillsList(relevantSkills)}",
-                    buttons = arrayOf(
-                        AlertButton(
-                            text = "Still Dead!",
-                            onClick = { _, _ ->
-                                checkoutStepTwo()
-                            },
-                            buttonType = ButtonType.POSITIVE
-                        ),
-                        AlertButton(
-                            text = "They Survived! Go Back",
-                            onClick = { _, _ -> },
-                            buttonType = ButtonType.NEUTRAL
-                        )
+        if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
+            AlertUtils.displayMessage(
+                context = this,
+                title = "Warning!",
+                message = "${character?.fullName ?: ""} has seemingly perished, but they still have a chance! Make sure you roll 1d10 to see if they miraculously survive (by rolling a 10)!\n\n${getDeathCheckSkillsList(character?.getRelevantBarcodeSkills() ?: listOf())}",
+                buttons = arrayOf(
+                    AlertButton(
+                        text = "Still Dead!",
+                        onClick = { _, _ ->
+                            checkoutStepTwo()
+                        },
+                        buttonType = ButtonType.POSITIVE
+                    ),
+                    AlertButton(
+                        text = "They Survived! Go Back",
+                        onClick = { _, _ -> },
+                        buttonType = ButtonType.NEUTRAL
                     )
                 )
-            } else {
-                checkoutStepTwo()
-            }
+            )
+        } else {
+            checkoutStepTwo()
         }
     }
 
     private fun checkoutStepTwo() {
-        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
-            val player = barcodeModel.player
-            val character = barcodeModel.character
-            val eventId = barcodeModel.eventId
-            val relevantSkills = barcodeModel.relevantSkills
-            val isNpc = character == null
-
-            character.ifLet({ char ->
-                checkoutButton.setLoadingWithText("Loading Character")
-                val characterRequest = CharacterService.GetCharacter()
-                lifecycleScope.launch {
-                    characterRequest.successfulResponse(IdSP(char.id)).ifLet({ cm ->
-                        val editedChar = CharacterModel(
-                            id = cm.id,
-                            fullName = cm.fullName,
-                            startDate = cm.startDate,
-                            isAlive = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("TRUE", "FALSE"),
-                            deathDate = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("", LocalDate.now().yyyyMMddFormatted()),
-                            infection = infection.getValue(),
-                            bio = cm.bio,
-                            approvedBio = cm.approvedBio,
-                            bullets = bullets.getValue(),
-                            megas = megas.getValue(),
-                            rivals = rivals.getValue(),
-                            rockets = rockets.getValue(),
-                            bulletCasings = casings.getValue(),
-                            clothSupplies = cloth.getValue(),
-                            woodSupplies = wood.getValue(),
-                            metalSupplies = metal.getValue(),
-                            techSupplies = tech.getValue(),
-                            medicalSupplies = medical.getValue(),
-                            armor = armor.valuePickerView.selectedItem as String,
-                            unshakableResolveUses = unshakableResolve.getValue(),
-                            mysteriousStrangerUses = mysteriousStranger.getValue(),
-                            playerId = cm.playerId,
-                            characterTypeId = cm.characterTypeId
-                        )
-                        checkoutButton.setLoadingWithText("Updating Character")
-                        val updateCharRequest = AdminService.UpdateCharacter()
-                        lifecycleScope.launch {
-                            updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
-                                checkoutStepThree()
-                            }, {
-                                checkoutButton.setLoading(false)
-                                restartScanner()
-                            })
-                        }
-                    }, {
-                        checkoutButton.setLoading(false)
-                        restartScanner()
-                    })
-                }
-            }, {
-                checkoutStepThree()
-            })
-        }
-    }
-
-    private fun checkoutStepThree() {
-        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
-            val player = barcodeModel.player
-            val character = barcodeModel.character
-            val eventId = barcodeModel.eventId
-            val relevantSkills = barcodeModel.relevantSkills
-            val isNpc = character == null
-
-            var needToAwardExtraXp = false
-            if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
-                needToAwardExtraXp = true
-            }
-            val xpAmount = isNpc.ternary(2, 1)
-
-            checkoutButton.setLoadingWithText("Loading Player")
-            val playerRequest = PlayerService.GetPlayer()
-            lifecycleScope.launch {
-               playerRequest.successfulResponse(IdSP(player.id)).ifLet({ fullPlayer ->
-                   val xp = fullPlayer.experience.toInt() + xpAmount
-                   val events = fullPlayer.numEventsAttended.toInt() + 1
-                   val npcEvents = fullPlayer.numNpcEventsAttended.toInt() + isNpc.ternary(1, 0)
-
-                   val playerUpdate = PlayerModel(
-                       id = fullPlayer.id,
-                       username = fullPlayer.username,
-                       fullName =  fullPlayer.fullName,
-                       startDate = fullPlayer.startDate,
-                       experience = xp.toString(),
-                       freeTier1Skills = fullPlayer.freeTier1Skills,
-                       prestigePoints = fullPlayer.prestigePoints,
-                       isCheckedIn = "FALSE",
-                       isCheckedInAsNpc = "FALSE",
-                       lastCheckIn = LocalDate.now().yyyyMMddFormatted(),
-                       numEventsAttended = events.toString(),
-                       numNpcEventsAttended = npcEvents.toString(),
-                       isAdmin = fullPlayer.isAdmin
-                   )
-
-                   checkoutButton.setLoadingWithText("Updating Player")
-
-                   val playerUpdateRequest = AdminService.UpdatePlayer()
-                   lifecycleScope.launch {
-                       playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({_ ->
-                           checkoutStepFour(needToAwardExtraXp)
-                       }, {
-                           checkoutButton.setLoading(false)
-                           restartScanner()
-                       })
-                   }
-               }, {
-                   checkoutButton.setLoading(false)
-                   restartScanner()
-               })
-            }
-        }
-    }
-
-    private fun checkoutStepFour(needToAwardExtraXp: Boolean) {
-        OldDataManager.shared.playerCheckOutModel.ifLet { barcodeModel ->
-            val player = barcodeModel.player
-            val character = barcodeModel.character
-            val eventId = barcodeModel.eventId
-            val eventAttendeeId = barcodeModel.eventAttendeeId
-            val relevantSkills = barcodeModel.relevantSkills
-            val isNpc = character == null
-
-            checkoutButton.setLoadingWithText("Updating Records")
-
-            val eventAttendeeUpdate = EventAttendeeModel(
-                id = eventAttendeeId,
-                playerId = player.id,
-                characterId = character?.id,
-                eventId = eventId,
-                isCheckedIn = "FALSE",
-                asNpc = isNpc.ternary("TRUE", "FALSE")
+        character.ifLet({ cm ->
+            val editedChar = CharacterModel(
+                id = cm.id,
+                fullName = cm.fullName,
+                startDate = cm.startDate,
+                isAlive = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("TRUE", "FALSE"),
+                deathDate = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("", LocalDate.now().yyyyMMddFormatted()),
+                infection = infection.getValue(),
+                bio = cm.bio,
+                approvedBio = cm.approvedBio.toString().uppercase(),
+                bullets = bullets.getValue(),
+                megas = megas.getValue(),
+                rivals = rivals.getValue(),
+                rockets = rockets.getValue(),
+                bulletCasings = casings.getValue(),
+                clothSupplies = cloth.getValue(),
+                woodSupplies = wood.getValue(),
+                metalSupplies = metal.getValue(),
+                techSupplies = tech.getValue(),
+                medicalSupplies = medical.getValue(),
+                armor = armor.valuePickerView.selectedItem as String,
+                unshakableResolveUses = unshakableResolve.getValue(),
+                mysteriousStrangerUses = mysteriousStranger.getValue(),
+                playerId = cm.playerId,
+                characterTypeId = cm.characterTypeId
             )
-
-            val updateAttendeeRequest = AdminService.UpdateEventAttendee()
+            checkoutButton.setLoadingWithText("Updating Character")
+            val updateCharRequest = AdminService.UpdateCharacter()
             lifecycleScope.launch {
-                updateAttendeeRequest.successfulResponse(UpdateModelSP(eventAttendeeUpdate)).ifLet({ eventAttendee ->
-                    if (needToAwardExtraXp && !isNpc) {
-                        checkoutButton.setLoadingWithText("Loading Character For Death Xp Bonus")
-                        val characterRequest = CharacterService.GetCharacter()
-                        lifecycleScope.launch {
-                            characterRequest.successfulResponse(IdSP(character!!.id)).ifLet({ characterModel ->
-                                checkoutButton.setLoadingWithText("Loading Skills For Death Xp Bonus")
-                                characterModel.getAllXpSpent(lifecycleScope) { xp ->
-                                    var adjustedXp = xp / 2
-
-                                    var max = player.numEventsAttended.toInt()
-                                    max += player.numNpcEventsAttended.toInt() // Adding double xp for npc events
-
-                                    adjustedXp = min(max, adjustedXp)
-
-                                    checkoutButton.setLoadingWithText("Refunding Xp")
-
-                                    val award = AwardCreateModel.createPlayerAward(
-                                        playerId = player.id,
-                                        awardType = AwardPlayerType.XP,
-                                        reason = "Death of Character: ${characterModel.fullName}",
-                                        amount = adjustedXp.toString()
-                                    )
-                                    val createAwardRequest = AdminService.AwardPlayer()
-                                    lifecycleScope.launch {
-                                        createAwardRequest.successfulResponse(AwardCreateSP(award)).ifLet({ _ ->
-                                            characterModel.getAllPrestigePointsSpent(lifecycleScope) { pp ->
-                                                if (pp > 0) {
-                                                    checkoutButton.setLoadingWithText("Refunding Xp")
-
-                                                    val a = AwardCreateModel.createPlayerAward(
-                                                        playerId = player.id,
-                                                        awardType = AwardPlayerType.PRESTIGEPOINTS,
-                                                        reason = "Death of Character: ${characterModel.fullName}",
-                                                        amount = pp.toString()
-                                                    )
-                                                    val car = AdminService.AwardPlayer()
-                                                    lifecycleScope.launch {
-                                                        car.successfulResponse(AwardCreateSP(a)).ifLet({ _ ->
-                                                            checkoutButton.setLoading(false)
-                                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                                                        }, {
-                                                            checkoutButton.setLoading(false)
-                                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death pp!")
-                                                        })
-                                                    }
-                                                } else {
-                                                    checkoutButton.setLoading(false)
-                                                    showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                                                }
-                                            }
-
-                                        }, {
-                                            checkoutButton.setLoading(false)
-                                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death xp!")
-                                        })
-                                    }
-                                }
-                            }, {
-                                checkoutButton.setLoading(false)
-                                showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death xp!")
-                            })
-                        }
-                    } else {
-                        checkoutButton.setLoading(false)
-                        showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                    }
+                updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
+                    checkoutStepThree()
                 }, {
                     checkoutButton.setLoading(false)
                     restartScanner()
                 })
             }
+        }, {
+            checkoutStepThree()
+        })
+    }
 
+    private fun checkoutStepThree() {
+        var needToAwardExtraXp = false
+        if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
+            // Character is dead, award extra xp
+            needToAwardExtraXp = true
+        }
+        val xpAmount = isNpc.ternary(2, 1)
+
+        val xp = player.experience + xpAmount
+        val events = player.numEventsAttended + 1
+        val npcEvents = player.numNpcEventsAttended + isNpc.ternary(1, 0)
+
+        val playerUpdate = PlayerModel(
+            id = player.id,
+            username = player.username,
+            fullName =  player.fullName,
+            startDate = player.startDate,
+            experience = xp.toString(),
+            freeTier1Skills = player.freeTier1Skills.toString(),
+            prestigePoints = player.prestigePoints.toString(),
+            isCheckedIn = "FALSE",
+            isCheckedInAsNpc = "FALSE",
+            lastCheckIn = LocalDate.now().yyyyMMddFormatted(),
+            numEventsAttended = events.toString(),
+            numNpcEventsAttended = npcEvents.toString(),
+            isAdmin = player.isAdmin.toString().uppercase()
+        )
+
+        checkoutButton.setLoadingWithText("Updating Player")
+
+        val playerUpdateRequest = AdminService.UpdatePlayer()
+        lifecycleScope.launch {
+            playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({_ ->
+                checkoutStepFour(needToAwardExtraXp)
+            }, {
+                checkoutButton.setLoading(false)
+                restartScanner()
+            })
+        }
+    }
+
+    private fun checkoutStepFour(needToAwardExtraXp: Boolean) {
+        checkoutButton.setLoadingWithText("Updating Records")
+
+        val eventAttendeeUpdate = EventAttendeeModel(
+            id = eventAttendeeModel.id,
+            playerId = eventAttendeeModel.playerId,
+            characterId = eventAttendeeModel.characterId,
+            eventId = eventAttendeeModel.eventId,
+            isCheckedIn = "FALSE",
+            asNpc = isNpc.ternary("TRUE", "FALSE")
+        )
+
+        val updateAttendeeRequest = AdminService.UpdateEventAttendee()
+        lifecycleScope.launch {
+            updateAttendeeRequest.successfulResponse(UpdateModelSP(eventAttendeeUpdate)).ifLet({ eventAttendee ->
+                if (needToAwardExtraXp && !isNpc && character != null) {
+                    checkoutButton.setLoadingWithText("Calculating Death Xp Bonus")
+                    val spentXp = character!!.getAllXpSpent()
+                    val spentPp = character!!.getAllSpentPrestigePoints()
+                    var adjustedXp = spentXp / 2
+
+                    var max = player.numEventsAttended
+                    max += player.numNpcEventsAttended // Adding double xp for npc events
+
+                    adjustedXp = min(max, adjustedXp)
+
+                    checkoutButton.setLoadingWithText("Refunding Xp")
+
+                    val award = AwardCreateModel.createPlayerAward(
+                        playerId = player.id,
+                        awardType = AwardPlayerType.XP,
+                        reason = "Death of Character: ${character!!.fullName}",
+                        amount = adjustedXp.toString()
+                    )
+                    val createAwardRequest = AdminService.AwardPlayer()
+                    lifecycleScope.launch {
+                        createAwardRequest.successfulResponse(AwardCreateSP(award)).ifLet({ _ ->
+                            if (spentPp > 0) {
+                                checkoutButton.setLoadingWithText("Refunding Prestige Points")
+
+                                val a = AwardCreateModel.createPlayerAward(
+                                    playerId = player.id,
+                                    awardType = AwardPlayerType.PRESTIGEPOINTS,
+                                    reason = "Death of Character: ${character!!.fullName}",
+                                    amount = spentPp.toString()
+                                )
+                                val car = AdminService.AwardPlayer()
+                                lifecycleScope.launch {
+                                    car.successfulResponse(AwardCreateSP(a)).ifLet({ _ ->
+                                        checkoutButton.setLoading(false)
+                                        showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                                    }, {
+                                        checkoutButton.setLoading(false)
+                                        showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death pp!")
+                                    })
+                                }
+                            } else {
+                                checkoutButton.setLoading(false)
+                                showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                            }
+                        }, {
+                            checkoutButton.setLoading(false)
+                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death xp!")
+                        })
+                    }
+                } else {
+                    checkoutButton.setLoading(false)
+                    showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
+                }
+            }, {
+                checkoutButton.setLoading(false)
+                restartScanner()
+            })
         }
     }
 
@@ -432,6 +387,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                     restartScanner()
                 }, ButtonType.POSITIVE),
                 AlertButton("Finished", { _, _ ->
+                    DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                     finish()
                 }, ButtonType.NEGATIVE),
             )
@@ -447,59 +403,53 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        OldDataManager.shared.playerCheckOutModel.ifLet {
-            val player = it.player
-            val character = it.character
-            val eventId = it.eventId
-            val relevantSkills = it.relevantSkills
-            val isNpc = character == null
+        playerName.set(player.fullName)
+        totalEventsAttended.set("${player.numEventsAttended}+1")
+        totalNpcEventsAttended.set(isNpc.ternary("${player.numNpcEventsAttended}+1", player.numNpcEventsAttended.toString()))
+        lastEventAttended.set(LocalDate.now().yyyyMMddFormatted().yyyyMMddToMonthDayYear())
 
-            playerName.set(player.fullName)
-            totalEventsAttended.set("${player.numEventsAttended}+1")
-            totalNpcEventsAttended.set(isNpc.ternary("${player.numNpcEventsAttended}+1", player.numNpcEventsAttended))
-            lastEventAttended.set(LocalDate.now().yyyyMMddFormatted().yyyyMMddToMonthDayYear())
+        // Character Section
+        character.ifLet({ char ->
+            characterLayout.isGone = false
+            characterName.set(char.fullName)
+            infection.set(char.infection)
+            reduceInfection.isGone = true
+            infection.div.isGone = false
 
-            // Character Section
-            character.ifLet({ char ->
-                characterLayout.isGone = false
-                characterName.set(char.fullName)
-                infection.set(char.infection)
-                reduceInfection.isGone = true
-                infection.div.isGone = false
+            val relevantSkills = char.getRelevantBarcodeSkills()
 
-                if (hasRegressionOrRemission(relevantSkills)) {
-                    infection.div.isGone = true
-                    reduceInfection.isGone = false
-                    reduceInfection.set(getReductionAmount(relevantSkills))
-                }
+            if (hasRegressionOrRemission(relevantSkills)) {
+                infection.div.isGone = true
+                reduceInfection.isGone = false
+                reduceInfection.set(getReductionAmount(relevantSkills))
+            }
 
-                val mysterStrangerTotal = mysteriousStrangerTotal(relevantSkills)
-                mysteriousStranger.isGone = mysterStrangerTotal == 0
-                if (mysterStrangerTotal > 0) {
-                    mysteriousStranger.set("Mysterious Stranger Uses (out of $mysterStrangerTotal)", char.mysteriousStrangerUses)
-                }
-                val hasUnshakableResolve = hasUnshakableResolve(relevantSkills)
-                unshakableResolve.isGone = !hasUnshakableResolve
-                if (hasUnshakableResolve) {
-                    unshakableResolve.set(char.unshakableResolveUses)
-                }
+            val mysterStrangerTotal = mysteriousStrangerTotal(relevantSkills)
+            mysteriousStranger.isGone = mysterStrangerTotal == 0
+            if (mysterStrangerTotal > 0) {
+                mysteriousStranger.set("Mysterious Stranger Uses (out of $mysterStrangerTotal)", char.mysteriousStrangerUses.toString())
+            }
+            val hasUnshakableResolve = hasUnshakableResolve(relevantSkills)
+            unshakableResolve.isGone = !hasUnshakableResolve
+            if (hasUnshakableResolve) {
+                unshakableResolve.set(char.unshakableResolveUses.toString())
+            }
 
-                bullets.set(char.bullets)
-                megas.set(char.megas)
-                rivals.set(char.rivals)
-                rockets.set(char.rockets)
-                casings.set(char.bulletCasings)
-                cloth.set(char.clothSupplies)
-                wood.set(char.woodSupplies)
-                metal.set(char.metalSupplies)
-                tech.set(char.techSupplies)
-                medical.set(char.medicalSupplies)
+            bullets.set(char.bullets.toString())
+            megas.set(char.megas.toString())
+            rivals.set(char.rivals.toString())
+            rockets.set(char.rockets.toString())
+            casings.set(char.bulletCasings.toString())
+            cloth.set(char.clothSupplies.toString())
+            wood.set(char.woodSupplies.toString())
+            metal.set(char.metalSupplies.toString())
+            tech.set(char.techSupplies.toString())
+            medical.set(char.medicalSupplies.toString())
 
-            }, {
-                characterLayout.isGone = true
-                characterName.set("NPC")
-            })
-        }
+        }, {
+            characterLayout.isGone = true
+            characterName.set("NPC")
+        })
     }
 
     private fun validateFields(): ValidationResult {
@@ -518,7 +468,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         ))
     }
 
-    private fun getDeathCheckSkillsList(relevantSkills: Array<SkillBarcodeModel>): String {
+    private fun getDeathCheckSkillsList(relevantSkills: List<FullCharacterModifiedSkillModel>): String {
         val skl = Constants.SpecificSkillIds
         var skills = ""
         var gamblerSkillsCount = 0
@@ -536,7 +486,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return skills
     }
 
-    private fun getThresholdCheckSkillsList(relevantSkills: Array<SkillBarcodeModel>, char: CharacterBarcodeModel): String {
+    private fun getThresholdCheckSkillsList(relevantSkills: List<FullCharacterModifiedSkillModel>): String {
         val skl = Constants.SpecificSkillIds
         var skills = ""
         var gamblerSkillsCount = 0
@@ -547,7 +497,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             if (skill.id == skl.willToLive) {
                 skills += "\nWill To Live skill - They may flip a coin instead of rolling. If heads, the roll was a success."
             }
-            if (skill.id == skl.unshakableResolve && char.unshakableResolveUses.toInt() > 0) {
+            if (skill.id == skl.unshakableResolve && character!!.unshakableResolveUses > 0) {
                 skills += "\nUnshakable Resolve skill - if all rolls (or flips) fail, you can choose to survive once per character. Make sure to adjust the value above if you use this skill."
             }
         }
@@ -560,14 +510,14 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return skills
     }
 
-    private fun isPassedThreshold(char: CharacterBarcodeModel): Boolean {
-        val prev = char.infection.toInt()
+    private fun isPassedThreshold(): Boolean {
+        val prev = character!!.infection.toInt()
         val cur = infection.valueTextField.text.toString().toInt()
 
         return (prev < 25 && cur >= 25) || (prev < 50 && cur >= 50) || (cur >= 75)
     }
 
-    private fun hasRegressionOrRemission(relevantSkills: Array<SkillBarcodeModel>): Boolean {
+    private fun hasRegressionOrRemission(relevantSkills: List<FullCharacterModifiedSkillModel>): Boolean {
         for (skill in relevantSkills) {
             if (skill.id.equalsAnyOf(Constants.SpecificSkillIds.regressionTypeSkills)) {
                 return true
@@ -576,7 +526,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return false
     }
 
-    private fun hasUnshakableResolve(relevantSkills: Array<SkillBarcodeModel>): Boolean {
+    private fun hasUnshakableResolve(relevantSkills: List<FullCharacterModifiedSkillModel>): Boolean {
         for (skill in relevantSkills) {
             if (skill.id == Constants.SpecificSkillIds.unshakableResolve) {
                 return true
@@ -585,7 +535,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return false
     }
 
-    private fun mysteriousStrangerTotal(relevantSkills: Array<SkillBarcodeModel>): Int {
+    private fun mysteriousStrangerTotal(relevantSkills: List<FullCharacterModifiedSkillModel>): Int {
         var count = 0
         for (skill in relevantSkills) {
             if (skill.id.equalsAnyOf(Constants.SpecificSkillIds.mysteriousStrangerTypeSkills)) {
@@ -595,7 +545,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return count
     }
 
-    private fun hasRegression(relevantSkills: Array<SkillBarcodeModel>): Boolean {
+    private fun hasRegression(relevantSkills: List<FullCharacterModifiedSkillModel>): Boolean {
         for (skill in relevantSkills) {
             if (skill.id == Constants.SpecificSkillIds.regression) {
                 return true
@@ -604,7 +554,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return false
     }
 
-    private fun hasRemission(relevantSkills: Array<SkillBarcodeModel>): Boolean {
+    private fun hasRemission(relevantSkills: List<FullCharacterModifiedSkillModel>): Boolean {
         for (skill in relevantSkills) {
             if (skill.id == Constants.SpecificSkillIds.remission) {
                 return true
@@ -613,7 +563,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return false
     }
 
-    private fun getReductionAmount(relevantSkills: Array<SkillBarcodeModel>): String {
+    private fun getReductionAmount(relevantSkills: List<FullCharacterModifiedSkillModel>): String {
         if (hasRemission(relevantSkills)) {
             return "1d4"
         }

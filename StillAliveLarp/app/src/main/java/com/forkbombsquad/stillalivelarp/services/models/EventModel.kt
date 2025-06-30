@@ -56,10 +56,6 @@ data class FullEventModel(
         return isOngoing() || isToday() || isInFuture()
     }
 
-    fun barcodeModel(): EventBarcodeModel {
-        return EventBarcodeModel(this)
-    }
-
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -73,10 +69,6 @@ data class EventModel(
     @JsonProperty("isStarted") var isStarted: String,
     @JsonProperty("isFinished") var isFinished: String
 ) : Serializable {
-
-    fun barcodeModel(): EventBarcodeModel {
-        return EventBarcodeModel(this)
-    }
 
     fun isToday(): Boolean {
         val today = LocalDate.now()
@@ -100,37 +92,6 @@ data class EventModel(
         }
         return ""
     }
-}
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class EventBarcodeModel(
-    val id: Int,
-    val title: String,
-    val date: String,
-    val startTime: String,
-    val endTime: String,
-    val isStarted: String,
-    val isFinished: String
-) : Serializable {
-    constructor(event: EventModel): this(
-        event.id,
-        event.title,
-        event.date,
-        event.startTime,
-        event.endTime,
-        event.isStarted,
-        event.isFinished
-    )
-
-    constructor(event: FullEventModel): this(
-        event.id,
-        event.title,
-        event.date,
-        event.startTime,
-        event.endTime,
-        event.isStarted.toString(),
-        event.isFinished.toString()
-    )
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

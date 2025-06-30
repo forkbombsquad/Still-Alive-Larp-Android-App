@@ -60,8 +60,7 @@ import java.net.URL
 import kotlin.reflect.KClass
 
 enum class DataManagerPassedDataKey {
-    CHECKOUT_BARCODE,
-    CHECKIN_BARCODE,
+    BARCODE,
     SELECTED_EVENT,
     SELECTED_PLAYER,
     SELECTED_CHARACTER,
@@ -69,7 +68,14 @@ enum class DataManagerPassedDataKey {
     CHARACTER_LIST,
     DESTINATION_CLASS,
     VIEW_TITLE,
-    PLAYER_LIST
+    PLAYER_LIST,
+    EVENT_LIST,
+    ADDITIONAL_DESTINATION_CLASS,
+    CONTACT_REQUEST_LIST,
+    SELECTED_CONTACT_REQUEST,
+    FEATURE_FLAG_LIST,
+    SELECTED_FEATURE_FLAG,
+    RESEARCH_PROJECT_LIST
 }
 
 enum class DataManagerType(val localDataKey: String) {

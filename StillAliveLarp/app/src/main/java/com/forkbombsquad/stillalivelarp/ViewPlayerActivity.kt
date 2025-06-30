@@ -75,6 +75,9 @@ class ViewPlayerActivity : NoStatusBarActivity() {
                 val intent = Intent(this, ViewGearActivity::class.java)
                 startActivity(intent)
             },
+            viewXpReductionsCallback = {
+                // TODO
+            },
             viewAwardsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, player.getActiveCharacter()!!.getAwardsSorted())
                 val intent = Intent(this, ViewAwardsActivity::class.java)
