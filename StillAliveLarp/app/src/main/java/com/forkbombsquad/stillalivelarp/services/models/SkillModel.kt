@@ -305,6 +305,10 @@ data class FullSkillModel(
         SkillCategoryModel(skillModel.skillCategoryId.toInt(), "")
     )
 
+    fun fullCharacterModifiedSkillModel(): FullCharacterModifiedSkillModel {
+        return FullCharacterModifiedSkillModel(this, null, null, 0, 0, 0, 50, 75)
+    }
+
     fun getTypeText(): String {
         when(skillTypeId) {
             Constants.SkillTypes.combat -> return "Combat"

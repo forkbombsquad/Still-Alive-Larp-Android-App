@@ -47,9 +47,8 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         skillsList.setOnClick {
-            // TODO view skills activity
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
-            val intent = Intent(this, OfflineViewSkillsActivity::class.java)
+            val intent = Intent(this, ViewSkillsActivity::class.java)
             startActivity(intent)
         }
         bio.setOnClick {

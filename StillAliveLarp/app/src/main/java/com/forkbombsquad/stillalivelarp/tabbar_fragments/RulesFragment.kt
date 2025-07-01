@@ -12,12 +12,15 @@ import com.forkbombsquad.stillalivelarp.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.ViewRulesActivity
+import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-
-import com.forkbombsquad.stillalivelarp.tabbar_fragments.rules.SkillListFragment
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class RulesFragment : Fragment() {
+
+    // TODO add loading indicator for this boi?
+    // TODO reorg project to be in folders and stuff
 
     private val TAG = "RULES_FRAGMENT"
 
@@ -46,11 +49,10 @@ class RulesFragment : Fragment() {
         nativeSkillTreeDiagramNav = v.findViewById(R.id.rules_skillTreeDiagramNativeNav)
 
         skillListNav.setOnClick {
-            // TODO convert to activity
-            val frag = SkillListFragment.newInstance()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.add(R.id.container, frag)
-            transaction.addToBackStack(TAG).commit()
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SKILL_LIST, DataManager.shared.getSkillsAsFCMSM())
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "All Skills")
+            val intent = Intent(v.context, ViewSkillsActivity::class.java)
+            startActivity(intent)
         }
 
         coreRulebookNav.setOnClick {

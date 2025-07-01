@@ -33,6 +33,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
@@ -75,7 +76,9 @@ enum class DataManagerPassedDataKey {
     SELECTED_CONTACT_REQUEST,
     FEATURE_FLAG_LIST,
     SELECTED_FEATURE_FLAG,
-    RESEARCH_PROJECT_LIST
+    RESEARCH_PROJECT_LIST,
+    SKILL_LIST,
+    SELECTED_SKILL
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -680,6 +683,10 @@ class DataManager private constructor() {
     //
     // Getters
     //
+
+    fun getSkillsAsFCMSM(): List<FullCharacterModifiedSkillModel> {
+        return skills.map { it.fullCharacterModifiedSkillModel() }
+    }
 
     fun getCurrentPlayer(): FullPlayerModel? {
         return players.firstOrNull { it.id == currentPlayerId }
