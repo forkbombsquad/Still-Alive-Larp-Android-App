@@ -36,6 +36,7 @@ import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sign
 
+// TODO personal no longer working
 class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPurchase: Boolean = false, player: FullPlayerModel, character: FullCharacterModel?) {
     private val personal: Boolean
     private val allowPurchase: Boolean

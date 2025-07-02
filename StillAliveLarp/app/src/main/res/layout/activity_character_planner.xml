@@ -30,8 +30,8 @@
 
             <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
                 android:id="@+id/loadinglayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/characterplanner_instructions"

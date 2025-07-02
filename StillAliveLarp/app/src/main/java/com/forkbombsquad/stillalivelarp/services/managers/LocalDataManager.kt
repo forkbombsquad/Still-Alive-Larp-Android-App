@@ -506,16 +506,22 @@ class LocalDataManager private constructor() {
     private fun buildAndStoreFullCharacters(characters: List<CharacterModel>, fullSkills: List<FullSkillModel>, characterSkills: Map<Int, List<CharacterSkillModel>>, gear: Map<Int, GearModel>, awards: LDAwardModels, attendees: LDEventAttendeeModels, preregs: LDPreregModels, xpReductions: Map<Int, List<XpReductionModel>>) {
         val fullChars: MutableList<FullCharacterModel> = mutableListOf()
         characters.forEach { character ->
+            val charSkills = characterSkills[character.id] ?: listOf()
+            val gearC = gear[character.id]
+            val awardsC = awards.characterAwards[character.id] ?: listOf()
+            val attendeesC = attendees.byCharacter[character.id] ?: listOf()
+            val preregsC = preregs.byCharacter[character.id] ?: listOf()
+            val xpRed = xpReductions[character.id] ?: listOf()
             fullChars.add(
                 FullCharacterModel(
                     charModel = character,
                     allSkills = fullSkills,
-                    charSkills = characterSkills[character.id] ?: listOf(),
-                    gear = gear[character.id],
-                    awards = awards.characterAwards[character.id] ?: listOf(),
-                    eventAttendees = attendees.byCharacter[character.id] ?: listOf(),
-                    preregs = preregs.byCharacter[character.id] ?: listOf(),
-                    xpReductions = xpReductions[character.id] ?: listOf()
+                    charSkills = charSkills,
+                    gear = gearC,
+                    awards = awardsC,
+                    eventAttendees = attendeesC,
+                    preregs = preregsC,
+                    xpReductions = xpRed
                 )
             )
         }

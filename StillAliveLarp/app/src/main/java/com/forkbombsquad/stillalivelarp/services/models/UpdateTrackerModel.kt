@@ -28,8 +28,8 @@ data class UpdateTrackerModel(
     @JsonProperty("skillCategories") var skillCategories: Int,
     @JsonProperty("skillPrereqs") var skillPrereqs: Int,
     @JsonProperty("xpReductions") var xpReductions: Int,
-    @JsonProperty("xpReductions") var rulebookVersion: String,
-    @JsonProperty("xpReductions") var treatingWoundsVersion: String
+    @JsonProperty("rulebookVersion") var rulebookVersion: String,
+    @JsonProperty("treatingWoundsVersion") var treatingWoundsVersion: String
 ) : Serializable {
     fun getDifferences(other: UpdateTrackerModel): List<DMT> {
         val updates: MutableList<DMT> = mutableListOf()
@@ -110,7 +110,7 @@ data class UpdateTrackerModel(
                 DataManagerType.EVENT_ATTENDEES -> this.eventAttendees = newTracker.eventAttendees
                 DataManagerType.PREREGS -> this.preregs = newTracker.preregs
                 DataManagerType.FEATURE_FLAGS -> this.featureFlags = newTracker.featureFlags
-                DataManagerType.INTRIGUES -> this.intrigues = newTracker.featureFlags
+                DataManagerType.INTRIGUES -> this.intrigues = newTracker.intrigues
                 DataManagerType.PLAYERS -> this.players = newTracker.players
                 DataManagerType.PROFILE_IMAGES -> this.profileImages = newTracker.profileImages
                 DataManagerType.RESEARCH_PROJECTS -> this.researchProjects = newTracker.researchProjects

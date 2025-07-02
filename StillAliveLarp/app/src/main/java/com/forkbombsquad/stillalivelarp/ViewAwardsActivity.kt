@@ -69,7 +69,7 @@ class ViewAwardsActivity : NoStatusBarActivity() {
             val amountView = TextView(this)
             amountView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             amountView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
-            amountView.text = "${award.amount} ${award.getDisplayText()}"
+            amountView.text = award.getDisplayText()
 
             horLayout.addView(nameView)
             horLayout.addView(dateView)

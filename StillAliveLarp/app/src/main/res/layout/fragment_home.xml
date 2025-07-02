@@ -36,8 +36,8 @@
                 <!--            Loading View-->
                 <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
                     android:id="@+id/loadinglayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/customborder"
                     android:paddingLeft="16dp"
@@ -100,7 +100,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-
                             <Button
                                 android:id="@+id/announcement_prev_button"
                                 android:layout_width="wrap_content"
@@ -436,6 +435,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="8dp"
+                                android:paddingBottom="8dp"
                                 android:textSize="16sp"
                                 android:textAlignment="textStart"
                                 android:text="A sample description of an event that could be multiple sentences long. If it seems like that's excessive then you should check your perception of objecctive reality"/>
@@ -465,6 +465,13 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
+                                <Space
+                                    android:id="@+id/event_prev_spacer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:visibility="gone"/>
+
                                 <Button
                                     android:id="@+id/event_prev_button"
                                     android:layout_width="wrap_content"
@@ -492,6 +499,13 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="Next &gt;"/>
+
+                                <Space
+                                    android:id="@+id/event_next_spacer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:visibility="gone"/>
 
 
                             </LinearLayout>

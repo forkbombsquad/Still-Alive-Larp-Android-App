@@ -67,6 +67,18 @@
             android:name=".NativeSkillTreeActivity"
             android:exported="false" />
         <activity
+            android:name=".PersonalNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlannedCharacterPersonalNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OtherCharacterPersonalNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NPCPersonalNativeSkillTreeActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewEventAttendeesActivity"
             android:exported="false" />
         <activity

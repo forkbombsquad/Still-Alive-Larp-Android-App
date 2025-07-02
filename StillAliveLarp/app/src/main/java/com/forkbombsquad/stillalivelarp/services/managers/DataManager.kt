@@ -47,11 +47,14 @@ import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
+import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Evaluator.Id
@@ -412,7 +415,8 @@ class DataManager private constructor() {
                     DataManagerType.PROFILE_IMAGES -> {
                         val request = ProfileImageService.GetAllProfileImages()
                         lifecycleScope.launch {
-                            request.successfulResponse().ifLet({
+                            request.successfulResponse(ignorePrintResopnseBody = true).ifLet({
+                                globalPrint("SERVICE CONTROLLER: Profile Images Downloaded")
                                 lifecycleScope.launch {
                                     LocalDataManager.shared.storeProfileImages(it.profileImages.toList())
                                     serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
@@ -512,27 +516,45 @@ class DataManager private constructor() {
                     }
                     DataManagerType.TREATING_WOUNDS -> {
                         lifecycleScope.launch {
-                            val jsoupAsyncTask = JsoupAsyncTask("https://stillalivelarp.com/healing") { doc ->
-                                lifecycleScope.launch {
-                                    val imageElement = doc?.getElementById("image")
-                                    val imgPath = imageElement?.attr("src")
-                                    val url = URL(imgPath)
-                                    val connection = url.openConnection() as? HttpURLConnection
-                                    connection?.doInput = true
-                                    connection?.connect()
-                                    val responseCode = connection?.responseCode ?: -1
-                                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                                        val imageStream = connection?.inputStream
-                                        val bmp = BitmapFactory.decodeStream(imageStream)
-                                        imageStream?.close()
-                                        LocalDataManager.shared.storeTreatingWounds(bmp)
+                            try {
+                                // 1. Get the document and parse it off the main thread
+                                val imageUrl = withContext(Dispatchers.IO) {
+                                    val doc = Jsoup.connect("https://stillalivelarp.com/healing").get()
+                                    val imageElement = doc.getElementById("image")
+                                    imageElement?.attr("src")
+                                }
+
+                                if (imageUrl != null) {
+                                    // 2. Download the image off the main thread
+                                    val bitmap = withContext(Dispatchers.IO) {
+                                        val url = URL(imageUrl)
+                                        val connection = url.openConnection() as HttpURLConnection
+                                        connection.doInput = true
+                                        connection.connect()
+
+                                        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                                            val inputStream = connection.inputStream
+                                            val bmp = BitmapFactory.decodeStream(inputStream)
+                                            inputStream.close()
+                                            bmp
+                                        } else null
+                                    }
+
+                                    // 3. Store the image on the main thread
+                                    if (bitmap != null) {
+                                        LocalDataManager.shared.storeTreatingWounds(bitmap)
                                         serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
                                     } else {
                                         serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                                     }
+                                } else {
+                                    serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                                 }
+
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                             }
-                            jsoupAsyncTask.execute()
                         }
                     }
                 }

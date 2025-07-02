@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Space
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -91,6 +92,8 @@ class HomeFragment : Fragment() {
     private lateinit var eventListPreregDesc: TextView
     private lateinit var previousEventButton: Button
     private lateinit var nextEventButton: Button
+    private lateinit var prevEventSpacer: Space
+    private lateinit var nextEventSpacer: Space
     private lateinit var eventShowbutton: Button
 
     private lateinit var awardsLayout: LinearLayout
@@ -116,8 +119,8 @@ class HomeFragment : Fragment() {
             this@HomeFragment.buildViews(v)
         }
 
-        // Load
-        reload(v)
+        // Loading Layout
+        loadingLayout = v.findViewById(R.id.loadinglayout)
 
         // Pull To Refresh
         pullToRefresh = v.findViewById(R.id.pulltorefresh_home)
@@ -215,6 +218,8 @@ class HomeFragment : Fragment() {
         previousEventButton = v.findViewById(R.id.event_prev_button)
         nextEventButton = v.findViewById(R.id.event_next_button)
         eventShowbutton = v.findViewById(R.id.event_show_button)
+        prevEventSpacer = v.findViewById(R.id.event_prev_spacer)
+        nextEventSpacer = v.findViewById(R.id.event_next_spacer)
 
         checkInAsCharButton.setOnClick {
             checkInAsCharButton.setLoading(true)
@@ -282,7 +287,7 @@ class HomeFragment : Fragment() {
         awardsInnerLayout = v.findViewById(R.id.awardsContainerView)
         noAwardsLayout = v.findViewById(R.id.noAwardsView)
 
-        buildViews(v)
+        reload(v)
     }
 
     private fun buildViews(v: View) {
@@ -408,8 +413,8 @@ class HomeFragment : Fragment() {
                 checkedInAs.isGone = true
             }
         }, {
-            eventTodayLayout.isGone = false
-            eventListLayout.isGone = true
+            eventTodayLayout.isGone = true
+            eventListLayout.isGone = false
             val events = showAllEvents.ternary(DataManager.shared.events, DataManager.shared.getRelevantEvents())
             events.getOrNull(eventIndex).ifLet { event ->
                 eventListTitle.text = event.title
@@ -436,7 +441,9 @@ class HomeFragment : Fragment() {
                 eventShowbutton.text = showAllEvents.ternary("Show Only\nRelevant\nEvents", "Show\nAll\nEvents")
             }
             nextEventButton.isGone = eventIndex + 1 == events.size
+            nextEventSpacer.isGone = !nextEventButton.isGone
             previousEventButton.isGone = eventIndex == 0
+            prevEventSpacer.isGone = !previousEventButton.isGone
         })
     }
 
@@ -455,7 +462,7 @@ class HomeFragment : Fragment() {
                     awardsInnerLayout.addView(divider)
                 }
                 val horLayout = LinearLayout(v.context)
-                horLayout.setPadding(0, 8, 0, 0)
+                horLayout.setPadding(0, 16, 0, 16)
                 horLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 horLayout.orientation = LinearLayout.HORIZONTAL
 
@@ -476,7 +483,7 @@ class HomeFragment : Fragment() {
                 val amountView = TextView(v.context)
                 amountView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 amountView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
-                amountView.text = "${award.amount} ${award.getDisplayText()}"
+                amountView.text = award.getDisplayText()
 
                 horLayout.addView(nameView)
                 horLayout.addView(dateView)
@@ -485,7 +492,7 @@ class HomeFragment : Fragment() {
                 val reasonView = TextView(v.context)
                 reasonView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 reasonView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                reasonView.setPadding(0, 0, 0, 8)
+                reasonView.setPadding(0, 0, 0, 16)
                 reasonView.text = award.reason
 
                 awardsInnerLayout.addView(horLayout)

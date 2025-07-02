@@ -1,6 +1,7 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
+import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -13,13 +14,12 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
 import kotlin.math.max
 
-class LoadingLayout(context: Context): LinearLayout(context) {
+class LoadingLayout(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
 
     val layout: LinearLayout
     val gettingContentText: TextView
     val loadingText: TextView
     val progressBar: ProgressBar
-
     init {
         inflate(context, R.layout.loading_layout, this)
 

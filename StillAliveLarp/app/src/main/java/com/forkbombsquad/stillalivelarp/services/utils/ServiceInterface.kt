@@ -20,7 +20,7 @@ interface ServiceInterface<G, T, H: ServicePayload> {
 
     suspend fun getResponse(payload: H): Response<T>
 
-    suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false): T? {
+    suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false, ignorePrintResopnseBody: Boolean = false): T? {
         val response: Response<T>? = try {
             getResponse(payload)
         } catch (e: Exception) {
@@ -28,7 +28,9 @@ interface ServiceInterface<G, T, H: ServicePayload> {
             null
         }
         response?.body().ifLet({
-            globalPrint("SERVICE CONTROLLER: Response Body:\n${globalToJson(it)}")
+            if (!ignorePrintResopnseBody) {
+                globalPrint("SERVICE CONTROLLER: Response Body:\n${globalToJson(it)}")
+            }
         }, {
             if (!ignoreErrors) {
                 response?.errorBody().ifLet({

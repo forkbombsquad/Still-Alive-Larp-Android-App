@@ -108,17 +108,20 @@ data class FullCharacterModel(
         val fcmSkills: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
         allSkills.forEach { baseFullSkill ->
             val xpRed = xpReductions.firstOrNull { it.skillId == baseFullSkill.id }
-            val charSkill = charSkills.first { it.skillId == baseFullSkill.id }
-            fcmSkills.add(FullCharacterModifiedSkillModel(
-                skill = baseFullSkill,
-                charSkillModel = charSkill,
-                xpReduction =  xpRed,
-                costOfCombatSkills(),
-                costOfProfessionSkills(),
-                costOfTalentSkills(),
-                costOf50InfectSkills(),
-                costOf75InfectSkills()
-            ))
+            charSkills.firstOrNull() { it.skillId == baseFullSkill.id }.ifLet({ charSkill ->
+                fcmSkills.add(FullCharacterModifiedSkillModel(
+                    skill = baseFullSkill,
+                    charSkillModel = charSkill,
+                    xpReduction =  xpRed,
+                    costOfCombatSkills(),
+                    costOfProfessionSkills(),
+                    costOfTalentSkills(),
+                    costOf50InfectSkills(),
+                    costOf75InfectSkills()
+                ))
+            }, {
+                fcmSkills.add(baseFullSkill.fullCharacterModifiedSkillModel())
+            })
         }
         this.skills = fcmSkills
     }
