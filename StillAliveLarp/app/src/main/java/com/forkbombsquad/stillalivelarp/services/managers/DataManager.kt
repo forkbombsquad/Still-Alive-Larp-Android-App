@@ -46,6 +46,8 @@ import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
+import com.forkbombsquad.stillalivelarp.utils.capitalizeOnlyFirstLetterOfEachWord
+import com.forkbombsquad.stillalivelarp.utils.capitalized
 import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -83,7 +85,7 @@ enum class DataManagerPassedDataKey {
     SELECTED_FEATURE_FLAG,
     RESEARCH_PROJECT_LIST,
     SKILL_LIST,
-    SELECTED_SKILL
+    ACTIVITY
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -665,12 +667,13 @@ class DataManager private constructor() {
     }
 
     private fun generateLoadingText(): String {
-        var text = "Loading: "
+        var text = "Loading:\n"
         updatesNeeded.forEachIndexed { index, dmt ->
             if (index > 0) {
-                text += ", "
+                // Allow two per line
+                text += (index % 2 == 0).ternary("\n", ", ")
             }
-            text += dmt.name.lowercase()
+            text += dmt.name.capitalizeOnlyFirstLetterOfEachWord()
         }
         text += "..."
         text = text.replace("_", " ")
@@ -690,6 +693,8 @@ class DataManager private constructor() {
             stepCallbacks.forEach { it() }
         }
         if (finishedCount == localUpdatesNeeded.count()) {
+            _updateLoadingText("Building Local Data Models...")
+            stepCallbacks.forEach { it() }
             LocalDataManager.shared.updatesSucceeded(currentUpdateTracker, updatesCompleted)
             populateLocalData(lifecycleScope, true)
         }
@@ -699,6 +704,8 @@ class DataManager private constructor() {
         lifecycleScope.launch {
             mutexThreadLocker.withLock {
                 if (firstLoad || updatesDownloaded) {
+                    _updateLoadingText("Populating Data In Memory...")
+                    stepCallbacks.forEach { it() }
                     firstLoad = false
                     // Normal Models
                     _updateAnnouncements(LocalDataManager.shared.getAnnouncements())
@@ -793,10 +800,11 @@ class DataManager private constructor() {
         }
     }
 
-    fun handleLoadingTextAndHidingViews(loadingLayout: LoadingLayout, thingsToHideWhileLoading: List<View> = listOf(), runIfNotLoading: () -> Unit) {
+    fun handleLoadingTextAndHidingViews(loadingLayout: LoadingLayout, thingsToHideWhileLoading: List<View> = listOf(), runIfLoading: () -> Unit = {}, runIfNotLoading: () -> Unit) {
         if (loading) {
             loadingLayout.setLoadingText(loadingText)
             thingsToHideWhileLoading.forEach { it.isGone = true }
+            runIfLoading()
         } else {
             loadingLayout.setLoading(false)
             thingsToHideWhileLoading.forEach { it.isGone = false }
@@ -814,6 +822,10 @@ class DataManager private constructor() {
 
     fun getCurrentPlayer(): FullPlayerModel? {
         return players.firstOrNull { it.id == currentPlayerId }
+    }
+
+    fun getPlayerForCharacter(character: FullCharacterModel): FullPlayerModel {
+        return players.first { it.id == character.playerId }
     }
 
     fun getActiveCharacter(): FullCharacterModel? {

@@ -15,15 +15,16 @@ import com.forkbombsquad.stillalivelarp.ViewRulesActivity
 import com.forkbombsquad.stillalivelarp.ViewSkillsActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 
 class RulesFragment : Fragment() {
 
-    // TODO add loading indicator for this boi?
     // TODO reorg project to be in folders and stuff
 
     private val TAG = "RULES_FRAGMENT"
 
+    private lateinit var loadingLayout: LoadingLayout
     private lateinit var rulesTitle: TextView
     private lateinit var skillListNav: NavArrowButtonBlack
     private lateinit var coreRulebookNav: NavArrowButtonBlack
@@ -41,7 +42,7 @@ class RulesFragment : Fragment() {
     }
 
     private fun setupView(v: View) {
-
+        loadingLayout = v.findViewById(R.id.loadinglayout)
         rulesTitle = v.findViewById(R.id.rules_rulesTitle)
         skillListNav = v.findViewById(R.id.rules_skillListNav)
         coreRulebookNav = v.findViewById(R.id.rules_coreRulebookNav)
@@ -70,14 +71,21 @@ class RulesFragment : Fragment() {
             startActivity(intent)
         }
 
-        DataManager.shared.load(lifecycleScope) {
-            buildView(v)
-        }
-        buildView(v)
+        reload()
     }
 
-    private fun buildView(v: View) {
+    private fun reload() {
+        DataManager.shared.load(lifecycleScope, stepFinished = {
+            buildView()
+        }, finished = {
+            buildView()
+        })
+        buildView()
+    }
+
+    private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(rulesTitle, "Rules and Reference")
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf()) {}
         skillListNav.setLoading(DataManager.shared.loading)
         coreRulebookNav.setLoading(DataManager.shared.loading)
         treatingWoundsNav.setLoading(DataManager.shared.loading)

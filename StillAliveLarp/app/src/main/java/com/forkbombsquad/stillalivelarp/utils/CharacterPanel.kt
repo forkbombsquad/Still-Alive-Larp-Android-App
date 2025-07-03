@@ -55,19 +55,19 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
             when (character.characterType()) {
                 CharacterType.STANDARD -> {
                     acText = if (character.isAlive) {
-                        "(Active Character)"
+                        "\n(Active Character)"
                     } else {
-                        "(Inactive Character)"
+                        "\n(Inactive Character)"
                     }
                 }
                 CharacterType.NPC -> {
-                    acText = "(NPC${character.isAlive.ternary("", " - Dead")})"
+                    acText = "\n(NPC${character.isAlive.ternary("", " - Dead")})"
                 }
                 CharacterType.PLANNER -> {
-                    acText = "(Planned Character)"
+                    acText = "\n(Planned Character)"
                 }
                 CharacterType.HIDDEN -> {
-                    acText = "(Hidden Character)"
+                    acText = "\n(Hidden Character)"
                 }
             }
             activeCharTitle.text = "${character.fullName} $acText"

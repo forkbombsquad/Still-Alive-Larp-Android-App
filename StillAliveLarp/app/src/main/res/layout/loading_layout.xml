@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/black"
             android:text="Loading..."/>
 
         <ProgressBar

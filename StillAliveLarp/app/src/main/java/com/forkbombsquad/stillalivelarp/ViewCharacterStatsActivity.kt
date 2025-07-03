@@ -89,7 +89,7 @@ class ViewCharacterStatsActivity : NoStatusBarActivity() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "Character Stats")
 
         name.set(character.fullName)
-        player.set(DataManager.shared.players.first { it.id == character.playerId }.fullName)
+        player.set(DataManager.shared.getPlayerForCharacter(character).fullName)
         startDate.set(character.startDate.yyyyMMddToMonthDayYear())
         eventsAttended.set(character.eventAttendees.count())
         var threshold = ""

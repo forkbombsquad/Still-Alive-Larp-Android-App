@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
@@ -12,8 +13,10 @@ import com.forkbombsquad.stillalivelarp.services.PlayerService
 import com.forkbombsquad.stillalivelarp.services.ProfileImageService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -47,7 +50,9 @@ class ManageAccountActivity : NoStatusBarActivity() {
         deleteLocaldata.setOnClick {
             deleteLocaldata.setLoading(true)
             AlertUtils.displayDeleteLocalDataCancelMessage(this, onClickOk = { _, _ ->
-                this.startDeletingLocalData()
+                lifecycleScope.launch {
+                    this@ManageAccountActivity.startDeletingLocalData()
+                }
             }, onClickCancel = { _, _ ->
                 deleteLocaldata.setLoading(false)
             })
@@ -65,8 +70,11 @@ class ManageAccountActivity : NoStatusBarActivity() {
 
     private fun startDeletingLocalData() {
         globalForceResetAllPlayerData()
-        AlertUtils.displaySuccessMessage(this, "All local data has been deleted!") { _, _ ->
-            deleteLocaldata.setLoading(false)
+        runOnUiThread {
+            AlertUtils.displaySuccessMessage(this, "All local data has been deleted, please close and re-open the app!") { _, _ ->
+                deleteLocaldata.setLoading(false)
+                finish()
+            }
         }
     }
 

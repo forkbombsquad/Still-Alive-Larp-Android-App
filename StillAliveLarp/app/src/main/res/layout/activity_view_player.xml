@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:paddingRight="16dp"
+            android:paddingBottom="64dp">
 
             <TextView
                 android:id="@+id/viewplayer_title"
@@ -70,6 +71,7 @@
 
             <com.forkbombsquad.stillalivelarp.utils.CharacterPanel
                 android:id="@+id/playerview_charPanel"
+                android:paddingTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

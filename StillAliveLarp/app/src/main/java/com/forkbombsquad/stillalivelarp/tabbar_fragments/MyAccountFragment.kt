@@ -37,7 +37,6 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.toBitmap
-import com.forkbombsquad.stillalivelarp.utils.underline
 
 /**
  * A simple [Fragment] subclass.
@@ -208,7 +207,7 @@ class MyAccountFragment : Fragment() {
         DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {
             val player = DataManager.shared.getCurrentPlayer()!!
             characterPanel.setValuesAndHideViews(DataManager.shared.getActiveCharacter(), player)
-            playerNameText.text = player.fullName.underline()
+            playerNameText.text = player.fullName
             adminToolsNav.isGone = !player.isAdmin
 
             player.profileImage.ifLet {

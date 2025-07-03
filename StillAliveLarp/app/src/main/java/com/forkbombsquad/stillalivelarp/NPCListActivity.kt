@@ -9,6 +9,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.CommunityFragment
 import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
@@ -30,7 +31,7 @@ class NPCListActivity : NoStatusBarActivity() {
     private lateinit var characters: List<FullCharacterModel>
     private lateinit var viewTitle: String
 
-    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
+    private val sourceClasses: List<KClass<*>> = listOf(CommunityFragment::class, AdminPanelActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

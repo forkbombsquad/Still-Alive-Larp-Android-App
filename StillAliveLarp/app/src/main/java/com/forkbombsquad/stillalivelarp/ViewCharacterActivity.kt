@@ -129,6 +129,6 @@ class ViewCharacterActivity : NoStatusBarActivity() {
             }
         }
 
-        playerName.set(DataManager.shared.players.first { it.id == character.id }.fullName)
+        playerName.set(DataManager.shared.getPlayerForCharacter(character).fullName)
     }
 }

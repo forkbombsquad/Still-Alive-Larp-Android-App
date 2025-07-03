@@ -76,7 +76,7 @@ class RefundSkillsActivity : NoStatusBarActivity() {
                         val deleteSkillRequest = AdminService.DeleteCharacterSkill()
                         lifecycleScope.launch {
                             deleteSkillRequest.successfulResponse(RefundSkillSP(character.playerId, character.id, skill.id)).ifLet({ deletedSkills ->
-                                val player = DataManager.shared.players.firstOrNull { it.id == character.playerId }!!
+                                val player = DataManager.shared.getPlayerForCharacter(character)
                                 var xp = 0
                                 var fs = 0
                                 var pp = 0

@@ -85,11 +85,14 @@
 
                     <TextView
                         android:id="@+id/myAccountPlayerName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:textAlignment="center"
-                        android:textSize="24sp" />
+                        android:text="Player Name"
+                        android:textStyle="bold"
+                        android:textSize="24sp"
+                        android:paddingTop="16dp"
+                        android:textColor="@color/black"
+                        android:textAlignment="textStart"/>
 
                     <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                         android:id="@+id/myaccount_playerStatsNavArrow"
@@ -109,6 +112,7 @@
 
                     <com.forkbombsquad.stillalivelarp.utils.CharacterPanel
                         android:id="@+id/myaccount_charPanel"
+                        android:paddingTop="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

@@ -81,3 +81,10 @@ fun String.decompress(): String {
 fun String.equalsIgnoreCase(other: String): Boolean {
     return this.lowercase() == other.lowercase()
 }
+
+fun String.capitalizeOnlyFirstLetterOfEachWord(): String =
+    this.lowercase()
+        .split(" ")
+        .joinToString(" ") { word ->
+            word.replaceFirstChar { it.uppercaseChar() }
+        }

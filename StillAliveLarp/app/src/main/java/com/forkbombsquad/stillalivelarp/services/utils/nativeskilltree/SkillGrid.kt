@@ -23,9 +23,9 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
+import com.forkbombsquad.stillalivelarp.tabbar_fragments.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Shapes
@@ -36,15 +36,13 @@ import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sign
 
-// TODO personal no longer working
-class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPurchase: Boolean = false, player: FullPlayerModel, character: FullCharacterModel?) {
+class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean = false, allowPurchase: Boolean = false, player: FullPlayerModel, character: FullCharacterModel?) {
     private val personal: Boolean
     private val allowPurchase: Boolean
     private var player: FullPlayerModel
     private var character: FullCharacterModel?
 
-    private val skills: List<FullSkillModel>
-    private var purchaseableSkills: List<FullCharacterModifiedSkillModel> = listOf()
+    private var skills: List<FullCharacterModifiedSkillModel>
     private val gridCategories: MutableList<SkillGridCategory> = mutableListOf()
     private var trueGrid: List<GridSkill> = listOf()
 
@@ -306,13 +304,13 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
     private val lightGreenDull = Color.parseColor("#667D61")
     private val darkGreenDull = Color.parseColor("#346C14")
 
-    val fullGrid: MutableList<MutableList<FullSkillModel?>>
+    val fullGrid: MutableList<MutableList<FullCharacterModifiedSkillModel?>>
     val gridConnections: List<GridConnection>
 
     lateinit var invalidate: () -> Unit
 
     init {
-        this.skills = skills
+        this.skills = character?.allSkillsWithCharacterModifications() ?: skills
         this.personal = personal
         this.allowPurchase = allowPurchase
         this.player = player
@@ -323,17 +321,13 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         fullGrid = calculateFullGrid()
         gridConnections = buildConnections()
         trueGrid = calculateTrueGrid()
-
-        if (personal && allowPurchase) {
-            purchaseableSkills = character?.allPurchaseableSkills() ?: listOf()
-        }
     }
 
-    fun getSkillColor(x: Float, y: Float, skill: FullSkillModel): Paint {
+    private fun getSkillColor(x: Float, y: Float, skill: FullCharacterModifiedSkillModel): Paint {
         var gradient: LinearGradient? = null
         when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> {
-                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
+                gradient = if ((personal && skill.isPurchased()) || !personal) {
                     // Normal Color
                     LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightRed, darkRed, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -345,7 +339,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 }
             }
             Constants.SkillTypes.profession -> {
-                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
+                gradient = if ((personal && skill.isPurchased()) || !personal) {
                     // Normal Color
                     LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightGreen, darkGreen, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -357,7 +351,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 }
             }
             Constants.SkillTypes.talent -> {
-                gradient = if ((personal && character?.getSkill(skill.id) != null) || !personal) {
+                gradient = if ((personal && skill.isPurchased()) || !personal) {
                     // Normal Color
                     LinearGradient(x+(skillWidth/2), y, x+(skillWidth/2), y+skillHeight, lightBlue, darkBlue, Shader.TileMode.CLAMP)
                 } else if (couldPurchaseSkill(skill)) {
@@ -374,7 +368,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         return paint
     }
 
-    fun getSkillConnectionColor(typeId: Int): Int {
+    private fun getSkillConnectionColor(typeId: Int): Int {
         var gradient: LinearGradient? = null
         when (typeId) {
             Constants.SkillTypes.combat -> {
@@ -389,16 +383,10 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         }
         return blackPaint.color
     }
-    private fun couldPurchaseSkill(skill: FullSkillModel): Boolean {
-        if (personal && allowPurchase) {
-            return purchaseableSkills.firstOrNull { it.id == skill.id } != null
-        }
-        return false
-    }
 
     private fun couldPurchaseSkill(skill: FullCharacterModifiedSkillModel): Boolean {
         if (personal && allowPurchase) {
-            return purchaseableSkills.firstOrNull { it.id == skill.id } != null
+            return character?.couldPurchaseSkill(skill) == true
         }
         return false
     }
@@ -419,10 +407,10 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
             var extraWidth = 0f
             var extraHeight = 0f
             exSkill.ifLet {
-                if (it.skill.skillCategoryId.toInt() - 1 < index) {
+                if (it.skill.category.id - 1 < index) {
                     extraXoffset = skillWidthExpanded - skillWidth
                 }
-                if (it.skill.skillCategoryId.toInt() - 1 == index) {
+                if (it.skill.category.id - 1 == index) {
                     extraWidth = skillWidthExpanded - skillWidth
                 }
                 extraHeight = it.rect.height() - skillHeight
@@ -460,7 +448,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 var startY4 = startY3 + skillHeight + skillHeight + (spacingHeight * 4f)
                 exSkill.ifLet { skl ->
                     if (skl.expanded) {
-                        val xp = skl.skill.xpCost.toInt()
+                        val xp = skl.skill.baseXpCost()
                         if (xp <= 4) {
                             startY4 += extraHeight
                         }
@@ -595,9 +583,9 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
             val sectionSpacing = textPadding * 4
             val lineHeight = 4
 
-            if (it.skill.skillCategoryId == Constants.SpecificSkillCategories.THE_INFECTED) {
+            if (it.skill.category.id == Constants.SpecificSkillCategories.THE_INFECTED) {
                 // Title
-                val text = "At Least ${it.skill.minInfection}% Infection Rating Required"
+                val text = it.skill.getInfCostText()
                 val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                     .setLineSpacing(1.5f, 1f)
@@ -607,9 +595,9 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 skillRequirements.add(SkillRequirement(Shapes.rectf(x - textPadding, y - skillReqSpacing - titleHeight - textPadding, skillWidth + textPadding, titleHeight.toFloat() + textPadding), layout))
             }
 
-            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.PRESTIGE) {
+            if (it.skill.category.id == Constants.SpecificSkillCategories.PRESTIGE) {
                 // Title
-                val text = "Requires 1 Prestige Point"
+                val text = "Requires ${it.skill.prestigeCost()} Prestige Point"
                 val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                     .setLineSpacing(1.5f, 1f)
@@ -619,9 +607,9 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 skillRequirements.add(SkillRequirement(Shapes.rectf(x - textPadding, y - skillReqSpacing - titleHeight - textPadding, skillWidth + textPadding, titleHeight.toFloat() + textPadding), layout))
             }
 
-            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.SPECIALIZATION) {
+            if (it.skill.category.id == Constants.SpecificSkillCategories.SPECIALIZATION) {
                 // Title
-                val text = "You may only select 1 Tier-${it.skill.xpCost} Specialization Skill"
+                val text = "You may only select 1 Tier-${it.skill.baseXpCost()} Specialization Skill"
 
                 val layout = StaticLayout.Builder.obtain(text, 0, text.length, skillRequirementPaint, skillWidth.toInt())
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -684,7 +672,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 heightSoFar += lineHeight + sectionSpacing
 
                 // Cost
-                text = character?.allSkillsWithCharacterModifications()?.firstOrNull { fcmsk -> fcmsk.id == it.skill.id }?.getFullCostText() ?: it.skill.getFullCostText()
+                text = it.skill.getFullCostText()
 
                 outlineLayout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -707,7 +695,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 // Plus dividing line
                 heightSoFar += lineHeight + sectionSpacing
 
-                if (skill.prereqs.isNotEmpty()) {
+                if (skill.hasPrereqs()) {
                     text = "Prerequisites"
                     outlineLayout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailPrereqTitlePaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                         .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -726,7 +714,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                     canvas.restore()
                     heightSoFar += outlineLayout.height + textPadding + textPadding
 
-                    skill.prereqs.forEach { prereq ->
+                    skill.prereqs().forEach { prereq ->
                         text = prereq.name
                         outlineLayout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailPrereqPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -772,8 +760,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 heightSoFar += outlineLayout.height + textPadding + textPadding
 
                 // Purchase button
-                val pskill = purchaseableSkills.firstOrNull { skl -> skl.id == it.skill.id }
-                if (personal && allowPurchase && pskill != null) {
+                if (personal && allowPurchase && character?.couldPurchaseSkill(it.skill) == true) {
                     // Purchase Skill button
                     text = "Purchase Skill"
                     if (makingPurchase) {
@@ -793,7 +780,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                     fillLayout.draw(canvas)
                     canvas.restore()
 
-                    purchaseButton = TappablePurchaseButton(pskill, purchaseRect)
+                    purchaseButton = TappablePurchaseButton(it.skill, purchaseRect)
 
                     heightSoFar += 100f + (textPadding * 8) + (buttonOutlineHeight * 2)
                 }
@@ -968,8 +955,8 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         this.gridCategories.sortBy { it.skillCategoryId }
     }
 
-    private fun calculateFullGrid(): MutableList<MutableList<FullSkillModel?>> {
-        val grid: MutableList<MutableList<FullSkillModel?>> = mutableListOf()
+    private fun calculateFullGrid(): MutableList<MutableList<FullCharacterModifiedSkillModel?>> {
+        val grid: MutableList<MutableList<FullCharacterModifiedSkillModel?>> = mutableListOf()
         grid.add(mutableListOf())
         grid.add(mutableListOf())
         grid.add(mutableListOf())
@@ -991,12 +978,12 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         for(y in 0 until fullGrid.count()) {
             for(x in 0 until fullGrid[y].count()) {
                 val skill = fullGrid[y][x]
-                val postReqCount = skill?.postreqs?.count()?.toFloat() ?: 1f
+                val postReqCount = skill?.postreqs()?.count()?.toFloat() ?: 1f
                 val increment = 1f / (postReqCount + 1f)
                 var index = 0
-                skill?.postreqs?.forEach { postreq ->
+                skill?.postreqs()?.forEach { postreq ->
                     getGridLocation(postreq.id).ifLet {
-                        gridConnections.add(GridConnection(GridLocation(x, y, skill.prereqs.firstOrNull { pre -> skill.xpCost == pre.xpCost.toInt() } != null), it, increment, getSkillConnectionColor(skill.skillTypeId), getSkill(postreq.id).prereqs.count(), skill.skillCategoryId))
+                        gridConnections.add(GridConnection(GridLocation(x, y, skill.prereqs().firstOrNull { pre -> skill.baseXpCost() == pre.xpCost.toInt() } != null), it, increment, getSkillConnectionColor(skill.skillTypeId), getSkill(postreq.id).prereqs().count(), skill.category.id))
                         index += 1
                     }
                 }
@@ -1022,7 +1009,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         return cons
     }
 
-    private fun getSkill(skillId: Int): FullSkillModel {
+    private fun getSkill(skillId: Int): FullCharacterModifiedSkillModel {
         return skills.first { it.id == skillId }
     }
 
@@ -1031,7 +1018,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
             for(x in 0 until fullGrid[y].count()) {
                 val skill = fullGrid[y][x]
                 if (skill?.id == skillId) {
-                    return GridLocation(x, y, skill.prereqs.firstOrNull { pre -> skill.xpCost == pre.xpCost.toInt() } != null)
+                    return GridLocation(x, y, skill.prereqs().firstOrNull { pre -> skill.baseXpCost() == pre.xpCost.toInt() } != null)
                 }
             }
         }
@@ -1067,10 +1054,10 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 DataManager.shared.load(lifecycleScope) {
                     player = DataManager.shared.getCurrentPlayer()!!
                     character = DataManager.shared.getCharacter(character!!.id)
-                    purchaseableSkills = character?.allPurchaseableSkills() ?: listOf()
+                    skills = character?.allPurchaseableSkills() ?: listOf()
                     trueGrid = calculateTrueGrid()
                     recalculateDottedLines()
-                    // TODO do I need to call an update callback?
+                    DataManager.shared.callUpdateCallback(MyAccountFragment::class)
                     makingPurchase = false
                     dotHandler.removeCallbacks(dotRunnable)
                     invalidate()
@@ -1119,7 +1106,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         // Plus dividing line
         totalHeight += lineHeight + sectionSpacing
 
-        text = character?.allSkillsWithCharacterModifications()?.firstOrNull { fcmsk -> fcmsk.id == skill.id }?.getFullCostText() ?: skill.getFullCostText()
+        text = skill.getFullCostText()
         layout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
             .setLineSpacing(1.5f, 1f)
@@ -1130,7 +1117,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         // Plus dividing line
         totalHeight += lineHeight + sectionSpacing
 
-        if (skill.prereqs.isNotEmpty()) {
+        if (skill.hasPrereqs()) {
             text = "Prerequisites"
             layout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailPrereqTitlePaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1139,7 +1126,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                 .build()
             totalHeight += layout.height + textPadding + textPadding
 
-            skill.prereqs.forEach { prereq ->
+            skill.prereqs().forEach { prereq ->
                 text = prereq.name
                 layout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailPrereqPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1164,8 +1151,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         totalHeight += layout.height + textPadding + textPadding
 
         // Purchase skill button
-        val pskill = purchaseableSkills.firstOrNull { skl -> skl.id == skill.id }
-        if (personal && allowPurchase && pskill != null) {
+        if (personal && allowPurchase && character?.couldPurchaseSkill(skill) == true) {
             // Purchase Skill button
             totalHeight += 100 + (textPadding * 8) + (buttonOutlineHeight * 2).toInt()
         }
@@ -1182,19 +1168,18 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         // For Height (Determined globally) just assume 2 for now
         // If you never need to calculate it,
         // Count the maximum number of skills that are prerequisites for other skills, both of the same xp value (right now it's 2)
-
-        val skillsCategorized: MutableMap<Int, MutableList<FullSkillModel>> = mutableMapOf()
+        val skillsCategorized: MutableMap<Int, MutableList<FullCharacterModifiedSkillModel>> = mutableMapOf()
         for (skill in skills) {
-            if (skillsCategorized[skill.skillCategoryId] == null) {
-                val mutableList: MutableList<FullSkillModel> = mutableListOf(skill)
-                skillsCategorized[skill.skillCategoryId] = mutableList
+            if (skillsCategorized[skill.category.id] == null) {
+                val mutableList: MutableList<FullCharacterModifiedSkillModel> = mutableListOf(skill)
+                skillsCategorized[skill.category.id] = mutableList
             } else {
-                skillsCategorized[skill.skillCategoryId]?.add(skill)
+                skillsCategorized[skill.category.id]?.add(skill)
             }
         }
 
         for ((category, skills) in skillsCategorized) {
-            gridCategories.add(SkillGridCategory(skills, category, this.skills.first { it.category.id == category }.name, this.skills))
+            gridCategories.add(SkillGridCategory(skills, category, this.skills.first { it.category.id == category }.category.name, this.skills))
         }
     }
 
@@ -1208,9 +1193,9 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         var exSkillId = -1
         getExapnded().ifLet { exSkill ->
             exExists = true
-            exTier = max(exSkill.skill.xpCost.toInt() - 1, 0)
+            exTier = max(exSkill.skill.baseXpCost() - 1, 0)
             exHeightDifference = exSkill.rect.height() - skillHeight
-            exIsLower = exSkill.skill.prereqs.firstOrNull { exSkill.skill.xpCost == it.xpCost.toInt() && it.skillCategoryId.toInt() == exSkill.skill.skillCategoryId } != null
+            exIsLower = exSkill.skill.prereqs().firstOrNull { exSkill.skill.baseXpCost() == it.xpCost.toInt() && it.skillCategoryId.toInt() == exSkill.skill.category.id } != null
             exXLoc = exSkill.gridX
             exSkillId = exSkill.skill.id
         }
@@ -1219,13 +1204,13 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
         this.fullGrid.forEachIndexed { xpCost, row ->
             row.forEachIndexed { skillIndex, skl ->
                 skl.ifLet { skill ->
-                    var y = if (skill.prereqs.firstOrNull { skill.xpCost == it.xpCost.toInt() && it.skillCategoryId.toInt() == skill.skillCategoryId } == null) {
+                    var y = if (skill.prereqs().firstOrNull { skill.baseXpCost() == it.xpCost.toInt() && it.skillCategoryId.toInt() == skill.category.id } == null) {
                         (xpCost * skillHeight * 2) + (xpCost * spacingHeight * 4) + spacingHeight + titleSize + titleSpacing
                     } else {
                         (xpCost * skillHeight * 2) + (xpCost * spacingHeight * 4) + skillHeight + spacingHeight + spacingHeight + titleSize + titleSpacing
                     }
                     var xoffset = 0f
-                    if (skill.skillCategoryId > Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+                    if (skill.category.id > Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
                         xoffset = xpCostWidth
                     }
                     var x = spacingWidth + (skillIndex * skillWidth) + (skillIndex * spacingWidth * 2) + xoffset
@@ -1237,7 +1222,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                         if (xpCost > exTier) {
                             y += exHeightDifference
                         } else if (xpCost == exTier) {
-                            if (!exIsLower && (skill.prereqs.firstOrNull { skill.xpCost == it.xpCost.toInt() && it.skillCategoryId.toInt() == skill.skillCategoryId } != null)) {
+                            if (!exIsLower && (skill.prereqs().firstOrNull { skill.baseXpCost() == it.xpCost.toInt() && it.skillCategoryId.toInt() == skill.category.id } != null)) {
                                 y += exHeightDifference
                             }
                         }
@@ -1276,7 +1261,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
                     thirdLineYOffset = offset
                 }
             }
-            if (it.skill.skillCategoryId.toInt() == Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
+            if (it.skill.category.id == Constants.SpecificSkillCategories.BEGINNER_SKILLS) {
                 lineStartXOffset = it.rect.width() - skillWidth
             }
         }
@@ -1284,7 +1269,7 @@ class SkillGrid(skills: List<FullSkillModel>, personal: Boolean = false, allowPu
 
 }
 
-data class GridSkill(var rect: RectF, val skill: FullSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
+data class GridSkill(var rect: RectF, val skill: FullCharacterModifiedSkillModel, val gridX: Int, val gridY: Int, var expanded: Boolean = false)
 
 data class SkillRequirement(var rect: RectF, val layout: StaticLayout)
 

@@ -23,10 +23,19 @@ data class FullCharacterModifiedSkillModel(
 
 ): Serializable {
 
-    val id = skill.id
-    val name = skill.name
-    val skillTypeId = skill.skillTypeId
-    val description = skill.description
+    val id: Int
+        get() = skill.id
+    val name: String
+        get() = skill.name
+
+    val skillTypeId: Int
+        get() = skill.skillTypeId
+
+    val description: String
+        get() = skill.description
+
+    val category: SkillCategoryModel
+        get() = skill.category
 
     fun isNew(event: FullEventModel): Boolean {
         return purchaseDate()?.yyyyMMddtoDate()?.isAfter(event.date.yyyyMMddtoDate())?: true
@@ -71,8 +80,8 @@ data class FullCharacterModifiedSkillModel(
     fun getRelevantSpecCostChange(): Int {
         return when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> combatXpMod
-            Constants.SkillTypes.profession -> talentXpMod
-            Constants.SkillTypes.talent -> professionXpMod
+            Constants.SkillTypes.profession -> professionXpMod
+            Constants.SkillTypes.talent -> talentXpMod
             else -> 0
         }
     }
@@ -93,9 +102,9 @@ data class FullCharacterModifiedSkillModel(
     fun modInfectionCost(): Int {
         var baseCost = skill.minInfection
         if (baseCost == 50) {
-            baseCost -= inf50Mod
+            baseCost = inf50Mod
         } else if (baseCost == 75) {
-            baseCost -= inf75Mod
+            baseCost = inf75Mod
         }
 
         return max(0, baseCost)
@@ -111,7 +120,7 @@ data class FullCharacterModifiedSkillModel(
     }
 
     fun usesInfection(): Boolean {
-        return modInfectionCost() > 0
+        return baseInfectionCost() > 0
     }
 
     fun hasModCost(): Boolean {
@@ -176,6 +185,14 @@ data class FullCharacterModifiedSkillModel(
     fun prereqs(): List<SkillModel> {
         return skill.prereqs
     }
+
+    fun postreqs(): List<SkillModel> {
+        return skill.postreqs
+    }
+
+//    fun hasSameCostPrereq(): Boolean {
+//        return  prereqs().firstOrNull { baseXpCost() == it.xpCost.toInt() } != null
+//    }
 
     fun isPurchased(): Boolean {
         return charSkillModel != null
@@ -289,20 +306,6 @@ data class FullSkillModel(
         prereqs,
         postreqs,
         category
-    )
-
-    constructor(skillModel: SkillModel): this(
-        skillModel.id,
-        skillModel.xpCost.toInt(),
-        skillModel.prestigeCost.toInt(),
-        skillModel.name,
-        skillModel.description,
-        skillModel.minInfection.toInt(),
-        skillModel.skillTypeId.toInt(),
-        skillModel.skillCategoryId.toInt(),
-        listOf(),
-        listOf(),
-        SkillCategoryModel(skillModel.skillCategoryId.toInt(), "")
     )
 
     fun fullCharacterModifiedSkillModel(): FullCharacterModifiedSkillModel {

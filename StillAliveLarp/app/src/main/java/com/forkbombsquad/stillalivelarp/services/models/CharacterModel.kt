@@ -106,22 +106,20 @@ data class FullCharacterModel(
         xpReductions
     ) {
         val fcmSkills: MutableList<FullCharacterModifiedSkillModel> = mutableListOf()
+        val pskills = allSkills.filter { charSkills.firstOrNull { cs -> it.id == cs.skillId } != null }
         allSkills.forEach { baseFullSkill ->
             val xpRed = xpReductions.firstOrNull { it.skillId == baseFullSkill.id }
-            charSkills.firstOrNull() { it.skillId == baseFullSkill.id }.ifLet({ charSkill ->
-                fcmSkills.add(FullCharacterModifiedSkillModel(
-                    skill = baseFullSkill,
-                    charSkillModel = charSkill,
-                    xpReduction =  xpRed,
-                    costOfCombatSkills(),
-                    costOfProfessionSkills(),
-                    costOfTalentSkills(),
-                    costOf50InfectSkills(),
-                    costOf75InfectSkills()
-                ))
-            }, {
-                fcmSkills.add(baseFullSkill.fullCharacterModifiedSkillModel())
-            })
+            val charSkill = charSkills.firstOrNull { it.skillId == baseFullSkill.id }
+            fcmSkills.add(FullCharacterModifiedSkillModel(
+                skill = baseFullSkill,
+                charSkillModel = charSkill,
+                xpReduction =  xpRed,
+                costOfCombatSkills(pskills),
+                costOfProfessionSkills(pskills),
+                costOfTalentSkills(pskills),
+                costOf50InfectSkills(pskills),
+                costOf75InfectSkills(pskills)
+            ))
         }
         this.skills = fcmSkills
     }
@@ -151,9 +149,6 @@ data class FullCharacterModel(
         return allPurchasedSkills().sumOf { it.spentPp() }
     }
 
-    fun getSkill(id: Int): FullCharacterModifiedSkillModel? {
-        return skills.firstOrNull { it.id == id }
-    }
     fun allSkillsWithCharacterModifications(): List<FullCharacterModifiedSkillModel> {
         return skills
     }
@@ -259,9 +254,9 @@ data class FullCharacterModel(
         var message = "$purchaseText using:\n"
 
         message += if (useFreeSkill) {
-            "1 Free Tier-1 Skill point"
+            "1 Free Tier-1 Skill Point"
         } else {
-            "${skill.modXpCost()} Experience Point"
+            "${skill.modXpCost()} Experience Point${(skill.modXpCost() > 1).ternary("s", "")}"
         }
 
         if (skill.usesPrestige()) {
@@ -285,7 +280,7 @@ data class FullCharacterModel(
 
     fun allPurchaseableSkills(searchText: String = "", filter: SkillFilterType = SkillFilterType.NONE): List<FullCharacterModifiedSkillModel> {
         val charSkills = allNonPurchasedSkills()
-        val player = DataManager.shared.players.first { it.id == playerId }
+        val player = DataManager.shared.getPlayerForCharacter(this)
 
         // Remove all skills you don't have prereqs for
         var newSkillList = charSkills.filter { skillToKeep -> hasAllPrereqsForSkill(skillToKeep) }
@@ -298,9 +293,8 @@ data class FullCharacterModel(
             }
         }
 
-
         // Remove Choose One Skills that can't be chosen
-        val cskills: List<FullCharacterModifiedSkillModel> = getChooseOneSkills()
+        val cskills: List<FullCharacterModifiedSkillModel> = getPurchasedChooseOneSkills()
         if (cskills.isEmpty()) { // Has none
             // Remove all level 2 cskills if the character doesn't have a level 1 cskill.
             newSkillList = newSkillList.filter { skillToKeep ->
@@ -334,53 +328,53 @@ data class FullCharacterModel(
         if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
             // Filter out skills that you don't have enough xp, fs, or inf for
             newSkillList = newSkillList.filter { skillToKeep ->
-                val keep = if (skillToKeep.modInfectionCost() > infection.toInt()) {
-                    false
-                } else if (skillToKeep.canUseFreeSkill() && player.freeTier1Skills > 0) {
-                    true
-                } else if (skillToKeep.modXpCost() > player.experience) {
-                    false
-                } else {
-                    false
+                var keep = true
+                if (infection.toInt() < skillToKeep.modInfectionCost()) {
+                    keep = false
+                }
+                if (keep) {
+                    keep = if (skillToKeep.canUseFreeSkill() && player.freeTier1Skills > 0) {
+                        true
+                    } else if (player.experience >= skillToKeep.modXpCost()) {
+                        true
+                    } else {
+                        false
+                    }
                 }
                 keep
             }
         }
         return newSkillList.filter { it.includeInFilter(searchText, filter) }
     }
+
+    fun couldPurchaseSkill(skill: FullCharacterModifiedSkillModel): Boolean {
+        if (skill.isPurchased()) { return false }
+        return allPurchaseableSkills().firstOrNull { it.id == skill.id } != null
+    }
+
     fun characterType(): CharacterType {
         return CharacterType.fromId(characterTypeId) ?: CharacterType.STANDARD
     }
 
     fun hasAllPrereqsForSkill(skill: FullCharacterModifiedSkillModel): Boolean {
-        var hasAll = true
-        skill.prereqs().forEach { skillModel ->
-            if (skills.firstOrNull { it.id == skillModel.id }?.isPurchased() == false) {
-                hasAll = false
-            }
-        }
-        return hasAll
+        val purchasedIds = allPurchasedSkills().map { it.id }
+        return skill.prereqs().all { it.id.equalsAnyOf(purchasedIds) }
     }
 
-    fun getIntrigueSkills(): List<Int> {
-        val list = mutableListOf<Int>()
-        val filteredSkills = skills.filter { sk ->
+    fun getPurchasedIntrigueSkills(): List<Int> {
+        return allPurchasedSkills().filter { sk ->
             sk.id.equalsAnyOf(Constants.SpecificSkillIds.investigatorTypeSkills)
-        }
-        filteredSkills.forEach {
-            list.add(it.id)
-        }
-        return list
+        }.map { it.id }
     }
 
-    fun getChooseOneSkills(): List<FullCharacterModifiedSkillModel> {
-        return skills.filter {
+    fun getPurchasedChooseOneSkills(): List<FullCharacterModifiedSkillModel> {
+        return allPurchasedSkills().filter {
             it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills)
         }
     }
 
-    fun costOfCombatSkills(): Int {
-        skills.forEach {
+    private fun costOfCombatSkills(purchasedSkills: List<FullSkillModel>): Int {
+        purchasedSkills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allCombatReducingSkills)) {
                 return -1
             }
@@ -391,8 +385,8 @@ data class FullCharacterModel(
         return 0
     }
 
-    fun costOfProfessionSkills(): Int {
-        skills.forEach {
+    private fun costOfProfessionSkills(purchasedSkills: List<FullSkillModel>): Int {
+        purchasedSkills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allProfessionReducingSkills)) {
                 return -1
             }
@@ -403,8 +397,8 @@ data class FullCharacterModel(
         return 0
     }
 
-    fun costOfTalentSkills(): Int {
-        skills.forEach {
+    private fun costOfTalentSkills(purchasedSkills: List<FullSkillModel>): Int {
+        purchasedSkills.forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allTalentReducingSkills)) {
                 return -1
             }
@@ -415,26 +409,16 @@ data class FullCharacterModel(
         return 0
     }
 
-    fun costOf50InfectSkills(): Int {
-        skills.forEach {
-            if (it.id == Constants.SpecificSkillIds.adaptable) {
-                return 25
-            }
-        }
-        return 50
+    private fun costOf50InfectSkills(purchasedSkills: List<FullSkillModel>): Int {
+        return (purchasedSkills.firstOrNull { it.id == Constants.SpecificSkillIds.adaptable } != null).ternary(25, 50)
     }
 
-    fun costOf75InfectSkills(): Int {
-        skills.forEach {
-            if (it.id == Constants.SpecificSkillIds.extremelyAdaptable) {
-                return 50
-            }
-        }
-        return 75
+    private fun costOf75InfectSkills(purchasedSkills: List<FullSkillModel>): Int {
+        return (purchasedSkills.firstOrNull { it.id == Constants.SpecificSkillIds.extremelyAdaptable } != null).ternary(50, 75)
     }
 
     fun hasUnshakableResolve(): Boolean {
-        skills.forEach {
+        allPurchasedSkills().forEach {
             if (it.id == Constants.SpecificSkillIds.unshakableResolve) {
                 return true
             }
@@ -444,7 +428,7 @@ data class FullCharacterModel(
 
     fun mysteriousStrangerCount(): Int {
         var count = 0
-        skills.forEach {
+        allPurchasedSkills().forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.mysteriousStrangerTypeSkills)) {
                 count++
             }
@@ -477,7 +461,7 @@ data class FullCharacterModel(
 
     fun getRelevantBarcodeSkills(): List<FullCharacterModifiedSkillModel> {
         val baseBarcodeSkills = mutableListOf<FullCharacterModifiedSkillModel>()
-        skills.forEach {
+        allPurchasedSkills().forEach {
             if (it.id.equalsAnyOf(Constants.SpecificSkillIds.barcodeRelevantSkills)) {
                 baseBarcodeSkills.add(it)
             }

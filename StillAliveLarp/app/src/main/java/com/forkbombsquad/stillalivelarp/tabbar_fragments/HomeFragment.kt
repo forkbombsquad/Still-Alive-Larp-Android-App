@@ -351,7 +351,7 @@ class HomeFragment : Fragment() {
         DataManager.shared.setTitleTextPotentiallyOffline(intrigueViewTitle, "Intrigue")
 
         DataManager.shared.getOngoingOrTodayEvent()?.intrigue.ifLet { intrigue ->
-            val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getIntrigueSkills() ?: listOf()
+            val intrigueSkills: List<Int> = DataManager.shared.getActiveCharacter()?.getPurchasedIntrigueSkills() ?: listOf()
             intrigueInvestigator.text = intrigue.investigatorMessage
             intrigueInterrogator.text = intrigue.interrogatorMessage
             intrigueInvestigatorLayout.isGone = intrigueSkills.firstOrNull { id -> id == Constants.SpecificSkillIds.investigator } == null
@@ -502,7 +502,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showIntrigue(): Boolean {
-        return (DataManager.shared.getActiveCharacter()?.getIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getOngoingOrTodayEvent()?.intrigue != null
+        return (DataManager.shared.getActiveCharacter()?.getPurchasedIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getOngoingOrTodayEvent()?.intrigue != null
     }
 
     private fun showCheckout(): Boolean {

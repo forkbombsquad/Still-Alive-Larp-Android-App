@@ -29,6 +29,11 @@
                 android:textSize="32sp"
                 android:textAlignment="center"/>
 
+            <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                android:id="@+id/loadinglayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                 android:id="@+id/rules_skillListNav"
                 android:layout_width="match_parent"

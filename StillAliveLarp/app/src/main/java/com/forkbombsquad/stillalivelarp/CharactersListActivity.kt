@@ -49,7 +49,7 @@ class CharactersListActivity : NoStatusBarActivity() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         innerLayout.removeAllViews()
         characters.alphabetized().forEachIndexed { index, character ->
-            val playerName = DataManager.shared.players.first { character.playerId == it.id }.fullName
+            val playerName = DataManager.shared.getPlayerForCharacter(character).fullName
             val arrow = NavArrowButtonBlackBuildable(this)
             arrow.textView.text = "${character.fullName} - ($playerName)"
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

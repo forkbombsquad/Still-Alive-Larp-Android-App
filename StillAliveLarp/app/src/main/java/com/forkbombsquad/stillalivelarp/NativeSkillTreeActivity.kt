@@ -47,7 +47,7 @@ open class NativeSkillTreeActivity : NoStatusBarActivity() {
     open fun setImageUpdateDrawables() {
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills,
+                DataManager.shared.getSkillsAsFCMSM(),
                 personal = false,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
@@ -67,7 +67,7 @@ class PersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
     override fun setImageUpdateDrawables() {
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills,
+                listOf(),
                 personal = true,
                 allowPurchase = !DataManager.shared.offlineMode,
                 player = DataManager.shared.getCurrentPlayer()!!,
@@ -83,7 +83,7 @@ class PlannedCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity(
     override fun setImageUpdateDrawables() {
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills,
+                listOf(),
                 personal = true,
                 allowPurchase = !DataManager.shared.offlineMode,
                 player = DataManager.shared.getCurrentPlayer()!!,
@@ -100,7 +100,7 @@ class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() 
     override fun setImageUpdateDrawables() {
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills,
+                listOf(),
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
@@ -115,10 +115,9 @@ class OtherCharacterPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() 
 class NPCPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
 
     override fun setImageUpdateDrawables() {
-        // TODO get character from stored data
         img.updateDrawables(
             SkillGrid(
-                DataManager.shared.skills,
+                listOf(),
                 personal = true,
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,

@@ -60,7 +60,7 @@ class AlertUtils {
         }
 
         fun displayDeleteLocalDataCancelMessage(context: Context, onClickOk: DialogInterface.OnClickListener? = null, onClickCancel: DialogInterface.OnClickListener? = null) {
-            displayMessage(context, "Are You Sure?", "Once deleted, all local data will be wiped and need to be re-downloaded and reconfigured.", arrayOf(AlertButton("Delete Local Data", onClickOk ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEGATIVE), AlertButton(context.getString(android.R.string.cancel), onClickCancel ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEUTRAL)))
+            displayMessage(context, "Are You Sure?", "Once deleted, all local data will be wiped and will need to be re-downloaded and reconfigured.", arrayOf(AlertButton("Delete Local Data", onClickOk ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEGATIVE), AlertButton(context.getString(android.R.string.cancel), onClickCancel ?: DialogInterface.OnClickListener { _, _ -> }, ButtonType.NEUTRAL)))
         }
 
         /**
