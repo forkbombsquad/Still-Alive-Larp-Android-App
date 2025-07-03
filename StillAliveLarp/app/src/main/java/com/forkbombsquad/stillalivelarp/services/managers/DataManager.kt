@@ -51,6 +51,8 @@ import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -115,10 +117,20 @@ enum class DataManagerLoadType {
 class DataManager private constructor() {
     // Global Settings
     var offlineMode: Boolean = false
-        private set
+    private val _offlineMode = MutableStateFlow(false)
+    val offlineModeFlow: StateFlow<Boolean> = _offlineMode
+    private fun _updateOfflineMode(new: Boolean) {
+        offlineMode = new
+        _offlineMode.value = new
+    }
 
     var currentPlayerId: Int = -1
-        private set
+    private val _currentPlayerId = MutableStateFlow(-1)
+    val currentPlayerIdFlow: StateFlow<Int> = _currentPlayerId
+    private fun _updateCurrentPlayerId(newPlayerId: Int) {
+        currentPlayerId = newPlayerId
+        _currentPlayerId.value = newPlayerId
+    }
 
     var updateCallbacks: MutableMap<String, () -> Unit> = mutableMapOf()
         private set
@@ -127,23 +139,113 @@ class DataManager private constructor() {
 
     // Unchanged From Server
     var announcements: List<AnnouncementModel> = listOf()
-    var contactRequests: List<ContactRequestModel> = listOf()
-    var featureFlags: List<FeatureFlagModel> = listOf()
-    var intrigues: Map<Int, IntrigueModel> = mapOf()
-    var researchProjects: List<ResearchProjectModel> = listOf()
+    private val _announcements = MutableStateFlow<List<AnnouncementModel>>(listOf())
+    val announcementsFlow: StateFlow<List<AnnouncementModel>> = _announcements
+    private fun _updateAnnouncements(new: List<AnnouncementModel>) {
+        announcements = new
+        _announcements.value = new
+    }
 
-    // Built Models that combine lots of different sub models
+    var contactRequests: List<ContactRequestModel> = listOf()
+    private val _contactRequests = MutableStateFlow<List<ContactRequestModel>>(listOf())
+    val contactRequestsFlow: StateFlow<List<ContactRequestModel>> = _contactRequests
+    private fun _updateContactRequests(new: List<ContactRequestModel>) {
+        contactRequests = new
+        _contactRequests.value = new
+    }
+
+    var featureFlags: List<FeatureFlagModel> = listOf()
+    private val _featureFlags = MutableStateFlow<List<FeatureFlagModel>>(listOf())
+    val featureFlagsFlow: StateFlow<List<FeatureFlagModel>> = _featureFlags
+    private fun _updateFeatureFlags(new: List<FeatureFlagModel>) {
+        featureFlags = new
+        _featureFlags.value = new
+    }
+
+    var intrigues: Map<Int, IntrigueModel> = mapOf()
+    private val _intrigues = MutableStateFlow<Map<Int, IntrigueModel>>(mapOf())
+    val intriguesFlow: StateFlow<Map<Int, IntrigueModel>> = _intrigues
+    private fun _updateIntrigues(new: Map<Int, IntrigueModel>) {
+        intrigues = new
+        _intrigues.value = new
+    }
+
+    var researchProjects: List<ResearchProjectModel> = listOf()
+    private val _researchProjects = MutableStateFlow<List<ResearchProjectModel>>(listOf())
+    val researchProjectsFlow: StateFlow<List<ResearchProjectModel>> = _researchProjects
+    private fun _updateResearchProjects(new: List<ResearchProjectModel>) {
+        researchProjects = new
+        _researchProjects.value = new
+    }
+
+    // Built Models
     var skills: List<FullSkillModel> = listOf()
+    private val _skills = MutableStateFlow<List<FullSkillModel>>(listOf())
+    val skillsFlow: StateFlow<List<FullSkillModel>> = _skills
+    private fun _updateSkills(new: List<FullSkillModel>) {
+        skills = new
+        _skills.value = new
+    }
+
     var events: List<FullEventModel> = listOf()
+    private val _events = MutableStateFlow<List<FullEventModel>>(listOf())
+    val eventsFlow: StateFlow<List<FullEventModel>> = _events
+    private fun _updateEvents(new: List<FullEventModel>) {
+        events = new
+        _events.value = new
+    }
+
     private var characters: List<FullCharacterModel> = listOf()
+    private val _characters = MutableStateFlow<List<FullCharacterModel>>(listOf())
+    val charactersFlow: StateFlow<List<FullCharacterModel>> = _characters
+    private fun _updateCharacters(new: List<FullCharacterModel>) {
+        characters = new
+        _characters.value = new
+    }
+
     var players: List<FullPlayerModel> = listOf()
+    private val _players = MutableStateFlow<List<FullPlayerModel>>(listOf())
+    val playersFlow: StateFlow<List<FullPlayerModel>> = _players
+    private fun _updatePlayers(new: List<FullPlayerModel>) {
+        players = new
+        _players.value = new
+    }
+
     var rulebook: Rulebook? = null
+    private val _rulebook = MutableStateFlow<Rulebook?>(null)
+    val rulebookFlow: StateFlow<Rulebook?> = _rulebook
+    private fun _updateRulebook(new: Rulebook?) {
+        rulebook = new
+        _rulebook.value = new
+    }
+
     var treatingWounds: Bitmap? = null
+    private val _treatingWounds = MutableStateFlow<Bitmap?>(null)
+    val treatingWoundsFlow: StateFlow<Bitmap?> = _treatingWounds
+    private fun _updateTreatingWounds(new: Bitmap?) {
+        treatingWounds = new
+        _treatingWounds.value = new
+    }
+
+    var loading: Boolean = false
+    private val _loading = MutableStateFlow(false)
+    val loadingFlow: StateFlow<Boolean> = _loading
+    private fun _updateLoading(new: Boolean) {
+        loading = new
+        _loading.value = new
+    }
+
+    var loadingText = ""
+    private val _loadingText = MutableStateFlow("")
+    val loadingTextFlow: StateFlow<String> = _loadingText
+    private fun _updateLoadingText(new: String) {
+        loadingText = new
+        _loadingText.value = new
+    }
+
 
     // DM variables
     private var firstLoad: Boolean = true
-    var loading: Boolean = false
-    var loadingText = ""
     private var callbacks: MutableList<() -> Unit> = mutableListOf()
     private var stepCallbacks: MutableList<() -> Unit> = mutableListOf()
     private var currentUpdateTracker: UpdateTrackerModel = UpdateTrackerModel.empty()
@@ -174,7 +276,7 @@ class DataManager private constructor() {
                 previousLoading = loading
                 stepCallbacks.add(stepFinished)
                 callbacks.add(finished)
-                loading = true
+                _updateLoading(true)
             }
             if (!previousLoading) {
                 when (modLoadType) {
@@ -206,7 +308,7 @@ class DataManager private constructor() {
     private fun loadForceDownloadAll(lifecycleScope: LifecycleCoroutineScope) {
         lifecycleScope.launch {
             mutexThreadLocker.withLock {
-                loadingText = "Force Clearing Data..."
+                _updateLoadingText("Force Clearing Data...")
                 firstLoad = true
                 LocalDataManager.shared.storeUpdateTracker(UpdateTrackerModel.empty())
             }
@@ -224,7 +326,7 @@ class DataManager private constructor() {
         } else {
             lifecycleScope.launch {
                 mutexThreadLocker.withLock {
-                    loadingText = generateLoadingText()
+                    _updateLoadingText(generateLoadingText())
                     stepCallbacks.forEach { it() }
                 }
             }
@@ -584,7 +686,7 @@ class DataManager private constructor() {
             finishedCount += 1
         }
         mutexThreadLocker.withLock {
-            loadingText = generateLoadingText()
+            _updateLoadingText(generateLoadingText())
             stepCallbacks.forEach { it() }
         }
         if (finishedCount == localUpdatesNeeded.count()) {
@@ -599,23 +701,23 @@ class DataManager private constructor() {
                 if (firstLoad || updatesDownloaded) {
                     firstLoad = false
                     // Normal Models
-                    announcements = LocalDataManager.shared.getAnnouncements()
-                    contactRequests = LocalDataManager.shared.getContactRequests()
-                    featureFlags = LocalDataManager.shared.getFeatureFlags()
-                    intrigues = LocalDataManager.shared.getIntrigues()
-                    researchProjects = LocalDataManager.shared.getResearchProjects()
+                    _updateAnnouncements(LocalDataManager.shared.getAnnouncements())
+                    _updateContactRequests(LocalDataManager.shared.getContactRequests())
+                    _updateFeatureFlags(LocalDataManager.shared.getFeatureFlags())
+                    _updateIntrigues(LocalDataManager.shared.getIntrigues())
+                    _updateResearchProjects(LocalDataManager.shared.getResearchProjects())
 
                     // Built Models
-                    skills = LocalDataManager.shared.getFullSkills()
-                    events = LocalDataManager.shared.getFullEvents()
-                    characters = LocalDataManager.shared.getFullCharacters()
-                    players = LocalDataManager.shared.getFullPlayers()
-                    rulebook = LocalDataManager.shared.getRulebook()
-                    treatingWounds = LocalDataManager.shared.getTreatingWounds()
-                    currentPlayerId = LocalDataManager.shared.getPlayerId()
+                    _updateSkills(LocalDataManager.shared.getFullSkills())
+                    _updateEvents(LocalDataManager.shared.getFullEvents())
+                    _updateCharacters(LocalDataManager.shared.getFullCharacters())
+                    _updatePlayers(LocalDataManager.shared.getFullPlayers())
+                    _updateRulebook(LocalDataManager.shared.getRulebook())
+                    _updateTreatingWounds(LocalDataManager.shared.getTreatingWounds())
+                    _updateCurrentPlayerId(LocalDataManager.shared.getPlayerId())
                 }
-                loadingText = ""
-                loading = false
+                _updateLoadingText("")
+                _updateLoading(false)
                 stepCallbacks.forEach { it() }
                 callbacks.forEach { it() }
                 callbacks = mutableListOf()
@@ -637,17 +739,17 @@ class DataManager private constructor() {
     // Utility Functions
     //
 
-    fun setOfflineMode(enabled: Boolean) {
-        offlineMode = enabled
+    fun setOfflineModeExternally(enabled: Boolean) {
+        _updateOfflineMode(enabled)
     }
 
-    fun setCurrentPlayerId(id: Int) {
+    fun setCurrentPlayerIdExternally(id: Int) {
         LocalDataManager.shared.storePlayerId(id)
-        currentPlayerId = id
+        _updateCurrentPlayerId(id)
     }
 
-    fun setCurrentPlayerId(player: PlayerModel) {
-        setCurrentPlayerId(player.id)
+    fun setCurrentPlayerIdExternally(player: PlayerModel) {
+        setCurrentPlayerIdExternally(player.id)
     }
 
     fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {

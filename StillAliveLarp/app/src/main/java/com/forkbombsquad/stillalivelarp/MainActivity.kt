@@ -120,7 +120,7 @@ class MainActivity : NoStatusBarActivity() {
         }
 
         offlineModeButton.setOnClick {
-            DataManager.shared.setOfflineMode(true)
+            DataManager.shared.setOfflineModeExternally(true)
             DataManager.shared.load(lifecycleScope, finished = {
                 if (DataManager.shared.players.isNotEmpty()) {
                     AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store the info required to use offline mode")
@@ -134,13 +134,13 @@ class MainActivity : NoStatusBarActivity() {
     }
 
     private fun signIn() {
-        DataManager.shared.setOfflineMode(false)
+        DataManager.shared.setOfflineModeExternally(false)
         UserAndPassManager.shared.setUandP(usernameField.text.toString().lowercase(), passwordField.text.toString(), stayLoggedInCheckbox.isChecked)
         logInButton.setLoadingWithText("Fetching Player Info...")
         val service = PlayerService.SignInPlayer()
         lifecycleScope.launch {
             service.successfulResponse().ifLet({ playerModel ->
-                DataManager.shared.setCurrentPlayerId(playerModel)
+                DataManager.shared.setCurrentPlayerIdExternally(playerModel)
                 UserAndPassManager.shared.clearTemp()
                 val intent = Intent(this@MainActivity, HomeActivity::class.java)
                 logInButton.setLoading(false)

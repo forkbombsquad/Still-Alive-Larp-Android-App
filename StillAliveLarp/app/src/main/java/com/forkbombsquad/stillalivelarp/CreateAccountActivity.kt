@@ -71,7 +71,7 @@ class CreateAccountActivity : NoStatusBarActivity() {
                             runOnUiThread {
                                 UserAndPassManager.shared.clearAll()
                                 UserAndPassManager.shared.setTemp(emailField.text.toString(), passwordField.text.toString())
-                                DataManager.shared.setCurrentPlayerId(it)
+                                DataManager.shared.setCurrentPlayerIdExternally(it)
                                 AlertUtils.displayOkMessage(this@CreateAccountActivity, "Success!", "Account for ${emailField.text} created!") { _, _ ->
                                     runOnUiThread {
                                         finish()
