@@ -1,0 +1,146 @@
+package com.forkbombsquad.stillalivelarp.views.account.admin
+
+import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.views.shared.CharactersListActivity
+import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.services.AdminService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+
+import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.AwardCharType
+import com.forkbombsquad.stillalivelarp.utils.KeyValuePickerView
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
+
+class AwardCharacterActivity : NoStatusBarActivity() {
+
+    private lateinit var title: TextView
+    private lateinit var awardType: KeyValuePickerView
+    private lateinit var awardSecondaryType: KeyValuePickerView
+    private lateinit var amount: TextInputEditText
+    private lateinit var reason: TextInputEditText
+    private lateinit var submitButton: LoadingButton
+
+    private lateinit var secondaryMaterialAdapter: ArrayAdapter<String>
+    private lateinit var secondaryAmmoAdapter: ArrayAdapter<String>
+
+    private lateinit var character: FullCharacterModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_award_character)
+        setupView()
+    }
+
+    private fun setupView() {
+        character = DataManager.shared.getPassedData(CharactersListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+
+        title = findViewById(R.id.awardchar_title)
+        awardType = findViewById(R.id.awardchar_awardTypeKVPicker)
+        awardSecondaryType = findViewById(R.id.awardchar_awardSecondaryTypeKVPicker)
+        amount = findViewById(R.id.awardchar_amount)
+        reason = findViewById(R.id.awardchar_reason)
+        submitButton = findViewById(R.id.awardchar_submitButton)
+
+        val awardTypeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("Material", "Ammo", "Infection"))
+        awardType.valuePickerView.adapter = awardTypeAdapter
+        awardType.valuePickerView.setSelection(0)
+
+        secondaryMaterialAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("Casing", "Wood", "Cloth", "Metal", "Tech", "Medical"))
+        secondaryAmmoAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("Bullet", "Mega", "Rival", "Rocket"))
+
+        awardSecondaryType.valuePickerView.adapter = secondaryMaterialAdapter
+        awardSecondaryType.valuePickerView.setSelection(0)
+
+        awardType.valuePickerView.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (awardType.valuePickerView.selectedItemPosition) {
+                    0 -> {
+                        awardSecondaryType.isGone = false
+                        awardSecondaryType.valuePickerView.setSelection(0)
+                        awardSecondaryType.valuePickerView.adapter = secondaryMaterialAdapter
+                        awardSecondaryType.valuePickerView.setSelection(0)
+                    }
+                    1 -> {
+                        awardSecondaryType.isGone = false
+                        awardSecondaryType.valuePickerView.setSelection(0)
+                        awardSecondaryType.valuePickerView.adapter = secondaryAmmoAdapter
+                        awardSecondaryType.valuePickerView.setSelection(0)
+                    }
+                    2 -> {
+                        awardSecondaryType.isGone = true
+                    }
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        submitButton.setOnClick {
+            submitButton.setLoading(true)
+            val awardCreateModel = AwardCreateModel.createCharacterAward(
+                char = character.baseModel(),
+                awardType = getAwardType(),
+                reason = reason.text.toString(),
+                amount = amount.text.toString()
+            )
+            val awardCharRequest = AdminService.AwardCharacter()
+            lifecycleScope.launch {
+                awardCharRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
+                    AlertUtils.displaySuccessMessage(this@AwardCharacterActivity, "Successfully Awarded ${character.fullName}!") { _, _ ->
+                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.closeActiviesToClose()
+                        finish()
+                    }
+                }, {
+                    submitButton.setLoading(false)
+                })
+            }
+        }
+
+        buildView()
+    }
+
+    private fun buildView() {
+        title.text = "Give Award To ${character.fullName}"
+    }
+
+    private fun getAwardType(): AwardCharType {
+        return when (awardType.valuePickerView.selectedItemPosition) {
+            0 -> {
+                when(awardSecondaryType.valuePickerView.selectedItemPosition) {
+                    0 -> AwardCharType.MATERIALCASINGS
+                    1 -> AwardCharType.MATERIALWOOD
+                    2 -> AwardCharType.MATERIALCLOTH
+                    3 -> AwardCharType.MATERIALMETAL
+                    4 -> AwardCharType.MATERIALTECH
+                    5 -> AwardCharType.MATERIALMED
+                    else -> AwardCharType.MATERIALCASINGS
+                }
+            }
+            1 -> {
+                when(awardSecondaryType.valuePickerView.selectedItemPosition) {
+                    0 -> AwardCharType.AMMOBULLET
+                    1 -> AwardCharType.AMMOMEGA
+                    2 -> AwardCharType.AMMORIVAL
+                    3 -> AwardCharType.AMMOROCKET
+                    else -> AwardCharType.AMMOBULLET
+                }
+            }
+            2 -> AwardCharType.INFECTION
+            else -> AwardCharType.INFECTION
+        }
+    }
+}

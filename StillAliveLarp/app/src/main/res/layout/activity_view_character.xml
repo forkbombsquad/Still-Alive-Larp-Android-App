@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".ViewCharacterActivity">
+    tools:context=".views.shared.ViewCharacterActivity">
 
     <ScrollView
         android:layout_width="match_parent"

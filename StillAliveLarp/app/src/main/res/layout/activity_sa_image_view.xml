@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".SAImageViewActivity">
+    tools:context=".utils.SAImageViewActivity">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imageContainer"

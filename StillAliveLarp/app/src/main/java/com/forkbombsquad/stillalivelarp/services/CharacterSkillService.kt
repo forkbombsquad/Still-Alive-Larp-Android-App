@@ -6,6 +6,7 @@ import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
+import com.forkbombsquad.stillalivelarp.services.utils.RefundSkillSP
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import okhttp3.RequestBody
@@ -37,6 +38,11 @@ interface TakePlannedCharacterSkillRequest {
 interface DeleteAllCharacterSkillRequest {
     @HTTP(method ="DELETE", path = "char-skill/delete/{charId}", hasBody = false)
     suspend fun makeRequest(@Path("charId") characterId: Int): Response<CharacterSkillListModel>
+}
+
+interface DeleteCharacterSkillRequest {
+    @HTTP(method ="DELETE", path = "char-skill/delete-skill/{playerId}/{charId}/{skillId}", hasBody = false)
+    suspend fun makeRequest(@Path("playerId") playerId: Int, @Path("charId") characterId: Int, @Path("skillId") skillId: Int): Response<CharacterSkillListModel>
 }
 
 class CharacterSkillService {
@@ -84,6 +90,15 @@ class CharacterSkillService {
 
         override suspend fun getResponse(payload: IdSP): Response<CharacterSkillListModel> {
             return request.makeRequest(payload.id())
+        }
+    }
+
+    class DeleteCharacterSkill: UAndPServiceInterface<DeleteCharacterSkillRequest, CharacterSkillListModel, RefundSkillSP> {
+        override val request: DeleteCharacterSkillRequest
+            get() = retrofit.create(DeleteCharacterSkillRequest::class.java)
+
+        override suspend fun getResponse(payload: RefundSkillSP): Response<CharacterSkillListModel> {
+            return request.makeRequest(payload.playerId(), payload.characterId(), payload.skillId())
         }
     }
 }

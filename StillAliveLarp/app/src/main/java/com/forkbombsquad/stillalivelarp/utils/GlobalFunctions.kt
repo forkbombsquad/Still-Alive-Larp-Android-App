@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.forkbombsquad.stillalivelarp.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 import com.google.gson.Gson

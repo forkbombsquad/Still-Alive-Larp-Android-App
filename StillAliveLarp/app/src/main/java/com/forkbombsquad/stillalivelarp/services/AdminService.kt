@@ -138,11 +138,6 @@ interface DeleteFeatureFlagRequest {
     suspend fun makeRequest(@Path("flagId") flagId: Int): Response<FeatureFlagModel>
 }
 
-interface DeleteCharacterSkillRequest {
-    @HTTP(method ="DELETE", path = "char-skill/delete-skill/{playerId}/{charId}/{skillId}", hasBody = false)
-    suspend fun makeRequest(@Path("playerId") playerId: Int, @Path("charId") characterId: Int, @Path("skillId") skillId: Int): Response<CharacterSkillListModel>
-}
-
 interface CreateResearchProjectRequest {
     @HTTP(method ="POST", path = "research-project/create/", hasBody = true)
     suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
@@ -360,15 +355,6 @@ class AdminService {
 
         override suspend fun getResponse(payload: IdSP): Response<FeatureFlagModel> {
             return request.makeRequest(payload.id())
-        }
-    }
-
-    class DeleteCharacterSkill: UAndPServiceInterface<DeleteCharacterSkillRequest, CharacterSkillListModel, RefundSkillSP> {
-        override val request: DeleteCharacterSkillRequest
-            get() = retrofit.create(DeleteCharacterSkillRequest::class.java)
-
-        override suspend fun getResponse(payload: RefundSkillSP): Response<CharacterSkillListModel> {
-            return request.makeRequest(payload.playerId(), payload.characterId(), payload.skillId())
         }
     }
 

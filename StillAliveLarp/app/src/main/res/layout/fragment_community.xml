@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".tabbar_fragments.CommunityFragment">
+    tools:context=".views.community.CommunityFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pulltorefresh_community"
