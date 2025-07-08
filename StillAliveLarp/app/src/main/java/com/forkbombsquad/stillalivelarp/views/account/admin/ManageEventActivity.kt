@@ -112,5 +112,10 @@ class ManageEventActivity : NoStatusBarActivity() {
         } else {
             startFinishButton.isGone = true
         }
+
+        if (DataManager.shared.offlineMode) {
+            startFinishButton.isGone = true
+            edit.isGone = true
+        }
     }
 }

@@ -29,8 +29,6 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class AddSkillActivity : NoStatusBarActivity() {
 
-    // TODO add skill deleting for PLANNED characters and maybe NPC characters
-
     private var currentSort: SkillSortType = SkillSortType.AZ
     private var currentFilter: SkillFilterType = SkillFilterType.NONE
 

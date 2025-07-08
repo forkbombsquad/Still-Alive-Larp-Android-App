@@ -22,7 +22,7 @@ class XpReductionsListActivity : NoStatusBarActivity() {
     private lateinit var layout: LinearLayout
 
     private lateinit var character: FullCharacterModel
-    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class)
+    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, ViewCharacterActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

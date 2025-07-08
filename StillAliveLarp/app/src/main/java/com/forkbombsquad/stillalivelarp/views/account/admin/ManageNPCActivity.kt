@@ -101,6 +101,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
                     reload()
                 }
             }
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, SkillsListActivity.SkillsListActivityActions.ALLOW_DELETE)
             val intent = Intent(this, SkillsListActivity::class.java)
             startActivity(intent)
         }

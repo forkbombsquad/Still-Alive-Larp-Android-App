@@ -75,8 +75,8 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "${player.fullName}'s Planned Characters")
         DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(instText, layout)) {
-            if (DataManager.shared.offlineMode) {
-                instText.isGone = DataManager.shared.playerIsCurrentPlayer(player)
+            if (!DataManager.shared.offlineMode) {
+                instText.isGone = !DataManager.shared.playerIsCurrentPlayer(player)
             } else {
                 instText.isGone = true
             }
@@ -92,8 +92,12 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 navarrow.setOnClick {
                     loadExisting(char)
                 }
+
+                navarrow.setCanSwipe(false)
+
                 if (!DataManager.shared.offlineMode) {
                     if (DataManager.shared.playerIsCurrentPlayer(player)) {
+                        navarrow.setCanSwipe(true)
                         navarrow.setOnSwipe {
                             setLoading("Deleting Character...")
                             AlertUtils.displayYesNoMessage(this, "Are You Sure?", "Are you sure you want to delete the planned character: ${char.fullName}. Once deleted, it can never be recovered.", onClickYes = { _, _ ->
@@ -112,7 +116,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                     }
                 }
 
-                navarrow.setLoading(true)
+                navarrow.setLoading(false)
                 layout.addView(navarrow)
             }
             if (!DataManager.shared.offlineMode && DataManager.shared.playerIsCurrentPlayer(player)) {
@@ -153,7 +157,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                         }
                     }
                 }
-                navarrow.setLoading(true)
+                navarrow.setLoading(false)
                 layout.addView(navarrow)
             }
         }
@@ -256,6 +260,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 reload()
             }
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, SkillsListActivity.SkillsListActivityActions.ALLOW_DELETE)
             val intent = Intent(this, SkillsListActivity::class.java)
             startActivity(intent)
         }

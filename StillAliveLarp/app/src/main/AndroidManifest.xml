@@ -88,7 +88,7 @@
             android:name=".views.account.admin.CreateEditFeatureFlagActivity"
             android:exported="false" />
         <activity
-            android:name=".views.account.admin.RefundSkillsActivity"
+            android:name=".views.account.admin.DeleteSkillsActivity"
             android:exported="false" />
         <activity
             android:name=".views.account.EditProfileImageActivity"

@@ -158,6 +158,14 @@
                         android:paddingTop="32dp"
                         android:paddingBottom="32dp"
                         app:buttontext="Sign Out"/>
+
+                    <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+                        android:id="@+id/myaccount_exitOffline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="32dp"
+                        android:paddingBottom="32dp"
+                        app:buttontext="Exit Offline Mode"/>
                 </LinearLayout>
 
             </LinearLayout> <!-- BEFORE THIS ONE-->

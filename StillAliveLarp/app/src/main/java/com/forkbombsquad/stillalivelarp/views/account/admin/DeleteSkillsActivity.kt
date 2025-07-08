@@ -21,18 +21,26 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
-class RefundSkillsActivity : NoStatusBarActivity() {
+class DeleteSkillsActivity : NoStatusBarActivity() {
 
-    // TODO adapt this view for removing skills from Planned Characters and NPCs. Will need to change the alert messages
+    enum class DeleteSkillsActivityActionType {
+        REFUND_XP,
+        JUST_DELETE
+    }
 
     private lateinit var title: TextView
     private lateinit var layout: LinearLayout
 
     private lateinit var character: FullCharacterModel
+    private lateinit var action: DeleteSkillsActivityActionType
 
     private lateinit var loadingLayout: LoadingLayout
+
+    private val sourceClasses: List<KClass<*>> = listOf(CharactersListActivity::class, AdminPanelActivity::class, SkillsListActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +51,8 @@ class RefundSkillsActivity : NoStatusBarActivity() {
     private fun setupView() {
         loadingLayout = findViewById(R.id.loadinglayout)
 
-        character = DataManager.shared.getPassedData(CharactersListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        action = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.ACTION) ?: DeleteSkillsActivityActionType.REFUND_XP
 
         title = findViewById(R.id.refundskills_title)
         layout = findViewById(R.id.refundskills_layout)
@@ -61,7 +70,7 @@ class RefundSkillsActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        title.text = "${character.fullName}'s\nRefundable Skills"
+        title.text = (action == DeleteSkillsActivityActionType.REFUND_XP).ternary("Refund Skills For\n${character.fullName}", "Delete Skills For\n${character.fullName}")
         DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(layout)) {
             layout.removeAllViews()
             character.allPurchasedSkills().filter { it.baseXpCost() > 0 }.alphabetized().forEachIndexed { index, skill ->
@@ -73,36 +82,46 @@ class RefundSkillsActivity : NoStatusBarActivity() {
                 arrow.setLoading(false)
                 arrow.setOnClick {
                     arrow.setLoading(true)
-                    AlertUtils.displayOkCancelMessage(this@RefundSkillsActivity, "Are you sure?", "Refund ${skill.name} to ${character.fullName}?", onClickOk = { _, _ ->
+                    AlertUtils.displayOkCancelMessage(this@DeleteSkillsActivity, "Are you sure?", (action == DeleteSkillsActivityActionType.REFUND_XP).ternary("Delete ${skill.name} from ${character.fullName} and refund xp to ${DataManager.shared.getPlayerForCharacter(character).fullName}?", "Delete ${skill.name} from ${character.fullName}?"), onClickOk = { _, _ ->
                         val deleteSkillRequest = CharacterSkillService.DeleteCharacterSkill()
                         lifecycleScope.launch {
                             deleteSkillRequest.successfulResponse(RefundSkillSP(character.playerId, character.id, skill.id)).ifLet({ deletedSkills ->
-                                val player = DataManager.shared.getPlayerForCharacter(character)
-                                var xp = 0
-                                var fs = 0
-                                var pp = 0
-                                for (skl in deletedSkills.charSkills) {
-                                    xp += skl.xpSpent
-                                    fs += skl.fsSpent
-                                    pp += skl.ppSpent
-                                }
-                                val playerUpdate = player.baseModelWithModifications(xp, fs, pp)
-                                val playerUpdateRequest = AdminService.UpdatePlayer()
-                                lifecycleScope.launch {
-                                    playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({ _ ->
-                                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
-                                        AlertUtils.displayOkMessage(this@RefundSkillsActivity, "Success!", "Refunded ${xp}xp, ${fs}fs, and ${pp}pp to ${character.fullName} (${player.fullName})!") { _, _ ->
+                                if (action == DeleteSkillsActivityActionType.REFUND_XP) {
+                                    // Refund
+                                    val player = DataManager.shared.getPlayerForCharacter(character)
+                                    var xp = 0
+                                    var fs = 0
+                                    var pp = 0
+                                    for (skl in deletedSkills.charSkills) {
+                                        xp += skl.xpSpent
+                                        fs += skl.fsSpent
+                                        pp += skl.ppSpent
+                                    }
+                                    val playerUpdate = player.baseModelWithModifications(xp, fs, pp)
+                                    val playerUpdateRequest = AdminService.UpdatePlayer()
+                                    lifecycleScope.launch {
+                                        playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({ _ ->
+                                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                                            AlertUtils.displayOkMessage(this@DeleteSkillsActivity, "Success!", "Refunded ${xp}xp, ${fs}fs, and ${pp}pp to ${character.fullName} (${player.fullName})!") { _, _ ->
+                                                arrow.setLoading(false)
+                                                reloadView()
+                                            }
+                                        }, {
                                             arrow.setLoading(false)
-                                            reloadView()
-                                        }
-                                    }, {
+                                            AlertUtils.displaySomethingWentWrong(this@DeleteSkillsActivity)
+                                        })
+                                    }
+                                } else {
+                                    // No Refund
+                                    DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                                    AlertUtils.displayOkMessage(this@DeleteSkillsActivity, "Success!", "${skill.name} removed from ${character.fullName}!") { _, _ ->
                                         arrow.setLoading(false)
-                                        AlertUtils.displaySomethingWentWrong(this@RefundSkillsActivity)
-                                    })
+                                        reloadView()
+                                    }
                                 }
                             }, {
                                 arrow.setLoading(false)
-                                AlertUtils.displaySomethingWentWrong(this@RefundSkillsActivity)
+                                AlertUtils.displaySomethingWentWrong(this@DeleteSkillsActivity)
                             })
                         }
 

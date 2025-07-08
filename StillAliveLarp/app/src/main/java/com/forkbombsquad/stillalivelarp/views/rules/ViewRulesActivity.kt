@@ -36,6 +36,8 @@ import kotlinx.coroutines.launch
 
 class ViewRulesActivity : NoStatusBarActivity() {
 
+    // TODO look into this. Not working offline right now.
+
     private lateinit var search: EditText
     private lateinit var layout: LinearLayout
     private lateinit var title: TextView

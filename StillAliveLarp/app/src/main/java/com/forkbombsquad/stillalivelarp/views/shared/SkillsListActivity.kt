@@ -15,6 +15,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.views.rules.RulesFragment
 import com.forkbombsquad.stillalivelarp.views.account.AddSkillActivity
@@ -26,22 +27,30 @@ import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.DeleteSkillsActivity
 import kotlin.reflect.KClass
 
 class SkillsListActivity : NoStatusBarActivity() {
+
+    enum class SkillsListActivityActions {
+        NO_DELETE,
+        ALLOW_DELETE
+    }
 
     private lateinit var title: TextView
     private lateinit var searchBar: EditText
     private lateinit var addNewButton: Button
     private lateinit var skillListLayout: LinearLayout
+    private lateinit var deleteButton: LoadingButton
 
     private lateinit var loadingLayout: LoadingLayout
 
     private var character: FullCharacterModel? = null
     private lateinit var skills: List<FullCharacterModifiedSkillModel>
     private var titleString: String? = null
+    private lateinit var action: SkillsListActivityActions
 
-    private val sourceClasses: List<KClass<*>> = listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class, ManageNPCActivity::class, RulesFragment::class)
+    private val sourceClasses: List<KClass<*>> = listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class, ManageNPCActivity::class, RulesFragment::class, ViewNPCStuffActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +67,7 @@ class SkillsListActivity : NoStatusBarActivity() {
             skills = skills.sortedBy { it.name }
             titleString = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
         })
+        action = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.ACTION) ?: SkillsListActivityActions.NO_DELETE
 
         loadingLayout = findViewById(R.id.loadinglayout)
 
@@ -65,6 +75,7 @@ class SkillsListActivity : NoStatusBarActivity() {
         searchBar = findViewById(R.id.skills_searchview)
         addNewButton = findViewById(R.id.skills_addnew)
         skillListLayout = findViewById(R.id.skills_layout)
+        deleteButton = findViewById(R.id.skills_deleteButton)
 
         addNewButton.setOnClickListener {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character!!)
@@ -75,6 +86,19 @@ class SkillsListActivity : NoStatusBarActivity() {
                 }
             }
             val intent = Intent(this, AddSkillActivity::class.java)
+            startActivity(intent)
+        }
+
+        deleteButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character!!)
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+                DataManager.shared.load(lifecycleScope) {
+                    DataManager.shared.callUpdateCallbacks(sourceClasses)
+                }
+            }
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, DeleteSkillsActivity.DeleteSkillsActivityActionType.JUST_DELETE)
+            val intent = Intent(this, DeleteSkillsActivity::class.java)
             startActivity(intent)
         }
 
@@ -104,13 +128,15 @@ class SkillsListActivity : NoStatusBarActivity() {
         }, {
             DataManager.shared.setTitleTextPotentiallyOffline(title, titleString ?: "Skills")
         })
-        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(searchBar, addNewButton, skillListLayout)) {
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(searchBar, addNewButton, skillListLayout, deleteButton)) {
             if (character != null) {
                 addNewButton.isGone = !(DataManager.shared.playerIsCurrentPlayer(character!!.playerId) && character!!.isAlive)
+                deleteButton.isGone = !(action == SkillsListActivityActions.ALLOW_DELETE && DataManager.shared.playerIsCurrentPlayer(character!!.playerId) && character!!.isAlive)
             }
 
             if (DataManager.shared.offlineMode || character == null) {
                 addNewButton.isGone = true
+                deleteButton.isGone = true
             }
 
             skillListLayout.removeAllViews()

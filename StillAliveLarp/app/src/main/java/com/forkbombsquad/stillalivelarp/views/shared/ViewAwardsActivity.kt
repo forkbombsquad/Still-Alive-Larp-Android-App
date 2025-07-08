@@ -53,10 +53,10 @@ class ViewAwardsActivity : NoStatusBarActivity() {
             val nameView = TextView(this)
             nameView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             nameView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
-            DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == award.characterId }.ifLet({ char ->
+            DataManager.shared.getCharacter(award.characterId ?: -1).ifLet({ char ->
                 nameView.text = char.fullName
             }, {
-                nameView.text = DataManager.shared.getCurrentPlayer()?.fullName ?: ""
+                nameView.text = DataManager.shared.players.firstOrNull { it.id == award.playerId }?.fullName ?: ""
             })
 
             val dateView = TextView(this)

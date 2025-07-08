@@ -22,6 +22,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
     private lateinit var viewSkillsList: NavArrowButtonBlack
     private lateinit var viewBio: NavArrowButtonBlack
     private lateinit var viewGear: NavArrowButtonBlack
+    private lateinit var viewXpReductions: NavArrowButtonBlack
     private lateinit var viewAwards: NavArrowButtonBlack
 
     private lateinit var character: FullCharacterModel
@@ -42,6 +43,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
         viewSkillsList = findViewById(R.id.charview_viewSkillsList)
         viewBio = findViewById(R.id.charview_viewBio)
         viewGear = findViewById(R.id.charview_viewGear)
+        viewXpReductions = findViewById(R.id.charview_viewXpReductions)
         viewAwards = findViewById(R.id.charview_viewAwards)
 
         viewStats.setOnClick {
@@ -94,6 +96,12 @@ class ViewCharacterActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
 
+        viewXpReductions.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
+            val intent = Intent(this, XpReductionsListActivity::class.java)
+            startActivity(intent)
+        }
+
         viewAwards.setOnClick {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.AWARDS_LIST, character.getAwardsSorted())
             val intent = Intent(this, ViewAwardsActivity::class.java)
@@ -116,12 +124,14 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                 viewBio.isGone = !showBio
                 viewGear.isGone = false
                 viewAwards.isGone = false
+                viewXpReductions.isGone = false
             }
             CharacterType.PLANNER, CharacterType.NPC, CharacterType.HIDDEN -> {
                 playerName.isGone = true
                 viewBio.isGone = character.characterType() == CharacterType.PLANNER
                 viewGear.isGone = true
                 viewAwards.isGone = true
+                viewXpReductions.isGone = true
             }
         }
 

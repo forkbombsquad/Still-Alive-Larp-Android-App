@@ -125,7 +125,7 @@ class MainActivity : NoStatusBarActivity() {
         offlineModeButton.setOnClick {
             DataManager.shared.setOfflineModeExternally(true)
             DataManager.shared.load(lifecycleScope, finished = {
-                if (DataManager.shared.players.isNotEmpty()) {
+                if (DataManager.shared.players.isEmpty()) {
                     AlertUtils.displayOkMessage(this, "Not Available", "You must successfully sign in at least once on this device to store the info required to use offline mode")
                 } else {
                     val intent = Intent(this@MainActivity, HomeActivity::class.java)

@@ -257,8 +257,9 @@ class AdminPanelActivity : NoStatusBarActivity() {
         }
         refundSkills.setOnClick {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, RefundSkillsActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, DeleteSkillsActivity::class)
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character to Refund Skills For")
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, DeleteSkillsActivity.DeleteSkillsActivityActionType.REFUND_XP)
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
@@ -312,6 +313,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         approveBios.isGone = offline
         updatePass.isGone = offline
         refundSkills.isGone = offline
+        manageIntrigue.isGone = offline
 
         val bioApprovalCount = DataManager.shared.getCharactersWhoNeedBiosApproved().count()
         if (bioApprovalCount > 0) {

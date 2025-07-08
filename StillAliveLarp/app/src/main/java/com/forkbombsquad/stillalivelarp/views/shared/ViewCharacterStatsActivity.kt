@@ -114,7 +114,7 @@ class ViewCharacterStatsActivity : NoStatusBarActivity() {
         val tskills = skills.filter { it.skillTypeId == Constants.SkillTypes.talent }.count()
         val pskills = skills.filter { it.skillTypeId == Constants.SkillTypes.profession }.count()
 
-        numSkills.set("${skills.count()}\n$cskills Combat\n$tskills Talent\n$pskills Profession")
+        numSkills.set("${skills.count()} Total\n\n($cskills Combat Skills)\n($tskills Talent Skills)\n($pskills Profession Skills)")
         spentXp.set(character.getSpentXp())
         spentFt1s.set(character.getSpentFt1s())
         spentPp.set(character.getSpentPp())

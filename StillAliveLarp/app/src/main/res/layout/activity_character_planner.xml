@@ -38,9 +38,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="*Swipe right on a Planned Character to delete it*"
+                android:text="*Swipe away a Planned Character to delete it*"
                 android:textColor="@color/black"
                 android:textSize="16dp"
+                android:paddingBottom="16dp"
                 android:textAlignment="center"/>
 
             <LinearLayout

@@ -222,7 +222,7 @@ class NavArrowButtonBlueSwipeable(context: Context): LinearLayout(context) {
 
     val container: FrameLayout
     val swipeTextView: TextView
-    val navArrow: NavArrowButtonBlueBuildable
+    val navArrow: NavArrowButtonBlue
     val textView: TextView
     val progressBar: ProgressBar
     val arrow: ImageView
@@ -240,6 +240,7 @@ class NavArrowButtonBlueSwipeable(context: Context): LinearLayout(context) {
     private val tapThreshold = 20f
     private var downX = 0f
     private var isSwiping = false
+    private var allowSwipe = true
 
     init {
         inflate(context, R.layout.navarrowbuttonblue_swipeable, this)
@@ -257,72 +258,84 @@ class NavArrowButtonBlueSwipeable(context: Context): LinearLayout(context) {
             this.navArrow.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        downX = event.rawX
-                        isSwiping = false
-                        true
+                        if (allowSwipe && progressBar.isGone) {
+                            downX = event.rawX
+                            isSwiping = false
+                            true
+                        } else {
+                            false
+                        }
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        val deltaX = event.rawX - downX
-                        if (deltaX < 0) { // Left swipe only
-                            val absDeltaX = -deltaX
-                            val progress = (absDeltaX / maxSwipe).coerceIn(0f, 1f)
+                        if (allowSwipe && progressBar.isGone) {
+                            val deltaX = event.rawX - downX
+                            if (deltaX < 0) { // Left swipe only
+                                val absDeltaX = -deltaX
+                                val progress = (absDeltaX / maxSwipe).coerceIn(0f, 1f)
 
-                            // Move foreground view
-                            navArrow.translationX = deltaX
+                                // Move foreground view
+                                navArrow.translationX = deltaX
 
-                            // Update background color
-                            val color =
-                                evaluator.evaluate(progress, bgStartColor, bgEndColor) as Int
-                            swipeTextView.setBackgroundColor(color)
+                                // Update background color
+                                val color =
+                                    evaluator.evaluate(progress, bgStartColor, bgEndColor) as Int
+                                swipeTextView.setBackgroundColor(color)
 
-                            val tColor =
-                                evaluator.evaluate(progress, textStartColor, textEndColor) as Int
-                            swipeTextView.setTextColor(tColor)
+                                val tColor =
+                                    evaluator.evaluate(progress, textStartColor, textEndColor) as Int
+                                swipeTextView.setTextColor(tColor)
 
-                            // Bold background text if past threshold
-                            swipeTextView.setTypeface(
-                                null,
-                                if (progress > swipeThreshold) Typeface.BOLD else Typeface.NORMAL
-                            )
+                                // Bold background text if past threshold
+                                swipeTextView.setTypeface(
+                                    null,
+                                    if (progress > swipeThreshold) Typeface.BOLD else Typeface.NORMAL
+                                )
 
-                            isSwiping = true
+                                isSwiping = true
+                            }
+                            true
+                        } else {
+                            false
                         }
-                        true
                     }
 
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        val totalDeltaX = event.rawX - downX
-                        val absDeltaX = abs(totalDeltaX)
+                        if (allowSwipe && progressBar.isGone) {
+                            val totalDeltaX = event.rawX - downX
+                            val absDeltaX = abs(totalDeltaX)
 
-                        if (!isSwiping && absDeltaX < tapThreshold && !progressBar.isGone) {
-                            // Consider it a tap
-                            this@NavArrowButtonBlueSwipeable.onClick()
-                        } else {
-                            val progress = (-totalDeltaX / maxSwipe).coerceIn(0f, 1f)
-                            if (progress > swipeThreshold && !progressBar.isGone && onSwipe != null) {
-                                // Swipe far enough — delete
-                                container.animate()
-                                    .translationX(-container.width.toFloat())
-                                    .alpha(0f)
-                                    .setDuration(200)
-                                    .withEndAction {
-                                        this@NavArrowButtonBlueSwipeable.onSwipe?.let { it() }
-                                    }.start()
+                            if (absDeltaX < tapThreshold && progressBar.isGone) {
+                                // Consider it a tap
+                                this@NavArrowButtonBlueSwipeable.onClick()
                             } else {
-                                // Not enough swipe — animate back
-                                navArrow.animate()
-                                    .translationX(0f)
-                                    .setDuration(200)
-                                    .withEndAction {
-                                        swipeTextView.setBackgroundColor(bgStartColor)
-                                        swipeTextView.setTextColor(textStartColor)
-                                        swipeTextView.setTypeface(null, Typeface.NORMAL)
-                                    }.start()
+                                val progress = (-totalDeltaX / maxSwipe).coerceIn(0f, 1f)
+                                if (progress > swipeThreshold && progressBar.isGone && onSwipe != null) {
+                                    // Swipe far enough — delete
+                                    container.animate()
+                                        .translationX(-container.width.toFloat())
+                                        .alpha(0f)
+                                        .setDuration(200)
+                                        .withEndAction {
+                                            this@NavArrowButtonBlueSwipeable.onSwipe?.let { it() }
+                                        }.start()
+                                } else {
+                                    // Not enough swipe — animate back
+                                    navArrow.animate()
+                                        .translationX(0f)
+                                        .setDuration(200)
+                                        .withEndAction {
+                                            swipeTextView.setBackgroundColor(bgStartColor)
+                                            swipeTextView.setTextColor(textStartColor)
+                                            swipeTextView.setTypeface(null, Typeface.NORMAL)
+                                        }.start()
+                                }
                             }
+                            isSwiping = false
+                            true
+                        } else {
+                            false
                         }
-                        isSwiping = false
-                        true
                     }
 
                     else -> {
@@ -339,16 +352,19 @@ class NavArrowButtonBlueSwipeable(context: Context): LinearLayout(context) {
     }
 
     fun setOnClick(callback: () -> Unit) {
-        this.onClick = onClick
-        this.setOnClickListener {
+        this.onClick = {
             if (progressBar.isGone) {
                 callback()
             }
         }
     }
 
+    fun setCanSwipe(canSwipe: Boolean) {
+        this.allowSwipe = canSwipe
+    }
+
     fun setOnSwipe(callback: () -> Unit) {
-        this.onSwipe = onSwipe
+        this.onSwipe = callback
     }
 
 }

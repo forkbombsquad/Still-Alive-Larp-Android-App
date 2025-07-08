@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,8 +10,8 @@
         android:id="@+id/swipe_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical|start"
-        android:paddingStart="24dp"
+        android:gravity="center_vertical|end"
+        android:paddingEnd="8dp"
         android:text="Delete"
         android:background="@android:color/transparent"
         android:textColor="@android:color/transparent"
@@ -18,7 +19,11 @@
         android:textSize="32sp" />
 
     <!-- Foreground (your original view) -->
-    <include layout="@layout/navarrowbutton_blue"
-        android:id="@+id/swipe_foreground"/>
+    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
+        android:id="@+id/swipe_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:text="Swipe Layout"
+        app:showLoading="false"/>
 
 </FrameLayout>

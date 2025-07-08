@@ -40,8 +40,8 @@ class EventsListActivity : AppCompatActivity() {
         events = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.EVENT_LIST)!!
         viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
 
-        title = findViewById(R.id.charlist_title)
-        innerLayout = findViewById(R.id.charlist_innerlayout)
+        title = findViewById(R.id.eventlist_title)
+        innerLayout = findViewById(R.id.eventlist_innerlayout)
 
         buildView()
     }
@@ -50,7 +50,7 @@ class EventsListActivity : AppCompatActivity() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         innerLayout.removeAllViews()
         var hadTop = false
-        if (additionalDestClass != null) {
+        if (additionalDestClass != null && !DataManager.shared.offlineMode) {
             hadTop = true
             val arrow = NavArrowButtonBlueBuildable(this)
             arrow.textView.text = "Create New event"

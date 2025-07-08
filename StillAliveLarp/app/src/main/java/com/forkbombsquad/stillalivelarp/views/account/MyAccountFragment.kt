@@ -56,6 +56,7 @@ class MyAccountFragment : Fragment() {
     private lateinit var adminToolsNav: NavArrowButtonRed
     private lateinit var debugButton: NavArrowButtonRed
     private lateinit var signOutButton: LoadingButton
+    private lateinit var exitOfflineMode: LoadingButton
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -87,6 +88,7 @@ class MyAccountFragment : Fragment() {
         manageAccountNav = v.findViewById(R.id.myaccount_manageAccountNavArrow)
         adminToolsNav = v.findViewById(R.id.myaccount_adminToolsNavArrow)
         signOutButton = v.findViewById(R.id.myaccount_signOutButton)
+        exitOfflineMode = v.findViewById(R.id.myaccount_exitOffline)
         debugButton = v.findViewById(R.id.myaccount_debugButton)
 
         profileImage.setOnClickListener {
@@ -180,6 +182,10 @@ class MyAccountFragment : Fragment() {
             activity?.finish()
         }
 
+        exitOfflineMode.setOnClick {
+            activity?.finish()
+        }
+
         pullToRefresh = v.findViewById(R.id.pulltorefresh_account)
         pullToRefresh.setOnRefreshListener {
             reload()
@@ -218,6 +224,7 @@ class MyAccountFragment : Fragment() {
         }
         manageAccountNav.isGone = DataManager.shared.offlineMode
         signOutButton.isGone = DataManager.shared.offlineMode
+        exitOfflineMode.isGone = !DataManager.shared.offlineMode
     }
 
     private fun doDebugStuff() {

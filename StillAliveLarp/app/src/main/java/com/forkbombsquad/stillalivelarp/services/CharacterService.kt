@@ -69,7 +69,7 @@ interface DeleteCharactersRequest {
 
 interface DeleteCharacterRequest {
     @HTTP(method ="DELETE", path = "characters/delete/{characterId}")
-    suspend fun makeRequest(@Path("characterTypeId") characterTypeId: Int): Response<CharacterModel>
+    suspend fun makeRequest(@Path("characterId") characterId: Int): Response<CharacterModel>
 }
 
 

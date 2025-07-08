@@ -7,7 +7,7 @@
     android:background="@color/black"
     tools:context=".views.shared.NativeSkillTreeActivity">
 
-    <com.forkbombsquad.stillalivelarp.TouchImageView
+    <com.forkbombsquad.stillalivelarp.views.shared.TouchImageView
         android:id="@+id/nativeskilltree_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
