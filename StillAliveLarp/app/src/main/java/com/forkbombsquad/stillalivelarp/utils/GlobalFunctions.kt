@@ -77,3 +77,13 @@ fun globalForceResetAllPlayerData() {
     DataManager.forceReset()
     LocalDataManager.clearAllLocalData()
 }
+
+fun globalStyleHtmlForRulebook(html: String): String {
+    return html
+        .replaceHtmlTagWithTag("skill", "b")
+        .replaceHtmlTagWithTagAndInnerValue("combat", "font", "color='#910016'")
+        .replaceHtmlTagWithTagAndInnerValue("profession", "font", "color='#0D8017'")
+        .replaceHtmlTagWithTagAndInnerValue("talent", "font", "color='#007AFF'")
+        .replaceHtmlTagWithTag("item", "i")
+        .replaceHtmlTagWithTag("condition", "u")
+}

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -20,6 +21,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 
 import com.forkbombsquad.stillalivelarp.utils.Heading
 import com.forkbombsquad.stillalivelarp.utils.HeadingView
@@ -31,20 +33,19 @@ import com.forkbombsquad.stillalivelarp.utils.SubSubHeading
 import com.forkbombsquad.stillalivelarp.utils.SubSubHeadingView
 import com.forkbombsquad.stillalivelarp.utils.Table
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ViewRulesActivity : NoStatusBarActivity() {
 
-    // TODO look into this. Not working offline right now.
-
     private lateinit var search: EditText
     private lateinit var layout: LinearLayout
     private lateinit var title: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var filterSpinner: Spinner
+    private lateinit var rulebook: Rulebook
 
-    private var loadingView = false
     private var headings: MutableList<View> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,17 +55,16 @@ class ViewRulesActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
+        rulebook = DataManager.shared.getPassedData(RulesFragment::class, DataManagerPassedDataKey.RULEBOOK)!!
+
         title = findViewById(R.id.viewrules_title)
         search = findViewById(R.id.viewrules_searchview)
         layout = findViewById(R.id.viewrules_layout)
-        progressBar = findViewById(R.id.viewrules_progressBar)
         filterSpinner = findViewById(R.id.rulebook_filter)
 
         val allFilters: MutableList<String> = mutableListOf()
         allFilters.add("No Filter")
-        DataManager.shared.rulebook.ifLet {
-            allFilters.addAll(it.getAllFilterableHeadingNames())
-        }
+        allFilters.addAll(rulebook.getAllFilterableHeadingNames())
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allFilters)
         filterSpinner.adapter = filterAdapter
         filterSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -88,54 +88,48 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
     @Synchronized
     private fun createViews() {
-        loadingView = DataManager.shared.loading
-        DataManager.shared.load(lifecycleScope) {
-            runOnUiThread {
-                buildView()
-            }
-        }
-        runOnUiThread {
-            buildView()
-        }
         headings = mutableListOf()
-        filterSpinner.isGone = DataManager.shared.loading
-        DataManager.shared.rulebook.ifLet { rulebook ->
-            for (heading in filterHeadings(rulebook)) {
-                val headingView = HeadingView(this)
-                headingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                headingView.setPadding(2, 8, 2, 8)
+        for (heading in filterHeadings(rulebook)) {
+            val headingView = HeadingView(this)
+            headingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            headingView.setPadding(2, 8, 2, 8)
 
-                headingView.title.text = heading.title
-                for (element in heading.textsAndTables) {
-                    (element as? Table).ifLet({ table ->
-                        headingView.texts.addView(createTableView(table))
-                    }, {
-                        headingView.texts.addView(createTextView(element as? String ?: ""))
-                    })
-                }
-
-                for (subsubheading in heading.subSubHeadings) {
-                    headingView.subsubheadings.addView(createSubSubHeading(subsubheading))
-                }
-
-                for (subheading in heading.subHeadings) {
-                    headingView.subheadings.addView(createSubHeading(subheading))
-                }
-
-                headings.add(headingView)
+            headingView.title.text = Html.fromHtml(heading.title, Html.FROM_HTML_MODE_LEGACY)
+            for (element in heading.textsAndTables) {
+                castToTable(element).ifLet({ table ->
+                    headingView.texts.addView(createTableView(table))
+                }, {
+                    headingView.texts.addView(createTextView(element as? String ?: ""))
+                })
             }
-            loadingView = DataManager.shared.loading
+
+            for (subsubheading in heading.subSubHeadings) {
+                headingView.subsubheadings.addView(createSubSubHeading(subsubheading))
+            }
+
+            for (subheading in heading.subHeadings) {
+                headingView.subheadings.addView(createSubHeading(subheading))
+            }
+
+            headings.add(headingView)
+        }
+        buildView()
+    }
+
+    private fun castToTable(element: Any): Table? {
+        return when (element) {
+            is LinkedTreeMap<*, *> -> {
+                val json = Gson().toJson(element)
+                return Gson().fromJson(json, Table::class.java)
+            }
+            else -> null
         }
     }
 
     private fun buildView() {
-        DataManager.shared.rulebook.ifLet { rulebook ->
-            title.text = "Rulebook v${rulebook.version}"
-        }
-        layout.removeAllViews()
-        loadingView = DataManager.shared.loading
-        progressBar.isGone = !loadingView
-        if (!loadingView) {
+        runOnUiThread {
+            DataManager.shared.setTitleTextPotentiallyOffline(title, "Rulebook v${rulebook.version}")
+            layout.removeAllViews()
             for (heading in headings) {
                 layout.addView(heading)
             }
@@ -178,11 +172,11 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
     private fun createSubSubHeading(subSubHeading: SubSubHeading): SubSubHeadingView {
         val subsubHeadingView = SubSubHeadingView(this)
-        subsubHeadingView.title.text = subSubHeading.title
+        subsubHeadingView.title.text = Html.fromHtml(subSubHeading.title, Html.FROM_HTML_MODE_LEGACY)
         subsubHeadingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         for (element in subSubHeading.textsAndTables) {
-            (element as? Table).ifLet({ table ->
+            castToTable(element).ifLet({ table ->
                 subsubHeadingView.texts.addView(createTableView(table))
             }, {
                 subsubHeadingView.texts.addView(createTextView(element as? String ?: ""))
@@ -193,11 +187,11 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
     private fun createSubHeading(subHeading: SubHeading): SubHeadingView {
         val subHeadingView = SubHeadingView(this)
-        subHeadingView.title.text = subHeading.title
+        subHeadingView.title.text = Html.fromHtml(subHeading.title, Html.FROM_HTML_MODE_LEGACY)
         subHeadingView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         for (element in subHeading.textsAndTables) {
-            (element as? Table).ifLet({ table ->
+            castToTable(element).ifLet({ table ->
                 subHeadingView.texts.addView(createTableView(table))
             }, {
                 subHeadingView.texts.addView(createTextView(element as? String ?: ""))
@@ -236,7 +230,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
 
             for (item in row) {
                 val tv = TextView(this)
-                tv.text = item
+                tv.text = Html.fromHtml(item, Html.FROM_HTML_MODE_LEGACY)
                 if (firstRow) {
                     tv.setTypeface(tv.typeface, Typeface.BOLD)
                 }
@@ -262,7 +256,7 @@ class ViewRulesActivity : NoStatusBarActivity() {
         tv.textSize = 16f
 
         tv.setTextColor(Color.rgb(0, 0, 0))
-        tv.text = text
+        tv.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
         tv.setPadding(0, 0, 0, 16)
         tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         return tv

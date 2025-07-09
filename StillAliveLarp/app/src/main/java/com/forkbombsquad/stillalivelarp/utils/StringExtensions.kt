@@ -55,6 +55,14 @@ fun String.replaceHtmlTag(tag: String, replaceWith: String = ""): String {
     return this.replace("<$tag>", replaceWith).replace("</$tag>", replaceWith)
 }
 
+fun String.replaceHtmlTagWithTag(tag: String, replaceWith: String = ""): String {
+    return this.replace("<$tag>", "<$replaceWith>").replace("</$tag>", "</$replaceWith>")
+}
+
+fun String.replaceHtmlTagWithTagAndInnerValue(tag: String, replaceWith: String = "", innerValue: String): String {
+    return this.replace("<$tag>", "<$replaceWith $innerValue>").replace("</$tag>", "</$replaceWith>")
+}
+
 fun String.replaceHtmlTags(tags: List<String>, replaceWith: String = ""): String {
     var replacement = this
     for (tag in tags) {
@@ -62,6 +70,15 @@ fun String.replaceHtmlTags(tags: List<String>, replaceWith: String = ""): String
     }
     return replacement
 }
+
+fun String.replaceHtmlTagsWithTag(tags: List<String>, replaceWith: String = ""): String {
+    var replacement = this
+    for (tag in tags) {
+        replacement = replacement.replaceHtmlTagWithTag(tag, replaceWith)
+    }
+    return replacement
+}
+
 
 fun String.compress(): String {
     val outputStream = ByteArrayOutputStream()

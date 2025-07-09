@@ -1,6 +1,18 @@
 package com.forkbombsquad.stillalivelarp.utils
 
+import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 import org.jsoup.nodes.Document
+
+private fun castToTable(element: Any): Table? {
+    return when (element) {
+        is LinkedTreeMap<*, *> -> {
+            val json = Gson().toJson(element)
+            return Gson().fromJson(json, Table::class.java)
+        }
+        else -> null
+    }
+}
 
 class Rulebook {
 
@@ -45,7 +57,7 @@ class Rulebook {
                             currentHeading = null
                         }
                         currentHeading = Heading()
-                        currentHeading?.title = element.text()
+                        currentHeading?.title = globalStyleHtmlForRulebook(element.html())
                     }
                     SUBHEADING -> {
                         currentSubSubHeading.ifLet {
@@ -61,7 +73,7 @@ class Rulebook {
                             currentSubHeading = null
                         }
                         currentSubHeading = SubHeading()
-                        currentSubHeading?.title = element.text()
+                        currentSubHeading?.title = globalStyleHtmlForRulebook(element.html())
                     }
                     SUBSUBHEADING -> {
                         currentSubSubHeading.ifLet {
@@ -73,15 +85,16 @@ class Rulebook {
                             currentSubSubHeading = null
                         }
                         currentSubSubHeading = SubSubHeading()
-                        currentSubSubHeading?.title = element.text()
+                        currentSubSubHeading?.title = globalStyleHtmlForRulebook(element.html())
                     }
                     TEXT -> {
+                        val html = globalStyleHtmlForRulebook(element.html())
                         if (currentSubSubHeading != null) {
-                            currentSubSubHeading?.textsAndTables?.add(element.text())
+                            currentSubSubHeading?.textsAndTables?.add(html)
                         } else if (currentSubHeading != null) {
-                            currentSubHeading?.textsAndTables?.add(element.text())
+                            currentSubHeading?.textsAndTables?.add(html)
                         } else {
-                            currentHeading?.textsAndTables?.add(element.text())
+                            currentHeading?.textsAndTables?.add(html)
                         }
                     }
                     TABLE -> {
@@ -93,7 +106,7 @@ class Rulebook {
                                 for (tableElement in tableRow.children().toList()) {
                                     when (tableElement.tagName()) {
                                         TABLEHEAD -> {
-                                            keys.add(tableElement.text())
+                                            keys.add(globalStyleHtmlForRulebook(tableElement.html()))
                                         }
                                         TABLEDETAIL -> {
                                             if (firstTd) {
@@ -102,9 +115,9 @@ class Rulebook {
                                                     if (!table.contents.containsKey(keys[count])) {
                                                         table.contents[keys[count]] = mutableListOf()
                                                     }
-                                                    table.contents[keys[count]]?.add(tableCell.toString()
-                                                        .replaceHtmlTags(listOf("td", "small", "b", "i", "skill", "condition", "item", "combat", "talent", "profession"))
-                                                        .replaceHtmlTag("br", "\n"))
+                                                    table.contents[keys[count]]?.add(
+                                                        globalStyleHtmlForRulebook(tableCell.toString())
+                                                    )
                                                     count += 1
                                                 }
                                             }
@@ -203,7 +216,7 @@ class Rulebook {
     }
 }
 
-class Heading{
+class Heading {
     // Display in this order
     var title: String = ""
     var textsAndTables: MutableList<Any> = mutableListOf()
@@ -223,7 +236,7 @@ class Heading{
             return true
         }
         for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
+            if (castToTable(tot)?.contains(text) == true) {
                 return true
             } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
                 return true
@@ -249,7 +262,7 @@ class Heading{
         val newSubHeadings: MutableList<SubHeading> = mutableListOf()
 
         for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
+            if (castToTable(tot)?.contains(text) == true) {
                 newTextsAndTables.add(tot)
             } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
                 newTextsAndTables.add(tot)
@@ -336,7 +349,7 @@ class SubHeading{
             return true
         }
         for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
+            if (castToTable(tot)?.contains(text) == true) {
                 return true
             } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
                 return true
@@ -365,7 +378,7 @@ class SubSubHeading {
             return true
         }
         for (tot in textsAndTables) {
-            if ((tot as? Table)?.contains(text) == true) {
+            if (castToTable(tot)?.contains(text) == true) {
                 return true
             } else if ((tot as? String)?.containsIgnoreCase(text) == true) {
                 return true

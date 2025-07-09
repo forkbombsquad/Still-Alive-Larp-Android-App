@@ -16,6 +16,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 
 class RulesFragment : Fragment() {
 
@@ -54,13 +55,19 @@ class RulesFragment : Fragment() {
         }
 
         coreRulebookNav.setOnClick {
-            val intent = Intent(v.context, ViewRulesActivity::class.java)
-            startActivity(intent)
+            DataManager.shared.rulebook.ifLet {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.RULEBOOK, it)
+                val intent = Intent(v.context, ViewRulesActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         treatingWoundsNav.setOnClick {
-            val intent = Intent(v.context, SAImageViewActivity::class.java)
-            startActivity(intent)
+            DataManager.shared.treatingWounds.ifLet {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IMAGE, it)
+                val intent = Intent(v.context, SAImageViewActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         nativeSkillTreeDiagramNav.setOnClick {

@@ -85,7 +85,9 @@ enum class DataManagerPassedDataKey {
     SELECTED_FEATURE_FLAG,
     RESEARCH_PROJECT_LIST,
     SKILL_LIST,
-    ACTION
+    ACTION,
+    RULEBOOK,
+    IMAGE
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -760,6 +762,7 @@ class DataManager private constructor() {
     }
 
     fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
+
         tv.text = offlineMode.ternary("[Offline] $baseText", baseText)
     }
 

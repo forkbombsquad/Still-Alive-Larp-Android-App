@@ -367,7 +367,8 @@ class LocalDataManager private constructor() {
     }
 
     fun getRulebook(): Rulebook? {
-        return get(DMT.RULEBOOK)
+        val rb: Rulebook? = get(DMT.RULEBOOK)
+        return rb
     }
 
     fun storeTreatingWounds(treatingWoundsBmp: Bitmap) {
