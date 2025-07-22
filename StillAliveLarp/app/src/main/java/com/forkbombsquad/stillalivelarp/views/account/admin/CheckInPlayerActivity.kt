@@ -224,6 +224,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 gearModified = true
                 character = DataManager.shared.characterToEdit
                 gear = character?.gear
+                gearList = gear?.getGearOrganized() ?: mapOf()
                 buildView()
             }
             val intent = Intent(this, AddEditGearActivity::class.java)
@@ -525,6 +526,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                         gearModified = true
                         character = DataManager.shared.characterToEdit
                         gear = character?.gear
+                        gearList = gear?.getGearOrganized() ?: mapOf()
                         buildView()
                     }
                     val intent = Intent(this, AddEditGearActivity::class.java)

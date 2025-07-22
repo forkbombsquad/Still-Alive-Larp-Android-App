@@ -37,15 +37,13 @@ class ManageNPCActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(NPCListActivity::class, DataManagerPassedDataKey.CHARACTER_LIST)!!
+        character = DataManager.shared.getPassedData(NPCListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.mannpc_title)
         manageStats = findViewById(R.id.mannpc_managestats)
         manageSkills = findViewById(R.id.mannpc_manageskills)
 
         manageStats.setOnClick {
-            manageStats.setLoading(true)
-            manageSkills.setLoading(true)
             AlertUtils.displayMessageWithInputs(
                 context = this,
                 title = "Adjust ${character.fullName} Values",
@@ -68,7 +66,10 @@ class ManageNPCActivity : NoStatusBarActivity() {
                     })
                 ),
             ) { response ->
-
+                runOnUiThread {
+                    manageStats.setLoading(true)
+                    manageSkills.setLoading(true)
+                }
                 val updateCharRequest = AdminService.UpdateCharacter()
 
                 val charUpdate = character.baseModel()
@@ -94,7 +95,6 @@ class ManageNPCActivity : NoStatusBarActivity() {
         }
 
         manageSkills.setOnClick {
-            manageSkills.setLoading(true)
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
             DataManager.shared.setUpdateCallback(this::class) {
                 DataManager.shared.load(lifecycleScope) {

@@ -2,6 +2,7 @@ package com.forkbombsquad.stillalivelarp.views.account.admin
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.views.shared.EventsListActivity
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 
 class ManageEventActivity : NoStatusBarActivity() {
 
+    private lateinit var viewTitle: TextView
     private lateinit var title: KeyValueView
     private lateinit var date: KeyValueView
     private lateinit var startTime: KeyValueView
@@ -47,6 +49,7 @@ class ManageEventActivity : NoStatusBarActivity() {
     private fun setupView() {
         event = DataManager.shared.getPassedData(EventsListActivity::class, DataManagerPassedDataKey.SELECTED_EVENT)!!
 
+        viewTitle = findViewById(R.id.manageevent_viewtitle)
         title = findViewById(R.id.manageevent_title)
         date = findViewById(R.id.manageevent_date)
         startTime = findViewById(R.id.manageevent_startTime)
@@ -98,6 +101,7 @@ class ManageEventActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(viewTitle, "Manage Event")
         title.set(event.title)
         date.set(event.date.yyyyMMddToMonthDayYear())
         startTime.set(event.startTime)

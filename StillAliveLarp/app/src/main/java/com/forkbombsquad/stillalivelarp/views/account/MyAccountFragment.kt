@@ -162,8 +162,16 @@ class MyAccountFragment : Fragment() {
             },
             viewPlannedCharsCallback = {
                 DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, DataManager.shared.getCurrentPlayer()!!)
-                val intent = Intent(v.context, CharacterPlannerActivity::class.java)
-                startActivity(intent)
+                if (!DataManager.shared.offlineMode) {
+                    val intent = Intent(v.context, CharacterPlannerActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getCurrentPlayer()!!.getPlannedCharacters())
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewCharacterActivity::class)
+                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "${DataManager.shared.getCurrentPlayer()!!.fullName}'s Planned Characters")
+                    val intent = Intent(v.context, CharactersListActivity::class.java)
+                    startActivity(intent)
+                }
             }
         )
         manageAccountNav.setOnClick {
@@ -212,7 +220,7 @@ class MyAccountFragment : Fragment() {
         DataManager.shared.setTitleTextPotentiallyOffline(accountTitle, "My Account")
         DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {
             val player = DataManager.shared.getCurrentPlayer()!!
-            characterPanel.setValuesAndHideViews(DataManager.shared.getActiveCharacter(), player)
+            characterPanel.setValuesAndHideViews(DataManager.shared.getActiveCharacter(), player, true)
             playerNameText.text = player.fullName
             adminToolsNav.isGone = !player.isAdmin
 

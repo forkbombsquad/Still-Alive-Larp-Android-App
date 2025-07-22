@@ -64,6 +64,7 @@ class DeleteSkillsActivity : NoStatusBarActivity() {
         DataManager.shared.load(lifecycleScope, stepFinished = {
             buildView()
         }, finished = {
+            character = DataManager.shared.getCharacter(character.id)!!
             buildView()
         })
         buildView()

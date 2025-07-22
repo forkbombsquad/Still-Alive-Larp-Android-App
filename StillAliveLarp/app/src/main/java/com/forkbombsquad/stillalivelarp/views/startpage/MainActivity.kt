@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.R
@@ -133,7 +134,6 @@ class MainActivity : NoStatusBarActivity() {
                 }
             })
         }
-
     }
 
     private fun signIn() {

@@ -49,8 +49,17 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
         viewPlannedChars = findViewById(R.id.charpanel_viewPlannedCharacters)
     }
 
-    fun setValuesAndHideViews(char: FullCharacterModel?, player: FullPlayerModel) {
+    fun setValuesAndHideViews(char: FullCharacterModel?, player: FullPlayerModel, fromAccount: Boolean = false) {
         char.ifLet({ character ->
+
+            if (fromAccount) {
+                viewSkillsTree.textView.text = "Manage Skills (Tree)"
+                viewSkillsList.textView.text = "Manage Skills (List)"
+            } else {
+                viewSkillsTree.textView.text = "View Skills (Tree)"
+                viewSkillsList.textView.text = "View Skills (List)"
+            }
+
             var acText = ""
             when (character.characterType()) {
                 CharacterType.STANDARD -> {
@@ -106,7 +115,18 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
             activeCharLayout.isGone = true
             viewInactiveChars.isGone = player.getInactiveCharacters().isEmpty() == true
             viewPlannedChars.isGone = player.getPlannedCharacters().isEmpty() == true
+            if (viewInactiveChars.isGone && viewPlannedChars.isGone) {
+                otherCharsTitle.isGone = true
+                otherCharsLayout.isGone = true
+            } else {
+                otherCharsTitle.isGone = false
+                otherCharsLayout.isGone = false
+            }
         })
+
+        if (!viewPlannedChars.isGone && fromAccount) {
+            viewPlannedChars.textView.text = "Character Planner"
+        }
     }
 
     fun setOnClicks(

@@ -42,6 +42,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
+    private lateinit var homeTitle: TextView
+
     private lateinit var loadingLayout: LoadingLayout
 
     private lateinit var announcementsLayout: LinearLayout
@@ -115,6 +117,8 @@ class HomeFragment : Fragment() {
             this@HomeFragment.buildViews(v)
         }
 
+        homeTitle = v.findViewById(R.id.hometitle)
+
         // Loading Layout
         loadingLayout = v.findViewById(R.id.loadinglayout)
 
@@ -161,8 +165,8 @@ class HomeFragment : Fragment() {
         intrigueInterrogator = v.findViewById(R.id.intrigue_interrogatorText)
 
         // Checkout
-        checkoutLayout = v.findViewById<LinearLayout>(R.id.checkoutView)
-        checkoutButton = v.findViewById<NavArrowButtonRed>(R.id.checkout_navarrow)
+        checkoutLayout = v.findViewById(R.id.checkoutView)
+        checkoutButton = v.findViewById(R.id.checkout_navarrow)
 
         checkoutButton.setOnClick {
             checkoutButton.setLoading(true)
@@ -287,6 +291,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun buildViews(v: View) {
+        DataManager.shared.setTitleTextPotentiallyOffline(homeTitle, "Home")
         if (DataManager.shared.loading) {
             // Loading Stuff
             loadingLayout.isGone = false
@@ -356,7 +361,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareCheckoutSection() {
-        checkoutLayout.isGone = !showCheckout()
+        val showCheckout = showCheckout()
+        checkoutLayout.isGone = !showCheckout
+        if (showCheckout) {
+            checkoutButton.textView.text = "Checkout From Event:\n${DataManager.shared.events.firstOrNull { event -> event.id == DataManager.shared.getCurrentPlayer()!!.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }!!.eventId }!!.title}"
+        }
     }
 
     private fun prepareCurrentCharSection() {
@@ -398,9 +407,12 @@ class HomeFragment : Fragment() {
                             checkedInAs.text = "Checked in as NPC"
                         })
                     }
+                    checkInAsCharButton.isGone = true
+                    checkInAsNpcButton.isGone = true
                 } else {
                     checkedInAs.isGone = true
                     checkInAsCharButton.isGone = DataManager.shared.getActiveCharacter() == null
+                    checkInAsCharButton.textView.text = "Check In as ${DataManager.shared.getActiveCharacter()?.fullName ?: "ERROR"}"
                     checkInAsNpcButton.isGone = false
                 }
             } else {

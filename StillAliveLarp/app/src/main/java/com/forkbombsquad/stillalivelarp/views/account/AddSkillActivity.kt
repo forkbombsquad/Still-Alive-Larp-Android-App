@@ -62,9 +62,10 @@ class AddSkillActivity : NoStatusBarActivity() {
     private fun setupView() {
         character = DataManager.shared.getPassedData(SkillsListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
         player = DataManager.shared.getCurrentPlayer()!!
-        sortAndFilterSkills()
 
         title = findViewById(R.id.title)
+
+        amountsLayout = findViewById(R.id.amountsLayout)
 
         xp = findViewById(R.id.addskill_xp)
         pp = findViewById(R.id.addskill_pp)
@@ -104,6 +105,7 @@ class AddSkillActivity : NoStatusBarActivity() {
             buildView()
         }
 
+        sortAndFilterSkills()
         buildView()
     }
 
@@ -129,6 +131,7 @@ class AddSkillActivity : NoStatusBarActivity() {
             cell.purchaseButton.setLoading(this@AddSkillActivity.loading || DataManager.shared.loading)
             cell.setupForPurchase(skill, player) {
                 this@AddSkillActivity.loading = true
+                cell.purchaseButton.setLoading(true)
                 character.attemptToPurchaseSkill(lifecycleScope, it) { succeeded ->
                     if (succeeded) {
                         DataManager.shared.load(lifecycleScope) {
@@ -142,6 +145,7 @@ class AddSkillActivity : NoStatusBarActivity() {
                         this@AddSkillActivity.loading = false
                         this@AddSkillActivity.buildView()
                     }
+                    cell.purchaseButton.setLoading(false)
                 }
             }
             cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

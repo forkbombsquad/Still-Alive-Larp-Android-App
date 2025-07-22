@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            app:text="View Stats"
+            app:text="View Character Stats"
             app:showLoading="false"/>
 
         <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            app:text="View Awards"
+            app:text="View Character Awards"
             app:showLoading="false"/>
 
     </LinearLayout>

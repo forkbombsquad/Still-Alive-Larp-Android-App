@@ -53,7 +53,7 @@ data class FullEventModel(
     }
 
     fun isRelevant(): Boolean {
-        return isOngoing() || isToday() || isInFuture()
+        return (isOngoing() || isToday() || isInFuture()) && !isFinished
     }
 
 }

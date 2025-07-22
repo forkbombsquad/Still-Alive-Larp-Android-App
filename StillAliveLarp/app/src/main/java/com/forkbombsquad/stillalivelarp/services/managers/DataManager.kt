@@ -763,7 +763,7 @@ class DataManager private constructor() {
 
     fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
 
-        tv.text = offlineMode.ternary("[Offline] $baseText", baseText)
+        tv.text = offlineMode.ternary("$baseText\n[Offline]", baseText)
     }
 
     fun setUpdateCallback(key: KClass<*>, callback: () -> Unit) {

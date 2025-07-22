@@ -30,8 +30,6 @@ import com.journeyapps.barcodescanner.ScanOptions
 
 class AdminPanelActivity : NoStatusBarActivity() {
 
-    // TODO make sure all activities that are shown while offline don't have internet enabled features
-
     private lateinit var title: TextView
     private lateinit var prereg: NavArrowButtonBlack
     private lateinit var eventManagement: NavArrowButtonBlack
@@ -307,8 +305,12 @@ class AdminPanelActivity : NoStatusBarActivity() {
         playerCheckIn.isGone = offline
         playerCheckOut.isGone = offline
         giveClassXpRed.isGone = offline
+        manageNPCs.isGone = offline
         awardPlayer.isGone = offline
         awardChar.isGone = offline
+        manageGear.isGone = offline
+        researchProjects.isGone = offline
+        featureFlagManagement.isGone = offline
         createAnnouncement.isGone = offline
         approveBios.isGone = offline
         updatePass.isGone = offline

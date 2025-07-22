@@ -95,7 +95,7 @@ class ViewPlayerActivity : NoStatusBarActivity() {
                 startActivity(intent)
             },
             viewPlannedCharsCallback = {
-                if (DataManager.shared.playerIsCurrentPlayer(player)) {
+                if (DataManager.shared.playerIsCurrentPlayer(player) && !DataManager.shared.offlineMode) {
                     DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_PLAYER, player)
                     val intent = Intent(this, CharacterPlannerActivity::class.java)
                     startActivity(intent)

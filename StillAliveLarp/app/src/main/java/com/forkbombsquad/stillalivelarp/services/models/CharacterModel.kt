@@ -169,7 +169,7 @@ data class FullCharacterModel(
                             val request = CharacterSkillService.TakeCharacterSkill()
                             lifecycleScope.launch {
                                 request.successfulResponse(CharacterSkillCreateSP(playerId, charSkillCreateModel)).ifLet({ _ ->
-                                    AlertUtils.displayOkMessage(globalGetContext()!!, "Skill Successfully Purchased!", "$fullName now has possesses the skill ${skill.name}.") { _, _ -> }
+                                    AlertUtils.displayOkMessage(globalGetContext()!!, "Skill Successfully Purchased!", "$fullName now possesses the skill ${skill.name}.") { _, _ -> }
                                     completion(true)
                                 }, {
                                     completion(false)
@@ -256,7 +256,7 @@ data class FullCharacterModel(
         message += if (useFreeSkill) {
             "1 Free Tier-1 Skill Point"
         } else {
-            "${skill.modXpCost()} Experience Point${(skill.modXpCost() > 1).ternary("s", "")}"
+            "${skill.modXpCost()} Experience Point${(skill.modXpCost() != 1).ternary("s", "")}"
         }
 
         if (skill.usesPrestige()) {

@@ -205,7 +205,7 @@ class AddEditGearActivity : NoStatusBarActivity() {
 
                     val updatedGearModel = GearModel(gear.id, gear.characterId, toJson)
                     DataManager.shared.characterToEdit!!.gear = updatedGearModel
-                    DataManager.shared.callUpdateCallback(ManageGearActivty::class)
+                    DataManager.shared.callUpdateCallbacks(listOf(ManageGearActivty::class, CheckInPlayerActivity::class))
                     finish()
                 }
             }

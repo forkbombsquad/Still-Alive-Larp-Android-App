@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
@@ -14,10 +13,12 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
+import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlin.reflect.KClass
 
-class EventsListActivity : AppCompatActivity() {
+class EventsListActivity : NoStatusBarActivity() {
+
     private lateinit var title: TextView
     private lateinit var innerLayout: LinearLayout
 
