@@ -67,6 +67,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.reflect.KClass
 
+// TODO add camp status model to this
+
 enum class DataManagerPassedDataKey {
     BARCODE,
     SELECTED_EVENT,

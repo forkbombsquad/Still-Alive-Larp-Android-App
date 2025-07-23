@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
@@ -27,11 +28,7 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.google.android.material.divider.MaterialDivider
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+// TODO show shortcut to NPC's stuff that you're checked in as
 class HomeFragment : Fragment() {
 
     private val TAG = "HOME_FRAGMENT"
@@ -404,7 +401,7 @@ class HomeFragment : Fragment() {
                         DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == attendee.characterId }.ifLet({ character ->
                             checkedInAs.text = "Checked in as ${character.fullName}"
                         }, {
-                            checkedInAs.text = "Checked in as NPC"
+                            checkedInAs.text = "Checked in as ${DataManager.shared.getCharacter(attendee.npcId)?.fullName ?: "NPC"}"
                         })
                     }
                     checkInAsCharButton.isGone = true
@@ -510,7 +507,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun showIntrigue(): Boolean {
-        return (DataManager.shared.getActiveCharacter()?.getPurchasedIntrigueSkills()?.count() ?: 0) > 0 && DataManager.shared.getOngoingOrTodayEvent()?.intrigue != null
+        val show = DataManager.shared.getOngoingOrTodayEvent()?.intrigue != null
+        if ((DataManager.shared.getActiveCharacter()?.getPurchasedIntrigueSkills()?.count() ?: 0) > 0 && show) {
+            return true
+        } else {
+            val npcId = DataManager.shared.getOngoingOrTodayEvent()?.attendees?.firstOrNull { it.playerId == (DataManager.shared.getCurrentPlayer()?.id ?: -1) }?.npcId ?: -1
+            val npc = DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.id == npcId }
+            if (npc != null) {
+                return (npc.getPurchasedIntrigueSkills().isNotEmpty() && show)
+            }
+        }
+        return false
     }
 
     private fun showCheckout(): Boolean {

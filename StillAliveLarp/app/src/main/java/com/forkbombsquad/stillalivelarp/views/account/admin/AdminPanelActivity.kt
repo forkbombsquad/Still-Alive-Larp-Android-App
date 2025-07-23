@@ -27,6 +27,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
+// TODO allow editing camp fortification json
 
 class AdminPanelActivity : NoStatusBarActivity() {
 

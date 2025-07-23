@@ -30,10 +30,17 @@
                 android:textAlignment="center"/>
 
             <com.forkbombsquad.stillalivelarp.utils.KeyValueView
-                android:id="@+id/npcstuff_infection"
+                android:id="@+id/npcstuff_timesplayed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:key="Times Played"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_infection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:key="Infection Rating"
                 app:showDiv="false"/>
 
@@ -42,6 +49,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:key="Bullets"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_ms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Mysterious Stranger Uses Remaining"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_ur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Unshakable Resolve Uses Remaining"
                 app:showDiv="false"/>
 
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack

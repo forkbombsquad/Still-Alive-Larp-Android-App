@@ -7,6 +7,7 @@ import java.io.Serializable
 
 private typealias DMT = DataManagerType
 
+// TODO add camp status to this model
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class UpdateTrackerModel(
     @JsonProperty("id") var id: Int,

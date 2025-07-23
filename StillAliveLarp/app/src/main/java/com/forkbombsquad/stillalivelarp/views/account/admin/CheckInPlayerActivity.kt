@@ -5,7 +5,11 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
@@ -15,6 +19,7 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 
 import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeCreateModel
@@ -47,6 +52,7 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CheckInPlayerActivity : NoStatusBarActivity() {
@@ -60,6 +66,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var characterRaffle: KeyValueView
 
     private lateinit var characterLayout: LinearLayout
+    private lateinit var npcPickerLayout: LinearLayout
+    private lateinit var npcPicker: Spinner
     private lateinit var infection: KeyValueView
     private lateinit var infectionThreshold: KeyValueView
     private lateinit var bullets: KeyValueView
@@ -150,6 +158,10 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             isNpc = true
         })
         event = DataManager.shared.events.first { it.id == barcodeModel.eventId }
+        val allNpcs = DataManager.shared.getAllCharacters(CharacterType.NPC).filter { it.isAlive && it.isNpcAndNotAttendingEvent(event.id) }.map { it.fullName }.sorted()
+        val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allNpcs)
+        npcPicker = findViewById(R.id.checkinplayer_npcpicker)
+        npcPicker.adapter = filterAdapter
     }
 
     private fun setupView() {
@@ -165,6 +177,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         characterRaffle = findViewById(R.id.checkinplayer_npcRaffleTicketCount)
 
         characterLayout = findViewById(R.id.checkinplayer_characterLayout)
+        npcPickerLayout = findViewById(R.id.checkinplayer_npcpickerlayout)
+        npcPicker = findViewById(R.id.checkinplayer_npcpicker)
         infection = findViewById(R.id.checkinplayer_infection)
         infectionThreshold = findViewById(R.id.checkinplayer_infectionThreshold)
         bullets = findViewById(R.id.checkinplayer_bullets)
@@ -231,7 +245,20 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
 
+        npcPicker.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                runOnUiThread {
+                    buildView()
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
         buildView()
+    }
+
+    private fun getSelectedNpc(): FullCharacterModel? {
+        return DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.fullName == npcPicker.selectedItem }
     }
 
     private fun saveModifiedGear(finished: () -> Unit) {
@@ -272,7 +299,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             characterId = null,
             eventId = event.id,
             isCheckedIn = "TRUE",
-            asNpc = isNpc.ternary("TRUE", "FALSE")
+            asNpc = isNpc.ternary("TRUE", "FALSE"),
+            npcId = (character == null).ternary(getSelectedNpc()?.id ?: -1, -1)
         )
 
         val checkInPlayerRequest = AdminService.CheckInPlayer()
@@ -359,6 +387,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
         // Character Section
         character.ifLet({ char ->
+            npcPickerLayout.isGone = true
             characterRaffle.isGone = true
             characterLayout.isGone = false
             characterName.set(char.fullName)
@@ -375,6 +404,15 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 infectionThreshold.isGone = true
             }
             bullets.set("${char.bullets}+${getAdditionalBulletCount(getRelevantSkills())}")
+            megas.isGone = false
+            rivals.isGone = false
+            rockets.isGone = false
+            casings.isGone = false
+            cloth.isGone = false
+            wood.isGone = false
+            metal.isGone = false
+            tech.isGone = false
+            medical.isGone = false
             megas.set(char.megas)
             rivals.set(char.rivals)
             rockets.set(char.rockets)
@@ -385,6 +423,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             tech.set(char.techSupplies)
             medical.set(char.medicalSupplies)
 
+            armor.isGone = false
             if (char.armor == CharacterArmor.NONE.text) {
                 armor.set(char.armor, false)
                 armorBeadCount.isGone = true
@@ -401,9 +440,41 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 }
             }
         }, {
-            characterLayout.isGone = true
-            characterName.set("NPC")
-            characterRaffle.isGone = false
+            npcPickerLayout.isGone = false
+            getSelectedNpc().ifLet({ npc ->
+                characterLayout.isGone = false
+                characterName.set("${npc.fullName}\nNPC")
+                characterRaffle.isGone = false
+                val inf = npc.infection.toInt()
+                infection.set("${inf}%", showDiv = (inf < 25))
+                infectionThreshold.isGone = false
+                if (inf >= 75) {
+                    infectionThreshold.set("THIRD")
+                } else if (inf >= 50) {
+                    infectionThreshold.set("SECOND")
+                } else if (inf >= 25) {
+                    infectionThreshold.set("FIRST")
+                } else {
+                    infectionThreshold.isGone = true
+                }
+                bullets.set("${npc.bullets}+${getAdditionalBulletCount(getRelevantSkills())}")
+                megas.isGone = true
+                rivals.isGone = true
+                rockets.isGone = true
+                casings.isGone = true
+                cloth.isGone = true
+                wood.isGone = true
+                metal.isGone = true
+                tech.isGone = true
+                medical.isGone = true
+
+                armor.isGone = true
+                armorBeadCount.isGone = true
+            }, {
+                characterLayout.isGone = true
+                characterName.set("NPC")
+                characterRaffle.isGone = false
+            })
         })
 
         // Relevant Skills Section
@@ -547,7 +618,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun getRelevantSkills(): List<FullCharacterModifiedSkillModel> {
-        return character?.getRelevantBarcodeSkills() ?: listOf()
+        return character?.getRelevantBarcodeSkills() ?: getSelectedNpc()?.getRelevantBarcodeSkills() ?: listOf()
     }
 
     private fun hasRelevantSkills(): Boolean {

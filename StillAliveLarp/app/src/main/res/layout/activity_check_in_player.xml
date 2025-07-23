@@ -105,6 +105,25 @@ tools:context=".views.account.admin.CheckInPlayerActivity">
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
+                <LinearLayout
+                    android:id="@+id/checkinplayer_npcpickerlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/customborder"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="16dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Select NPC"/>
+                    <Spinner
+                        android:id="@+id/checkinplayer_npcpicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
                 <com.forkbombsquad.stillalivelarp.utils.KeyValueView
                     android:id="@+id/checkinplayer_characterName"
                     android:layout_width="match_parent"

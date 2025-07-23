@@ -53,7 +53,7 @@ class ViewPreregsForEventActivity : NoStatusBarActivity() {
 
         val count = event.preregs.count()
         if (count > 0) {
-            event.preregs.forEach {
+            event.preregs.sortedWith(compareBy { DataManager.shared.players.first { player ->  player.id == it.playerId }.fullName }).forEach {
                 val preregCell = PreregCell(this)
 
                 preregCell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

@@ -124,6 +124,11 @@ data class FullCharacterModel(
         this.skills = fcmSkills
     }
 
+    fun isNpcAndNotAttendingEvent(eventId: Int): Boolean {
+        if (characterType() != CharacterType.NPC) { return false }
+        return DataManager.shared.events.firstOrNull { it.id == eventId }?.attendees?.firstOrNull { it.npcId == id } == null
+    }
+
     fun baseModel(): CharacterModel {
         return CharacterModel(this)
     }

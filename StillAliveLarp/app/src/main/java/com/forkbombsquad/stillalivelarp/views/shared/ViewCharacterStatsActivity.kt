@@ -120,8 +120,12 @@ class ViewCharacterStatsActivity : NoStatusBarActivity() {
         spentPp.set(character.getSpentPp())
 
         armor.set(character.armor)
-        mysteriousStranger.set("${character.mysteriousStrangerUses} / ${character.mysteriousStrangerCount()}")
-        unshakableResolve.set("${character.unshakableResolveUses} / ${character.hasUnshakableResolve().ternary("1", "0")}")
+        mysteriousStranger.set("${character.mysteriousStrangerCount() - character.mysteriousStrangerUses} / ${character.mysteriousStrangerCount()}")
+        unshakableResolve.set("${character.hasUnshakableResolve().ternary(1, 0) - character.unshakableResolveUses} / ${character.hasUnshakableResolve().ternary("1", "0")}")
+
+        mysteriousStranger.isGone = character.mysteriousStrangerCount() == 0
+        unshakableResolve.isGone = !character.hasUnshakableResolve()
+
         charId.set(character.id)
 
         if (DataManager.shared.getCurrentPlayer()?.isAdmin == false) {

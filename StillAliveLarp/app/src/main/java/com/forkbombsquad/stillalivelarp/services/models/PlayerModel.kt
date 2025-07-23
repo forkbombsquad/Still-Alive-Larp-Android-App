@@ -8,6 +8,8 @@ import java.io.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+// TODO add CampStatus model and services
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FullPlayerModel(
     val id: Int,

@@ -74,3 +74,8 @@ interface UAndPServiceInterface<G, T, H: ServicePayload>: ServiceInterface<G, T,
     override val retrofit: Retrofit
         get() = RetrofitClient.getUAndPClient()
 }
+
+interface UAndPNoPlayerTokenServiceInterface<G, T, H: ServicePayload>: ServiceInterface<G, T, H> {
+    override val retrofit: Retrofit
+        get() = RetrofitClient.getUAndPNoPlayerTokenClient()
+}

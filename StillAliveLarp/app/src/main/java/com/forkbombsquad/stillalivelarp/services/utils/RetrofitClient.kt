@@ -11,7 +11,8 @@ object RetrofitClient {
     private val okHttpClient = OkHttpClient().newBuilder().addInterceptor(RequestLogInterceptor).build()
     private val tokenHttpClient = OkHttpClient().newBuilder().addInterceptor(GetTokenInterceptor).build()
     private val authHttpClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor).addInterceptor(RequestLogInterceptor).build()
-    private val uandpClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor).addInterceptor(UAndPInterceptor).addInterceptor(RequestLogInterceptor).build()
+    private val uandpNoPlayerTokenClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor).addInterceptor(UAndPInterceptor).addInterceptor(RequestLogInterceptor).build()
+    private val uandpClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor).addInterceptor(PlayerTokenAuthInterceptor).addInterceptor(RequestLogInterceptor).build()
 
     fun getClient(): Retrofit =
         Retrofit.Builder()
@@ -38,6 +39,13 @@ object RetrofitClient {
     fun getUAndPClient(): Retrofit =
         Retrofit.Builder()
             .client(uandpClient)
+            .baseUrl(BASE_URL)
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build()
+
+    fun getUAndPNoPlayerTokenClient(): Retrofit =
+        Retrofit.Builder()
+            .client(uandpNoPlayerTokenClient)
             .baseUrl(BASE_URL)
             .addConverterFactory(JacksonConverterFactory.create())
             .build()

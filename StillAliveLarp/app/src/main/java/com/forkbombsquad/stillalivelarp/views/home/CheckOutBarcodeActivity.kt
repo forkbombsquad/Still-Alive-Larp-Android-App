@@ -8,11 +8,13 @@ import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 
 import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 
 class CheckOutBarcodeActivity : NoStatusBarActivity() {
 
@@ -45,7 +47,7 @@ class CheckOutBarcodeActivity : NoStatusBarActivity() {
             image.isGone = false
 
             title.text = "Check Out\n${it.fullName}"
-            kvView.set("Checking Out", character?.fullName ?: "NPC")
+            kvView.set("Checking Out", character?.fullName ?: DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { char -> it.eventAttendees.first { att -> att.eventId == barcode.eventId }.id == char.id }?.fullName ?: "" + (character == null).ternary(" - NPC", ""))
             image.setImageBitmap(BarcodeGenerator.generateCheckOutBarcode(barcode))
         }, {
             title.text = "Error Generating Barcode"

@@ -55,6 +55,24 @@ object AuthInterceptor: Interceptor {
 
 }
 
+object PlayerTokenAuthInterceptor: Interceptor {
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val token = runBlocking { AuthManager.shared.getPlayerToken() } ?: ""
+        val requestWithAuth = chain.request()
+            .newBuilder()
+            .header(
+                "ptoken", "Bearer $token"
+            )
+            .header(
+                "Content-Type", "application/json"
+            )
+            .build()
+        return chain.proceed(requestWithAuth)
+    }
+
+}
+
 object UAndPInterceptor: Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

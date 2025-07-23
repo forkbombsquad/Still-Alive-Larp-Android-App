@@ -49,8 +49,11 @@ import java.util.Base64
 
 private typealias DMT = DataManagerType
 class LocalDataManager private constructor() {
+
+    // TODO add camp status model to this
     companion object {
 
+        // TODO update this number because models changed
         // TODO ROUTINE - update this number if any of the models change between releases
         const val LOCAL_DATA_VERSION = "1"
 

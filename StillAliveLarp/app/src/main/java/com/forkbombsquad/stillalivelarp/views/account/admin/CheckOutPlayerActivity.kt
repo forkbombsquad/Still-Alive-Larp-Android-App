@@ -195,6 +195,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun checkoutStepOne() {
+        // TODO npcs can now be edited. Make sure you apply those changes at checkout!
+        // This includes bullets, infection, alive or dead, and mysterious stranger uses
         if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
             AlertUtils.displayMessage(
                 context = this,
@@ -312,7 +314,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             characterId = eventAttendeeModel.characterId,
             eventId = eventAttendeeModel.eventId,
             isCheckedIn = "FALSE",
-            asNpc = isNpc.ternary("TRUE", "FALSE")
+            asNpc = isNpc.ternary("TRUE", "FALSE"),
+            npcId = eventAttendeeModel.npcId
         )
 
         val updateAttendeeRequest = AdminService.UpdateEventAttendee()
@@ -437,6 +440,17 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                 unshakableResolve.set(char.unshakableResolveUses.toString())
             }
 
+            megas.isGone = false
+            rivals.isGone = false
+            rockets.isGone = false
+            casings.isGone = false
+            cloth.isGone = false
+            wood.isGone = false
+            metal.isGone = false
+            tech.isGone = false
+            medical.isGone = false
+            armor.isGone = false
+
             bullets.set(char.bullets.toString())
             megas.set(char.megas.toString())
             rivals.set(char.rivals.toString())
@@ -449,8 +463,49 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             medical.set(char.medicalSupplies.toString())
 
         }, {
-            characterLayout.isGone = true
-            characterName.set("NPC")
+            // NPC section
+            DataManager.shared.getCharacter(eventAttendeeModel.npcId).ifLet({ npc ->
+                characterLayout.isGone = false
+                characterName.set("${npc.fullName} - NPC")
+                infection.set(npc.infection)
+                reduceInfection.isGone = true
+                infection.div.isGone = false
+
+                val relevantSkills = npc.getRelevantBarcodeSkills()
+
+                if (hasRegressionOrRemission(relevantSkills)) {
+                    infection.div.isGone = true
+                    reduceInfection.isGone = false
+                    reduceInfection.set(getReductionAmount(relevantSkills))
+                }
+
+                val mysterStrangerTotal = mysteriousStrangerTotal(relevantSkills)
+                mysteriousStranger.isGone = mysterStrangerTotal == 0
+                if (mysterStrangerTotal > 0) {
+                    mysteriousStranger.set("Mysterious Stranger Uses (out of $mysterStrangerTotal)", npc.mysteriousStrangerUses.toString())
+                }
+                val hasUnshakableResolve = hasUnshakableResolve(relevantSkills)
+                unshakableResolve.isGone = !hasUnshakableResolve
+                if (hasUnshakableResolve) {
+                    unshakableResolve.set(npc.unshakableResolveUses.toString())
+                }
+
+                bullets.set(npc.bullets.toString())
+                megas.isGone = true
+                rivals.isGone = true
+                rockets.isGone = true
+                casings.isGone = true
+                cloth.isGone = true
+                wood.isGone = true
+                metal.isGone = true
+                tech.isGone = true
+                medical.isGone = true
+                armor.isGone = true
+            }, {
+                characterLayout.isGone = true
+                characterName.set("NPC")
+            })
+
         })
     }
 
