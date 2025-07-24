@@ -5,7 +5,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 
 class FeatureFlag(var name: String) {
     companion object {
-        val CAMP_STATUS = FeatureFlag("campstatus")
+//        val CAMP_STATUS = FeatureFlag("campstatus")
     }
 
     fun isActive(): Boolean {

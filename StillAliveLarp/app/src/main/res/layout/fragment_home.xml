@@ -382,10 +382,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black"
-                            android:paddingTop="8dp"
+                            android:paddingVertical="16dp"
                             android:text="Checked In as Sample Character"/>
+
+                        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                            android:id="@+id/viewInfoForNPC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="View Info For NPC"
+                            android:paddingVertical="8dp"
+                            app:showLoading="false"/>
 
                     </LinearLayout>
 

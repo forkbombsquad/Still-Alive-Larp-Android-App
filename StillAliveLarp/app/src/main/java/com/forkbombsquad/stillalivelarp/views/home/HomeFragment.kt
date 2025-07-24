@@ -20,15 +20,16 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
+import com.forkbombsquad.stillalivelarp.views.shared.ViewNPCStuffActivity
 import com.google.android.material.divider.MaterialDivider
 
-// TODO show shortcut to NPC's stuff that you're checked in as
 class HomeFragment : Fragment() {
 
     private val TAG = "HOME_FRAGMENT"
@@ -77,6 +78,7 @@ class HomeFragment : Fragment() {
     private lateinit var checkInAsCharButton: NavArrowButtonGreen
     private lateinit var checkInAsNpcButton: NavArrowButtonBlue
     private lateinit var checkedInAs: TextView
+    private lateinit var viewNpcInfo: NavArrowButtonBlack
 
     private lateinit var eventListLayout: LinearLayout
     private lateinit var eventListViewTitle: TextView
@@ -204,6 +206,7 @@ class HomeFragment : Fragment() {
         checkInAsCharButton = v.findViewById(R.id.checkInAsCharButton)
         checkInAsNpcButton = v.findViewById(R.id.checkInAsNPCButton)
         checkedInAs = v.findViewById(R.id.eventTodayCheckedInAs)
+        viewNpcInfo = v.findViewById(R.id.viewInfoForNPC)
 
         eventListLayout = v.findViewById(R.id.eventListView)
         eventListViewTitle = v.findViewById(R.id.eventslistviewtitle)
@@ -320,7 +323,7 @@ class HomeFragment : Fragment() {
             prepareCurrentCharSection()
 
             // Events View
-            prepareEventsSection()
+            prepareEventsSection(v)
 
             // Awards View
             prepareAwardsSection(v)
@@ -381,11 +384,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun prepareEventsSection() {
+    private fun prepareEventsSection(v: View) {
         eventLayout.isGone = !showEventsSection()
         DataManager.shared.setTitleTextPotentiallyOffline(eventTodayViewTitle, "Event Today!")
         DataManager.shared.setTitleTextPotentiallyOffline(eventListViewTitle, "Events")
-
+        viewNpcInfo.isGone = true
         DataManager.shared.getOngoingOrTodayEvent().ifLet({ event ->
             eventTodayLayout.isGone = false
             eventListLayout.isGone = true
@@ -401,7 +404,17 @@ class HomeFragment : Fragment() {
                         DataManager.shared.getCurrentPlayer()?.characters?.firstOrNull { it.id == attendee.characterId }.ifLet({ character ->
                             checkedInAs.text = "Checked in as ${character.fullName}"
                         }, {
-                            checkedInAs.text = "Checked in as ${DataManager.shared.getCharacter(attendee.npcId)?.fullName ?: "NPC"}"
+                            val npc = DataManager.shared.getCharacter(attendee.npcId)
+                            checkedInAs.text = "Checked in as ${npc?.fullName ?: "NPC"}"
+                            npc.ifLet {
+                                viewNpcInfo.textView.text = "View Info For ${it.fullName}"
+                                viewNpcInfo.isGone = false
+                                viewNpcInfo.setOnClick {
+                                    DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, it)
+                                    val intent = Intent(v.context, ViewNPCStuffActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
                         })
                     }
                     checkInAsCharButton.isGone = true

@@ -1,6 +1,7 @@
 package com.forkbombsquad.stillalivelarp.services
 
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
+import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillListModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestListModel
@@ -146,6 +147,11 @@ interface CreateResearchProjectRequest {
 interface UpdateResearchProjectRequest {
     @HTTP(method = "PUT", path = "research-project/update/", hasBody = true)
     suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
+}
+
+interface UpdateCampStatusRequest {
+    @HTTP(method = "PUT", path = "camp-status/update/", hasBody = true)
+    suspend fun makeRequest(@Body campStatus: RequestBody): Response<CampStatusModel>
 }
 
 
@@ -374,6 +380,16 @@ class AdminService {
             get() = retrofit.create(UpdateResearchProjectRequest::class.java)
 
         override suspend fun getResponse(payload: UpdateModelSP): Response<ResearchProjectModel> {
+            return request.makeRequest(payload.model())
+        }
+    }
+
+    class UpdateCampStatus:
+        UAndPServiceInterface<UpdateCampStatusRequest, CampStatusModel, UpdateModelSP> {
+        override val request: UpdateCampStatusRequest
+            get() = retrofit.create(UpdateCampStatusRequest::class.java)
+
+        override suspend fun getResponse(payload: UpdateModelSP): Response<CampStatusModel> {
             return request.makeRequest(payload.model())
         }
     }

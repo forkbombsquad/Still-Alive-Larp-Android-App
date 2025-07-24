@@ -7,7 +7,6 @@ import java.io.Serializable
 
 private typealias DMT = DataManagerType
 
-// TODO add camp status to this model
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class UpdateTrackerModel(
     @JsonProperty("id") var id: Int,
@@ -29,6 +28,7 @@ data class UpdateTrackerModel(
     @JsonProperty("skillCategories") var skillCategories: Int,
     @JsonProperty("skillPrereqs") var skillPrereqs: Int,
     @JsonProperty("xpReductions") var xpReductions: Int,
+    @JsonProperty("campStatus") var campStatus: Int,
     @JsonProperty("rulebookVersion") var rulebookVersion: String,
     @JsonProperty("treatingWoundsVersion") var treatingWoundsVersion: String
 ) : Serializable {
@@ -94,6 +94,9 @@ data class UpdateTrackerModel(
         if (other.treatingWoundsVersion != this.treatingWoundsVersion) {
             updates.add(DMT.TREATING_WOUNDS)
         }
+        if (other.campStatus != this.campStatus) {
+            updates.add(DMT.CAMP_STATUS)
+        }
         return updates
     }
 
@@ -121,6 +124,7 @@ data class UpdateTrackerModel(
                 DataManagerType.XP_REDUCTIONS -> this.xpReductions = newTracker.xpReductions
                 DataManagerType.RULEBOOK -> this.rulebookVersion = newTracker.rulebookVersion
                 DataManagerType.TREATING_WOUNDS -> this.treatingWoundsVersion = newTracker.treatingWoundsVersion
+                DataManagerType.CAMP_STATUS -> this.campStatus = newTracker.campStatus
             }
         }
     }
@@ -133,7 +137,7 @@ data class UpdateTrackerModel(
 
     companion object {
         fun empty(): UpdateTrackerModel {
-            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, "", "")
+            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, "", "")
         }
     }
 

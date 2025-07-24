@@ -2,11 +2,16 @@ package com.forkbombsquad.stillalivelarp.utils
 
 import android.content.Context
 import android.content.DialogInterface
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
+import kotlin.math.max
 
 data class AlertButton(val text: String, val onClick: DialogInterface.OnClickListener, val buttonType: ButtonType)
 
@@ -227,5 +232,98 @@ class AlertUtils {
             }
         }
 
+        fun displayMessageWithInputs(
+            context: Context,
+            title: String,
+            messageInputs: List<MessageInput>,
+            response: (messageOutput: MessageOutput) -> Unit
+        ) {
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(24, 24, 24, 24)
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val scrollView = ScrollView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+            scrollView.addView(layout)
+
+            messageInputs.forEach { messageInput ->
+                if (messageInput.sectionTitle != null) {
+                    layout.addView(messageInput.sectionTitle)
+                }
+                if (messageInput.editText != null) {
+                    layout.addView(messageInput.editText)
+                }
+                if (messageInput.checkbox != null) {
+                    layout.addView(messageInput.checkbox)
+                }
+                if (messageInput.spinner != null) {
+                    layout.addView(messageInput.spinner)
+                }
+            }
+
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle(title)
+                alert.setView(scrollView)
+                alert.setPositiveButton("Ok") { _, _ ->
+                    response(MessageOutput(messageInputs))
+                }
+                alert.setNegativeButton("Cancel", null)
+                alert.show()
+            }
+        }
+
     }
+}
+
+data class MessageInput(
+    val key: String,
+    val sectionTitle: TextView?,
+    val editText: EditText?,
+    val checkbox: CheckBox?,
+    val spinner: DropdownSpinner?
+)
+
+data class MessageOutput(
+    val messageInputs: List<MessageInput>
+) {
+    fun getValuesForKey(key: String): MessageOutputValue? {
+        val input = messageInputs.firstOrNull { it.key == key }
+        return if (input != null) {
+            MessageOutputValue(key, input.editText?.text?.toString(), input.checkbox?.isChecked, input.spinner?.getSelectedItem())
+        } else {
+            null
+        }
+    }
+
+}
+
+data class MessageOutputValue(
+    val key: String,
+    val editTextValue: String?,
+    val checkboxValue: Boolean?,
+    val spinnerValue: String?
+) {
+
+    fun getEditTextString(): String {
+        return editTextValue ?: ""
+    }
+
+    fun isChecked(): Boolean {
+        return checkboxValue ?: false
+    }
+
+    fun selectedSpinnerItem(): String {
+        return spinnerValue ?: ""
+    }
+
 }

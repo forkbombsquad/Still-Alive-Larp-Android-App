@@ -75,7 +75,9 @@ class CommunityFragment : Fragment() {
         }
 
         campStatusButton.setOnClick {
-            // TODO FUTURE - add this. It will display the Camp Fortification Rings
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CAMP_STATUS, DataManager.shared.campStatus!!)
+            val intent = Intent(v.context, ViewCampStatusActivity::class.java)
+            startActivity(intent)
         }
 
         researchProjects.setOnClick {
@@ -106,9 +108,7 @@ class CommunityFragment : Fragment() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(communityTitle, "Community")
-        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {
-            campStatusButton.isGone = !FeatureFlag.CAMP_STATUS.isActive()
-        }
+        DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf(contentLayout)) {}
     }
 
     companion object {

@@ -100,6 +100,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var fortuneSkillBonusMaterials: KeyValueView
     private lateinit var fullyLoadedSkill: KeyValueView
     private lateinit var fullyLoadedDetails: KeyValueView
+    private lateinit var mysteriousStrangerUses: KeyValueView
+    private lateinit var unshakableResolveUses: KeyValueView
 
     private lateinit var newSkillsLayout: LinearLayout
     private lateinit var newSkillsInnerLayout: LinearLayout
@@ -211,6 +213,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         fortuneSkillBonusMaterials = findViewById(R.id.checkinplayer_fortuneSkillBonusMaterials)
         fullyLoadedSkill = findViewById(R.id.checkinplayer_fullyLoadedSkill)
         fullyLoadedDetails = findViewById(R.id.checkinplayer_fullyLoadedDetails)
+        mysteriousStrangerUses = findViewById(R.id.checkinplayer_mysteriousstrangeruses)
+        unshakableResolveUses = findViewById(R.id.checkinplayer_unshakableresolveuses)
         newSkillsLayout = findViewById(R.id.checkinplayer_newSkillsLayout)
         newSkillsInnerLayout = findViewById(R.id.checkinplayer_newSkillsInnerLayout)
 
@@ -439,6 +443,12 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                     armorBeadCount.set("RED BEADS NEEDED", "1")
                 }
             }
+
+            mysteriousStrangerUses.isGone = char.mysteriousStrangerCount() == 0
+            mysteriousStrangerUses.set("${char.mysteriousStrangerCount() - char.mysteriousStrangerUses} / ${char.mysteriousStrangerCount()}")
+
+            unshakableResolveUses.isGone = !char.hasUnshakableResolve()
+            unshakableResolveUses.set("${(char.unshakableResolveUses == 0).ternary(1, 0)} / ${char.hasUnshakableResolve().ternary(1, 0)}")
         }, {
             npcPickerLayout.isGone = false
             getSelectedNpc().ifLet({ npc ->
@@ -470,6 +480,12 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
                 armor.isGone = true
                 armorBeadCount.isGone = true
+
+                mysteriousStrangerUses.isGone = npc.mysteriousStrangerCount() == 0
+                mysteriousStrangerUses.set("${npc.mysteriousStrangerCount() - npc.mysteriousStrangerUses} / ${npc.mysteriousStrangerCount()}")
+
+                unshakableResolveUses.isGone = !npc.hasUnshakableResolve()
+                unshakableResolveUses.set("${(npc.unshakableResolveUses == 0).ternary(1, 0)} / ${npc.hasUnshakableResolve().ternary(1, 0)}")
             }, {
                 characterLayout.isGone = true
                 characterName.set("NPC")

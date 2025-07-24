@@ -415,6 +415,22 @@ tools:context=".views.account.admin.CheckInPlayerActivity">
                     app:showDiv="true"
                     app:value="Bullets: &lt;= 25\nMegas: &lt;= 8\nMilitaries: &lt;= 5\nRockets: &lt;= 2" />
 
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_mysteriousstrangeruses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Remaining Mysterious Stranger Uses"
+                    app:showDiv="true"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_unshakableresolveuses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Remaining Unshakable Resolve Uses"
+                    app:showDiv="true"
+                    app:value="Example" />
+
                 <LinearLayout
                     android:id="@+id/checkinplayer_newSkillsLayout"
                     android:layout_width="match_parent"

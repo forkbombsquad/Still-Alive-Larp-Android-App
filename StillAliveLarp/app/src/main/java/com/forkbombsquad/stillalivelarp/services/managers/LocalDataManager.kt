@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.models.AppVersionModel
 import com.forkbombsquad.stillalivelarp.services.models.AwardModel
+import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
@@ -50,12 +51,10 @@ import java.util.Base64
 private typealias DMT = DataManagerType
 class LocalDataManager private constructor() {
 
-    // TODO add camp status model to this
     companion object {
 
-        // TODO update this number because models changed
         // TODO ROUTINE - update this number if any of the models change between releases
-        const val LOCAL_DATA_VERSION = "1"
+        const val LOCAL_DATA_VERSION = "1.0.0.0"
 
         var shared = LocalDataManager()
             private set
@@ -372,6 +371,15 @@ class LocalDataManager private constructor() {
     fun getRulebook(): Rulebook? {
         val rb: Rulebook? = get(DMT.RULEBOOK)
         return rb
+    }
+
+    fun storeCampStatus(campStatus: CampStatusModel) {
+        store(campStatus, DMT.CAMP_STATUS)
+    }
+
+    fun getCampStatus(): CampStatusModel? {
+        val cs: CampStatusModel? = get(DMT.CAMP_STATUS)
+        return cs
     }
 
     fun storeTreatingWounds(treatingWoundsBmp: Bitmap) {

@@ -27,8 +27,6 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
-// TODO allow editing camp fortification json
-
 class AdminPanelActivity : NoStatusBarActivity() {
 
     private lateinit var title: TextView
@@ -49,6 +47,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var featureFlagManagement: NavArrowButtonBlack
     private lateinit var manageNPCs: NavArrowButtonBlack
     private lateinit var researchProjects: NavArrowButtonBlack
+    private lateinit var campFortifications: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -117,6 +116,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         refundSkills = findViewById(R.id.adminpanel_refundSkills)
         manageNPCs = findViewById(R.id.adminpanel_manageNPCs)
         researchProjects = findViewById(R.id.adminpanel_research)
+        campFortifications = findViewById(R.id.adminpanel_campfortifications)
 
         pullToRefresh = findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -283,6 +283,14 @@ class AdminPanelActivity : NoStatusBarActivity() {
             val intent = Intent(this, ManageResearchProjectsActivity::class.java)
             startActivity(intent)
         }
+        campFortifications.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CAMP_STATUS, DataManager.shared.campStatus!!)
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+            }
+            val intent = Intent(this, ManageCampFortificationsActivity::class.java)
+            startActivity(intent)
+        }
 
         reload()
     }
@@ -317,6 +325,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         updatePass.isGone = offline
         refundSkills.isGone = offline
         manageIntrigue.isGone = offline
+        campFortifications.isGone = offline
 
         val bioApprovalCount = DataManager.shared.getCharactersWhoNeedBiosApproved().count()
         if (bioApprovalCount > 0) {

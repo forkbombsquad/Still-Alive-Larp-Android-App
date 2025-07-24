@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.home.HomeActivity
 
 class ViewNPCStuffActivity : NoStatusBarActivity() {
 
@@ -36,7 +37,7 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(NPCListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(NPCListActivity::class, HomeActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         NPCNameText = findViewById(R.id.npcstuff_charName)
         timesPlayed = findViewById(R.id.npcstuff_timesplayed)

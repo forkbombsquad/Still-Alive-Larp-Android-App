@@ -11,6 +11,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
+import com.forkbombsquad.stillalivelarp.services.CampStatusService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.ContactRequestService
@@ -29,6 +30,8 @@ import com.forkbombsquad.stillalivelarp.services.SkillService
 import com.forkbombsquad.stillalivelarp.services.SpecialClassXpReductionService
 import com.forkbombsquad.stillalivelarp.services.UpdateTrackerService
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
+import com.forkbombsquad.stillalivelarp.services.models.CampFortification
+import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
@@ -67,8 +70,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.reflect.KClass
 
-// TODO add camp status model to this
-
 enum class DataManagerPassedDataKey {
     BARCODE,
     SELECTED_EVENT,
@@ -89,7 +90,8 @@ enum class DataManagerPassedDataKey {
     SKILL_LIST,
     ACTION,
     RULEBOOK,
-    IMAGE
+    IMAGE,
+    CAMP_STATUS
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -113,7 +115,8 @@ enum class DataManagerType(val localDataKey: String) {
     SKILL_PREREQS("skillPrereqs_dm_sp_key"),
     XP_REDUCTIONS("xpReductions_dm_sp_key"),
     RULEBOOK("rulebook_dm_sp_key"),
-    TREATING_WOUNDS("treatingwounds_dm_sp_key");
+    TREATING_WOUNDS("treatingwounds_dm_sp_key"),
+    CAMP_STATUS("campStatus_dm_sp_key");
 }
 
 enum class DataManagerLoadType {
@@ -233,6 +236,14 @@ class DataManager private constructor() {
         _treatingWounds.value = new
     }
 
+    var campStatus: CampStatusModel? = null
+    private val _campStatus = MutableStateFlow<CampStatusModel?>(null)
+    val campStatusFlow: StateFlow<CampStatusModel?> = _campStatus
+    private fun _updateCampStatus(new: CampStatusModel?) {
+        campStatus = new
+        _campStatus.value = new
+    }
+
     var loading: Boolean = false
     private val _loading = MutableStateFlow(false)
     val loadingFlow: StateFlow<Boolean> = _loading
@@ -270,6 +281,7 @@ class DataManager private constructor() {
 
     var characterToEdit: FullCharacterModel? = null
     var gearToEdit: GearJsonModel? = null
+    var fortificationToEdit: CampFortification? = null
 
     fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
         var modLoadType = loadType
@@ -611,6 +623,21 @@ class DataManager private constructor() {
                             })
                         }
                     }
+                    DataManagerType.CAMP_STATUS -> {
+                        val request = CampStatusService.GetCampStatus()
+                        lifecycleScope.launch {
+                            request.successfulResponse().ifLet({
+                                lifecycleScope.launch {
+                                    LocalDataManager.shared.storeCampStatus(it)
+                                    serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                }
+                            }, {
+                                lifecycleScope.launch {
+                                    serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
+                                }
+                            })
+                        }
+                    }
                     DataManagerType.RULEBOOK -> {
                         lifecycleScope.launch {
                             val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
@@ -717,6 +744,7 @@ class DataManager private constructor() {
                     _updateFeatureFlags(LocalDataManager.shared.getFeatureFlags())
                     _updateIntrigues(LocalDataManager.shared.getIntrigues())
                     _updateResearchProjects(LocalDataManager.shared.getResearchProjects())
+                    _updateCampStatus(LocalDataManager.shared.getCampStatus())
 
                     // Built Models
                     _updateSkills(LocalDataManager.shared.getFullSkills())

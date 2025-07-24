@@ -16,6 +16,12 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
+            android:name=".views.account.admin.ManageCampFortificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.community.ViewCampStatusActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.shared.EventsListActivity"
             android:exported="false" />
         <activity

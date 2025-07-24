@@ -14,6 +14,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 
 import com.forkbombsquad.stillalivelarp.services.models.AwardCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
 import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
@@ -159,9 +160,10 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
         checkoutButton.setOnClick {
             val valResult = validateFields()
+            val charOrNpc = character ?: getNpc()
             if (!valResult.hasError) {
-                character.ifLet({ char ->
-                    if (isPassedThreshold() && isAlive.valuePickerView.selectedItemPosition == 0) {
+                charOrNpc.ifLet({ char ->
+                    if (isPassedThreshold(char) && isAlive.valuePickerView.selectedItemPosition == 0) {
                         AlertUtils.displayMessage(
                             context = this,
                             title = "Warning!",
@@ -170,7 +172,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                                 AlertButton(
                                     text = "Check Passed!",
                                     onClick = { _, _ ->
-                                        checkoutStepOne()
+                                        checkoutStepOne(charOrNpc)
                                     },
                                     buttonType = ButtonType.POSITIVE
                                 ),
@@ -182,10 +184,10 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                             )
                         )
                     } else {
-                        checkoutStepOne()
+                        checkoutStepOne(charOrNpc)
                     }
                 }, {
-                    checkoutStepOne()
+                    checkoutStepOne(charOrNpc)
                 })
             } else {
                 AlertUtils.displayValidationError(this, valResult.getErrorMessages())
@@ -194,19 +196,17 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         buildView()
     }
 
-    private fun checkoutStepOne() {
-        // TODO npcs can now be edited. Make sure you apply those changes at checkout!
-        // This includes bullets, infection, alive or dead, and mysterious stranger uses
-        if (!isNpc && isAlive.valuePickerView.selectedItemPosition == 1) {
+    private fun checkoutStepOne(charOrNpc: FullCharacterModel?) {
+        if (isAlive.valuePickerView.selectedItemPosition == 1 && charOrNpc != null) {
             AlertUtils.displayMessage(
                 context = this,
                 title = "Warning!",
-                message = "${character?.fullName ?: ""} has seemingly perished, but they still have a chance! Make sure you roll 1d10 to see if they miraculously survive (by rolling a 10)!\n\n${getDeathCheckSkillsList(character?.getRelevantBarcodeSkills() ?: listOf())}",
+                message = "${charOrNpc.fullName} has seemingly perished, but they still have a chance! Make sure you roll 1d10 to see if they miraculously survive (by rolling a 10)!\n\n${getDeathCheckSkillsList(charOrNpc.getRelevantBarcodeSkills())}",
                 buttons = arrayOf(
                     AlertButton(
                         text = "Still Dead!",
                         onClick = { _, _ ->
-                            checkoutStepTwo()
+                            checkoutStepTwo(charOrNpc)
                         },
                         buttonType = ButtonType.POSITIVE
                     ),
@@ -218,46 +218,86 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                 )
             )
         } else {
-            checkoutStepTwo()
+            checkoutStepTwo(charOrNpc)
         }
     }
 
-    private fun checkoutStepTwo() {
-        character.ifLet({ cm ->
-            val editedChar = CharacterModel(
-                id = cm.id,
-                fullName = cm.fullName,
-                startDate = cm.startDate,
-                isAlive = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("TRUE", "FALSE"),
-                deathDate = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("", LocalDate.now().yyyyMMddFormatted()),
-                infection = infection.getValue(),
-                bio = cm.bio,
-                approvedBio = cm.approvedBio.toString().uppercase(),
-                bullets = bullets.getValue(),
-                megas = megas.getValue(),
-                rivals = rivals.getValue(),
-                rockets = rockets.getValue(),
-                bulletCasings = casings.getValue(),
-                clothSupplies = cloth.getValue(),
-                woodSupplies = wood.getValue(),
-                metalSupplies = metal.getValue(),
-                techSupplies = tech.getValue(),
-                medicalSupplies = medical.getValue(),
-                armor = armor.valuePickerView.selectedItem as String,
-                unshakableResolveUses = unshakableResolve.getValue(),
-                mysteriousStrangerUses = mysteriousStranger.getValue(),
-                playerId = cm.playerId,
-                characterTypeId = cm.characterTypeId
-            )
-            checkoutButton.setLoadingWithText("Updating Character")
-            val updateCharRequest = AdminService.UpdateCharacter()
-            lifecycleScope.launch {
-                updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
-                    checkoutStepThree()
-                }, {
-                    checkoutButton.setLoading(false)
-                    restartScanner()
-                })
+    private fun checkoutStepTwo(charOrNpc: FullCharacterModel?) {
+        charOrNpc.ifLet({ cm ->
+            if (cm.characterType() == CharacterType.NPC) {
+                // NPC
+                val editedNPC = CharacterModel(
+                    id = cm.id,
+                    fullName = cm.fullName,
+                    startDate = cm.startDate,
+                    isAlive = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("TRUE", "FALSE"),
+                    deathDate = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("", LocalDate.now().yyyyMMddFormatted()),
+                    infection = infection.getValue(),
+                    bio = cm.bio,
+                    approvedBio = cm.approvedBio.toString().uppercase(),
+                    bullets = bullets.getValue(),
+                    megas = cm.megas.toString(),
+                    rivals = cm.rivals.toString(),
+                    rockets = cm.rockets.toString(),
+                    bulletCasings = cm.bulletCasings.toString(),
+                    clothSupplies = cm.clothSupplies.toString(),
+                    woodSupplies = cm.woodSupplies.toString(),
+                    metalSupplies = cm.metalSupplies.toString(),
+                    techSupplies = cm.techSupplies.toString(),
+                    medicalSupplies = cm.medicalSupplies.toString(),
+                    armor = cm.armor,
+                    unshakableResolveUses = unshakableResolve.getValue(),
+                    mysteriousStrangerUses = mysteriousStranger.getValue(),
+                    playerId = cm.playerId,
+                    characterTypeId = cm.characterTypeId
+                )
+                checkoutButton.setLoadingWithText("Updating NPC Character")
+                val updateCharRequest = AdminService.UpdateCharacter()
+                lifecycleScope.launch {
+                    updateCharRequest.successfulResponse(UpdateModelSP(editedNPC)).ifLet({ _ ->
+                        checkoutStepThree()
+                    }, {
+                        checkoutButton.setLoading(false)
+                        restartScanner()
+                    })
+                }
+            } else {
+                // Player Character
+                val editedChar = CharacterModel(
+                    id = cm.id,
+                    fullName = cm.fullName,
+                    startDate = cm.startDate,
+                    isAlive = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("TRUE", "FALSE"),
+                    deathDate = (isAlive.valuePickerView.selectedItemPosition == 0).ternary("", LocalDate.now().yyyyMMddFormatted()),
+                    infection = infection.getValue(),
+                    bio = cm.bio,
+                    approvedBio = cm.approvedBio.toString().uppercase(),
+                    bullets = bullets.getValue(),
+                    megas = megas.getValue(),
+                    rivals = rivals.getValue(),
+                    rockets = rockets.getValue(),
+                    bulletCasings = casings.getValue(),
+                    clothSupplies = cloth.getValue(),
+                    woodSupplies = wood.getValue(),
+                    metalSupplies = metal.getValue(),
+                    techSupplies = tech.getValue(),
+                    medicalSupplies = medical.getValue(),
+                    armor = armor.valuePickerView.selectedItem as String,
+                    unshakableResolveUses = unshakableResolve.getValue(),
+                    mysteriousStrangerUses = mysteriousStranger.getValue(),
+                    playerId = cm.playerId,
+                    characterTypeId = cm.characterTypeId
+                )
+                checkoutButton.setLoadingWithText("Updating Character")
+                val updateCharRequest = AdminService.UpdateCharacter()
+                lifecycleScope.launch {
+                    updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
+                        checkoutStepThree()
+                    }, {
+                        checkoutButton.setLoading(false)
+                        restartScanner()
+                    })
+                }
             }
         }, {
             checkoutStepThree()
@@ -464,7 +504,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
         }, {
             // NPC section
-            DataManager.shared.getCharacter(eventAttendeeModel.npcId).ifLet({ npc ->
+            getNpc().ifLet({ npc ->
                 characterLayout.isGone = false
                 characterName.set("${npc.fullName} - NPC")
                 infection.set(npc.infection)
@@ -507,6 +547,11 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             })
 
         })
+    }
+
+    private fun getNpc(): FullCharacterModel? {
+        if (!isNpc) { return null }
+        return DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.id == eventAttendeeModel.npcId }
     }
 
     private fun validateFields(): ValidationResult {
@@ -567,8 +612,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         return skills
     }
 
-    private fun isPassedThreshold(): Boolean {
-        val prev = character!!.infection.toInt()
+    private fun isPassedThreshold(charOrNpc: FullCharacterModel?): Boolean {
+        val prev = charOrNpc?.infection?.toInt() ?: 0
         val cur = infection.valueTextField.text.toString().toInt()
 
         return (prev < 25 && cur >= 25) || (prev < 50 && cur >= 50) || (cur >= 75)
