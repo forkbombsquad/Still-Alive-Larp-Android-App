@@ -424,9 +424,9 @@ class LocalDataManager private constructor() {
 
     private fun recalculateFullModels(newUpdateTracker: UpdateTrackerModel) {
         val neededUpdates = determineWhichTypesNeedUpdates(newUpdateTracker)
-        var builtFullSkills = false
-        var builtFullEvents = false
-        var builtFullCharacters = false
+        var builtFullSkills = true
+        var builtFullEvents = true
+        var builtFullCharacters = true
 
         val attendees = getEventAttendees()
         val preregs = getPreregs()
@@ -435,13 +435,15 @@ class LocalDataManager private constructor() {
         // FULL SKILLS
         if (neededUpdates.doesNotContain(listOf(DMT.SKILLS, DMT.SKILL_CATEGORIES, DMT.SKILL_PREREQS))) {
             buildAndStoreFullSkills(getSkills(), getSkillCategories(), getSkillPrereqs())
-            builtFullSkills = true
+        } else if (getFullSkills().isEmpty())  {
+            builtFullSkills = false
         }
 
         // FULL EVENTS
         if (neededUpdates.doesNotContain(listOf(DMT.EVENTS, DMT.EVENT_ATTENDEES, DMT.PREREGS, DMT.INTRIGUES))) {
             buildAndStoreFullEvents(getEvents(), attendees, preregs, getIntrigues())
-            builtFullEvents = true
+        } else if (getFullEvents().isEmpty()) {
+            builtFullEvents = false
         }
 
         // FULL CHARACTERS
@@ -456,7 +458,8 @@ class LocalDataManager private constructor() {
                 preregs = preregs,
                 xpReductions = getXpReductions()
             )
-            builtFullCharacters = true
+        } else if (getFullCharacters().isEmpty()) {
+            builtFullCharacters = false
         }
 
         // FULL PLAYERS
