@@ -30,6 +30,8 @@ import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_globalGenerateNewBarcodeModelFromOld
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.GiveCharacterCheckInRewardsSP
@@ -45,6 +47,7 @@ import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -133,7 +136,14 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 recalculateModels()
                 buildView()
             }, {
-                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
+                // TODO remove this once legacy support is gone from iOS update
+                globalFromJson<LEGACY_PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
+                    barcodeModel = LEGACY_globalGenerateNewBarcodeModelFromOld(it)
+                    recalculateModels()
+                    buildView()
+                }, {
+                    AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
+                })
             })
         }
     }

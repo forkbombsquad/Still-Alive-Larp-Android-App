@@ -21,6 +21,9 @@ import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_globalGenerateNewBarcodeModelFromOld
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -38,6 +41,7 @@ import com.forkbombsquad.stillalivelarp.utils.ValidationGroup
 import com.forkbombsquad.stillalivelarp.utils.ValidationResult
 import com.forkbombsquad.stillalivelarp.utils.ValidationType
 import com.forkbombsquad.stillalivelarp.utils.Validator
+import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -95,9 +99,14 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                 recalculateModels()
                 buildView()
             }, {
-                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ ->
-                    finish()
-                }
+                // TODO remove this once legacy support is gone from iOS update
+                globalFromJson<LEGACY_PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
+                    barcodeModel = LEGACY_globalGenerateNewBarcodeModelFromOld(it)
+                    recalculateModels()
+                    buildView()
+                }, {
+                    AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
+                })
             })
         }
     }

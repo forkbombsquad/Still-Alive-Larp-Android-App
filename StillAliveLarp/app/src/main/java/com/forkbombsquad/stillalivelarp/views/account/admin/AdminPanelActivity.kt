@@ -18,10 +18,14 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckInBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckOutBarcodeModel
+import com.forkbombsquad.stillalivelarp.services.models.LEGACY_globalGenerateNewBarcodeModelFromOld
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.journeyapps.barcodescanner.ScanContract
@@ -71,7 +75,17 @@ class AdminPanelActivity : NoStatusBarActivity() {
                     val intent = Intent(this, CheckInPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
-                    AlertUtils.displayError(this, "Unable to parse barcode data!")
+                    // TODO remove this once legacy support is gone from iOS update
+                    globalFromJson<LEGACY_PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, LEGACY_globalGenerateNewBarcodeModelFromOld(it))
+                        DataManager.shared.setUpdateCallback(this::class) {
+                            reload()
+                        }
+                        val intent = Intent(this, CheckInPlayerActivity::class.java)
+                        startActivity(intent)
+                    }, {
+                        AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
+                    })
                 })
             } else if (checkInOutState == CHECKOUT_STATE) {
                 globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
@@ -82,7 +96,17 @@ class AdminPanelActivity : NoStatusBarActivity() {
                     val intent = Intent(this, CheckOutPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
-                    AlertUtils.displayError(this, "Unable to parse barcode data!")
+                    // TODO remove this once legacy support is gone from iOS update
+                    globalFromJson<LEGACY_PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, LEGACY_globalGenerateNewBarcodeModelFromOld(it))
+                        DataManager.shared.setUpdateCallback(this::class) {
+                            reload()
+                        }
+                        val intent = Intent(this, CheckOutPlayerActivity::class.java)
+                        startActivity(intent)
+                    }, {
+                        AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
+                    })
                 })
             }
         }

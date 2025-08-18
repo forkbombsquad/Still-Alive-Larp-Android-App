@@ -140,7 +140,7 @@ class SkillsListActivity : NoStatusBarActivity() {
             }
 
             skillListLayout.removeAllViews()
-            skills.forEachIndexed { index, skill ->
+            skills.filter { it.includeInFilter(searchBar.text.toString(), SkillFilterType.NONE) }.forEachIndexed { index, skill ->
                 val cell = SkillCell(this)
                 cell.setup(skill)
                 cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

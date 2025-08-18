@@ -14,6 +14,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.views.home.HomeActivity
+import com.forkbombsquad.stillalivelarp.views.home.HomeFragment
 
 class ViewNPCStuffActivity : NoStatusBarActivity() {
 
@@ -37,7 +38,7 @@ class ViewNPCStuffActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(NPCListActivity::class, HomeActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(NPCListActivity::class, HomeFragment::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         NPCNameText = findViewById(R.id.npcstuff_charName)
         timesPlayed = findViewById(R.id.npcstuff_timesplayed)
