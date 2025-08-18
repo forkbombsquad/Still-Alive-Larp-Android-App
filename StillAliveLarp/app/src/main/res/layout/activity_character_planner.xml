@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".CharacterPlannerActivity">
+    tools:context=".views.account.CharacterPlannerActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/plannedchars_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -27,36 +28,21 @@
                 android:textSize="32sp"
                 android:textAlignment="center"/>
 
-            <ProgressBar
-                android:id="@+id/characterplanner_loading"
+            <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                android:id="@+id/loadinglayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                android:id="@+id/characterplanner_loadingstufflayout"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/characterplanner_instructions"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-                <ProgressBar
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.1"/>
-                <TextView
-                    android:id="@+id/characterplanner_loadingstufftext"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Loading..."
-                    android:textSize="24sp"
-                    android:textColor="@color/mid_red"
-                    android:textAlignment="center"/>
-                <ProgressBar
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.1"/>
-            </LinearLayout>
+                android:text="*Swipe away a Planned Character to delete it*"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:paddingBottom="16dp"
+                android:textAlignment="center"/>
 
             <LinearLayout
                 android:id="@+id/characterplanner_layout"

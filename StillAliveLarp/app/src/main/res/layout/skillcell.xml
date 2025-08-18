@@ -48,6 +48,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:paddingLeft="4dp"
+            android:textAlignment="center"
             android:text="1xp"/>
 
         <TextView
@@ -65,7 +66,7 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="textEnd"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:paddingRight="4dp"
@@ -91,6 +92,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="center"
+                android:textAlignment="center"
                 android:paddingRight="8dp"
                 android:text="Cost: 1xp"/>
 
@@ -102,6 +104,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/blue"
                 android:gravity="center"
+                android:textAlignment="center"
                 android:paddingLeft="8dp"
                 android:text="and 1 PP"/>
         </LinearLayout>
@@ -113,6 +116,7 @@
             android:textSize="18sp"
             android:textColor="@color/black"
             android:gravity="center"
+            android:textAlignment="center"
             android:paddingRight="8dp"
             android:text="Your infection rating meets the required 50%"/>
 

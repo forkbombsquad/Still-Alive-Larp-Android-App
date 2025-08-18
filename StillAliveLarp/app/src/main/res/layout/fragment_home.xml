@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".tabbar_fragments.HomeFragment">
+    tools:context=".views.home.HomeFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pulltorefresh_home"
@@ -25,6 +25,7 @@
                 android:paddingRight="16dp">
 
                 <TextView
+                    android:id="@+id/hometitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -33,8 +34,19 @@
                     android:textSize="32sp"
                     android:textAlignment="center"/>
 
+                <!--            Loading View-->
+                <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                    android:id="@+id/loadinglayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/customborder"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
                 <!--            Announcements View-->
                 <LinearLayout
+                    android:id="@+id/announcementslayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -89,7 +101,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-
                             <Button
                                 android:id="@+id/announcement_prev_button"
                                 android:layout_width="wrap_content"
@@ -110,19 +121,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <ProgressBar
-                                android:id="@+id/announcement_list_progress_bar"
-                                style="?android:attr/progressBarStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                />
-                        </LinearLayout>
-
 
                     </LinearLayout>
 
@@ -141,6 +139,7 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/intriguetitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -256,31 +255,13 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/currentchartitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/currentchar"
                         android:textAlignment="center"
                         android:textSize="24sp" />
-
-                    <LinearLayout
-                        android:id="@+id/currentCharLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Loading Character Information..."/>
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/currentCharNameView"
@@ -337,42 +318,6 @@
                     android:paddingRight="16dp">
 
                     <LinearLayout
-                        android:id="@+id/eventLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/events"
-                            android:textAlignment="center"
-                            android:textSize="24sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="8dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ProgressBar
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Loading Events..."/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/eventTodayView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -381,6 +326,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/eventstodayviewtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -436,10 +382,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black"
-                            android:paddingTop="8dp"
+                            android:paddingVertical="16dp"
                             android:text="Checked In as Sample Character"/>
+
+                        <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                            android:id="@+id/viewInfoForNPC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="View Info For NPC"
+                            android:paddingVertical="8dp"
+                            app:showLoading="false"/>
 
                     </LinearLayout>
 
@@ -452,6 +406,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/eventslistviewtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -489,6 +444,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingTop="8dp"
+                                android:paddingBottom="8dp"
                                 android:textSize="16sp"
                                 android:textAlignment="textStart"
                                 android:text="A sample description of an event that could be multiple sentences long. If it seems like that's excessive then you should check your perception of objecctive reality"/>
@@ -518,6 +474,13 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
+                                <Space
+                                    android:id="@+id/event_prev_spacer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:visibility="gone"/>
+
                                 <Button
                                     android:id="@+id/event_prev_button"
                                     android:layout_width="wrap_content"
@@ -530,10 +493,28 @@
                                     android:layout_weight="3"/>
 
                                 <Button
+                                    android:id="@+id/event_show_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="Show Only\nRelevant\nEvents"/>
+
+                                <Space
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"/>
+
+                                <Button
                                     android:id="@+id/event_next_button"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="Next &gt;"/>
+
+                                <Space
+                                    android:id="@+id/event_next_spacer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:visibility="gone"/>
 
 
                             </LinearLayout>
@@ -557,6 +538,7 @@
                     android:paddingRight="16dp">
 
                     <TextView
+                        android:id="@+id/awardsviewtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -565,34 +547,12 @@
                         android:textSize="24sp" />
 
                     <LinearLayout
-                        android:id="@+id/awardsLoadingView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Loading Awards..."/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/awardsContainerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
                         android:gravity="center"
                         android:orientation="vertical">
-
-
-
                     </LinearLayout>
 
                     <LinearLayout

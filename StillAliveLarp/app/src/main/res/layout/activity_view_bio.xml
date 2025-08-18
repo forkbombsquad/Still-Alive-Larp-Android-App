@@ -6,7 +6,7 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:background="@color/light_gray"
-tools:context=".ViewBioActivity">
+tools:context=".views.shared.ViewBioActivity">
 
 <ScrollView
     android:layout_width="match_parent"

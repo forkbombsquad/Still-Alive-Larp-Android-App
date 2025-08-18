@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".ViewNPCStuffActivity">
+    tools:context=".views.shared.ViewNPCStuffActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,10 +30,17 @@
                 android:textAlignment="center"/>
 
             <com.forkbombsquad.stillalivelarp.utils.KeyValueView
-                android:id="@+id/npcstuff_infection"
+                android:id="@+id/npcstuff_timesplayed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:key="Times Played"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_infection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:key="Infection Rating"
                 app:showDiv="false"/>
 
@@ -44,12 +51,34 @@
                 app:key="Bullets"
                 app:showDiv="false"/>
 
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_ms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Mysterious Stranger Uses Remaining"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/npcstuff_ur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Unshakable Resolve Uses Remaining"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                android:id="@+id/npcstuff_skillsTreeNavArrow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:text="View Skills (Tree)"
+                app:showLoading="false"/>
+
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                 android:id="@+id/npcstuff_skillsNavArrow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                app:text="NPC Skills"
+                app:text="View Skills (List)"
                 app:showLoading="false"/>
 
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack

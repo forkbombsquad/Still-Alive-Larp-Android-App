@@ -5,8 +5,41 @@ import com.forkbombsquad.stillalivelarp.services.models.EventModel
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
+
+fun <T> List<T>.doesNotContain(value: T): Boolean {
+    return !this.contains(value)
+}
+
+fun <T> List<T>.doesNotContain(values: List<T>): Boolean {
+    values.forEach { value ->
+        if (this.contains(value)) {
+            return false
+        }
+    }
+    return true
+}
+
+@JvmName("sortSkills")
+fun List<FullCharacterModifiedSkillModel>.sort(sortType: SkillSortType): List<FullCharacterModifiedSkillModel> {
+    return when (sortType) {
+        SkillSortType.AZ -> this.sortedWith(compareBy { it.name })
+        SkillSortType.ZA -> this.sortedWith(compareByDescending { it.name })
+        SkillSortType.XPASC -> this.sortedWith(compareBy({ it.modXpCost() }, { it.name }))
+        SkillSortType.XPDESC -> this.sortedWith(compareByDescending { it.modXpCost() })
+        SkillSortType.TYPEASC -> this.sortedWith(compareBy({ it.getTypeText() }, { it.name }))
+        SkillSortType.TYPEDESC -> this.sortedWith(compareByDescending { it.getTypeText() })
+    }
+}
+
+@JvmName("alphabetizedFullPlayerModel")
+fun List<FullPlayerModel>.alphabetized(): List<FullPlayerModel> {
+    return this.sortedWith(compareBy { it.fullName })
+}
+
 
 @JvmName("alphabetizedPlayerModel")
 fun List<PlayerModel>.alphabetized(): List<PlayerModel> {
@@ -28,13 +61,13 @@ fun List<EventModel>.inChronologicalOrder(): List<EventModel> {
 }
 
 @JvmName("alphabetizedFullSkillsModel")
-fun List<FullSkillModel>.alphabetized(): List<FullSkillModel> {
+fun List<FullCharacterModifiedSkillModel>.alphabetized(): List<FullCharacterModifiedSkillModel> {
     return this.sortedWith(compareBy { it.name })
 }
 
 data class PreregNumbers(val premium: Int, val premiumNpc: Int, val basic: Int, val basicNpc: Int, val free: Int, val notAttending: Int)
 
-fun Array<EventPreregModel>.getRegNumbers(): PreregNumbers {
+fun List<EventPreregModel>.getRegNumbers(): PreregNumbers {
     var prem = 0
     var premNpc = 0
     var basic = 0

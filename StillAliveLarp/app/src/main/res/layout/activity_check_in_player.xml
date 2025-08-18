@@ -6,7 +6,7 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:background="@color/light_gray"
-tools:context=".CheckInPlayerActivity">
+tools:context=".views.account.admin.CheckInPlayerActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -104,6 +104,25 @@ tools:context=".CheckInPlayerActivity">
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/checkinplayer_npcpickerlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/customborder"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="16dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Select NPC"/>
+                    <Spinner
+                        android:id="@+id/checkinplayer_npcpicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
                 <com.forkbombsquad.stillalivelarp.utils.KeyValueView
                     android:id="@+id/checkinplayer_characterName"
@@ -395,6 +414,46 @@ tools:context=".CheckInPlayerActivity">
                     app:key="BONUS AMMO"
                     app:showDiv="true"
                     app:value="Bullets: &lt;= 25\nMegas: &lt;= 8\nMilitaries: &lt;= 5\nRockets: &lt;= 2" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_mysteriousstrangeruses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Remaining Mysterious Stranger Uses"
+                    app:showDiv="true"
+                    app:value="Example" />
+
+                <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                    android:id="@+id/checkinplayer_unshakableresolveuses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:key="Remaining Unshakable Resolve Uses"
+                    app:showDiv="true"
+                    app:value="Example" />
+
+                <LinearLayout
+                    android:id="@+id/checkinplayer_newSkillsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="New Skills Since Last Event"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="italic" />
+
+                    <LinearLayout
+                        android:id="@+id/checkinplayer_newSkillsInnerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

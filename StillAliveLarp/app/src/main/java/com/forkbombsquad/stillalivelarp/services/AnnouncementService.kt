@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.services
 
+import com.forkbombsquad.stillalivelarp.services.models.AnnouncementFullListModel
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementListModel
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
@@ -17,6 +18,11 @@ interface GetAnnouncementRequest {
 interface GetAllAnnouncementsRequest {
     @HTTP(method ="GET", path = "announcements/all_ids/")
     suspend fun makeRequest(): Response<AnnouncementListModel>
+}
+
+interface GetAllFullAnnouncementsRequest {
+    @HTTP(method ="GET", path = "announcements/all/")
+    suspend fun makeRequest(): Response<AnnouncementFullListModel>
 }
 
 class AnnouncementService {
@@ -38,4 +44,15 @@ class AnnouncementService {
             return request.makeRequest()
         }
     }
+
+    class GetAllFullAnnouncements:
+        UAndPServiceInterface<GetAllFullAnnouncementsRequest, AnnouncementFullListModel, ServicePayload> {
+        override val request: GetAllFullAnnouncementsRequest
+            get() = retrofit.create(GetAllFullAnnouncementsRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<AnnouncementFullListModel> {
+            return request.makeRequest()
+        }
+    }
+
 }

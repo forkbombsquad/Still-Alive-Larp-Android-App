@@ -5,6 +5,7 @@ import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -19,7 +20,7 @@ interface ServiceInterface<G, T, H: ServicePayload> {
 
     suspend fun getResponse(payload: H): Response<T>
 
-    suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false): T? {
+    suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false, ignorePrintResopnseBody: Boolean = false): T? {
         val response: Response<T>? = try {
             getResponse(payload)
         } catch (e: Exception) {
@@ -27,17 +28,19 @@ interface ServiceInterface<G, T, H: ServicePayload> {
             null
         }
         response?.body().ifLet({
-            globalPrint("SERVICE CONTROLLER: Response Body:\n${globalToJson(it)}")
+            if (!ignorePrintResopnseBody) {
+                globalPrint("SERVICE CONTROLLER: Response Body:\n${globalToJson(it)}")
+            }
         }, {
             if (!ignoreErrors) {
                 response?.errorBody().ifLet({
                     globalFromJson<ErrorModel>(it.string()).ifLet({ error ->
-                        AlertUtils.displayError(StillAliveLarpApplication.activity, response?.code() ?: 502, error)
+                        AlertUtils.displayError(globalGetContext()!!, response?.code() ?: 502, error)
                     }, {
-                        AlertUtils.displaySomethingWentWrong(StillAliveLarpApplication.activity)
+                        AlertUtils.displaySomethingWentWrong(globalGetContext()!!)
                     })
                 }, {
-                    AlertUtils.displaySomethingWentWrong(StillAliveLarpApplication.activity)
+                    AlertUtils.displaySomethingWentWrong(globalGetContext()!!)
                 })
             }
         })
@@ -70,4 +73,9 @@ interface AuthServiceInterface<G, T, H: ServicePayload>: ServiceInterface<G, T, 
 interface UAndPServiceInterface<G, T, H: ServicePayload>: ServiceInterface<G, T, H> {
     override val retrofit: Retrofit
         get() = RetrofitClient.getUAndPClient()
+}
+
+interface UAndPNoPlayerTokenServiceInterface<G, T, H: ServicePayload>: ServiceInterface<G, T, H> {
+    override val retrofit: Retrofit
+        get() = RetrofitClient.getUAndPNoPlayerTokenClient()
 }

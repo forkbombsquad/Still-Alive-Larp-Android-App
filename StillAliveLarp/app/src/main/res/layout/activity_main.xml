@@ -8,7 +8,7 @@
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".MainActivity">
+    tools:context=".views.startpage.MainActivity">
 
     <ScrollView
         android:layout_width="match_parent"

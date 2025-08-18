@@ -16,148 +16,136 @@
         android:theme="@style/Theme.StillAliveLarp"
         tools:targetApi="31">
         <activity
-            android:name=".ViewResearchProjectsActivity"
+            android:name=".views.account.admin.ManageCampFortificationsActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageResearchProjectsActivity"
+            android:name=".views.community.ViewCampStatusActivity"
             android:exported="false" />
         <activity
-            android:name=".OtherCharacterNativeSkillTreeActivity"
+            android:name=".views.shared.EventsListActivity"
             android:exported="false" />
         <activity
-            android:name=".AddEditGearFromBarcodeActivity"
+            android:name=".views.account.admin.AdminPanelActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineNPCListActivity"
+            android:name=".views.shared.ViewCharacterActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineNativeSkillTreeActivity"
+            android:name=".views.shared.ViewAwardsActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflinePersonalNativeSkillTreeActivity"
+            android:name=".views.shared.CharactersListActivity"
             android:exported="false" />
         <activity
-            android:name=".PersonalSkillTreeActivity"
+            android:name=".views.shared.SkillsListActivity"
             android:exported="false" />
         <activity
-            android:name=".NPCSkillListActivity"
+            android:name=".views.shared.ViewCharacterStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageNPCActivity"
+            android:name=".views.shared.ViewPlayerStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectNPCToManageActivity"
+            android:name=".views.shared.PlayersListActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewNPCStuffActivity"
+            android:name=".views.shared.ViewPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".NPCListActivity"
+            android:name=".views.community.ViewResearchProjectsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPlannedSkillActivity"
+            android:name=".views.account.admin.ManageResearchProjectsActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterPlannerSkillListActivity"
+            android:name=".views.account.admin.ManageNPCActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterPlannerActivity"
+            android:name=".views.shared.ViewNPCStuffActivity"
             android:exported="false" />
         <activity
-            android:name=".NativeSkillTreeActivity"
+            android:name=".views.shared.NPCListActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewEventAttendeesActivity"
+            android:name=".views.account.CharacterPlannerActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineViewAllSkillsActivity"
+            android:name=".views.shared.NativeSkillTreeActivity"
             android:exported="false" />
         <activity
-            android:name=".SAImageViewActivity"
+            android:name=".views.shared.PersonalNativeSkillTreeActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateEditFeatureFlagActivity"
+            android:name=".views.shared.PlannedCharacterPersonalNativeSkillTreeActivity"
             android:exported="false" />
         <activity
-            android:name=".RefundSkillsActivity"
+            android:name=".views.shared.OtherCharacterPersonalNativeSkillTreeActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectCharacterToRefundSkillsActivity"
+            android:name=".views.shared.NPCPersonalNativeSkillTreeActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileImageActivity"
+            android:name=".views.account.admin.ViewEventAttendeesActivity"
             android:exported="false" />
         <activity
-            android:name=".FeatureFlagManagementActivity"
+            android:name=".utils.SAImageViewActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewRulesActivity"
+            android:name=".views.account.admin.CreateEditFeatureFlagActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineViewGearActivity"
+            android:name=".views.account.admin.DeleteSkillsActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewGearActivity"
+            android:name=".views.account.EditProfileImageActivity"
             android:exported="false" />
         <activity
-            android:name=".AddEditGearActivity"
+            android:name=".views.account.admin.FeatureFlagManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageGearActivty"
+            android:name=".views.rules.ViewRulesActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectCharacterToManageGearActivity"
+            android:name=".views.shared.ViewGearActivity"
             android:exported="false" />
         <activity
-            android:name=".EditEventActivity"
+            android:name=".views.account.admin.AddEditGearActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageEventActivity"
+            android:name=".views.account.admin.ManageGearActivty"
             android:exported="false" />
         <activity
-            android:name=".CreateNewEventActivity"
+            android:name=".views.account.admin.EditEventActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectEventForEventManagementActivity"
+            android:name=".views.account.admin.ManageEventActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePlayerPasswordActivity"
+            android:name=".views.account.admin.CreateNewEventActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectPlayerToChangePassActivity"
+            android:name=".views.account.admin.ChangePlayerPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageIntrigueActivity"
+            android:name=".views.account.admin.ManageIntrigueActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectEventForIntrigueActivty"
+            android:name=".views.account.admin.CreateAnnouncementActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAnnouncementActivity"
+            android:name=".views.account.admin.AwardCharacterActivity"
             android:exported="false" />
         <activity
-            android:name=".AwardCharacterActivity"
+            android:name=".views.account.admin.AwardPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectCharacterToAwardActivity"
+            android:name=".views.account.admin.SelectSkillForClassXpReductionActivity"
             android:exported="false" />
         <activity
-            android:name=".AwardPlayerActivity"
+            android:name=".views.account.admin.CheckOutPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectPlayerToAwardActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectSkillForClassXpReductionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectCharacterForClassXpReductionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CheckOutPlayerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CheckInPlayerActivity"
+            android:name=".views.account.admin.CheckInPlayerActivity"
             android:exported="false" />
         <activity
             android:name=".utils.CaptureActivityPortrait"
@@ -166,83 +154,62 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".ContactDetailsActivity"
+            android:name=".views.account.admin.ContactDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactListActivity"
+            android:name=".views.account.admin.ContactListActivity"
             android:exported="false" />
         <activity
-            android:name=".ApproveBioActivity"
+            android:name=".views.account.admin.ApproveBioActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterBioListActivity"
+            android:name=".views.shared.XpReductionsListActivity"
             android:exported="false" />
         <activity
-            android:name=".SpecialClassXpReductionsActivity"
+            android:name=".views.account.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".views.account.ManageAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageAccountActivity"
+            android:name=".views.account.EditBioActivity"
             android:exported="false" />
         <activity
-            android:name=".EditBioActivity"
+            android:name=".views.shared.ViewBioActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineViewBioActivity"
+            android:name=".views.home.PreregActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewBioActivity"
+            android:name=".views.account.admin.ViewPreregsForEventActivity"
             android:exported="false" />
         <activity
-            android:name=".PreregActivity"
+            android:name=".utils.templates.ActivityTemplate"
             android:exported="false" />
         <activity
-            android:name=".ViewPreregsForEventActivity"
+            android:name=".views.home.CreateCharacterActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivityTemplate"
+            android:name=".views.home.CheckOutBarcodeActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectEventForPreregViewActivity"
+            android:name=".views.home.CheckInBarcodeActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateCharacterActivity"
+            android:name=".views.account.AddSkillActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckOutBarcodeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CheckInBarcodeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineViewSkillsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineCharacterStatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflinePlayerStatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OfflineMyAccountActivity"
-            android:exported="false" />
-        <activity
-            android:name=".tabbar_fragments.account.AddSkillActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
+            android:name=".views.home.HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".CreateAccountActivity"
+            android:name=".views.startpage.CreateAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactActivity"
+            android:name=".views.startpage.ContactActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".views.startpage.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

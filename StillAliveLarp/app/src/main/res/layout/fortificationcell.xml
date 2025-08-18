@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/customborder_lightgray">
+
+
+    <TextView
+        android:id="@+id/fc_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="Medium Fortification"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"/>
+
+    <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+        android:id="@+id/fc_health"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="Health Remaining"
+        app:value="10 / 10"/>
+
+</LinearLayout>

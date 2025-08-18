@@ -5,16 +5,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".FeatureFlagManagementActivity">
+    tools:context=".views.account.admin.FeatureFlagManagementActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/pulltorefresh_featureflagmanagement"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Feature Flag Management"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -23,40 +34,16 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Feature Flag Management"
-                    android:textStyle="bold"
-                    android:textSize="32sp"
-                    android:textAlignment="center"/>
-
                 <LinearLayout
+                    android:id="@+id/featureflagmanagement_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:orientation="vertical"/>
 
-                    <ProgressBar
-                        android:id="@+id/featureflagmanagement_loadingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
+            </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/featureflagmanagement_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
+        </LinearLayout> <!-- BEFORE THIS ONE-->
 
-                </LinearLayout>
-
-            </LinearLayout> <!-- BEFORE THIS ONE-->
-
-        </ScrollView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </ScrollView>
 
 </LinearLayout>

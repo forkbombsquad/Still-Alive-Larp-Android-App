@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".tabbar_fragments.RulesFragment">
+    tools:context=".views.rules.RulesFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,6 +20,7 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/rules_rulesTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -27,6 +28,11 @@
                 android:textStyle="bold"
                 android:textSize="32sp"
                 android:textAlignment="center"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                android:id="@+id/loadinglayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                 android:id="@+id/rules_skillListNav"
@@ -58,23 +64,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
                 app:text="Treating Wounds Flowchart"
-                app:showLoading="false"/>
-
-
-            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                android:id="@+id/rules_skillTreeDiagramNav"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                app:text="Skill Tree Diagram Image (Legacy)"
-                app:showLoading="false"/>
-
-            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-                android:id="@+id/rules_skillTreeDiagramDarkNav"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                app:text="Dark Skill Tree Diagram Image (Legacy)"
                 app:showLoading="false"/>
 
 

@@ -5,82 +5,134 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.addMinOne
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
 import java.io.Serializable
+import kotlin.math.max
 
-data class CharacterModifiedSkillModel(
-    var id: Int,
-    val xpCost: String,
-    val prestigeCost: String,
-    val name: String,
-    val description: String,
-    val minInfection: String,
-    val skillTypeId: String,
-    val skillCategoryId: String,
-    var prereqs: Array<FullSkillModel>,
-    var modXpCost: String,
-    var modInfCost: String
-) : Serializable {
+data class FullCharacterModifiedSkillModel(
+    private val skill: FullSkillModel,
+    private val charSkillModel: CharacterSkillModel?,
+    private val xpReduction: XpReductionModel?,
+    private val combatXpMod: Int,
+    private val professionXpMod: Int,
+    private val talentXpMod: Int,
+    private val inf50Mod: Int,
+    private val inf75Mod: Int
 
-    constructor(fsm: FullSkillModel, modXpCost: String, modInfCost: String): this(
-        fsm.id,
-        fsm.xpCost,
-        fsm.prestigeCost,
-        fsm.name,
-        fsm.description,
-        fsm.minInfection,
-        fsm.skillTypeId,
-        fsm.skillCategoryId,
-        fsm.prereqs,
-        modXpCost,
-        modInfCost
-    )
+): Serializable {
+
+    val id: Int
+        get() = skill.id
+    val name: String
+        get() = skill.name
+
+    val skillTypeId: Int
+        get() = skill.skillTypeId
+
+    val description: String
+        get() = skill.description
+
+    val category: SkillCategoryModel
+        get() = skill.category
+
+    fun isNew(event: FullEventModel): Boolean {
+        return purchaseDate()?.yyyyMMddtoDate()?.isAfter(event.date.yyyyMMddtoDate())?: true
+    }
+
+    fun purchaseDate(): String? {
+        return charSkillModel?.date
+    }
+
+    fun spentXp(): Int {
+        return charSkillModel?.xpSpent ?: 0
+    }
+
+    fun spentFt1s(): Int {
+        return charSkillModel?.fsSpent ?: 0
+    }
+
+    fun spentPp(): Int {
+        return charSkillModel?.ppSpent ?: 0
+    }
+
+    fun prestigeCost(): Int {
+        return skill.prestigeCost
+    }
+
+    fun hasXpReduction(): Boolean {
+        return xpReduction != null
+    }
+
+    fun getXpReductionModel(): XpReductionModel? {
+        return xpReduction
+    }
+
+    fun baseXpCost(): Int {
+        return skill.xpCost
+    }
+
+    fun baseInfectionCost(): Int {
+        return skill.minInfection
+    }
+
+    fun getRelevantSpecCostChange(): Int {
+        return when (skill.skillTypeId) {
+            Constants.SkillTypes.combat -> combatXpMod
+            Constants.SkillTypes.profession -> professionXpMod
+            Constants.SkillTypes.talent -> talentXpMod
+            else -> 0
+        }
+    }
+
+    fun modXpCost(): Int {
+        var baseCost = skill.xpCost
+        xpReduction.ifLet {
+            baseCost -= it.xpReduction.toInt()
+        }
+        baseCost += getRelevantSpecCostChange()
+        var max = 1
+        if (skill.xpCost == 0) {
+            max = 0
+        }
+        return max(max, baseCost)
+    }
+
+    fun modInfectionCost(): Int {
+        var baseCost = skill.minInfection
+        if (baseCost == 50) {
+            baseCost = inf50Mod
+        } else if (baseCost == 75) {
+            baseCost = inf75Mod
+        }
+
+        return max(0, baseCost)
+    }
 
     fun usesPrestige(): Boolean {
-        return prestigeCost.toInt() > 0
+        return prestigeCost() > 0
     }
 
     fun canUseFreeSkill(): Boolean {
-        return xpCost.toInt() == 1
+        // Free Skills may not be used on skills that have been reduced to 1 xp, ONLY skills that are naturally 1 xp
+        return skill.xpCost == 1
     }
 
     fun usesInfection(): Boolean {
-        return minInfection.toInt() > 0
+        return baseInfectionCost() > 0
     }
 
     fun hasModCost(): Boolean {
-        return xpCost.toInt() != modXpCost.toInt()
+        return modXpCost() != baseXpCost()
     }
 
     fun hasModInfCost(): Boolean {
-        return minInfection.toInt() != modInfCost.toInt()
-    }
-
-
-    fun getModCost(combatMod: Int, professionMod: Int, talentMod: Int, xpReductions: Array<XpReductionModel>): Int {
-        var cost = xpCost.toInt()
-        when(skillTypeId.toInt()) {
-            Constants.SkillTypes.combat -> cost = cost.addMinOne(combatMod)
-            Constants.SkillTypes.profession -> cost = cost.addMinOne(professionMod)
-            Constants.SkillTypes.talent -> cost = cost.addMinOne(talentMod)
-        }
-        xpReductions.forEach { reduction ->
-            if (reduction.skillId == this.id) {
-                cost = cost.addMinOne(-1 * reduction.xpReduction.toInt())
-            }
-        }
-        return cost
-    }
-
-    fun getInfModCost(inf50Mod: Int, inf75Mod: Int): Int {
-        when(minInfection.toInt()) {
-            50 -> return inf50Mod
-            75 -> return inf75Mod
-        }
-        return minInfection.toInt()
+        return modInfectionCost() != baseInfectionCost()
     }
 
     fun getTypeText(): String {
-        when(skillTypeId.toInt()) {
+        when (skill.skillTypeId) {
             Constants.SkillTypes.combat -> return "Combat"
             Constants.SkillTypes.profession -> return "Profession"
             Constants.SkillTypes.talent -> return "Talent"
@@ -88,9 +140,13 @@ data class CharacterModifiedSkillModel(
         return ""
     }
 
+    fun hasPrereqs(): Boolean {
+        return skill.prereqs.isNotEmpty()
+    }
+
     fun getPrereqNames(): String {
         var str = ""
-        prereqs.forEachIndexed{ index, prereq ->
+        skill.prereqs.forEachIndexed { index, prereq ->
             if (index > 0) {
                 str += "\n"
             }
@@ -102,178 +158,167 @@ data class CharacterModifiedSkillModel(
     fun includeInFilter(seachText: String, filterType: SkillFilterType): Boolean {
         val text = seachText.trim().lowercase()
         if (text.isNotEmpty()) {
-            if (!name.lowercase().contains(text) && !getTypeText().lowercase().contains(text) && !description.lowercase().contains(text) && !getPrereqNames().lowercase().contains(text)) {
+            if (!skill.name.lowercase().contains(text) &&
+                !getTypeText().lowercase().contains(text) &&
+                !skill.description.lowercase().contains(text) &&
+                !getPrereqNames().lowercase().contains(text) &&
+                !skill.category.name.lowercase().contains(text)
+            ) {
                 return false
             }
         }
         return when (filterType) {
             SkillFilterType.NONE -> true
-            SkillFilterType.COMBAT -> skillTypeId.toInt() == Constants.SkillTypes.combat
-            SkillFilterType.PROFESSION -> skillTypeId.toInt() == Constants.SkillTypes.profession
-            SkillFilterType.TALENT -> skillTypeId.toInt() == Constants.SkillTypes.talent
-            SkillFilterType.XP0 -> xpCost.toInt() == 0
-            SkillFilterType.XP1 -> xpCost.toInt() == 1
-            SkillFilterType.XP2 -> xpCost.toInt() == 2
-            SkillFilterType.XP3 -> xpCost.toInt() == 3
-            SkillFilterType.XP4 -> xpCost.toInt() == 4
-            SkillFilterType.PP -> prestigeCost.toInt() > 0
-            SkillFilterType.INF -> minInfection.toInt() > 0
+            SkillFilterType.COMBAT -> skill.skillTypeId == Constants.SkillTypes.combat
+            SkillFilterType.PROFESSION -> skill.skillTypeId == Constants.SkillTypes.profession
+            SkillFilterType.TALENT -> skill.skillTypeId == Constants.SkillTypes.talent
+            SkillFilterType.XP0 -> modXpCost() == 0
+            SkillFilterType.XP1 -> modXpCost() == 1
+            SkillFilterType.XP2 -> modXpCost() == 2
+            SkillFilterType.XP3 -> modXpCost() == 3
+            SkillFilterType.XP4 -> modXpCost() >= 4 // <-- Also show skills that cost higher than 4
+            SkillFilterType.PP -> prestigeCost() > 0
+            SkillFilterType.INF -> modInfectionCost() > 0
         }
     }
 
-    fun toFullSkillModel(): FullSkillModel {
-        return FullSkillModel(
-            id = id,
-            xpCost = xpCost,
-            prestigeCost = prestigeCost,
-            name = name,
-            description = description,
-            minInfection = minInfection,
-            skillTypeId = skillTypeId,
-            skillCategoryId = skillCategoryId,
-            prereqs = prereqs,
-            arrayOf()
-        )
+    fun prereqs(): List<SkillModel> {
+        return skill.prereqs
     }
+
+    fun postreqs(): List<SkillModel> {
+        return skill.postreqs
+    }
+
+//    fun hasSameCostPrereq(): Boolean {
+//        return  prereqs().firstOrNull { baseXpCost() == it.xpCost.toInt() } != null
+//    }
+
+    fun isPurchased(): Boolean {
+        return charSkillModel != null
+    }
+
+    fun getXpCostText(allowFreeSkillUse: Boolean = false): String {
+        var text = ""
+        var usedFreeSKill = false
+        charSkillModel.ifLet({ cs ->
+            // Already Purchased
+            text += "Already Purchased With:\n"
+            if (cs.fsSpent > 0) {
+                text += "${cs.fsSpent} Free Tier 1 Skill${(cs.fsSpent > 1).ternary("s", "")}"
+                usedFreeSKill = true
+            } else {
+                text += "${cs.xpSpent}xp"
+            }
+        }, {
+            // Not purchased yet
+            if (allowFreeSkillUse && canUseFreeSkill()) {
+                text += "1 Free Tier-1 Skill"
+                usedFreeSKill = true
+            } else {
+                text += "${modXpCost()}xp"
+            }
+        })
+
+        if (hasModCost() && !usedFreeSKill) {
+            text += " (changed from ${baseXpCost()}xp with:"
+            if (getRelevantSpecCostChange() != 0) {
+                text += " ${getRelevantSpecCostChange()} from ${getTypeText()} Specialization"
+            }
+            if (getRelevantSpecCostChange() != 0 && hasXpReduction()) {
+                text += " and"
+            }
+            if (hasXpReduction()) {
+                text += " ${xpReduction?.xpReduction?.toInt() ?: 0} from Special Class Xp Reductions"
+            }
+            text += ")"
+        }
+        return text
+    }
+
+    fun getInfCostText(): String {
+        var text = ""
+        text += "${modInfectionCost()}% Inf Threshold"
+        if (hasModInfCost()) {
+            text += " (changed from ${baseInfectionCost()}%)"
+        }
+        return text
+    }
+
+    fun getPrestigeCostText(): String {
+        var text = ""
+        charSkillModel.ifLet({ cs ->
+            text = "${cs.ppSpent}pp"
+        }, {
+            text = "${prestigeCost()}pp"
+        })
+        return text
+    }
+
+    fun getFullCostText(): String {
+        var text = ""
+        charSkillModel.ifLet({ cs ->
+            // Already Purchased
+            text += getXpCostText()
+            if (cs.ppSpent > 0) {
+                text += "\n"
+                text += getPrestigeCostText()
+            }
+        }, {
+            // Not purchased yet
+            text += getXpCostText()
+            if (baseInfectionCost() > 0) {
+                text += "\n"
+                text += getInfCostText()
+            }
+            if (usesPrestige()) {
+                text += "\n"
+                text += getPrestigeCostText()
+            }
+        })
+        return text
+    }
+
 }
 
 data class FullSkillModel(
     val id: Int,
-    val xpCost: String,
-    val prestigeCost: String,
+    val xpCost: Int,
+    val prestigeCost: Int,
     val name: String,
     val description: String,
-    val minInfection: String,
-    val skillTypeId: String,
-    val skillCategoryId: String,
-    var prereqs: Array<FullSkillModel>,
-    var postreqs: Array<Int>
-) : Serializable {
-
-    constructor(skillModel: SkillModel): this(
+    val minInfection: Int,
+    val skillTypeId: Int,
+    val skillCategoryId: Int,
+    val prereqs: List<SkillModel>,
+    val postreqs: List<SkillModel>,
+    val category: SkillCategoryModel
+): Serializable {
+    constructor(skillModel: SkillModel, prereqs: List<SkillModel>, postreqs: List<SkillModel>, category: SkillCategoryModel): this(
         skillModel.id,
-        skillModel.xpCost,
-        skillModel.prestigeCost,
+        skillModel.xpCost.toInt(),
+        skillModel.prestigeCost.toInt(),
         skillModel.name,
         skillModel.description,
-        skillModel.minInfection,
-        skillModel.skillTypeId,
-        skillModel.skillCategoryId,
-        arrayOf(),
-        arrayOf()
+        skillModel.minInfection.toInt(),
+        skillModel.skillTypeId.toInt(),
+        skillModel.skillCategoryId.toInt(),
+        prereqs,
+        postreqs,
+        category
     )
 
-    constructor(skillModel: CharacterModifiedSkillModel): this(
-        skillModel.id,
-        skillModel.xpCost,
-        skillModel.prestigeCost,
-        skillModel.name,
-        skillModel.description,
-        skillModel.minInfection,
-        skillModel.skillTypeId,
-        skillModel.skillCategoryId,
-        arrayOf(),
-        arrayOf()
-    )
-
-    fun getModCost(combatMod: Int, professionMod: Int, talentMod: Int, xpReductions: Array<XpReductionModel>): Int {
-        var cost = xpCost.toInt()
-        when(skillTypeId.toInt()) {
-            Constants.SkillTypes.combat -> {
-                if (cost > 0 || combatMod > 0) {
-                    cost = cost.addMinOne(combatMod)
-                }
-            }
-            Constants.SkillTypes.profession -> {
-                if (cost > 0 || professionMod > 0) {
-                    cost = cost.addMinOne(professionMod)
-                }
-            }
-            Constants.SkillTypes.talent -> {
-                if (cost > 0 || talentMod > 0) {
-                    cost = cost.addMinOne(talentMod)
-                }
-            }
-        }
-        xpReductions.forEach { reduction ->
-            if (reduction.skillId == this.id) {
-                cost = cost.addMinOne(-1 * reduction.xpReduction.toInt())
-            }
-        }
-        return cost
-    }
-
-    fun getModCost(combatMod: Int, professionMod: Int, talentMod: Int, xpReduction: XpReductionModel): Int {
-        var cost = xpCost.toInt()
-        when(skillTypeId.toInt()) {
-            Constants.SkillTypes.combat -> {
-                if (cost > 0 || combatMod > 0) {
-                    cost = cost.addMinOne(combatMod)
-                }
-            }
-            Constants.SkillTypes.profession -> {
-                if (cost > 0 || professionMod > 0) {
-                    cost = cost.addMinOne(professionMod)
-                }
-            }
-            Constants.SkillTypes.talent -> {
-                if (cost > 0 || talentMod > 0) {
-                    cost = cost.addMinOne(talentMod)
-                }
-            }
-        }
-        if (xpReduction.skillId == this.id) {
-            cost = cost.addMinOne(-1 * xpReduction.xpReduction.toInt())
-        }
-        return cost
-    }
-
-    fun getInfModCost(inf50Mod: Int, inf75Mod: Int): Int {
-        when(minInfection.toInt()) {
-            50 -> return inf50Mod
-            75 -> return inf75Mod
-        }
-        return minInfection.toInt()
+    fun fullCharacterModifiedSkillModel(): FullCharacterModifiedSkillModel {
+        return FullCharacterModifiedSkillModel(this, null, null, 0, 0, 0, 50, 75)
     }
 
     fun getTypeText(): String {
-        when(skillTypeId.toInt()) {
+        when(skillTypeId) {
             Constants.SkillTypes.combat -> return "Combat"
             Constants.SkillTypes.profession -> return "Profession"
             Constants.SkillTypes.talent -> return "Talent"
         }
         return ""
-    }
-
-    fun getFullCostText(purchaseableSkills: List<CharacterModifiedSkillModel>): String {
-        var text = ""
-        val pskill = purchaseableSkills.firstOrNull { it.id == id }
-        if (pskill != null) {
-            if (pskill.hasModCost()) {
-                text += "${pskill.modXpCost}xp (usual cost: ${xpCost}xp)"
-            } else {
-                text += "${xpCost}xp"
-            }
-
-            if (pskill.hasModInfCost() && minInfection.toInt() > 0) {
-                text += " | ${pskill.modInfCost}% Inf Threshold (usual threshold: ${minInfection}%)"
-            } else if(minInfection.toInt() > 0) {
-                text += " | ${minInfection}% Inf Threshold"
-            }
-
-            if (prestigeCost.toInt() > 0) {
-                text += " | ${prestigeCost}pp"
-            }
-        } else {
-            text += "${xpCost}xp"
-            if (minInfection.toInt() > 0) {
-                text += " | ${minInfection}% Inf Threshold"
-            }
-            if (prestigeCost.toInt() > 0) {
-                text += " | ${prestigeCost}pp"
-            }
-        }
-        return text
     }
 
     fun getPrereqNames(): String {
@@ -289,7 +334,7 @@ data class FullSkillModel(
 
     fun hasSameCostPrereq(): Boolean {
         prereqs.forEach {
-            if (it.xpCost == xpCost) { return true }
+            if (it.xpCost.toInt() == xpCost) { return true }
         }
         return false
     }
@@ -303,18 +348,33 @@ data class FullSkillModel(
         }
         return when (filterType) {
             SkillFilterType.NONE -> true
-            SkillFilterType.COMBAT -> skillTypeId.toInt() == Constants.SkillTypes.combat
-            SkillFilterType.PROFESSION -> skillTypeId.toInt() == Constants.SkillTypes.profession
-            SkillFilterType.TALENT -> skillTypeId.toInt() == Constants.SkillTypes.talent
-            SkillFilterType.XP0 -> xpCost.toInt() == 0
-            SkillFilterType.XP1 -> xpCost.toInt() == 1
-            SkillFilterType.XP2 -> xpCost.toInt() == 2
-            SkillFilterType.XP3 -> xpCost.toInt() == 3
-            SkillFilterType.XP4 -> xpCost.toInt() == 4
-            SkillFilterType.PP -> prestigeCost.toInt() > 0
-            SkillFilterType.INF -> minInfection.toInt() > 0
+            SkillFilterType.COMBAT -> skillTypeId == Constants.SkillTypes.combat
+            SkillFilterType.PROFESSION -> skillTypeId == Constants.SkillTypes.profession
+            SkillFilterType.TALENT -> skillTypeId == Constants.SkillTypes.talent
+            SkillFilterType.XP0 -> xpCost == 0
+            SkillFilterType.XP1 -> xpCost == 1
+            SkillFilterType.XP2 -> xpCost == 2
+            SkillFilterType.XP3 -> xpCost == 3
+            SkillFilterType.XP4 -> xpCost == 4
+            SkillFilterType.PP -> prestigeCost > 0
+            SkillFilterType.INF -> minInfection > 0
         }
     }
+
+    fun getFullCostText(): String {
+        var text = ""
+        text += "${xpCost}xp"
+        if (minInfection > 0) {
+            text += "\n"
+            text += "${minInfection}% Inf Threshold"
+        }
+        if (prestigeCost > 0) {
+            text += "\n"
+            text += "${prestigeCost}pp"
+        }
+        return text
+    }
+
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -328,14 +388,6 @@ data class SkillModel(
     @JsonProperty("skillTypeId") val skillTypeId: String,
     @JsonProperty("skillCategoryId") val skillCategoryId: String
 ) : Serializable
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class SkillBarcodeModel(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("name") val name: String
-) : Serializable {
-    constructor(fullSkillModel: FullSkillModel): this(fullSkillModel.id, fullSkillModel.name)
-}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class SkillListModel(

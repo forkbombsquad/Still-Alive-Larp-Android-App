@@ -1,6 +1,7 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 class Constants {
+
     class CharacterTypeId {
         companion object {
             const val standard = 1
@@ -18,7 +19,7 @@ class Constants {
 
     class Logging {
         companion object {
-            // TODO ALWAYS - set these to false before release
+            // TODO ROUTINE - set these to false before release
             const val showLogging = false
             const val showTestLogging = false
             const val showDebugButtonInAccountView = false
@@ -30,15 +31,6 @@ class Constants {
             const val combat = 1
             const val profession = 2
             const val talent = 3
-        }
-    }
-
-    class CharacterTypes {
-        companion object {
-            const val standard = 1
-            const val NPC = 2
-            const val Planner = 3
-            const val Hidden = 4
         }
     }
 

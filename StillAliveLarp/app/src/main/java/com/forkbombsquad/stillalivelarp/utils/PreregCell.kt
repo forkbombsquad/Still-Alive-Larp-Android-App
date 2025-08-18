@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+
 import com.forkbombsquad.stillalivelarp.services.models.EventPreregModel
 import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 
@@ -23,11 +24,8 @@ class PreregCell(context: Context): LinearLayout(context) {
     }
 
     fun set(eventPrereg: EventPreregModel) {
-        val players = DataManager.shared.allPlayers ?: listOf()
-        val chars = DataManager.shared.allCharacters ?: listOf()
-
-        playerName.set(players.firstOrNull { it.id == eventPrereg.playerId }?.fullName ?: "")
-        charName.set(chars.firstOrNull { it.id == eventPrereg.getCharId() }?.fullName ?: "NPC")
+        playerName.set(DataManager.shared.players.first { it.id == eventPrereg.playerId }.fullName)
+        charName.set(DataManager.shared.getAllCharacters().firstOrNull { it.id == eventPrereg.getCharId() }?.fullName ?: "NPC")
         charName.isGone = eventPrereg.eventRegType() == EventRegType.NOT_PREREGED
         regType.set(eventPrereg.eventRegType().getAttendingText())
     }

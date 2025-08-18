@@ -6,7 +6,7 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:background="@color/light_gray"
-tools:context=".ManageEventActivity">
+tools:context=".views.account.admin.ManageEventActivity">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -20,6 +20,7 @@ tools:context=".ManageEventActivity">
         android:paddingRight="16dp">
 
         <TextView
+            android:id="@+id/manageevent_viewtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

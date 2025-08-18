@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".RefundSkillsActivity">
+    tools:context=".views.account.admin.DeleteSkillsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,21 +28,16 @@
                 android:textSize="32sp"
                 android:textAlignment="center"/>
 
-            <LinearLayout
+            <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
+                android:id="@+id/loadinglayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ProgressBar
-                    android:id="@+id/refundskills_progressbar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-                <LinearLayout
-                    android:id="@+id/refundskills_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/refundskills_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
         </LinearLayout> <!-- BEFORE THIS ONE-->
 

@@ -21,9 +21,6 @@ fun Boolean.ternary(value: Boolean, otherwise: Boolean): Boolean {
     return otherwise
 }
 
-fun <T> Boolean.ternary(value: T?, otherwise: T?): T? {
-    if (this) {
-        return value
-    }
-    return otherwise
+fun <T> Boolean.ternary(value: T, otherwise: T): T {
+    return if (this) value else otherwise
 }

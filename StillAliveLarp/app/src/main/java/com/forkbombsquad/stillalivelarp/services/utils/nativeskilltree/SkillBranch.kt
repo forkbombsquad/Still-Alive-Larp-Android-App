@@ -1,22 +1,22 @@
 package com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree
 
-import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 
-class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>, categoryId: Int) {
+class SkillBranch(skills: List<FullCharacterModifiedSkillModel>, allSkills: List<FullCharacterModifiedSkillModel>, categoryId: Int) {
 
     val categoryId: Int
-    val allSkills: List<FullSkillModel>
-    val skills: List<FullSkillModel>
+    val allSkills: List<FullCharacterModifiedSkillModel>
+    val skills: List<FullCharacterModifiedSkillModel>
     var width: Int
-    val grid: MutableList<MutableList<FullSkillModel?>>
+    val grid: MutableList<MutableList<FullCharacterModifiedSkillModel?>>
 
     init {
         this.categoryId = categoryId
         this.allSkills = allSkills
-        this.skills = skills.sortedBy { it.xpCost.toInt() }
+        this.skills = skills.sortedBy { it.baseXpCost() }
         val counts = arrayOf(0, 0, 0, 0, 0)
         skills.forEach {
-            counts[it.xpCost.toInt()] += 1
+            counts[it.baseXpCost()] += 1
         }
         width = counts.max()
         grid = mutableListOf()
@@ -24,7 +24,7 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
     }
 
     private fun organziePlacementGrid() {
-        if (skills.firstOrNull { it.xpCost.toInt() == 0 } != null) {
+        if (skills.firstOrNull { it.baseXpCost() == 0 } != null) {
             // Free Skills
             grid.add(mutableListOf())
             grid.add(mutableListOf())
@@ -55,11 +55,11 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         }
     }
 
-    private fun addSkillRec(skill: FullSkillModel?, previousCost: Int) {
+    private fun addSkillRec(skill: FullCharacterModifiedSkillModel?, previousCost: Int) {
         if (skill != null) {
             if (skillInGrid(skill)) { return }
-            if (skill.skillCategoryId.toInt() != categoryId) { return }
-            val cost = skill.xpCost.toInt()
+            if (skill.category.id != categoryId) { return }
+            val cost = skill.baseXpCost()
             grid[cost - 1].add(skill)
 
             // Add null spaces if there's a jump in the grid (i.e. a skill leads to another skill that skips a tier)
@@ -71,14 +71,14 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
                 }
             }
 
-            skill.postreqs.forEach { postreqId ->
-                val postreq = getSkill(postreqId)
-                addSkillRec(postreq, cost)
+            skill.postreqs().forEach { postreq ->
+                val pr = getSkill(postreq.id)
+                addSkillRec(pr, cost)
             }
         }
     }
 
-    fun skillInGrid(skill: FullSkillModel): Boolean {
+    fun skillInGrid(skill: FullCharacterModifiedSkillModel): Boolean {
         grid.forEach {
             if (it.firstOrNull { sk -> sk?.id == skill.id } != null) {
                 return true
@@ -87,8 +87,8 @@ class SkillBranch(skills: List<FullSkillModel>, allSkills: List<FullSkillModel>,
         return false
     }
 
-    fun getSkill(skillId: Int): FullSkillModel? {
-        return allSkills.firstOrNull() { it.id == skillId }
+    fun getSkill(skillId: Int): FullCharacterModifiedSkillModel? {
+        return allSkills.firstOrNull { it.id == skillId }
     }
 
     fun prettyPrintGrid(): String {

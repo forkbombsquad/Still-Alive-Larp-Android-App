@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".views.shared.ViewCharacterStatsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/charstats_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Character Stats"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Name"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Player"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_startdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Start Date"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_numEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Events Attended"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_infection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Infection Rating"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_bullets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:key="Bullets"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_megas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Megas"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_rivals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Rivals"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_rockets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Rockets"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_bulletCasings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:key="Bullet Casings"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_cloth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Cloth Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_wood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Wood Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_metal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Metal Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_tech"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Tech Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_medical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Medical Supplies"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_numSkills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Skills"
+                app:value="55\n12 Combat\n16 Talent\n27 Profession"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_spentXp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Xp"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_spentFt1s"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Free Tier-1 Skills"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_spentPp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Prestige Points"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_armor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:key="Armor"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_mysteriousStranger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Mysterious Stranger Uses Remaining"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_unshakableResolve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:key="Unshakable Resolve Uses Remaining"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/charstats_charId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="32dp"
+                app:key="CharacterId"
+                app:showDiv="false"/>
+
+        </LinearLayout> <!-- BEFORE THIS ONE-->
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.forkbombsquad.stillalivelarp.services
 
 import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
+import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillListModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestListModel
@@ -79,13 +80,8 @@ interface UpdateCharacterRequest {
 }
 
 interface UpdateContactRequestRequest {
-    @HTTP(method ="PUT", path = "contact/update/", hasBody = true)
+    @HTTP(method = "PUT", path = "contact/update/", hasBody = true)
     suspend fun makeRequest(@Body characterSkill: RequestBody): Response<ContactRequestModel>
-}
-
-interface GetAllContactRequestsRequest {
-    @HTTP(method ="GET", path = "contact/all/")
-    suspend fun makeRequest(): Response<ContactRequestListModel>
 }
 
 interface UpdatePAdminRequest {
@@ -101,11 +97,6 @@ interface CreateIntrigueRequest {
 interface UpdateIntrigueRequest {
     @HTTP(method ="PUT", path = "intrigue/update/", hasBody = true)
     suspend fun makeRequest(@Body intrigue: RequestBody): Response<IntrigueModel>
-}
-
-interface GetAllIntriguesRequest {
-    @HTTP(method ="GET", path = "intrigue/all/")
-    suspend fun makeRequest(): Response<IntrigueListModel>
 }
 
 interface UpdatePlayerRequest {
@@ -148,11 +139,6 @@ interface DeleteFeatureFlagRequest {
     suspend fun makeRequest(@Path("flagId") flagId: Int): Response<FeatureFlagModel>
 }
 
-interface DeleteCharacterSkillRequest {
-    @HTTP(method ="DELETE", path = "char-skill/delete-skill/{playerId}/{charId}/{skillId}", hasBody = false)
-    suspend fun makeRequest(@Path("playerId") playerId: Int, @Path("charId") characterId: Int, @Path("skillId") skillId: Int): Response<CharacterSkillListModel>
-}
-
 interface CreateResearchProjectRequest {
     @HTTP(method ="POST", path = "research-project/create/", hasBody = true)
     suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
@@ -161,6 +147,11 @@ interface CreateResearchProjectRequest {
 interface UpdateResearchProjectRequest {
     @HTTP(method = "PUT", path = "research-project/update/", hasBody = true)
     suspend fun makeRequest(@Body researchProject: RequestBody): Response<ResearchProjectModel>
+}
+
+interface UpdateCampStatusRequest {
+    @HTTP(method = "PUT", path = "camp-status/update/", hasBody = true)
+    suspend fun makeRequest(@Body campStatus: RequestBody): Response<CampStatusModel>
 }
 
 
@@ -265,15 +256,6 @@ class AdminService {
         }
     }
 
-    class GetAllContactRequests: UAndPServiceInterface<GetAllContactRequestsRequest, ContactRequestListModel, ServicePayload> {
-        override val request: GetAllContactRequestsRequest
-            get() = retrofit.create(GetAllContactRequestsRequest::class.java)
-
-        override suspend fun getResponse(payload: ServicePayload): Response<ContactRequestListModel> {
-            return request.makeRequest()
-        }
-    }
-
     class UpdatePAdmin: UAndPServiceInterface<UpdatePAdminRequest, PlayerModel, UpdatePSP> {
         override val request: UpdatePAdminRequest
             get() = retrofit.create(UpdatePAdminRequest::class.java)
@@ -300,15 +282,6 @@ class AdminService {
 
         override suspend fun getResponse(payload: UpdateModelSP): Response<IntrigueModel> {
             return request.makeRequest(payload.model())
-        }
-    }
-
-    class GetAllIntrigues: UAndPServiceInterface<GetAllIntriguesRequest, IntrigueListModel, ServicePayload> {
-        override val request: GetAllIntriguesRequest
-            get() = retrofit.create(GetAllIntriguesRequest::class.java)
-
-        override suspend fun getResponse(payload: ServicePayload): Response<IntrigueListModel> {
-            return request.makeRequest()
         }
     }
 
@@ -391,15 +364,6 @@ class AdminService {
         }
     }
 
-    class DeleteCharacterSkill: UAndPServiceInterface<DeleteCharacterSkillRequest, CharacterSkillListModel, RefundSkillSP> {
-        override val request: DeleteCharacterSkillRequest
-            get() = retrofit.create(DeleteCharacterSkillRequest::class.java)
-
-        override suspend fun getResponse(payload: RefundSkillSP): Response<CharacterSkillListModel> {
-            return request.makeRequest(payload.playerId(), payload.characterId(), payload.skillId())
-        }
-    }
-
     class CreateResearchProject:
         UAndPServiceInterface<CreateResearchProjectRequest, ResearchProjectModel, CreateModelSP> {
         override val request: CreateResearchProjectRequest
@@ -416,6 +380,16 @@ class AdminService {
             get() = retrofit.create(UpdateResearchProjectRequest::class.java)
 
         override suspend fun getResponse(payload: UpdateModelSP): Response<ResearchProjectModel> {
+            return request.makeRequest(payload.model())
+        }
+    }
+
+    class UpdateCampStatus:
+        UAndPServiceInterface<UpdateCampStatusRequest, CampStatusModel, UpdateModelSP> {
+        override val request: UpdateCampStatusRequest
+            get() = retrofit.create(UpdateCampStatusRequest::class.java)
+
+        override suspend fun getResponse(payload: UpdateModelSP): Response<CampStatusModel> {
             return request.makeRequest(payload.model())
         }
     }

@@ -4,12 +4,13 @@ import com.forkbombsquad.stillalivelarp.services.models.OAuthTokenModel
 import com.forkbombsquad.stillalivelarp.services.utils.ServicePayload
 import com.forkbombsquad.stillalivelarp.services.utils.ServiceUtils
 import com.forkbombsquad.stillalivelarp.services.utils.TokenServiceInterface
+import com.forkbombsquad.stillalivelarp.services.utils.UAndPNoPlayerTokenServiceInterface
+import com.forkbombsquad.stillalivelarp.services.utils.UAndPServiceInterface
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Headers
 import retrofit2.http.POST
-
 
 interface AuthTokenRequest {
     @FormUrlEncoded
@@ -20,6 +21,14 @@ interface AuthTokenRequest {
     suspend fun getAuthToken(@Field("username") username: String, @Field("password") password: String): Response<OAuthTokenModel>
 }
 
+interface AuthPlayerTokenRequest {
+    @Headers(
+        "accept: application/json"
+    )
+    @POST("auth/get_player_token")
+    suspend fun getAuthPlayerToken(): Response<OAuthTokenModel>
+}
+
 class AuthService: TokenServiceInterface<AuthTokenRequest, OAuthTokenModel, ServicePayload> {
 
     override val request: AuthTokenRequest
@@ -27,6 +36,18 @@ class AuthService: TokenServiceInterface<AuthTokenRequest, OAuthTokenModel, Serv
 
     override suspend fun getResponse(payload: ServicePayload): Response<OAuthTokenModel> {
         return request.getAuthToken(ServiceUtils.user, ServiceUtils.pass)
+    }
+
+}
+
+class PlayerAuthService:
+    UAndPNoPlayerTokenServiceInterface<AuthPlayerTokenRequest, OAuthTokenModel, ServicePayload> {
+
+    override val request: AuthPlayerTokenRequest
+        get() = retrofit.create(AuthPlayerTokenRequest::class.java)
+
+    override suspend fun getResponse(payload: ServicePayload): Response<OAuthTokenModel> {
+        return request.getAuthPlayerToken()
     }
 
 }

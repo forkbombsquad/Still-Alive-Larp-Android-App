@@ -37,6 +37,11 @@ interface GetAllCharactersRequest {
     suspend fun makeRequest(): Response<CharacterListFullModel>
 }
 
+interface GetAllFullCharactersRequest {
+    @HTTP(method ="GET", path = "characters/all/")
+    suspend fun makeRequest(): Response<CharacterListFullModel>
+}
+
 interface GetAllNPCCharactersRequest {
     @HTTP(method ="GET", path = "characters/all_with_type/${Constants.CharacterTypeId.NPC}")
     suspend fun makeRequest(): Response<CharacterListFullModel>
@@ -60,6 +65,11 @@ interface UpdateCharacterBioRequest {
 interface DeleteCharactersRequest {
     @HTTP(method ="DELETE", path = "characters/delete/")
     suspend fun makeRequest(): Response<CharacterListFullModel>
+}
+
+interface DeleteCharacterRequest {
+    @HTTP(method ="DELETE", path = "characters/delete/{characterId}")
+    suspend fun makeRequest(@Path("characterId") characterId: Int): Response<CharacterModel>
 }
 
 
@@ -94,6 +104,15 @@ class CharacterService {
     class GetAllCharacters: UAndPServiceInterface<GetAllCharactersRequest, CharacterListFullModel, ServicePayload> {
         override val request: GetAllCharactersRequest
             get() = retrofit.create(GetAllCharactersRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
+            return request.makeRequest()
+        }
+    }
+
+    class GetAllFullCharacters: UAndPServiceInterface<GetAllFullCharactersRequest, CharacterListFullModel, ServicePayload> {
+        override val request: GetAllFullCharactersRequest
+            get() = retrofit.create(GetAllFullCharactersRequest::class.java)
 
         override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
             return request.makeRequest()
@@ -142,6 +161,15 @@ class CharacterService {
 
         override suspend fun getResponse(payload: ServicePayload): Response<CharacterListFullModel> {
             return request.makeRequest()
+        }
+    }
+
+    class DeleteCharacter: UAndPServiceInterface<DeleteCharacterRequest, CharacterModel, IdSP> {
+        override val request: DeleteCharacterRequest
+            get() = retrofit.create(DeleteCharacterRequest::class.java)
+
+        override suspend fun getResponse(payload: IdSP): Response<CharacterModel> {
+            return request.makeRequest(payload.id())
         }
     }
 }

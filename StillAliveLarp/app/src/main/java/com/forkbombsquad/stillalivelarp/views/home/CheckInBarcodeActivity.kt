@@ -1,0 +1,59 @@
+package com.forkbombsquad.stillalivelarp.views.home
+
+import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isGone
+import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
+
+import com.forkbombsquad.stillalivelarp.utils.BarcodeGenerator
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
+import com.forkbombsquad.stillalivelarp.utils.ifLet
+
+class CheckInBarcodeActivity : NoStatusBarActivity() {
+
+    private lateinit var title: TextView
+    private lateinit var kvView: KeyValueView
+    private lateinit var image: ImageView
+
+    private lateinit var barcode: CheckInOutBarcodeModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_check_in_barcode)
+        setupView()
+    }
+
+    private fun setupView() {
+        title = findViewById(R.id.checkinbarcode_title)
+        kvView = findViewById(R.id.checkinbarcode_keyvalueview)
+        image = findViewById(R.id.checkinbarcode_image)
+        barcode = DataManager.shared.getPassedData(HomeFragment::class, DataManagerPassedDataKey.BARCODE)!!
+        buildView()
+    }
+
+    private fun buildView() {
+        val player = DataManager.shared.players.firstOrNull { it.id == barcode.playerId }
+        val character = DataManager.shared.getCharacter(barcode.characterId ?: -1)
+        player.ifLet({
+            kvView.isGone = false
+            image.isGone = false
+
+            title.text = "Check In\n${it.fullName}"
+            kvView.set("Checking In As ", character?.fullName ?: "NPC")
+            image.setImageBitmap(BarcodeGenerator.generateCheckInBarcode(barcode))
+        }, {
+            title.text = "Error Generating Barcode"
+            kvView.isGone = true
+            image.isGone = true
+        })
+    }
+
+    override fun onBackPressed() {
+        DataManager.shared.callUpdateCallback(HomeFragment::class)
+        super.onBackPressed()
+    }
+}

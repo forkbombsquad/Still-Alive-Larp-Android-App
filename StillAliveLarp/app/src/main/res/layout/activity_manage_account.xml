@@ -6,7 +6,7 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:background="@color/light_gray"
-tools:context=".ManageAccountActivity">
+tools:context=".views.account.ManageAccountActivity">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -35,6 +35,15 @@ tools:context=".ManageAccountActivity">
             android:layout_marginTop="16dp"
             app:text="Change Password"
             app:showLoading="false"/>
+
+
+        <com.forkbombsquad.stillalivelarp.utils.LoadingButton
+            android:id="@+id/manageaccount_deleteLocalData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:buttontext="Delete Local data"
+            />
 
         <com.forkbombsquad.stillalivelarp.utils.LoadingButton
             android:id="@+id/manageaccount_deleteAccount"

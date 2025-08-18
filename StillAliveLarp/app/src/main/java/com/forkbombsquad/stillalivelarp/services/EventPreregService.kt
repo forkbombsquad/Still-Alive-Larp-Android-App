@@ -18,6 +18,11 @@ interface GetPreregsForEventRequest {
     suspend fun makeRequest(@Path("eventId") eventId: Int): Response<EventPreregListModel>
 }
 
+interface GetAllPreregsRequest {
+    @HTTP(method ="GET", path = "prereg/all/")
+    suspend fun makeRequest(): Response<EventPreregListModel>
+}
+
 interface UpdatePreregRequest {
     @HTTP(method ="PUT", path = "prereg/update/", hasBody = true)
     suspend fun makeRequest(@Body preregModel: RequestBody): Response<EventPreregModel>
@@ -41,6 +46,16 @@ class EventPreregService {
 
         override suspend fun getResponse(payload: IdSP): Response<EventPreregListModel> {
             return request.makeRequest(payload.id())
+        }
+    }
+
+    class GetAllPreregs:
+        UAndPServiceInterface<GetAllPreregsRequest, EventPreregListModel, ServicePayload> {
+        override val request: GetAllPreregsRequest
+            get() = retrofit.create(GetAllPreregsRequest::class.java)
+
+        override suspend fun getResponse(payload: ServicePayload): Response<EventPreregListModel> {
+            return request.makeRequest()
         }
     }
 

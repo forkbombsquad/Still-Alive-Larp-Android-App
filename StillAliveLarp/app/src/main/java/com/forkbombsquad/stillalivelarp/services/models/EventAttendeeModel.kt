@@ -11,7 +11,8 @@ data class EventAttendeeModel(
     @JsonProperty("characterId") val characterId: Int?,
     @JsonProperty("eventId") val eventId: Int,
     @JsonProperty("isCheckedIn") val isCheckedIn: String,
-    @JsonProperty("asNpc") val asNpc: String
+    @JsonProperty("asNpc") val asNpc: String,
+    @JsonProperty("npcId") val npcId: Int
 ) : Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,7 +21,8 @@ data class EventAttendeeCreateModel(
     @JsonProperty("characterId") val characterId: Int? = null,
     @JsonProperty("eventId") val eventId: Int,
     @JsonProperty("isCheckedIn") val isCheckedIn: String,
-    @JsonProperty("asNpc") val asNpc: String
+    @JsonProperty("asNpc") val asNpc: String,
+    @JsonProperty("npcId") val npcId: Int
 ) : Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)

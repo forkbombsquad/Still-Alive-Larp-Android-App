@@ -17,10 +17,10 @@ fun Int.equalsAnyOf(array: IntArray): Boolean {
 }
 
 fun Int.equalsAnyOf(array: Array<Int>): Boolean {
-    array.forEach {
-        if (it == this) {
-            return true
-        }
-    }
-    return false
+    return this in array
 }
+
+fun Int.equalsAnyOf(list: List<Int>): Boolean {
+    return list.contains(this)
+}
+

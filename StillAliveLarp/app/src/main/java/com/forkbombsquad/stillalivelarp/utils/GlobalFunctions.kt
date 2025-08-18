@@ -5,13 +5,12 @@ import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import com.forkbombsquad.stillalivelarp.services.managers.CharacterManager
+import androidx.fragment.app.Fragment
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
-import com.forkbombsquad.stillalivelarp.services.managers.PlayerManager
-import com.forkbombsquad.stillalivelarp.services.managers.SharedPrefsManager
-import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
+import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 import com.google.gson.Gson
-import java.lang.reflect.Type
+import com.google.gson.reflect.TypeToken
+import kotlin.reflect.KClass
 
 fun globalPrint(message: String) {
     if (Constants.Logging.showLogging) {
@@ -25,8 +24,8 @@ fun globalTestPrint(message: Any) {
     }
 }
 
-fun globalGetContext(): Context {
-    return StillAliveLarpApplication.context
+fun globalGetContext(): Context? {
+    return StillAliveLarpApplication.currentActivty
 }
 
 fun globalToJson(model: Any): String {
@@ -37,14 +36,8 @@ fun globalToJson(model: Any): String {
 inline fun <reified T> globalFromJson(json: String): T? {
     val gson = Gson()
     return tryOptional {
-        return gson.fromJson(json, T::class.java)
-    }
-}
-
-inline fun <reified T> globalFromJson(json: String, typeToken: Type): T? {
-    val gson = Gson()
-    return tryOptional {
-        return gson.fromJson<T>(json, typeToken)
+        val type = object : TypeToken<T>() {}.type
+        gson.fromJson<T>(json, type)
     }
 }
 
@@ -71,10 +64,26 @@ fun globalCopyToClipboard(context: Context, string: String) {
     Toast.makeText(context, "Text copied to clipboard!", Toast.LENGTH_SHORT).show()
 }
 
-fun globalForceResetAllPlayerData(context: Context) {
+fun getFragmentOrActivityName(kClass: KClass<*>): String {
+    return when {
+        Fragment::class.java.isAssignableFrom(kClass.java) ->
+            kClass.simpleName ?: "UnnamedFragment"
+        NoStatusBarActivity::class.java.isAssignableFrom(kClass.java) ->
+            kClass.simpleName ?: "UnnamedActivity"
+        else -> "UnknownComponent"
+    }
+}
+fun globalForceResetAllPlayerData() {
     DataManager.forceReset()
-    SharedPrefsManager.shared.clearAll(context)
-    UserAndPassManager.shared.clear(context)
-    PlayerManager.shared.forceReset()
-    CharacterManager.shared.forceReset()
+    LocalDataManager.clearAllLocalData()
+}
+
+fun globalStyleHtmlForRulebook(html: String): String {
+    return html
+        .replaceHtmlTagWithTag("skill", "b")
+        .replaceHtmlTagWithTagAndInnerValue("combat", "font", "color='#910016'")
+        .replaceHtmlTagWithTagAndInnerValue("profession", "font", "color='#0D8017'")
+        .replaceHtmlTagWithTagAndInnerValue("talent", "font", "color='#007AFF'")
+        .replaceHtmlTagWithTag("item", "i")
+        .replaceHtmlTagWithTag("condition", "u")
 }

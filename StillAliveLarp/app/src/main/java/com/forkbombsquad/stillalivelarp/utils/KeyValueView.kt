@@ -46,6 +46,10 @@ class KeyValueView(context: Context, attrs: AttributeSet): LinearLayout(context,
         set(keyView.text.toString(), value, !div.isGone)
     }
 
+    fun set(value: Int) {
+        set(value.toString())
+    }
+
     fun setAndHideIfEmpty(value: String) {
         set(keyView.text.toString(), value, !div.isGone)
         this.isGone = value.isEmpty()
@@ -73,6 +77,15 @@ class KeyValueViewBuildable(context: Context): LinearLayout(context) {
         keyView = findViewById(R.id.keyvalueview_key)
         valueView = findViewById(R.id.keyvalueview_value)
         div = findViewById(R.id.keyvalueview_div)
+    }
+
+    fun setColor(keyColor: Int, valueColor: Int) {
+        keyView.setTextColor(context.getColor(keyColor))
+        valueView.setTextColor(context.getColor(valueColor))
+    }
+
+    fun setColor(valueColor: Int) {
+        valueView.setTextColor(context.getColor(valueColor))
     }
 
     fun set(key: String, value: String, showDiv: Boolean) {
