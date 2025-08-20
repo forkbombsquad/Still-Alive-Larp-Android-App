@@ -209,6 +209,7 @@ data class FullCharacterModel(
         var freeSkillPrompt = ""
         var purchaseTitle = ""
         var purchaseText = ""
+        var needsFreeSkillPointsToBuyAsFreeSkill = true
         when (characterType()) {
             CharacterType.STANDARD -> {
                 freeSkillPrompt = "Use 1 Free Tier-1 Skill?"
@@ -219,11 +220,13 @@ data class FullCharacterModel(
                 freeSkillPrompt = "Use NPC 1 Free Tier-1 Skill?"
                 purchaseText = "Purchase ${skill.name} For NPC"
                 purchaseTitle = "Confirm NPC Purchase?"
+                needsFreeSkillPointsToBuyAsFreeSkill = false
             }
             CharacterType.PLANNER -> {
                 freeSkillPrompt = "Plan to use 1 Free Tier-1 Skill?"
                 purchaseText = "Plan to purchase ${skill.name}"
                 purchaseTitle = "Confirm Planned Purchase?"
+                needsFreeSkillPointsToBuyAsFreeSkill = false
             }
             CharacterType.HIDDEN -> {
                 completion(null)
@@ -231,7 +234,7 @@ data class FullCharacterModel(
             }
         }
         val player = DataManager.shared.getPlayerForCharacter(this)
-        if (skill.canUseFreeSkill() && player.freeTier1Skills > 0) {
+        if (skill.canUseFreeSkill() && ((player.freeTier1Skills > 0 && needsFreeSkillPointsToBuyAsFreeSkill) || !needsFreeSkillPointsToBuyAsFreeSkill)) {
             promptToUseFT1S(freeSkillPrompt) { useFT1S ->
                 useFT1S.ifLet({ useFreeSkill ->
                     promptToPurchase(purchaseTitle, purchaseText, useFreeSkill, skill, completion)
