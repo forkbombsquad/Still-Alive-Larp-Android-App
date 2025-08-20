@@ -230,7 +230,8 @@ data class FullCharacterModel(
                 return
             }
         }
-        if (skill.canUseFreeSkill()) {
+        val player = DataManager.shared.getPlayerForCharacter(this)
+        if (skill.canUseFreeSkill() && player.freeTier1Skills > 0) {
             promptToUseFT1S(freeSkillPrompt) { useFT1S ->
                 useFT1S.ifLet({ useFreeSkill ->
                     promptToPurchase(purchaseTitle, purchaseText, useFreeSkill, skill, completion)
