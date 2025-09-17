@@ -123,7 +123,7 @@ data class FullPlayerModel(
     }
 
     fun getUniqueCharacterNameRec(name: String, incrementalCount: Int? = null): String {
-        val fName = "$name${(incrementalCount == null).ternary("", " ${incrementalCount!!}")}"
+        val fName = "$name${" ${incrementalCount ?: ""}"}".trim()
         return if (characters.firstOrNull { it.fullName == fName } == null) {
             fName
         } else {
