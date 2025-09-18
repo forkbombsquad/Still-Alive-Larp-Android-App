@@ -1,0 +1,620 @@
+{
+  "eventPreregs": [
+    {
+      "characterId": 1,
+      "eventId": 1,
+      "id": 1,
+      "playerId": 1,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 2,
+      "eventId": 2,
+      "id": 2,
+      "playerId": 3,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 2,
+      "eventId": 1,
+      "id": 3,
+      "playerId": 3,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 4,
+      "playerId": 16,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": 10,
+      "eventId": 1,
+      "id": 5,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 6,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 6,
+      "eventId": 2,
+      "id": 7,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 1,
+      "eventId": 2,
+      "id": 8,
+      "playerId": 1,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 9,
+      "playerId": 19,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 10,
+      "playerId": 19,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 1,
+      "eventId": 3,
+      "id": 11,
+      "playerId": 1,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 12,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 6,
+      "eventId": 3,
+      "id": 13,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 6,
+      "eventId": 4,
+      "id": 14,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 3,
+      "id": 15,
+      "playerId": 19,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 4,
+      "id": 16,
+      "playerId": 19,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 17,
+      "playerId": 18,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 18,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 19,
+      "playerId": 20,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 20,
+      "playerId": 23,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 21,
+      "playerId": 21,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 22,
+      "playerId": 20,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 23,
+      "playerId": 21,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 1,
+      "id": 24,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 10,
+      "eventId": 2,
+      "id": 25,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 10,
+      "eventId": 3,
+      "id": 26,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 10,
+      "eventId": 4,
+      "id": 27,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 28,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 3,
+      "id": 29,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 4,
+      "id": 30,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 8,
+      "eventId": 2,
+      "id": 31,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 5,
+      "eventId": 2,
+      "id": 32,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 33,
+      "playerId": 23,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 34,
+      "playerId": 11,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": -1,
+      "eventId": 2,
+      "id": 35,
+      "playerId": 25,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 14,
+      "eventId": 3,
+      "id": 36,
+      "playerId": 23,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 2,
+      "eventId": 3,
+      "id": 37,
+      "playerId": 3,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 3,
+      "id": 38,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 3,
+      "id": 39,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 5,
+      "eventId": 3,
+      "id": 40,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 13,
+      "eventId": 3,
+      "id": 41,
+      "playerId": 18,
+      "regType": "NONE"
+    },
+    {
+      "characterId": 1,
+      "eventId": 4,
+      "id": 42,
+      "playerId": 1,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 8,
+      "eventId": 4,
+      "id": 43,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 4,
+      "id": 44,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 5,
+      "eventId": 4,
+      "id": 45,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 14,
+      "eventId": 4,
+      "id": 46,
+      "playerId": 23,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 4,
+      "id": 47,
+      "playerId": 21,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 13,
+      "eventId": 4,
+      "id": 48,
+      "playerId": 18,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 4,
+      "id": 49,
+      "playerId": 20,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 16,
+      "eventId": 5,
+      "id": 50,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 7,
+      "eventId": 5,
+      "id": 51,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 52,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 53,
+      "playerId": 19,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 54,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 2,
+      "eventId": 5,
+      "id": 55,
+      "playerId": 3,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 10,
+      "eventId": 5,
+      "id": 56,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 57,
+      "playerId": 27,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 58,
+      "playerId": 28,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 59,
+      "playerId": 20,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 5,
+      "id": 60,
+      "playerId": 21,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 6,
+      "id": 61,
+      "playerId": 16,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": 7,
+      "eventId": 6,
+      "id": 62,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 6,
+      "id": 63,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 5,
+      "eventId": 6,
+      "id": 64,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 6,
+      "id": 65,
+      "playerId": 19,
+      "regType": "NONE"
+    },
+    {
+      "characterId": 9,
+      "eventId": 6,
+      "id": 66,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 6,
+      "id": 67,
+      "playerId": 29,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 6,
+      "id": 68,
+      "playerId": 26,
+      "regType": "FREE"
+    },
+    {
+      "characterId": 16,
+      "eventId": 7,
+      "id": 69,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 7,
+      "eventId": 7,
+      "id": 70,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 7,
+      "eventId": 8,
+      "id": 71,
+      "playerId": 11,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 14,
+      "eventId": 7,
+      "id": 72,
+      "playerId": 23,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 73,
+      "playerId": 30,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 9,
+      "eventId": 7,
+      "id": 74,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 75,
+      "playerId": 3,
+      "regType": "FREE"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 76,
+      "playerId": 7,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 77,
+      "playerId": 31,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 8,
+      "eventId": 7,
+      "id": 78,
+      "playerId": 6,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 10,
+      "eventId": 7,
+      "id": 79,
+      "playerId": 17,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 80,
+      "playerId": 19,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 42,
+      "eventId": 7,
+      "id": 81,
+      "playerId": 28,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 43,
+      "eventId": 7,
+      "id": 82,
+      "playerId": 20,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 44,
+      "eventId": 7,
+      "id": 83,
+      "playerId": 27,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 84,
+      "playerId": 32,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 7,
+      "id": 85,
+      "playerId": 33,
+      "regType": "BASIC"
+    },
+    {
+      "characterId": 16,
+      "eventId": 8,
+      "id": 86,
+      "playerId": 16,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": -1,
+      "eventId": 8,
+      "id": 87,
+      "playerId": 21,
+      "regType": "PREMIUM"
+    },
+    {
+      "characterId": 9,
+      "eventId": 8,
+      "id": 88,
+      "playerId": 15,
+      "regType": "PREMIUM"
+    }
+  ]
+}

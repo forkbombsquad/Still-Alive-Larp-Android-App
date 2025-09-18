@@ -1,0 +1,573 @@
+{
+  "eventAttendees": [
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 1,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 19
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 2,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 21
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 3,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 4,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 5,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 6,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 23
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 7,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 18
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 8,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 9,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 17
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 1,
+      "id": 10,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 6,
+      "eventId": 2,
+      "id": 11,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 10,
+      "eventId": 2,
+      "id": 12,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 17
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 2,
+      "id": 13,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 21
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 2,
+      "id": 14,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 2,
+      "id": 15,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 19
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 8,
+      "eventId": 2,
+      "id": 16,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 5,
+      "eventId": 2,
+      "id": 17,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 6,
+      "eventId": 3,
+      "id": 18,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 3,
+      "id": 19,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 5,
+      "eventId": 3,
+      "id": 20,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 3,
+      "id": 21,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 3,
+      "id": 22,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 3,
+      "id": 23,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 19
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 14,
+      "eventId": 3,
+      "id": 24,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 23
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 6,
+      "eventId": 4,
+      "id": 25,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 4,
+      "id": 26,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 21
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 8,
+      "eventId": 4,
+      "id": 27,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 5,
+      "eventId": 4,
+      "id": 28,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 4,
+      "id": 29,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 4,
+      "id": 30,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 13,
+      "eventId": 4,
+      "id": 31,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 18
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 10,
+      "eventId": 4,
+      "id": 32,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 17
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 14,
+      "eventId": 4,
+      "id": 33,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 23
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 4,
+      "id": 34,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 20
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 4,
+      "id": 35,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 19
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 36,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 21
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 37,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 38,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 39,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 40,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 19
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 41,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 27
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 42,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 28
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 43,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 20
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 44,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 5,
+      "id": 45,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 17
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 6,
+      "id": 46,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 6,
+      "id": 47,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 5,
+      "eventId": 6,
+      "id": 48,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 7
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 7,
+      "eventId": 6,
+      "id": 49,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 9,
+      "eventId": 6,
+      "id": 50,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 6,
+      "id": 51,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 26
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 6,
+      "id": 52,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 29
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 6,
+      "eventId": 7,
+      "id": 53,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 16
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 7,
+      "eventId": 7,
+      "id": 54,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 11
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 9,
+      "eventId": 7,
+      "id": 55,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 15
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 56,
+      "isCheckedIn": "FALSE",
+      "npcId": 21,
+      "playerId": 7
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 8,
+      "eventId": 7,
+      "id": 57,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 6
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 58,
+      "isCheckedIn": "FALSE",
+      "npcId": 23,
+      "playerId": 19
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 59,
+      "isCheckedIn": "FALSE",
+      "npcId": 19,
+      "playerId": 31
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 43,
+      "eventId": 7,
+      "id": 60,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 20
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 44,
+      "eventId": 7,
+      "id": 61,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 27
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 42,
+      "eventId": 7,
+      "id": 62,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 28
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 63,
+      "isCheckedIn": "FALSE",
+      "npcId": 24,
+      "playerId": 32
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 14,
+      "eventId": 7,
+      "id": 64,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 23
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 65,
+      "isCheckedIn": "FALSE",
+      "npcId": 25,
+      "playerId": 30
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 66,
+      "isCheckedIn": "FALSE",
+      "npcId": 20,
+      "playerId": 33
+    },
+    {
+      "asNpc": "FALSE",
+      "characterId": 10,
+      "eventId": 7,
+      "id": 67,
+      "isCheckedIn": "FALSE",
+      "npcId": -1,
+      "playerId": 17
+    },
+    {
+      "asNpc": "TRUE",
+      "eventId": 7,
+      "id": 68,
+      "isCheckedIn": "FALSE",
+      "npcId": 22,
+      "playerId": 35
+    }
+  ]
+}

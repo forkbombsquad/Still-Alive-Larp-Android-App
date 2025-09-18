@@ -1,0 +1,1104 @@
+{
+  "skills": [
+    {
+      "description": "Your body adapts to the infection more easily than others. Your infection threshold for tier-2 â€˜the infectedâ€™ skills is lowered from 50% to 25%\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 1,
+      "minInfection": "0",
+      "name": "Adaptable",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Light Firearm Proficiency, but you can wield Advanced Firearms.",
+      "id": 2,
+      "minInfection": "0",
+      "name": "Advanced Firearm Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "2",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you work on Research Projects to develop new pharmaceuticals, develop alternate recipes for existing pharmaceuticals, and work on plot-relevant research such as new treatment methods for the Infection.\n\n**This skill requires additional gear to function: you need to provide your own medical research kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay researching the infection such as petri dishes, pipettes, or a microscope slides. If you don't have any medical reserach gear, you cannot use this skill.",
+      "id": 3,
+      "minInfection": "0",
+      "name": "Advanced Medical Research",
+      "prestigeCost": "0",
+      "skillCategoryId": "12",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "You may use the Mysterious Stranger skill 1 additional time per Character (bringing the total up to 3).",
+      "id": 4,
+      "minInfection": "0",
+      "name": "Anonymous Ally",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "You gain an additional 2 bullets per event, bringing the total up to 10.",
+      "id": 5,
+      "minInfection": "0",
+      "name": "Bandoliers",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Allows you to Deconstruct Armor, Firearms, Gear and Melee Weapons. Also allows you to deal damage to Fortifications using a Melee Weapon, though doing so is loud and should be roleplayed as such.",
+      "id": 6,
+      "minInfection": "0",
+      "name": "Bash",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "1",
+      "xpCost": "0"
+    },
+    {
+      "description": "Allows you to craft Heavy Melee Weapons.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 7,
+      "minInfection": "0",
+      "name": "Blacksmithing",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "Using a Super-Light melee weapon, you can force a single zombie, who is grabbing you, to let go of you by shouting â€œBREAKâ€� and hitting them with it. You still gain a Wound from this bite as normal. Your Super Light melee weapon is broken as part of this process and must be repaired before it can be used again.",
+      "id": 8,
+      "minInfection": "0",
+      "name": "Break",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Break, but it works on ALL zombies currently grabbing you, not just one. You need to say â€œBreak Awayâ€� to use this skill, rather than just â€œBreakâ€�. This still breaks your Super Light Melee Weapon as normal.",
+      "id": 9,
+      "minInfection": "0",
+      "name": "Break Away",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you to craft regular bullets.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 10,
+      "minInfection": "0",
+      "name": "Bullet Crafting",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "From now on, all Combat type skills cost 1 less to take (minimum 1) and all Talent type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 11,
+      "minInfection": "0",
+      "name": "Combat Aficionado",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "From now on, all Combat type skills cost 1 less to take (minimum 1) and all Profession type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 12,
+      "minInfection": "0",
+      "name": "Combat Specialist",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "While not in line of sight of any zombies, you may take out a set of green beads and place them around your neck. So long as you only make zombie noises and move no faster than a typical zombie moves, any zombies who come across you will ignore you as if you were one of them.\r\n\r\nIf you stop imitating a zombie or do something out of the ordinary, zombies will realize you are not one of them and attack. You should remove your green beads at this point.",
+      "id": 13,
+      "minInfection": "50",
+      "name": "Dead Man Walking",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Dead Man Walking, but you may move more quickly, mimicing the movements and sounds of a Zoombie.",
+      "id": 14,
+      "minInfection": "75",
+      "name": "Dead Man Sprinting",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "You gain an additional 2 bullets per event, bringing the total up to 4.",
+      "id": 15,
+      "minInfection": "0",
+      "name": "Deep Pockets",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "You gain an additional 2 bullets per event, bringing the total up to 6.",
+      "id": 16,
+      "minInfection": "0",
+      "name": "Deeper Pockets",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "Using the medical cots at Camp you are able to tend to and heal Wounds and Fatal Wounds, rather than just wrap them. Use the Treating Wounds Flowchart (found in the app and on the website) to walk you through healing each wound. Wounds that you heal will likely cause the user to gain Infection, it is your job to keep track of how much infection each person gains and report it at the end of the event so that their characters can be updated. Unwrapped wounds cause +2 infection dice, Zombie bites cause +1 infection die, and your lack of skill causes +1 infection die. You are able to mitigate one of those infection dice by using 1 Medical Supply during the healing process - though it cannot mitigate your lack of skill. Each wound (and fatal wound) must be healed individually. You may treat as many people at once as there are medical cots available. \r\n\r\nIf you don't use a Medical Supply to mitigate additional infection, players should roleplay being in more pain as you heal them as they are only able to get the bare minimum of pain killers. It is customary to be paid in bullets for your services if the person you're healing can afford it, though they may not always be able to.\n\n**This skill requires additional gear to function: you need to provide your own medical kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay healing wounds such as gauze, forceps, or a stethoscope. If you don't have any medical gear, you cannot use this skill.",
+      "id": 17,
+      "minInfection": "0",
+      "name": "Doctor",
+      "prestigeCost": "0",
+      "skillCategoryId": "12",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "From now on, all Combat type skills cost 1 less to take (minimum 1).\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 19,
+      "minInfection": "0",
+      "name": "Expert: Combat",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "From now on, all Profession type skills cost 1 less to take (minimum 1).\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 20,
+      "minInfection": "0",
+      "name": "Expert: Profession",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "From now on, all Talent type skills cost 1 less to take (minimum 1).\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 21,
+      "minInfection": "0",
+      "name": "Expert: Talent",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you to craft Rockets and Grenades.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 22,
+      "minInfection": "0",
+      "name": "Explosives Crafting",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "Your body adapts to the infection more easily than others. Your infection threshold for tier-4 infection skills is lowered from 75% to 50%\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 23,
+      "minInfection": "0",
+      "name": "Extremely Adaptable",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "The infection in your body has learned to repair itself after injury. Any time you are not in an Encounter and have a Wound (not a Fatal Wound) you can choose to sit down and meditate for 5 minutes. During this meditation you must be completely silent and any interruptions cause the process to start over. \r\n\r\nAfter the 5 minutes is up your wound is healed. At which point you flip a coin. If tails, you gain 2 infection dice. You may only regenerate one Wound at a time.",
+      "id": 24,
+      "minInfection": "50",
+      "name": "Fast Healing",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You are able to use any Tier-2 (or below) Profession type skills as if you had them yourself, so long as you are under the instruction and supervision of someone who already has the relevant skill. They do not need to be performing the skill with you but must be able to communicate with you to walk you through it. It takes you twice as long to accomplish any time based tasks while using Follow the Leader.",
+      "id": 25,
+      "minInfection": "0",
+      "name": "Follow the Leader",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "3",
+      "xpCost": "0"
+    },
+    {
+      "description": "Allows you to recover as many items as possible from Deconstructed objects and deal Damage to Fortifications as quickly as possible.\r\n\r\nYou can also use this skill to take extra time while damaging Fortifications to stay quiet while doing so.",
+      "id": 26,
+      "minInfection": "0",
+      "name": "Crash",
+      "prestigeCost": "0",
+      "skillCategoryId": "5",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Gamblerâ€™s Luck, but you gain an additional flip, roll, and raffle ticket anytime theyâ€™re relevant (2 of each)",
+      "id": 27,
+      "minInfection": "0",
+      "name": "Gamblerâ€™s Eye",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "You are either extremely lucky or extremely skilled, and no one can tell which. \n\nYou sometimes find additional loot when scavenging.\n\nAlso, anytime you need to roll a dice or flip a coin, you may do it twice and keep the better result.\n\nAdditionally you receive 1 free raffle ticket per event.",
+      "id": 29,
+      "minInfection": "0",
+      "name": "Gamblerâ€™s Luck",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "Allows you to craft all firearms except those classified as Military Grade.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 31,
+      "minInfection": "0",
+      "name": "Gunsmithing",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "You plant both of your feet, put both hands on your firearm and take aim. After 10 full seconds, you may make a single shot against a zombie, announcing \"Headshot\" as you do. If you manage to hit the zombie in the torso, the zombie is instantly killed (Fatally Wounded and Tapped). You may not move while you are taking aim. If you are attacked or otherwise interrupted while taking aim, you must start over. You may only make one Headshot attempt per Encounter. \r\n\r\nAn Encounter is defined as an entire \"bout of combat\". Though the threat does not need to be continuous, it should be timely. I.e. If everyone in your group has enough time to breathe and relax a little after an attack, the Encounter is over. Most Quests are action-packed enough that they count as one Encounter, though some quests are split up into mutiple Encounters because of travel time between attacks. Killing all of the nearby zombies and having a momentary reprive before more poke over the horizon isn't considered the end of an Encounter. It's moreso about the vibe of the current situation and whether or not the threat has been dealt with. If you aren't sure if an Encounter is over, you can always ask a Game Runner.",
+      "id": 32,
+      "minInfection": "0",
+      "name": "Headshot",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Light Firearm Dual Wielding but you may use Heavy Firearms. You are free to mix and match.",
+      "id": 33,
+      "minInfection": "0",
+      "name": "Heavy Firearm Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Light Firearm Proficiency, but you may wield Heavy Firearms.",
+      "id": 34,
+      "minInfection": "0",
+      "name": "Heavy Firearm Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "2",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Super Light Melee Weapon Proficiency, but you can wield Heavy melee weapons.\r\n\r\nAdditionally, while wielding a Heavy Melee Weapon in both hands, you may make a powerful \"Shove\" attack. To do so, plant both feet, raise your weapon slowly above your head and then make a full swing downward shouting \"Shove\" while you do. Anyone hit by the shove attack takes injuries as normal but is also knocked backwards 5ft and falls prone. A Shove attack should take around twice as long as a regular swing to execute.",
+      "id": 35,
+      "minInfection": "0",
+      "name": "Heavy Melee Weapon Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "4",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Tutor, but you can teach Tier-2 skills.",
+      "id": 36,
+      "minInfection": "0",
+      "name": "Instructor",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Investigator, but you gain two pieces of information about the upcomming event",
+      "id": 37,
+      "minInfection": "0",
+      "name": "Interrogator",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "At check in, you are given a piece of true information pertaining to the event or the current story. You are free to share this information or keep it to yourself.",
+      "id": 38,
+      "minInfection": "0",
+      "name": "Investigator",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "Allows you to craft Megadarts.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 39,
+      "minInfection": "0",
+      "name": "Large Round Crafting",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "You can wield and shoot Light Firearms by having one in each hand. You are not able to wield a melee weapon in your other hand.",
+      "id": 40,
+      "minInfection": "0",
+      "name": "Light Firearm Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "You can wield, shoot, and reload Light Firearms.",
+      "id": 41,
+      "minInfection": "0",
+      "name": "Light Firearm Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "1",
+      "xpCost": "0"
+    },
+    {
+      "description": "You can wield and fight with Light Melee Weapons by having one in each hand.  You are not able to wield a firearm in your other hand.",
+      "id": 42,
+      "minInfection": "0",
+      "name": "Light Melee Weapon Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Super Light Melee Weapon Proficiency, but you can wield Light Melee Weapons.",
+      "id": 43,
+      "minInfection": "0",
+      "name": "Light Melee Weapon Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "4",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "Allows you to craft complex objects and structures. In addition, it allows you to design Resarch Projects focused on creating Alternate Crafting Recipies.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 44,
+      "minInfection": "0",
+      "name": "Master Craftsman",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "From now on, your Commanderâ€™s Feast entry ticket is always free.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 45,
+      "minInfection": "0",
+      "name": "Meal Ticket",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "Allows you to wrap Wounds and Fatal Wounds to keep people healthy and moving until they can see a Doctor. To wrap an injury you must tie a bandage around the affected area (wrapping a injury doesn't take any more time than it takes to tie the bandage). Each injury needs to be Wrapped individually with a new bandage. Bandages should be tied all the way around the affected area - this means that you may have to use multiple in order to fully wrap a Torso.\n\n**This skill requires additional gear to function: you need to provide your own medical wraps/bandages in order to use this skill. The wraps will be returned to you after the wounds have been healed in the medical area. If you don't have any wraps/bandages left, you may not use this skill.",
+      "id": 46,
+      "minInfection": "0",
+      "name": "Medic",
+      "prestigeCost": "0",
+      "skillCategoryId": "12",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Light Firearm Dual Wielding, but allows you to use Medium Firearms. You are free to mix and match.",
+      "id": 47,
+      "minInfection": "0",
+      "name": "Medium Firearm Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Light Firearm Proficiency, but you can wield Medium firearms.",
+      "id": 48,
+      "minInfection": "0",
+      "name": "Medium Firearm Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "2",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Light Melee Weapon Dual Wielding, but allows you to use Medium Melee Weapons. You are free to mix and match.",
+      "id": 49,
+      "minInfection": "0",
+      "name": "Medium Melee Weapon Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "As Super Light Melee Weapon Proficiency, but you can wield Medium Melee weapons.",
+      "id": 50,
+      "minInfection": "0",
+      "name": "Medium Melee Weapon Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "4",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Light Firearm Proficiency, but you can wield Military Grade firearms.",
+      "id": 51,
+      "minInfection": "0",
+      "name": "Military Grade Firearm Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "2",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "Allows you to craft Military Grade Firearms.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 52,
+      "minInfection": "0",
+      "name": "Military Grade Gunsmithing",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "Allows you to craft Rivals (Military Grade ammo).\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 53,
+      "minInfection": "0",
+      "name": "Military Grade Munitions Crafting",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "Once per character, when youâ€™ve been dragged down to the ground by zombies with no hope of escape, you may shout â€œI GUESS THIS IS THE ENDâ€�. Doing so will cause all of the zombies around you to die in a hailstorm of bullets from a Mysterious Stranger saving your life. You must make your way back to camp alone, wondering who saved you and why. Once you make it back near the Camp, you must collapse on the ground. Each of your limbs gains a Wound and your torso gains a Fatal Wound. All of your wounds are considered Wrapped by the Mysterious Stranger.",
+      "id": 54,
+      "minInfection": "0",
+      "name": "Mysterious Stranger",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Tough Skin, but you gain an additional set of blue beads at check in (bringing your total up to 3).",
+      "id": 55,
+      "minInfection": "0",
+      "name": "Natural Armor",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Naturally Resistant, but your die is a d4.",
+      "id": 56,
+      "minInfection": "0",
+      "name": "Naturally Immune",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Naturally Resistant, but your die is a d6.",
+      "id": 57,
+      "minInfection": "0",
+      "name": "Naturally Impervious",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "As Naturally Resistant, but your die is a d8.",
+      "id": 58,
+      "minInfection": "0",
+      "name": "Naturally Resilient",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You are more resistant to the infection than most people. Your infection die is a d10 instead of a d12.",
+      "id": 59,
+      "minInfection": "0",
+      "name": "Naturally Resistant",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Tough Skin, but you gain an additional set of blue beads at check in (bringing your total up to 2).",
+      "id": 60,
+      "minInfection": "0",
+      "name": "Pain Tolerance",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You gain an additional 2 bullets per event, bringing the total up to 8.",
+      "id": 61,
+      "minInfection": "0",
+      "name": "Parachute Pants",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you to craft any known pharmaceutical recipe.\n\n**This skill requires additional gear to function: you need to provide your own medical crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting medicines such as empty pill bottles, small trays, or brushes. If you don't have any medical crafting gear, you cannot use this skill.",
+      "id": 62,
+      "minInfection": "0",
+      "name": "Pharmaceuticals",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "From now on, all Profession type skills cost 1 less to take (minimum 1) and all Talent type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 63,
+      "minInfection": "0",
+      "name": "Profession Aficionado",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "From now on, all Profession type skills cost 1 less to take (minimum 1) and all Combat type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 64,
+      "minInfection": "0",
+      "name": "Profession Specialist",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Tutor, but you can teach Tier-4 skills. Additionally, you can now hold a Special Class on a specific skill that reduces the xp cost to take that skill by 1 (stackable). The special class takes 10 minutes to teach and requires a Teaching Kit. If you wish to start a special class, contact a Game Runner before you do. You cannot benifit from your own Special Classes. Your Special Class may be taught to as many people as you have available chairs in the teaching area. You should charge bullets for your Special Classes as its effect is very valuable. This Special Class stacks with other XP reducing sources such as the Expert: [Skill Type] skills, though a skill's cost can never be reduced below 1xp.\n\n**Using the Special Class ability of this skill requires additional gear to function: you need to provide your own teaching supplies in order to use the Special Class portion of this skill. They dont need to be anything fancy, just some tools that you can use to roleplay teaching such as a textbook, pointer, or notebook. If you don't have any teaching gear, you cannot use the Special Class portion of this skill.",
+      "id": 65,
+      "minInfection": "0",
+      "name": "Professor",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Tap, but you may shoot a helpless zombie (expending a bullet) from a range to Tap them. You need to say â€œRANGED TAPâ€� instead of just â€œTAPâ€�.",
+      "id": 66,
+      "minInfection": "0",
+      "name": "Ranged Tap",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Fast Healing but you can now heal Fatal Wounds. Additionally, when you heal regular Wounds you may heal up to two at once. If you heal two Wounds, you only need to make one coin flip and still only gain 2 infection dice on tails.\r\n\r\nFinally, if you have a story-related disability, such as a missing limb, it will regenerate naturally over the course of 1 full event.",
+      "id": 67,
+      "minInfection": "75",
+      "name": "Regeneration",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Your body has found a way to fight off the infection. At check out for each event, you reduce your Infection Rating by 1 point.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 68,
+      "minInfection": "0",
+      "name": "Regression",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "As Regression, but you instead roll 1d4 at check out and reduce your Infection Rating by the total rolled.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 69,
+      "minInfection": "0",
+      "name": "Remission",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "The infection in your body has hardened your skin. At check in you get a set of Red Beads function like Bullet-Proof Armor (works like Standard Armor but also protects against Gunshots, Rockets, and Gusher Balls).",
+      "id": 70,
+      "minInfection": "50",
+      "name": "Scaled Skin",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "Allows you to quickly search through junk piles and find hidden caches of materials and useful items.",
+      "id": 71,
+      "minInfection": "0",
+      "name": "Scavenger",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "You can wield and use Super Light Melee Weapons. Unlike other Melee Weapons, you may only stab using Super Lights. Do not swing them.",
+      "id": 72,
+      "minInfection": "0",
+      "name": "Super Light Melee Weapon Proficiency",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "1",
+      "xpCost": "0"
+    },
+    {
+      "description": "As Doctor, but you are able to treat wounds in half the time and cause less infection to spread while doing so. It is customary to be paid in bullets for your services if the person you're healing can afford it, though they may not always be able to.\n\n**This skill requires additional gear to function: you need to provide your own medical kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay healing wounds such as gauze, forceps, or a stethoscope. If you don't have any medical gear, you cannot use this skill.",
+      "id": 73,
+      "minInfection": "0",
+      "name": "Surgeon",
+      "prestigeCost": "0",
+      "skillCategoryId": "12",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "From now on, all Talent type skills cost 1 less to take (minimum 1) and all Combat type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 74,
+      "minInfection": "0",
+      "name": "Talent Aficionado",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "From now on, all Talent type skills cost 1 less to take (minimum 1) and all Profession type skills cost 1 more.\n\n*You may only take two specialization type skills, one in tier 3 and one in tier 4.",
+      "id": 75,
+      "minInfection": "0",
+      "name": "Talent Specialist",
+      "prestigeCost": "0",
+      "skillCategoryId": "15",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "In order to finish off any Helpless zombie or human, you must Tap them. To do so, you put a weapon (that youâ€™re proficient with) up to their torso and roleplay finishing them off while saying â€œTAPâ€�. If youâ€™re using a gun, tapping doesnâ€™t require a bullet (do not shoot them from point blank, just roleplay it).",
+      "id": 76,
+      "minInfection": "0",
+      "name": "Tap",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "1",
+      "xpCost": "0"
+    },
+    {
+      "description": "As Tutor, but you can teach Tier-3 skills.",
+      "id": 77,
+      "minInfection": "0",
+      "name": "Teacher",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you to craft simple objects and structures.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 78,
+      "minInfection": "0",
+      "name": "Tinkerer",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Scavenger, but you can find even more hidden loot.",
+      "id": 79,
+      "minInfection": "0",
+      "name": "Tomb Raider",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "Youâ€™ve become hardened over time and are somewhat resistant to damage. At check in you gain a set of Blue Beads that work like Standard Armor (when you take a melee attack or zombie bite, you may instead remove the beads from your neck, ignoring the wound completely). You may not put the beads back on until the next event.",
+      "id": 80,
+      "minInfection": "0",
+      "name": "Tough Skin",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Scavenger, but you can find more hidden loot.",
+      "id": 81,
+      "minInfection": "0",
+      "name": "Treasure Hunter",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Light Firearm Dual Wielding and Light Melee Weapon Dual Wielding, but you are able to wield a Light Melee Weapon in one hand and a Light Firearm in the other.",
+      "id": 83,
+      "minInfection": "0",
+      "name": "True Light Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Medium Firearm Dual Wielding and Medium Melee Weapon Dual Wielding, but you are able to wield a Medium Melee Weapon in one hand and a Medium Firearm in the other.",
+      "id": 84,
+      "minInfection": "0",
+      "name": "True Medium Dual Wielding",
+      "prestigeCost": "0",
+      "skillCategoryId": "3",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "Allows you to teach others (or yourself) new skills. You can teach any Tier-1 skill (regardless if you have the skill or not). You may teach to as many people as there are chairs in the classroom area, but you may only teach one skill at a time. Players are only eligible to learn skills if they already purchased them (yourself included). See the Taking New Skills section of this rulebook for more information. Teaching a skill to a class takes 5 minutes, during which time you should be sure that the player learning the skill understands how to use it and generally roleplay practicing using the skill. It is customary to be paid for your services in bullets if the players being taught can afford it, though they may not be able to.",
+      "id": 85,
+      "minInfection": "0",
+      "name": "Tutor",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Break, but instead of using a Super Light Melee Weapon, you just roleplay hitting/punching the zombie whoâ€™s currently grabbing you. \nThis only functions in place of the regular Break skill. You must still use a Super Light Melee Weapon when using the Break Away skill.",
+      "id": 86,
+      "minInfection": "0",
+      "name": "Unarmed Break",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    },
+    {
+      "description": "As Scavenger, but you can find all of the hidden loot.",
+      "id": 87,
+      "minInfection": "0",
+      "name": "Uncharted",
+      "prestigeCost": "0",
+      "skillCategoryId": "10",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "You may use the Mysterious Stranger skill 1 additional time per Character (bringing the total up to 2).",
+      "id": 88,
+      "minInfection": "0",
+      "name": "Unknown Assailant",
+      "prestigeCost": "0",
+      "skillCategoryId": "8",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "Once per character, if you would be turned into a zombie from a failed Infection Roll (or flip), treat that roll as if it was a success instead. Your body staves off the infection so you live another day.",
+      "id": 89,
+      "minInfection": "0",
+      "name": "Unshakable Resolve",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Allows you to recover more items from Deconstructed objects and deal Damage to Fortifications using a melee weapon more quickly.\r\n\r\nYou can also use this skill to take extra time while damaging Fortifications to stay quiet while doing so.",
+      "id": 90,
+      "minInfection": "0",
+      "name": "Smash",
+      "prestigeCost": "0",
+      "skillCategoryId": "5",
+      "skillTypeId": "1",
+      "xpCost": "1"
+    },
+    {
+      "description": "Allows you to craft Super Light, Light, and Medium Melee Weapons.\n\n**This skill requires additional gear to function: you need to provide your own crafting kit in order to use this skill. It doesn't need to be anything fancy, just some tools that you can use to roleplay crafting such as a hammer, wrench, or screwdriver. If you don't have any crafting gear, you cannot use this skill.",
+      "id": 91,
+      "minInfection": "0",
+      "name": "Weapon Smithing",
+      "prestigeCost": "0",
+      "skillCategoryId": "11",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "When you need to make an Infection Roll, you may instead flip a coin. If heads, treat the roll as a success. This works even if your infection rating is 100%.",
+      "id": 93,
+      "minInfection": "0",
+      "name": "Will to Live",
+      "prestigeCost": "0",
+      "skillCategoryId": "7",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You have so much experience fighting through the pain of your injuries that they barely affect you anymore. \r\n\r\nFor the purposes of movement and combat restrictions, you treat all of your Unwrapped Wounds as if they were Wrapped Wounds, all of your Wrapped Wounds as if you didn't have the injury at all, and all Wrapped Fatal Wounds as if they were Wrapped Wounds. Unwrapped Fatal Wounds still affect you as normal. \r\n\r\nEven though you treat them differently, your injuries still need to be healed by the end of the Event.",
+      "id": 94,
+      "minInfection": "0",
+      "name": "Wounded Warrior",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "Whenever you finish crafting any items in the following categories: Ammunition and Explosives, Armor, Pharmaceuticals; you have a 10% chance to craft twice as many of whatever you were crafting without using extra materials. Seek out a Game Runner to make this roll.\r\n\r\nAdditionally, when you repair a Damaged Fortification, you also have a 10% chance to repair 2 Health instead of 1.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 95,
+      "minInfection": "0",
+      "name": "Spontaneous Production",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "1"
+    },
+    {
+      "description": "You seem to have a miraculous amount of luck granting you an almost supernatural aura that helps you avoid getting hurt. At check in you get a pair of Black Beads which function like a more powerful version of Bullet-Proof Armor. In addtion to protection from melee and ranged attacks, they also protect you from plot related misfortune!\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 96,
+      "minInfection": "0",
+      "name": "Plot Armor",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You're always finding useful materials wherever you look. At every check in, a Game Runner will roll randomly on a chart of materials. If they roll Wood, Cloth or Metal, you gain 1d4 of that material. If they roll Tech Supplies or Medical Supplies, you gain 1 of that material.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 97,
+      "minInfection": "0",
+      "name": "Fortunate Find",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Fortunate Find but, instead of a Game Runner rolling randomly, you can choose which material you want. If you pick Wood, Cloth, or Stone, you gain 2d4 of that material. If you pick Tech Supplies or Medical Supplies, you gain 2 of that material.\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 98,
+      "minInfection": "0",
+      "name": "Prosperous Discovery",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Your immune system is unparalleled. Any time you would gain infection, reduce the amount you would gain by 1 (this cannot reduce the amount below 1).\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 99,
+      "minInfection": "0",
+      "name": "Stalwart",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "3"
+    },
+    {
+      "description": "Before using this skill, you must register a primary firearm (that you are capable of wielding) to your character - talk to a Game Runner to do this. At check in for each event, your registered firearm will be loaded with bullets. The maximum amount of regular bullets that can be loaded into your firearm is 25. If your firearm shoots other types of bullets, it will be loaded up to a maximum equivalent value of the regular bullets (i.e. 8 megas, 5 militaries, or 2 rockets).\n\n*This is a prestige skill. It requires 1 prestige point in addition to its xp cost.",
+      "id": 100,
+      "minInfection": "0",
+      "name": "Fully Loaded",
+      "prestigeCost": "1",
+      "skillCategoryId": "14",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "You are a natural-born leader. When you sign up for a quest in a Leadership spot, you gain an additional benefit: before heading out, you will receive a hint about any secondary objectives that may be present around the location of the scenario (such as scavenge spots).",
+      "id": 101,
+      "minInfection": "0",
+      "name": "Leadership",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "1"
+    },
+    {
+      "description": "As Leadership, but each member of your quest group also receives 10 Camp Bullets before heading out, representing their trust in your leadership abilities.",
+      "id": 102,
+      "minInfection": "0",
+      "name": "Logistics",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "2"
+    },
+    {
+      "description": "As Logistics, but each member of your quest group is also outfitted with regular armor from the camp (provided they don't have any already) before heading out, representing the camp's trust in your leadership abilities.",
+      "id": 103,
+      "minInfection": "0",
+      "name": "Management",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "3"
+    },
+    {
+      "description": "As Management, but the camp trusts you enough to bring an extra person on your quest beyond the regular maximum. This extra person also receives all of your other leadership tree bonuses.",
+      "id": 104,
+      "minInfection": "0",
+      "name": "Kingpin",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "2",
+      "xpCost": "4"
+    },
+    {
+      "description": "You love to sing or play music and use your talents to help with the monotony of everyday life at camp. So long as you're singing or playing music, everyone within 15ft will work more quickly (You cannot be doing anything else productive while singing/playing - this includes combat). All tasks that require time to complete (such as scavenging, crafting, or resource gathering) will have their times cut in half while you're performing (down to a minimum of 1 minute). Multiple people with this skill may perform together to further reduce the time, but it can never be reduced below 1 minute. Be wary though, performing music is loud and could attract a lot of unwanted attention if you aren't careful! It's customary to be paid for your services.",
+      "id": 105,
+      "minInfection": "0",
+      "name": "Musical Inspiration",
+      "prestigeCost": "0",
+      "skillCategoryId": "9",
+      "skillTypeId": "3",
+      "xpCost": "2"
+    },
+    {
+      "description": "You are able to wield and fire any firearm that you are proficient with using only one hand. You may carry any non-weapon objects in your offhand without incuring any penalties.",
+      "id": 106,
+      "minInfection": "0",
+      "name": "Improved Grip",
+      "prestigeCost": "0",
+      "skillCategoryId": "2",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "You are able to wield and fire any melee weapons that you are proficient with using only one hand. You may carry any non-weapon objects in your offhand without incuring any penalties.",
+      "id": 107,
+      "minInfection": "0",
+      "name": "Improved Handling",
+      "prestigeCost": "0",
+      "skillCategoryId": "4",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "Small weapons are easy to maneuver. You may wield Super Light Melee Weapons, Light Melee Weapons, and Light Firearms with one hand. \r\n\r\nAdditionally, you may dual wield Super Light Melee Weapons and Light Firearms (but only those that carry 2 bullets or fewer).",
+      "id": 108,
+      "minInfection": "0",
+      "name": "Weapon Finesse",
+      "prestigeCost": "0",
+      "skillCategoryId": "1",
+      "skillTypeId": "1",
+      "xpCost": "0"
+    },
+    {
+      "description": "You are skilled at throwing weapons. You may throw any Super Light Melee Weapon. On a successful hit, it deals damage as a regular melee strike. You are free to retrieve your thrown weapon as normal. \r\n\r\nAdditionally, you have the ability to throw Grenades (Rockets) by shouting \"Grenade!\".\r\n\r\nFinally, if you also possess the Ranged Tap skill, you can use it with a thrown Super Light Melee Weapon.",
+      "id": 109,
+      "minInfection": "0",
+      "name": "Thrown Weapons",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "Your reactions are heightened at vital moments. Once per Encounter, when you take a Fatal Wound and fall to the ground, you may take a single shot from a firearm of your choice before needing to clench your wounds.\r\n\r\nAn Encounter is defined as an entire \"bout of combat\". Though the threat does not need to be continuous, it should be timely. I.e. If everyone in your group has enough time to breathe and relax a little after an attack, the Encounter is over. Most Quests are action-packed enough that they count as one Encounter, though some quests are split up into mutiple Encounters because of travel time between attacks. Killing all of the nearby zombies and having a momentary reprive before more poke over the horizon isn't considered the end of an Encounter. It's moreso about the vibe of the current situation and whether or not the threat has been dealt with. If you aren't sure if an Encounter is over, you can always ask a Game Runner.",
+      "id": 110,
+      "minInfection": "0",
+      "name": "Bullet Time",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "3"
+    },
+    {
+      "description": "Once per event you are able to make a loud Zombie-Like Shriek. When you do, all zombies that can hear you freeze in place for 10 seconds.",
+      "id": 111,
+      "minInfection": "75",
+      "name": "Banshee Wail",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Once per Event, when you take a Fatal Wound, you may fly into a state of anamalist fury. Until you are no longer in immediate danger (i.e. no hostiles in sight), you do not feel the effects of any wounds. However, as soon as the Death Throes subside, all of the wounds you took during the effect affect you all at once. This effect works very similar to the pharmaceutical Adreanaline.",
+      "id": 112,
+      "minInfection": "75",
+      "name": "Death Throes",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "Your insides shift and change, making it more difficult to kill you. Once per event, the first time you would take a Fatal Wound, ignore it completely, making a zombie noise to signify that it was ignored.",
+      "id": 113,
+      "minInfection": "75",
+      "name": "Shifting Vitals",
+      "prestigeCost": "0",
+      "skillCategoryId": "13",
+      "skillTypeId": "3",
+      "xpCost": "4"
+    },
+    {
+      "description": "You are extremely stealthy. If you can manage to sneak up on your target without being noticed, you may attack them with a Super Light Melee Weapon. Your attack will deal a Wound directly to their torso, bypassing all protective beads that your target has to do so. When you make this attack you must say \"Breach\" to let the target know not to treat it as a normal attack.",
+      "id": 114,
+      "minInfection": "0",
+      "name": "Ambush",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "2"
+    },
+    {
+      "description": "You have honed your stealth attacks to ensure you always hit vital areas. This skill works as Ambush but instead of just making the target's torso Wounded, it casues their torso to be Fatally Wounded. To use this upgraded version of the skill, you need to say: \"Impale\" rather than \"Breach\".",
+      "id": 115,
+      "minInfection": "0",
+      "name": "Assassin",
+      "prestigeCost": "0",
+      "skillCategoryId": "6",
+      "skillTypeId": "1",
+      "xpCost": "4"
+    }
+  ]
+}

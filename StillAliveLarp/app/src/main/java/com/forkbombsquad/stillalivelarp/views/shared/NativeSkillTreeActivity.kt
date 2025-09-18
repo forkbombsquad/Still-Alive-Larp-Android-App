@@ -23,6 +23,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import kotlinx.coroutines.CoroutineScope
 
 open class NativeSkillTreeActivity : NoStatusBarActivity() {
 
@@ -151,7 +152,7 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
     private var lastFlingX = 0
     private var lastFlingY = 0
 
-    private lateinit var lifecycleScope: LifecycleCoroutineScope
+    private lateinit var lifecycleScope: CoroutineScope
 
     private val flingRunnable = object : Runnable {
         override fun run() {
@@ -282,7 +283,7 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         invalidate()
     }
 
-    fun updateDrawables(skillGrid: SkillGrid, lifecycleScope: LifecycleCoroutineScope) {
+    fun updateDrawables(skillGrid: SkillGrid, lifecycleScope: CoroutineScope) {
         this.lifecycleScope = lifecycleScope
         this.skillGrid = skillGrid
         this.skillGrid!!.invalidate = {

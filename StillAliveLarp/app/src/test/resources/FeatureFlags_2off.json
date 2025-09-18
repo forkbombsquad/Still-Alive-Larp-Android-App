@@ -1,0 +1,18 @@
+{
+  "featureFlags": [
+    {
+      "activeAndroid": "FALSE",
+      "activeIos": "FALSE",
+      "description": "This flag is turned on when we want to display the legacy skill tree image. It is replaced by the native rendered skill tree, but both are available right now",
+      "id": 3,
+      "name": "oldskilltreeimage"
+    },
+    {
+      "activeAndroid": "FALSE",
+      "activeIos": "FALSE",
+      "description": "Once turned on, this will activate the ability for users to see the camp status button.",
+      "id": 4,
+      "name": "campstatus"
+    }
+  ]
+}

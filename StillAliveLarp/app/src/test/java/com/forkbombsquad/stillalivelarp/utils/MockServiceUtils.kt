@@ -1,4 +1,4 @@
-package com.forkbombsquad.stillalivelarp
+package com.forkbombsquad.stillalivelarp.utils
 
 import com.forkbombsquad.stillalivelarp.services.utils.AwardCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
@@ -117,33 +117,40 @@ class MockServiceUtils {
         }
 
         private fun buildEndpointUrl(requestClass: KClass<*>, args: List<Any?>): String {
-            val function = requestClass.memberFunctions.first { it.name == "makeRequest" }
+            val function = requestClass.memberFunctions.firstOrNull { it.name == "makeRequest" }
 
-            val httpAnnotation = function.findAnnotation<retrofit2.http.HTTP>()
-                ?: error("Function \"makeRequest\" does not have @HTTP annotation")
-
-            var path = httpAnnotation.path
-
-            val usedArgs = mutableSetOf<Int>()
-
-            // Replace path parameters in order
-            val pathParamRegex = "\\{[^}]+}".toRegex()
-            pathParamRegex.findAll(path).forEachIndexed { index, matchResult ->
-                if (index < args.size) {
-                    path = path.replace(matchResult.value, args[index].toString())
-                    usedArgs.add(index)
-                }
-            }
-
-            // Treat remaining arguments as query parameters if they're string, int, or boolean
-            val remainingArgs = args.withIndex().filter { it.index !in usedArgs }.filter { it.value is String || it.value is Int || it.value is Boolean }
-            val queryString = if (remainingArgs.isNotEmpty()) {
-                remainingArgs.joinToString("&") { "param${it.index + 1}=${it.value}" }
+            return if (function == null) {
+                val func = requestClass.memberFunctions.first { it.name == "getAuthToken" || it.name == "getAuthPlayerToken" || it.name == "getVersions" }
+                if (func.findAnnotation<retrofit2.http.POST>() != null) func.findAnnotation<retrofit2.http.POST>()!!.value else (func.findAnnotation<retrofit2.http.GET>()?.value ?: error("Function \"custom\" does not have @POST or @GET annotation"))
             } else {
-                ""
+                val httpAnnotation = function.findAnnotation<retrofit2.http.HTTP>()
+                    ?: error("Function \"makeRequest\" does not have @HTTP annotation")
+
+                var path = httpAnnotation.path
+
+                val usedArgs = mutableSetOf<Int>()
+
+                // Replace path parameters in order
+                val pathParamRegex = "\\{[^}]+}".toRegex()
+                pathParamRegex.findAll(path).forEachIndexed { index, matchResult ->
+                    if (index < args.size) {
+                        path = path.replace(matchResult.value, args[index].toString())
+                        usedArgs.add(index)
+                    }
+                }
+
+                // Treat remaining arguments as query parameters if they're string, int, or boolean
+                val remainingArgs = args.withIndex().filter { it.index !in usedArgs }.filter { it.value is String || it.value is Int || it.value is Boolean }
+                val queryString = if (remainingArgs.isNotEmpty()) {
+                    remainingArgs.joinToString("&") { "param${it.index + 1}=${it.value}" }
+                } else {
+                    ""
+                }
+
+                if (queryString.isNotEmpty()) "$path?$queryString" else path
             }
 
-            return if (queryString.isNotEmpty()) "$path?$queryString" else path
+
         }
 
     }

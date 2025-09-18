@@ -1,0 +1,2586 @@
+
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+      background-color: #CCC;
+    }
+
+    .content {
+      width: 80%;
+      margin:auto;
+      justify-content: center;
+    }
+
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    .centertext {
+      text-align: center;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    .column {
+      width: 100%;
+    }
+
+    .column ul {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+
+    .column li {
+      display: block;
+    }
+
+    .level1 a {
+      font-size: 28px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .level2 {
+      text-indent: 2em;
+    }
+
+    .level2 a {
+      font-size: 28px;
+    }
+
+    .level3 {
+      text-indent: 4em;
+    }
+
+    .level3 a {
+      font-size: 28px;
+      text-decoration: none;
+      font-style: italic;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: "Brush Script MT", cursive;
+      font-size:50px;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    h2 {
+      text-align: left;
+      font-family: "Arial";
+      font-size:40px;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    h3 {
+      text-align: left;
+      font-family: "Arial";
+      font-size:25px;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .sample-build {
+      text-align: center;
+      font-family: "Arial";
+      font-size:25px;
+      font-weight: bold;
+      text-indent:-6em;
+    }
+
+    p {
+      font-family: "Arial";
+      text-indent: 2em;
+      font-size: 18px;
+    }
+
+    .noindent {
+      text-indent: 0;
+    }
+
+    a {
+      font-size: 20px;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 8px;
+      font-size: 18px;
+    }
+
+    table {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    td > p {
+      text-align: center;
+      font-family: "Arial";
+      text-indent: 0em;
+      font-size: 18px;
+    }
+
+    skill {
+      font-weight: 1000;
+      font-size: 20px;
+      font-family: "Times New Roman";
+    }
+
+    condition {
+      font-weight: 400;
+      font-size: 20px;
+      font-style: italic;
+      font-family: "Georgia";
+    }
+
+    profession {
+      font-weight: bold;
+      color: DarkGreen;
+    }
+
+    combat {
+      font-weight: bold;
+      color: DarkRed;
+    }
+
+    talent {
+      font-weight: bold;
+      color: DarkBlue;
+    }
+
+    item {
+      font-weight: 1000;
+      font-size: 19px;
+      font-family: "Courier New";
+      text-decoration: underline;
+    }
+
+
+</style>
+<body>
+<div class="content">
+    <div id="AppContent">
+        <h1 id="Intro">Introduction</h1>
+        <h2 id="Welcome">Welcome To Still Alive Larp</h2>
+        <h3 id="Note">A Note From The Authors</h3>
+
+        <p>Thank you for taking an interest in Still Alive Larp! This project started as a small dream between the 4 founders
+            in late 2014. We never imagined that we would actually see people playing our game, but our dream has become a reality!
+            From 2016-2018 the Game went through its first iteration and, though it was rough around the edges, Still Alive owes a lot
+            to that time period and the players who took part in it. If you are a player who played during this time period, check out
+            the Returning Players section near the end of the rulebook as we would like to reward you for coming back and playing!</p>
+        <p>
+            The second iteration of Still Alive LARP has a much more refined system and set of rules. We had our first 3 events in 2024
+            and have been going strong ever since! On behalf of all of us here, thank you so much for your interest! We hope you have fun!</p>
+
+        <h3 id="WhatIs">What is Still Alive?</h3>
+
+        <p>Still Alive is a horror LARP (Live Action Role-Playing) game set in a post-apocalyptic scenario. Your mission,
+            should you choose to accept it, is to survive all the challenges of a zombie apocalypse alongside other survivors
+            at the base camp (aptly named Camp Still Alive). You'll spend your days fighting off the horde, gathering materials,
+            crafting supplies to improve your arsenal and the camp, and trying to survive while faced with hardships, tough moral decisions, hordes of zombies,
+            and lots more!</p>
+
+        <h3 id="Age">Age Limitations</h3>
+
+        <p>Due to the mature nature of the LARP (horror, swearing, [fake] blood and gore)  we require all players to be 18
+            or older, with no exceptions.</p>
+
+        <h3 id="Contact">Contact Us</h3>
+
+        <p>If you have any questions about Still Alive, feel free to reach out to us! Send us a message on our <a href="https://discord.gg/95rsefbQEe">Discord Server</a>!</p>
+
+        <h1 id="GettingStarted">Getting Started</h1>
+
+        <p>First we'll get the basics out of the way: Still Alive LARP at its core is a Live-Action combat RPG with horror elements in which you will use Nerf guns and Fiberglass-Cored Foam melee weapons to fight Zombies, Humans, and perhaps even stranger things. It typically takes place at night (around 5pm-midnight), once per month during the Summer.
+            The events are roughly split into two halves by the Commander's Feast (a meal prepared by the LARP, during which players may break character). The first half, usually referred to as "Daytime" is less dangerous and usually focuses on exploration, expeditions, construction, and downtime; while the second half "Nighttime" is much more treacherous, typically focusing on mitigating risks, completing tasks quickly, and trying to stay alive.</p>
+
+        <h2 id="PlayingTheGame">Playing The Game</h2>
+        <p>When you attend a Still Alive event you will experience day full of excitement and danger; and, though you're
+            only there for a few hours, the work you do represents the work done by the camp for the entire month (until the next Event).
+            When you decide to go to an event, you may choose to be an NPC - Non-Player Character, or a PC - Player Character.</p>
+        <p>
+            If you choose NPC, the Game-Runners will assign you a role or roles that you will play for the event: zombies,
+            hostiles humans, and even friendly or neutral characters are all on the table. Most often you will be given
+            the role of a permanent camp NPC.</p>
+        <p>However, if you want to build your own character and really experience everything our game has to offer,
+            you'll want to play a PC, instead. As you play your PC and attend events,
+            you'll earn <item>experience points (xp)</item>, which allow you to purchase skills and become more powerful.</p>
+        <p><i>Note - until our player count get a little higher, both NPCs and PCs alike may be pulled to
+            temporarily play as Zombies for specific scenarios that they aren't involved in to help create a more
+            difficult experience for those that are participating.</i></p>
+        <h2 id="YourPC">Your PC (Player Character)</h2>
+        <p>To get started creating your PC, you will need to download the Still Alive mobile app
+            (<a href="https://play.google.com/store/apps/details?id=com.forkbombsquad.stillalivelarp">Android</a> or
+            <a href="https://apps.apple.com/us/app/still-alive-larp/id6449710836">iOS</a>) and create an account (if you haven't
+            gotten the Pre-Approval code required to create an account yet, join the
+            <a href="https://discord.gg/95rsefbQEe">Discord</a> and ask for it there!). Once you log in, you'll be able to create a new Character on the Home tab.</p>
+        <p>All new characters start with the following: 3 <item>xp</item>, 1 <item>Free Tier-1 Skill</item> and 20
+            <item>bullets</item>. The <item>xp</item> and <item>Free Tier-1 Skill</item> are used to purchase skills
+            for your character from the Skill Tree - which is how you define what your character is and isn't capable of.
+            The <item>bullets</item> (represented physically in-game as Nerf darts) serve as both ammunition and currency in Still Alive.</p>
+
+        <h3 id="Skill Tree">The Skill Tree</h3>
+        <p>The <a href="https://stillalivelarp.com/skilltree" target="_blank">Skill Tree</a> is a visual representation
+            of all the potential abilities that your character can learn by spending <item>xp</item> (The skill tree is
+            accessible in the Mobile app by going to the Rules Tab > Skill Tree Diagram), from there you can tap on any skill to read more about it.
+            The skills are divided into 3 basic types, <combat>Combat (Red)</combat>, <profession>Profession (Green)</profession>
+            and <talent>Talent (Blue)</talent>. Though these types don't do anything on their own, a few of the Skills in the game take a Skill's Type into account.</p>
+        <p>Additionally, skills are organized vertically into 4 Tiers, starting at
+            the top and moving downward. Skills in each Tier cost <item>xp</item> equal to their Tier number (i.e. Skills
+            in the top row cost 1 <item>xp</item>, then 2 <item>xp</item> for the next row and so on).
+            Lines connecting skills together are signifiers of prerequisite skills. Additionally, if a number is found
+            on the prerequisite line, it means there are multiple prerequisites.</p>
+        <p>Explanations for what the skills do can be found in the <a href="#SkillExplanations">Skill Explanations</a>
+            section at the bottom of the rulebook webpage or by going to Rules Tab > Skill List in the mobile app. There are
+            quite a few rules in the Still Alive system and the most important thing to remember is that specific rules always
+            overwrite more broad rules. For instance, the broad rule about wielding firearms states you must hold any firearm
+            with two hands. However, the Weapon Finesse skill allows you to dual wield small weapons, including firearms
+            that hold two or fewer bullets. The Weapon Finesse rule is more specific,
+            so it overrides the general rule.</p>
+
+        <h3 id="FreeSkills">Free Skills</h3>
+        <p>Every new character starts with 6 basic skills, listed below with a short description. If you want to
+            understand the full rules for each skill, check them out in the Mobile App or at the bottom of the Web
+            version of the rulebook.</p>
+        <p><skill>Tap</skill> - Allows you to finish off anyone with the <i>Helpless</i> condition; Zombie, Human, or otherwise.</p>
+        <p><skill>Light Firearm Proficiency</skill> - Allows you to wield Light classified firearms.</p>
+        <p><skill>Bash</skill> - Allows you to destroy simple objects and light fortifications.</p>
+        <p><skill>Super Light Melee Weapon Proficiency</skill> - Allows you to wield Super Light classified melee weapons.</p>
+        <p><skill>Follow The Leader</skill> - Allows you to perform some <profession>Profession</profession> Type skills,
+            without possessing the skills yourself, under the instruction of someone who has them.</p>
+        <p><skill>Weapon Finesse</skill> - Allows you to dual wield Super Light Melee Weapons and Light Firearms that shoot 2 or fewer bullets.</p>
+
+        <h3 id="SpendingXp">Spending Xp</h3>
+        <p>You can spend your hard-earned experience (<item>xp</item>) in the mobile app
+            (<a href="https://play.google.com/store/apps/details?id=com.forkbombsquad.stillalivelarp">Android</a> or
+            <a href="https://apps.apple.com/us/app/still-alive-larp/id6449710836">iOS</a>) by going to either: My Account
+            > Personal Skill Tree Diagram and tapping on a skill you qualify for or My Account > Skill Management > + Add New.
+            The amount of skills available can be pretty daunting - check out the <a href="#Samples">Sample Builds</a> Section
+            or feel free to reach out on our <a href="https://discord.gg/95rsefbQEe">Discord Server</a> if you need some guidance about which skills to take
+            , especially if you have a build in mind but don't know how to execute it.</p>
+
+        <h3 id="Progression">Progression and Earning Xp</h3>
+        <p>In order to continue to gain <item>xp</item> for your character and make real progress, you will need to
+            attend events and donate at least enough money for the Basic Donation Tier ($15). You are welcome to play for
+            free, but your character will not gain <item>xp</item>. When you donate at least enough for the Basic Donation
+            Tier of an event, you will earn 1 <item>xp</item> if you play as your PC or 2 <item>xp</item> if you play as an NPC.</p>
+        <p>The Raffle is another way that you can quickly earn <item>xp</item> for your character. At the end of every
+            event we do a raffle drawing where you can win various things for your character such as <item>xp</item>,
+            <item>crafting supplies</item>, <item>bullets</item>, or even <item>prestige points</item>!
+            When you donate enough for the Premium Donation Tier ($25+) for an event, you will get one free entry into The Raffle (Along with a meal ticket for the Commander's Feast).
+            Additionally, each level of the <skill>Gambler's</skill> branch of the skill tree grants you 1 bonus entry into the raffle (if you are playing your PC).
+            Finally, you may purchase Raffle Tickets for $5/each before the event starts. We will announce ahead of time what will
+            be raffled off each event so that you can plan for it. If you NPC for the event, you will start with 2 raffle tickets
+            (if you donate at least enough for premium entry).</p>
+
+        <p><i>Special Note For Players Who Played Still Alive before version 2.0</i> - Although the game and story are different this time around,
+            we'd like to reward you for sticking with us! When you make a character for the first time, you will gain half (rounded down)
+            of your unspent AND spent <item>experience</item> points to spend on your new character. Additionally, you will gain 1
+            <item>prestige point</item> to spend however you like! We're so glad you're coming back and
+            wanted to reward your loyalty!</p>
+
+        <h2 id="Character">Building the "Character" of your PC</h2>
+        <h3 id="Backstory">Your Backstory</h3>
+
+        <p>We hope your PC will become a living part of the world and its lore. Someone with their own motivations and
+            goals who can make decisions outside what's most mechanically optimal. For this reason, if you write a well-constructed
+            backstory about your character and their experience with the end of the world at least 24 hours before your
+            first event, you'll be awarded 1 extra starting <item>experience</item> (so long as it's approved by the game runners).
+            It doesn't need to be a novel, but a good description about your life before coming to camp and any important details
+            will suffice. If you need inspiration, check out <a href="#Story">The Story So Far...</a> to learn about the world and it's lore. Also, don't
+            be afraid to reach out to anyone at the Still Alive team if you need help creating your character or have
+            questions about the world. </p>
+
+        <h3 id="Stayincharacter">Staying In Character</h3>
+        <p>While suspending disbelief can be hard when dealing with some game mechanics, we're trying to keep the level
+            of immersion in this game as high as reasonably possible. Players should always be in character while the game is running
+            unless a Game Runner calls a time-out. If you need to come out of character for any reason (such as to talk to
+            a Game Runner or to make an important phone call), please pull one of us aside and let us know, then leave the
+            active play area before breaking character. This just means that you should distance yourself from all other
+            players for the duration of your character-break. Following this rule will do wonders for keeping an immersive
+            atmosphere for Still Alive, and we thank you for your compliance.</p>
+
+        <h3 id="Costumes">Costumes, Outfits, and Accessories</h3>
+        <p><i>Note</i> - When creating an outfit for your character, make sure you follow the rules outlined in the
+            <a href="#StarterGear">Starter Gear</a> section below as there are some restrictions on mechanically advantageous
+            clothing and accessory items. Gear that exceeds the limitations outlined there must be created in-game.</p>
+        <p>As this is a modern-day LARP, there are no restrictions on the styles of clothing you are allowed to wear. Anything
+            you could find in the real world could probably be found by your character as well. We do, however, require all
+            players to wear close-toed shoes for safety. Though the rest of your outfit is free-reign, remember that the game
+            takes place in rough terrain near forests, rivers, and steep hillsides so dress appropriately.
+            If you want to be especially immersive, remember that the apocalypse began more than 4 years ago so access to
+            machine washed clothing is rare. Any clean clothes you have would likely have been washed by hand and tears would
+            probably be repaired with patches.</p>
+        <p>You're free to build a specific costume for your character, but it's not necessary. So long as you look the part
+            you'll be accepted with open arms! If you have any off-the-wall ideas for your costume, please reach out to us
+            to get it approved before the event that you plan to wear it at.</p>
+        <p>As far as accessories go, just make sure you're following the rules in the <a href="#StarterGear">Starter Gear</a> section below.
+            Otherwise, you can bring just about anything you like in. Even cell phones are allowed, however we will ask you to turn them to airplane mode
+            after the event starts to keep immersion high as there are no longer functioning cell-towers in the world.</p>
+        <p>Flashlights are a special case - while allowed, regular flashlights are highly discouraged and should only be used
+            as a last resort. The light will attract hordes of zombies and potentially something even more sinister. There is a
+            solution, however: Blacklight flashlights may be used to your heart's content. Though they're dimmer than traditional flashlights,
+            it's a small price to pay for safety. The camp will have some blacklight flashlights that you can rent for a few bullets on a first-come first-served basis, or you
+            can bring your own. Keep in mind the rules about wielding weapons without the proper <skill>Dual Wielding</skill> or <skill>Improved Grip</skill>/<skill>Improved Handling</skill> skills! You may want to attach your
+            blacklight flashlight to your gun, if possible.</p>
+        <p>Finally, If your character's <item>Infection</item> Rating reaches 25% (and every 25% thereafter), we'll begin
+            adding some makeup to your character at check in to illustrate how the infection is corrupting your body! You can,
+            instead, apply this makeup yourself if you wish (with Game Runner approval).</p>
+        <p>You are allowed and encouraged to paint your nerf guns in any way you like, but you MUST leave the tip of the gun orange
+            (or whatever bright color it was originally).</p>
+
+        <h2 id="Safety">Safety</h2>
+
+        <p>The first and most important rule in Still Alive is Safety. We want everyone to be able to enjoy this larp
+            without worry about being injured. Listed in this section you will find our base safety guidelines. If we're missing anything or a particular
+            event has unique Safety requirements, we will talk about them during the pre-game briefing.
+        </p>
+        <h3 id="Firearm Safety">Firearm Safety</h3>
+        <p>Real firearms are strictly off limits on the ENTIRETY of the Still Alive LARP land. If you are caught bringing a real firearm, you will be banned from the LARP for life.</p>
+        <p>All custom painted Nerf guns MUST leave their tips entirely unpainted so that the bright color can be seen visibly from a distance.
+            Though this isn't required by law, we require it to play our game for the safety of all participants of the LARP.</p>
+        <h3 id="CombatSafety">Combat Safety</h3>
+        <p>Shooting and/or striking any person's head or face is strictly off limits. Any headshots are considered misses
+            and anyone purposely aiming for heads will be asked to leave. If you wish to shoot someone in the head for story
+            reasons, you should talk to a Game Runner, and we can work something out.</p>
+        <p>Eye protection is not required but it is recommended. Take it from us, a Nerf dart to the eye hurts a lot and
+            could do some serious damage.</p>
+        <p>All melee combat is considered Medium Contact. This means that attacks should never hurt but should be hard enough to
+            be felt through multiple layers of clothing. If a hit is every too hard, it does not count. Simply say "Too Hard" and continue playing,
+            taking a time out if needed. With blood pumping, everyone misjudges the strength of their attacks somtimes. Just be considerate.
+            Contact a Game Runner if someone is hitting too hard often enough that it's become a problem.</p>
+        <h3 id="TerrainSafety">Terrain and Land Use</h3>
+        <p>Closed-toed shoes are required to play the game.</p>
+        <p>There are several bridges in the game, usually made of wooden pallets. Be careful on and around them. Do not fight
+            or stand on bridges for long periods of time. Cross if you need to and continue fighting on the other side.</p>
+        <p>There are a few streams crossing the land and several wetlands you can come across. Waterproof boots are recommended,
+            as is a change of socks. You are free to play in the wetlands if you wish, but do so at your own risk.</p>
+        <p>The Camp has a large Fire Pit in the middle that will be lit for the majority of most events. Treat it with respect,
+            fire is not a toy.</p>
+        <p>Though there is a lot of forest cover on the land, the camp itself is in the middle of a small meadow with little
+            natural shade. It can get extremely warm before the sun goes down. Make sure you apply sunscreen often and stay hydrated. We will
+            provide water if needed, but we won't have enough to supply everyone if no one brings their own.</p>
+        <h3 id="WildlifeSafety">Wildlife</h3>
+        <p>The land is filled with diverse species of plants and animals. Be careful out there and always be vigilant.</p>
+        <p>Notable harmful plant species you may encounter include: Stinging Nettles and Wild Parsnip. Poison Ivy and Poison Oak are
+            also native to this area of Wisconsin, though none have been spotted on the land so far.</p>
+        <p>Notable harmful animal species you may encounter include: Deer Ticks, Mosquitoes and other biting bugs, and Snakes. Bug spray is highly recommended.</p>
+        <h3 id="SubstanceUse">Substance Use</h3>
+        <p>If you are of legal age to do so, you may bring in Alcohol or Tobacco products and use them in-game if you wish, though you should always be considerate of others.
+            If you are sharing, it is your responsibility to make sure that everyone you share with is of legal age to consume such products. Illegal substances are
+            NOT allowed on Still Alive LARP property.</p>
+        <p>Keep in mind that Still Alive is a very physical game that can require quick thinking and fast reflexes. If you wish to indulge, make sure you do so in
+            moderation.</p>
+        <h3 id="Emergencies">Emergencies</h3>
+        <p>All Game Runners have radios to contact each other and always talk on Channel 10. We have a first at kit at camp if needed and will not hesitate to transport
+            you up the hill and to the hospital in Reedsburg in the event of an emergency.</p>
+
+
+        <h2 id="Your First Event">Your First Event</h2>
+        <p>When you check in as your PC for the first time, your character is afforded a few niceties to help get
+            them off the ground.</p>
+        <h3 id="PreMasteredSkills">Pre-Mastered Skills</h3>
+        <p>Ordinarily, when you take a new <combat>Combat</combat> or <profession>Profession</profession> skill, you
+            need to be taught to use it in-game by someone with the appropriate teaching skill (<skill>Tutor</skill>,
+            <skill>Instructor</skill>, <skill>Teacher</skill>, <skill>Professor</skill>) before you can actually use it.
+            <talent>Talent</talent> skills are always exempt from this rule, as are any skills that were purchased before your PC's
+            first event, saving you some time and <item>bullets</item>.</p>
+        <h3 id="StarterGear">Starter Gear</h3>
+        <p>In addition to skills, your PC is allowed to enter their first event with any of the following gear:</p>
+
+        <p><item>Weapons</item> - You may enter with up to 2 of each type of weapon that you're proficient with. You may not
+            enter with any weapons you are not proficient with.</p>
+        <p><item>Clothing</item> - You may enter with as much or as little clothing as you like. However, you are limited
+            to 1 piece of clothing that provides a distinct mechanical advantage (such as cargo shorts/pants or jackets/coats with
+            several large pockets). If you have any questions as to what constitutes mechanically advantageous clothing,
+            reach out to us on the Discord! We'll gladly take a look at things on a case-by-base basis. Typically, it comes
+            down to carrying capacity.</p>
+        <p><item>Accessories</item> - You may enter with any number of non-mechanically advantageous accessory items
+            (such as safety glasses, sunglasses, belts, masks, headbands, gloves, phones, watches, etc). You may enter with 2 Mechanically Advantageous Accessories
+            such as flashlights (blacklight and regular) or holsters. Remember that non-blacklight flashlights may get you killed!
+        </p>
+        <p><item>Bags</item> - You may enter with 1 <item>Small Bag</item> and 1 bag that's <item>Large</item> or smaller. Bag Size Classifications are defined in the table below:</p>
+
+        <table border="1">
+            <tr>
+                <th>Bag Size</th>
+                <th>Bag Capacity Requirements</th>
+            </tr>
+            <tr>
+                <td>Small</td>
+                <td>Capacity of 0.5 liters (30.5cu in) or less</td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>Capacity between 0.5 liters (30.5cu in) and 5 liters (305.1cu in)</td>
+            </tr>
+            <tr>
+                <td>Large</td>
+                <td>Capacity between 5 liters (305.1cu in) and 25 liters (1,525.6cu in)</td>
+            </tr>
+            <tr>
+                <td>Extra Large</td>
+                <td>Capacity larger than 25 liters (1,525.6cu in)</td>
+            </tr>
+        </table>
+
+        <p>All of the gear you enter with will be registered to your character, allowing you to bring it with you to
+            any subsequent events or leave it at home if you wish. After your Character's first event, if you want your character to
+            have new gear (or if you want to come in with more gear than what you're limited to during your first event),
+            you will either need to craft it yourself, have someone else craft it for you, or purchase it at the Camp store
+            with your hard-earned <item>bullets</item> (if you plan to purchase your gear from the Camp, please give it to
+            staff ahead of time so that we can have it ready and available).</p>
+        <p>You may switch out your regular clothing, shoes, or non-mechanically advantageous accessory items without needing
+            to worry about getting them into the game. The idea is to allow flexibility with what players are allowed to wear
+            without giving them an advantage in the game. If you have any questions, please don't hesitate to reach out
+            to us on the Discord.</p>
+
+        <h3 id="MoneyAndMaterials">Money and Materials</h3>
+        <p>Though you need to supply your own gear, we will supply everything else (<item>crafting materials</item>,
+            <item>bullets</item>, <item>beads</item>, etc). All players start with 20 <item>bullets</item> which serve as both
+            ammunition and currency in this game. We know nearly everyone who owns a nerf gun also owns darts for it.
+            It's for this reason that we never allow players to bring in darts from their own supply
+            to keep the game fair for everyone. During checkout at the end of each event, your materials counts are
+            uploaded to your character in the Mobile App and their physical counterparts are returned to the LARP.</p>
+
+        <p>While in the Camp, traders may come and go, selling or buying various wares.
+            You're free to trade with them as you please. Make sure you check in often because new traders may have rare
+            or limited-time items! While real money may be used out of game to buy things such as raffle tickets, flashlights, and food,
+            you will NEVER be able to buy <item>bullets</item> or in game items for real money. </p>
+        <p>Different <item>bullet</item> types have different values to most people, though bartering is always an option. Below is a table
+            showing the typical exchange rate for <item>bullets</item>. Exchange rates may fluctuate a little, but they're much more
+            rigid than the prices of <item>crafting materials</item>.</p>
+
+        <table border="1">
+            <tr>
+                <th>Bullet Type</th>
+                <th>Value in Regular Bullets</th>
+            </tr>
+            <tr>
+                <td>Bullet</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Megadart</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Rival (Military Grade Ammo)</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>Rocket</td>
+                <td>10</td>
+            </tr>
+        </table>
+
+        <p>*This table is just a guideline and should not be used as a set-in-stone exchange rate. The apocalypse is
+            rough and times are tough. Prices are bound to vary.</p>
+        <h2 id="Story">The Story So Far...</h2>
+        <h3 id="Spring2024">Spring 2024</h3>
+        <p>"Four years. It's been four years since this damn infection hit. What started it? I've still got no idea -
+            I don't think anyone does. The big cities fell first... lots of people cooped up together like anchovies in a can.
+            They were doomed before this whole thing got off the ground. Always started the same way too: a loud ringing as
+            everyone's phones went off in unison, alerting us to the 'Major Hospital Quarantined Due To Outbreak'. Then, a few
+            days later you'd hear they've started calling the whole city a 'Dead Zone'.
+        </p>
+
+        <p>
+            They always thought they'd cure it too. Every single one of those fucking hospitals took in infected patients trying
+            desperately to reverse the effects, only to close for good within a couple of days and doom the entire city shortly after.
+            That's when they started invoking Martial Law - not like it did any good, though. By the time the new world order
+            was enforced, the infection had already wormed its way inside their walls.
+        </p>
+
+        <p>
+            Back in those days they didn't know anything about the way it works - slowly corrupting you from the inside.
+            They all thought nothing bad would happen to them... and they were all wrong. Within about a year the whole world
+            was plunged into absolute chaos. No major cities or towns left - just a few small villages standing as a beacon of hope, isolated
+            from the rest of the world. It wouldn't be long until those fell too.
+        </p>
+
+        <p>
+            I still remember the day I left our little hamlet. It was a rainy April morning when we got an alert that a town
+            not ten miles from us was declared a 'Dead Zone' and instructing all of us to cut any communications with them.
+            It was clear that we needed to leave. So Lancer, Gantz and I packed up our guns and headed out. We figured that,
+            if we could get far enough away from town, we could build a camp that would hold for years before the infection
+            breached its walls; and in that week, the camp was finished.
+        </p>
+
+        <p>
+            I suppose you're wondering who I am and if you'll be safe here. Well, to answer the first question: I am Commander
+            Davis, leader and protector of this camp. As for the second question, that's a little tougher to answer - nowhere is safe.
+            People haven't been safe since this whole thing stared... but, if you're looking for the safest spot within a hundred miles,
+            then you're in the right place. As long as you're not stupid, I'm sure you'll get along just fine. So, without further
+            ado, welcome to Camp Still Alive!"
+        </p>
+        <h3 id="Spring2025">Spring 2025</h3>
+        <p>
+            If you're wondering how 2024 went, then have a seat. It was the most eventful year we've had since we founded the damn place.
+            Airman Wylder became a ranking member of the Camp, a well-earned achievement. Along with that we've nearly doubled the
+            number of survivors living here. A true testament to the Camp's longevity.
+        </p>
+        <p>
+            The biggest accomplishment we made over the year was finishing the Radio Tower Project. It took nearly the entire warm season
+            to do it, but we pulled through in the end. Finally, we can communicate across the wasteland - priming us for Phase 2.
+            And yes, details about Phase 2 will remain classified until such time that I see it fit to share them.
+        </p>
+        <p>
+            We only had one casualty: Kody Kowaslki - an achievement all on its own. Though, Lancer seems to think we just got
+            a lucky break and that there will be many more casualties to come - but what does he know? We've got to celebrate the
+            small victories while we have them.
+        </p>
+        <p>
+            The last thing I remember before strapping down for the winter was an encounter with a few Cultist bastards and their
+            Gusher pets. Somehow they've got zombies trained to like them and fight for them. Utterly Revolting. A man from their
+            ranks, Viktor Petrov, left us a threatening note about some creature called "The Juggernaut". Bunch of empty threats if
+            you ask me. Fuckin' zombie worshipers.
+        </p>
+        <p>
+            Overall it was a good year, though if we can keep the momentum going, this year will be better I'm sure.
+        </p>
+
+        <h2 id="EventEntry">Event Entry Details</h2>
+
+        <p>You can play Still Alive for free if you wish! However, there are 2 tiers of donations that you can give which afford you multiple benefits!</p>
+        <h3 id="Donations">Donation Tiers</h3>
+
+        <p><b>Basic Donation Tier - $15</b> If you donate $15, you are able to play the game with your PC if you wish.
+            Playing as a PC, you will earn 1 <item>xp</item>. If you choose to play as an NPC, you will earn 2 <item>xp</item>.
+            If you choose this tier, you will need to provide your own food.</p>
+
+        <p><b>Premium Donation Tier - $25 or more</b> If you donate at least $25, you gain all the benefits of the Basic Donation Tier as well as 1 Meal
+            Ticket to the Commander's Feast and 1 free Raffle Ticket for The Raffle at the end of the event.
+            If you NPC for the event along with your usual 2 <item>xp</item>, you get 2 free raffle tickets instead of 1.</p>
+
+        <h3 id="Feast">The Commander's Feast</h3>
+        <p>The Commander's Feast is a meal put on by the game runners each event. Though the type of food varies from event
+            to event, anyone with a Meal Ticket will be allowed to eat to their heart's content! The Commander's Feast for each
+            event will be announced ahead of time, alongside the rest of the details for the event.</p>
+
+        <h3 id="Raffle">The Raffle</h3>
+        <p>The Raffle is a small drawing that the Game Runners do at the end of each event. Each entry into it gives you the
+            opportunity to win lots of prizes that range from <item>experience</item> points, to free weapons, and maybe even a coveted <item>Prestige Point</item>!
+            The prizes for the raffle will usually be announced at the same time as the Commander's Feast.</p>
+        <p>The raffle will usually offer 3-5 prizes, drawn in order from least to most valuable. You may only win one prize per event. If you win
+            an earlier prize but want to try your chances at a later one, you may ask to have your ticket put back in the pot and a new winner will be drawn
+            for the current prize. If you give up a prize in this way, you are not guaranteed to be picked for another one.</p>
+        <p>Buying Premium Entry will get you 1 free Raffle Ticket entry (2 if you NPC). Additional Raffle Tickets may be purchased for $5/each.
+            It's also worth noting that the skills <skill>Gambler's Luck</skill> and <skill>Gambler's Eye</skill> also grants an additional free Raffle Ticket
+            per event, if you're playing your PC.</p>
+
+        <h1 id="Samples">Sample Builds</h1>
+
+        <h2 id="SampleStarters">Sample Starter Builds (4xp + 1 Free Tier-1 Skill)</h2>
+
+        <p>If you need some ideas about how to build your character, we've created a few example builds below that fit
+            into some basic archetypes. All the sample builds below assume the character turned in a backstory to earn
+            1 extra starting <item>experience</item>. This means that they spent 4 <item>experience</item> and 1 <item>Free Tier-1 Skill</item>.
+            In addition to the purchased skills below, all characters get the following skills for free: <skill>Tap</skill>,
+            <skill>Light Firearm Proficiency</skill>, <skill>Bash</skill>, <skill>Super Light Melee Weapon Proficiency</skill>,
+            <skill>Follow the Leader</skill>, and <skill>Weapon Finesse</skill>.</p>
+
+        <h3 id="Scavenger">The Scavenger</h3>
+
+        <p>The Scavenger is a character who's always prepared. Gathering materials and resources from the environment
+            around them and repurposing them into new things. An all around jack of all trades that anyone would want on
+            their expeditions.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Scavenger</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Bullet Crafting</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Tinkerer</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Break</td>
+                <td>1</td>
+            </tr>
+        </table>
+
+
+        <h3 id="CloseComb">The Close Combatant</h3>
+
+        <p>The Close-Combatant is a character who loves to get up into combat and fight zombies face to face.
+            They'll use a gun if they have to, but they're much more comfortable in the thick of the battle with a weapon
+            that doesn't run out of ammunition. They're unusually tough and can take a hit or two before going down.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Light Melee Weapon Proficiency</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Medium Melee Weapon Proficiency</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Tough Skin</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Naturally Resistant</td>
+                <td>1</td>
+            </tr>
+        </table>
+
+
+        <h3 id="GunExp">The Gun Expert</h3>
+
+        <p>The Gun Expert is a character who strives to wield the biggest gun and use it with deadly accuracy.
+            Whether you're a zombie or a human, you should fear the trigger finger of The Gun Expert.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Medium Firearm Proficiency</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Heavy Firearm Proficiency</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Ranged Tap</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Deep Pockets</td>
+                <td>1</td>
+            </tr>
+        </table>
+
+
+        <h3 id="survivalist">The Survivalist</h3>
+
+        <p>Whether through sheer willpower or a genetic predisposition, The Survivalist is nearly impossible to kill and
+            always seems to have another trick up their sleeves!</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Break</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Tough Skin</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Naturally Resistant</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Will to Live</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+
+        <h3 id="TheDual">The Dual Wielder</h3>
+
+        <p>Determined never to be caught unaware, The Dual Wielder strives to ensure they always have the upper hand!
+            Planning to eventually wield firearms and melee weapons together, they laid the foundation for that goal. </p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Light Firearm Dual Wielding</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Light Melee Weapon Proficiency</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Medium Firearm Proficiency</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Medium Firearm Dual Wielding</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+        <h2 id="SampleIntermediates">Sample Intermediate Builds (10xp + 1 Free Tier-1 Skill)</h2>
+
+        <p>The following builds are for players who want a more in-depth idea about what different character archetypes can do after getting a few events under their belts. All the characters here are using 10 <item>xp</item> and 1 <item>Free Tier-1 Skill</item>. The equivalent of a character (with approved backstory) going to 6 events OR only 3 events if you play as an NPC.</p>
+
+        <h3 id="Repurposer">The Repurposer</h3>
+
+        <p>The Repurposer is a character focused on scavenging resources and using those resources to craft new and better things. A focused character that knows what they want to accomplish but will rely on others to help them if things get hairy.</p>
+        <p>It's worth noting that this build saves 2 <item>xp</item> by taking <skill>Expert: Profession</skill> early on, without it this build would've cost 12 <item>xp</item>. The longer you have them, the more the <skill>Expert</skill> skills end up saving you in the long run.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Scavenger</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Expert: Profession</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Treasure Hunter</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Tinkerer</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Bullet Crafting</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Large Round Crafting</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Tomb Raider</td>
+                <td>2 (reduced from 3)</td>
+            </tr>
+            <tr>
+                <td>Weapon Smithing</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+        </table>
+
+        <h3 id="OnePercent">The One Percenter</h3>
+
+        <p>The One Percenter is a character focused on getting gathering as many bullets as they can to keep up their wealthy lifestyle.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Scavenger</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Bullet Crafting</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Deep Pockets</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Deeper Pockets</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Parachute Pants</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Gambler's Luck</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Scavenger</td>
+                <td>1</td>
+            </tr>
+        </table>
+
+        <h3 id="Physician">The Physician</h3>
+
+        <p>The Physician is a character focused on healing others, creating Pharmaceuticals, and researching a cure</p>
+        <p>It's worth noting that this build saves 1 <item>xp</item> by taking <skill>Expert: Profession</skill> early on, without it this build would've cost 11 <item>xp</item>. The longer you have them, the more the <skill>Expert</skill> skills end up saving you in the long run.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Medic</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Expert: Profession</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Doctor</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Pharmaceuticals</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Surgeon</td>
+                <td>2 (reduced from 3)</td>
+            </tr>
+            <tr>
+                <td>Advanced Medical Research</td>
+                <td>3 (reduced from 4)</td>
+            </tr>
+        </table>
+
+        <h3 id="Unkillable">The Unkillable</h3>
+
+        <p>The Unkillable is a character focused entirely on surviving anything that's thrown at them.</p>
+        <p>It's worth noting that this build saves 5 <item>xp</item> by taking <skill>Expert: Talent</skill> early on, without it this build would've cost 16 <item>xp</item>. The longer you have them, the more the <skill>Expert</skill> skills end up saving you in the long run.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Tough Skin</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Expert: Talent</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>Naturally Resistant</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Naturally Resilient</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Will To Live</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Pain Tolerance</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Gambler's Luck</td>
+                <td>1 (reduced from 2)</td>
+            </tr>
+            <tr>
+                <td>Gambler's Eye</td>
+                <td>3 (reduced from 4)</td>
+            </tr>
+        </table>
+
+        <h3 id="JackOfAll">The Jack of All Trades</h3>
+
+        <p>The Jack of All Trades is a character not focused on a single idea but instead focused on taking lots of useful skills to try and cover all situations. This is likely the closest to your average Still Alive character build.</p>
+
+        <table border="1">
+            <tr>
+                <th>SKILL</th>
+                <th>XP COST</th>
+            </tr>
+            <tr>
+                <td>Break</td>
+                <td>1 (Use free Tier-1 Skill)</td>
+            </tr>
+            <tr>
+                <td>Medium Firearm Proficiency</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Medic</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Tough Skin</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Scavenger</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Light Melee Weapon Proficiency</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Tinkerer</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Ranged Tap</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Musical Inspiration</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+        <h1 id="Combat">Combat</h1>
+        <p>First of all, a disclaimer: Still Alive is an unforgiving, brutal game and combat can be extremely costly, especially when dealing with other human. Choose your battles wisely, your character may not come out alive if you don't!</p>
+        <h2 id="Weapon Classification"> Weapon Classification</h2>
+        <p>Before we get into the nitty-gritty of how combat works, you need to know how to tell what your weapons are classified as, so you can tell which skills are required to wield them.</p>
+        <h3 id="Firearm Classification">Firearm Classification</h3>
+        <p>The only guns currently allowed in the Still Alive system are Nerf brand. Additionally, no custom modifications (besides custom paint) are
+            allowed - all guns must be stock. The only types of Nerf guns currently allowed in the system are those
+            that shoot any of the following ammo types: Regular Nerf Darts, Megadarts, Rivals, or Rockets.</p>
+        <p>Beyond that, figuring out what classification your firearm is straightforward. Start with 0 points, and then add points
+            for any of the following:</p>
+        <table border="1">
+            <tr>
+                <th>If your firearm...</th>
+                <th>Points to Add</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>Has at least 1 detachable magazine</td>
+                <td>+1 per magazine</td>
+                <td>This includes any extra magazine storage slots that the gun may have on its body, even if they don't directly feed the barrel.</td>
+            </tr>
+            <tr>
+                <td>Doesn't hold a magazine but holds more than 5 bullets</td>
+                <td>+1</td>
+                <td>This includes all bullets loaded into the chamber, as well as any additional bullet storage on the gun's body.</td>
+            </tr>
+            <tr>
+                <td>Doesn't hold a magazine but holds more than 10 bullets</td>
+                <td>+1</td>
+                <td>This includes all bullets loaded into the chamber, as well as any additional bullet storage on the gun's body.</td>
+            </tr>
+            <tr>
+                <td>Doesn't hold a magazine but holds more than 15 bullets</td>
+                <td>+1</td>
+                <td>This includes all bullets loaded into the chamber, as well as any additional bullet storage on the gun's body.</td>
+            </tr>
+            <tr>
+                <td>Is semi-automatic</td>
+                <td>+1</td>
+                <td>
+                    Semi-Automatic is defined as the ability to fire the firearm repeatedly by just interacting with the firing mechanism over and over again without requiring any other interactions.
+                    Auxiliary actions performed on the firing mechanism itself (such as pulling back a bowstring before relasing it to fire) are not considered "other interactions" as all "other interactions" must be made to a different part of the firearm.
+                    Additionally, for a firearm to be considered Semi-Automatic, it needs to be able to fire more than one shot before reloading.
+                    Firearms that fire multiple bullets in a single shot but then must be interacted with to fire again (such as the Nerf Zombie Strike Sledgefire) are not considered Semi-Automatic.<br><br>
+                    When dealing with non-traditional firearm designs, these rules can sometimes be confusing. To help clear things up, the following firearms are considered Semi-Automatic: Nerf Dragonpower Skyblaze, Nerf N-Strike StratoBow, and Nerf Thunderbow.
+                    To add additional clarity, the following firearms are NOT considered Semi-Automatic: Nerf Epic Action Bow, Nerf Hawkeye Longshot Bow, Nerf Lightning Bow.
+                </td>
+            </tr>
+            <tr>
+                <td>Is fully automatic</td>
+                <td>+2</td>
+                <td>
+                    Fully-Automatic is defined as the ability to fire a firearm repeatedly by interacting with the firing mechanism only once (such as by holding down a trigger).
+                    Additionally, for a firearm to be considered Fully-Automatic, it needs to be able to fire more than one shot before reloading.
+                    Firearms that fire multiple bullets in a single shot but then must be interacted with to fire again (such as the Nerf Zombie Strike Sledgefire) are not considered Fully-Automatic.
+
+                </td>
+            </tr>
+            <tr>
+                <td>Can shoot Rockets</td>
+                <td>Automatically Considered Military Grade</td>
+                <td>This includes any firearms that have rocket launchers attached to them.</td>
+            </tr>
+            <tr>
+                <td>Can shoot Rival ammo</td>
+                <td>Automatically Considered Military Grade</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <p>Once you have your total, you can check your firearm classification on the table below.
+            Only firearms that can shoot Rockets or Rival Ammo are considered Military Grade.
+            All other firearms are capped at the "Advanced" level. Additionally, if you have a light firearm that holds 2 or fewer bullets,
+            it can be used with the <skill>Weapon Finesse</skill> skill.</p>
+
+        <table border="1">
+            <tr>
+                <th>Points</th>
+                <th>Classification/Proficiency Required</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>Light Firearm</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Medium Firearm</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Heavy Firearm</td>
+            </tr>
+            <tr>
+                <td>3+</td>
+                <td>Advanced Firearm</td>
+            </tr>
+        </table>
+
+
+        <h3 id="MeleeWeaponClassification">Melee Weapon Classification</h3>
+
+        <p>Melee weapons are easier to classify than firearms, though they are still subject to game runner approval.
+            Weapons bought from <a href="https://calimacil.com/">Calimacil</a> or
+            <a href="https://www.medievalcollectibles.com/">Medieval Collectables</a> are usually approved without issues.
+            Use the table below to determine which category your weapon is in:</p>
+
+        <table border="1">
+            <tr>
+                <th>Attributes</th>
+                <th>Classification/Proficiency Required</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>Coreless (safe to throw or stab). No size restrictions.</td>
+                <td>Super Light Melee Weapon</td>
+                <td>These are Typically smaller than or near the size of Light weapons. If a coreless weapon is
+                    deemed too large by Game Runners, we will reclassify it on a case-by-case basis.</td>
+            </tr>
+            <tr>
+                <td>22.99" or Shorter<br>(57.3cm)</td>
+                <td>Light Melee Weapon</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>23" - 43.99"<br>(57.4cm - 111.7cm)</td>
+                <td>Medium Melee Weapon</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>44" or more <br>(111.8cm or more)</td>
+                <td>Heavy Melee Weapon</td>
+                <td></td>
+            </tr>
+        </table>
+        <h2 id="CombatBasics">Combat Basics</h2>
+        <p>The Still Alive combat system doesn't use hit-points. Instead, if you are hit by an attack and don't have
+            anything protecting you (such as beads from <item>Armor</item> or the <skill>Tough Skin</skill> skill),
+            you will become injured. This means that the size of a weapon or bullet doesn't affect the amount of damage it deals,
+            only the accuracy and hardness of its hits.</p>
+        <p>All attacks are governed by the honor system in Still Alive. If you feel an attack hit you, you've been hit. If you don't feel it,
+            then the attack missed you. This makes Nighttime combat more dangerous because attacks will "miss" more often due to
+            the psychological connections between being able to see an attack hit you and feeling it. Attacks hitting the
+            head or just loose clothing never count. A Game Runner will try their best to not be too far away from
+            an encounter to help keep things fair. If someone starts abusing this power, we will intervene.</p>
+        <p>You have 5 separate zones of your body that can be separately injured: your 4 Limbs (2 arms and 2 legs) and your Torso.
+            Your Limbs can sustain multiple injuries at once, your torso may only have one Wound/Fatal Wound at a time. See the
+            <a href="#InjuriesAndConditions">Injuries and Conditions</a> section below for more information.</p>
+        <h2 id="FirearmCombat">Fighting With Firearms</h2>
+        <p>Guns are simultaneously the most useful and most deadly weapons in your arsenal. While the perfect shot can
+            knock a zombie to the ground, a stray bullet could kill your companion.</p>
+        <p>Shooting firearms accurately is difficult. Unless you possess a skill that says otherwise, all firearms must be wielded and fired with 2 hands.
+            If you shoot a firearm with one hand, you must toss it at least 10 feet away from you as it "flies out of your hands".
+            This isn't an ideal situation to be in, but it might just save your life.</p>
+        <p>Shooting your target is the best way to dispatch them quickly and safely. Shooting a limb gives it a <condition>Wound</condition>, regardless of how many
+            <condition>Wounds</condition> (<condition>Wrapped</condition> or <condition>Unwrapped</condition>) it already has. Shooting a Torso removes all <condition>Wounds</condition> the torso already has, then
+            gives it an <condition>Unwrapped</condition> <condition>Fatal Wound</condition> and makes the target <condition>Helpless</condition>.
+            If your target is a human, shooting them in the Torso while they are <condition>Helpless</condition> will instantly kill them, doing the same for zombies requires the <skill>Ranged Tap</skill> skill.</p>
+
+        <h3 id="RocketsAndGrenades">Rockets and Grenades</h3>
+        <p>While all <item>bullets</item> deal the same amount of damage, the same can't be said for <item>Rockets</item>.
+            When a <item>Rocket</item> is fired, if it hit its target (or another nearby target), the <item>Rocket</item> immediately explodes.
+            Everyone within 10ft of the hit immediately takes a <condition>Fatal Wound</condition> to their Torso. Additionally,
+            the target who was hit directly takes a <condition>Wound</condition> on each of their Limbs. In most cases, hitting
+            a Zombie with a <item>Rocket</item> will instantly kill them (without the need to <skill>Tap</skill> them).
+        </p>
+        <p>
+            <item>Fortifications</item> may be targeted by Rockets as well. A direct hit from a <item>Rocket</item> to a
+            <item>Fortification</item> instantly deals 5 damage to it. Fortifications do not take damage from <item>Rockets</item> unless they are hit directly.
+            When a <item>Fortification</item> is hit by a <item>Rocket</item>, the <item>Rocket</item> will still injure to everyone within 10ft of it - except for
+            anyone hiding behind the <item>Fortification</item> at the time of the blast. If the <item>Rocket</item> deals enough damage to the <item>Fortification</item>
+            that it breaks, anyone hiding behind it will also be injured as normal.
+        </p>
+        <p>
+            If the <item>Rocket</item> misses its target completely, the person who fired it waits for it to come to a stop, counts to 3, and then shouts "BOOM!".
+            Everyone within 10 feet of the <item>Rocket</item> when "BOOM!" is shouted immediately takes a <condition>Fatal Wound</condition> to their Torso.
+            If a brave (or stupid) character decides to jump on top of the <item>Rocket</item> before the "BOOM!", they will shield everyone around them from the blast.
+            But will each of their Limbs will take a <condition>Wound</condition> and their Torso will take a <condition>Fatal Wound</condition>.
+        </p>
+        <p>
+            <item>Grenades</item> are just simply <item>Rockets</item> that have been thrown by someone using the <skill>Thrown Weapons</skill> skill.
+            Regardless of where they are aimed, they function as a <item>Rocket</item> that misses its target (don't forget to shout "BOOM!" after it's been still for 3 seconds). As such, hitting a target with a <item>Grenade</item>
+            won't deal any extra injuries to them. <item>Grenades</item> cannot deal damage to <item>Fortifications</item>. Brave (or stupid) characters
+            may still dive on top of a <item>Grenade</item> to protect their allies, taking the same injuries as they would if they dove on top of a <item>Rocket</item>.
+            If you throw a <item>Grenade</item>, you must shout "GRENADE!" so everyone knows it works differently than a <item>Rocket</item>.
+        </p>
+
+        <h2 id="MeleeCombat">Fighting With Melee Weapons</h2>
+        <p>
+            Melee combat can be especially tricky in a world where everyone has guns, but it certainly has its place!
+            The only real problem with melee weapons is that they require you to get up close and personal with your target.
+        </p>
+        <p>
+            Wielding melee weapons without training can be cumbersome. Unless you possess a skill that says otherwise, all melee weapons must be wielded with 2 hands.
+            If you make a one-handed attack with a melee weapon, you must drop the weapon to your feet after the attack. Not an ideal situation, but one that could save your life. Additionally,
+            blocking an attack with a melee weapon held in one hand also causes you to drop it.</p>
+        <p>
+            In order for a Melee Attack to be considered legal, you must make a full swing with it.
+            To do so, your wrist (or wrists if you're holding a weapon with both hands) must pass behind your body
+            during the back-swing before swinging forward in an arc. This "full-swing" ensures that melee attacks stay balanced and keep the necessary level
+            of danger that they hold in real life. You can NEVER stab using any weapon that has a fiberglass core.
+        </p>
+        <p>
+            Super Light Melee Weapons are a special case. You DO NOT swing them to attack. Instead, you must stab your target with them.
+            To initiate a stab, you need to bring your hand back towards your body so that your knuckles are at the same level or behind your Torso, wait a brief moment, then thrust forward.
+            Wait another brief moment before attempting another stab. Stabs should be calculated and calm, not erratic.
+            DO NOT stab any harder than you would hit with your melee weapon. If you accidentally punch your target, your attack does not count.
+        </p>
+        <p>
+            Still Alive combat is STRICTLY medium contact. This means that your strike should never hurt, but it should be
+            hard enough to be felt through several layers of clothing. This can be difficult to keep up when adrenaline is
+            running, so if you've been hit too hard just call out "Too Hard!" and ignore that attack. Everyone needs to try
+            and be considerate of everyone else.
+        </p>
+        <p>
+            Attacks from Melee weapons work very similarly to firearms. Attacks to Limbs cause <condition>Wounds</condition> as normal, but attacks to the Torso are a bit less effective than firearms.
+            A melee attack to a Torso with no <condition>Wounds</condition> causes it to gain a <condition>Wound</condition>. If the Torso already has a <condition>Wound</condition> (<condition>Wrapped</condition> or <condition>Unwrapped</condition>),
+            a melee attack upgrades that <condition>Wound</condition> to an <condition>Unwrapped</condition> <condition>Fatal Wound</condition>. Additional attacks to a Torso with an <condition>Unwrapped</condition> <condition>Fatal Wound</condition> do no further damage. If the <condition>Fatal Wound</condition>
+            has been <condition>Wrapped</condition>, an attack will cause the <condition>Fatal Wound</condition> to become <condition>Unwrapped</condition> again, restarting timers and giving making the target <condition>Helpless</condition>.
+        </p>
+        <p>
+            Heavy Melee Weapons have a special ability: The Shove Attack. The attacker will shout "SHOVE!" and swing their weapon from above their heads
+            (this attack should be done slowly and deliberately, taking about twice as much time as a normal melee attack).
+            Shove attacks deal normal damage but also knock the target back 5 feet and cause them to fall PRONE (the target's torso must touch the ground).
+            If the target blocks the Shove Attack, they are still knocked back and fall PRONE from the force.
+        </p>
+
+        <h2 id="ZombieCombat">Fighting Zombies</h2>
+        <p>
+            You'll most likely be fighting zombies much more often than you'll be facing off with other humans;
+            that isn't to say you won't come across the occasional hostile survivor or unhinged psycho, just that zombies
+            will probably be your number one concern most of the time. Fortunately for you, all you need to do is take them
+            out before they reach you. If a zombie gets close enough to you, it will lunge out at you and try to grab one of your limbs or your torso
+            (signifying that it's biting you). If a Zombie grabs on to you, DO NOT try to fight it or pull away.
+            You have a few options to remove a zombie that has latched onto you: have a friend attack it until it lets go,
+            or use one of the following skills: <skill>Break</skill>, <skill>Break Away</skill>, or <skill>Unarmed Break</skill>.
+            Without using those skills, you MAY NOT directly attack a zombie that's currently biting you. This is to signify
+            the great amount of pain the zombie is causing you while it flails around and your inability to focus while it happens.
+            You are free to defend yourself from other attacks while this happens, so long as you have the skills to wield your
+            weapons properly.
+        </p>
+        <p>
+            When you are grabbed (bitten), you will be held in place by the zombie. You are not allowed to move from the spot you were grabbed. If a zombie grabs onto
+            one of your Limbs you must immediately drop anything it was carrying, and you may not use that Limb. Zombie bites are considered Melee Attacks for all intents and purposes.
+            This means that, the moment a zombie successfully bites you, the area (limb or torso) they were biting gains an injury as if it were struck by a Melee Weapon.
+            Because zombie bites count as melee attacks, the injury can be prevented by the beads granted by <item>Armor</item> and skills like <skill>Tough Skin</skill>.
+            However, even if the Injury is prevented, a zombie bite still holds you in place and needs to be removed by another player (or with a skill like <skill>Break</skill>) as normal.
+            Multiple zombies may grab and bite you at once.
+        </p>
+        <p>
+            If things take a turn for the worse, zombies may drag you to the ground and start Devouring you. Zombies may
+            ONLY begin Devouring you IF AND ONLY IF one of the following is true:
+            1. You have the helpless condition (usually caused by an <condition>Unwrapped</condition> <condition>Fatal Wound</condition>).
+            2. More than half of your body is currently being grabbed by zombies (4 limbs, 1 torso).
+            3. You have no nearby allies and have no other means of removing the zombies that are currently grabbing you.
+        </p>
+        <p>
+            When zombies start Devouring you have <b>2 minutes</b> to scream like crazy and get help (this timer is the same one as the <condition>Unwrapped</condition> <condition>Fatal Wound</condition> timer so if you were helpless
+            before zombies began Devouring you, the timer does not reset). If aren't saved in that time, your character is Devoured by zombies
+            and killed. If someone manages to save you before those 2 minutes are up, you survive the encounter but gain a
+            <condition>Wound</condition> on each of your limbs (on top of any existing <condition>Wounds</condition> you may have), and
+            your torso gains a <condition>Fatal Wound</condition> if it didn't already have one. The <skill>Mysterious Stranger</skill> skill
+            (and subsequent skills in that branch) are designed to help you in a situation like this.
+        </p>
+        <p>
+            Dealing damage to zombies works nearly identically to attacking humans. Attacking their Limbs
+            <condition>Wounds</condition> them and attacks to the torso will cause <condition>Wounds</condition> and <condition>Fatal Wounds</condition> as normal.
+            There are a few major differences, though. First, regular Torso <condition>Wounds</condition> have no adverse affects on a zombie. Second, zombies
+            cannot be instantly killed by bullets when they have a <condition>Fatal Wound</condition> the way humans can. Third, zombies have
+            the ability to regenerate their <condition>Wounds</condition> and <condition>Fatal Wounds</condition> while lying on the ground, even while <condition>Helpless</condition> .
+            So if you don't kill them quickly using the <skill>Tap</skill> skill, they will get back up to attack you again!
+        </p>
+        <p>
+            It is not uncommon to see zombies that have adapted to be a little tougher than normal. These zombies wear colored beads that function exactly like the protective beads available to players through <item>Armor</item> and skills like <skill>Tough Skin</skill>.
+        </p>
+
+        <h3 id="SpecialZombies">Special Zombies</h3>
+        <p>
+            In addition to normal zombies (Roamers), there are several types of "Special Zombies".
+            This list is an incomplete compendium as it just contains the Special Zombies that Camp Still Alive has encountered
+            and documented. So don't be surprised if you come across something worse. The ones we have documented are listed below.
+            It's important to note that several types of Special Zombies have Damage Immunity under certain circumstances; unless explicitly stated otherwise,
+            a direct hit from a <item>Rocket</item> or a strike from the <skill>Ambush</skill> or <skill>Assassin</skill> skills always bypasses this Damage Immunity.
+        </p>
+        <p><item>Brutes</item> - Extra tough zombies with bony armor plates attached to their limbs.
+            Their torso has Damage Immunity unless all of its limbs are <condition>Wounded</condition>.
+        <p><item>Gushers</item> - Extremely dangerous zombies that throw blob-like projectiles of concentrated infection (called Gusher Balls) that they produce inside their mouths. Gusher
+            Balls are considered shots from a Firearm for all intents and purposes (including for injuries and bead armor). Additionally, the concentrated infection causes injuries from Gusher Balls to be more
+            infectious than any other type of injury yet known by the Camp. As if that weren't enough, After producing Gusher Balls, Gushers cover themselves in a thick and protective mucus coating.
+            Gushers have Damage Immunity as long as they are holding at least one Gusher Ball.</p>
+        <p><item>Screechers</item> - Powerful zombies that seem to have some control over the way the Infection behaves around them. When
+            they let out their blood-curdling screech, all nearby zombies (including those who have been <skill>Tapped</skill>), instantly regenerate all injuries and rise again to join the fight.</p>
+        <p><item>Shades</item> - Extra stealthy zombies that hunt under cover of shadow. They make little to no noise and have special adaptations in their skin which makes it harden in the dark.
+            They have Damage Immunity unless they are under direct light (including blacklight).</p>
+        <p><item>Zoombies</item> - Zombies with improved leg muscle and vestibular system adaptations, making them capable of running at high speeds without falling over.</p>
+
+        <h2 id="InjuriesAndConditions">Injuries and Conditions</h2>
+        <p>
+            There are 2 types of injuries in the Still Alive combat system: <condition>Wounds</condition> and <condition>Fatal Wounds</condition>.
+            All 5 zones of your body may suffer <condition>Wounds</condition> but only your Torso may suffer <condition>Fatal Wounds</condition>.
+            Additionally, each injury can be in two states: <condition>Unwrapped</condition> or <condition>Wrapped</condition>.
+            Whenever you gain a new injury it always starts in the <condition>Unwrapped</condition> state. The <skill>Medic</skill> skill gives
+            its user the ability to <condition>Wrap</condition> wounds that are currently <condition>Unwrapped</condition>, provided they have
+            enough supplies.
+        </p>
+        <p>
+            Your injuries limit what your character is capable of (until they are healed by someone with the <skill>Doctor</skill> skill back at camp).
+            The table below outlines how each type of injury affects you. Though multiple injuries in each zone are possible, you only need to follow the effects of the
+            worst injury in each zone (<condition>Unwrapped</condition> is worse than <condition>Wrapped</condition> and
+            <condition>Fatal Wounds</condition> are worse than <condition>Wounds</condition>).
+        </p>
+        <table border="1">
+            <tr>
+                <th>Injury Type</th>
+                <th>Effects/Restrictions</th>
+            </tr>
+            <tr>
+                <td>Unwrapped Wound (Arm)</td>
+                <td>Your arm must hang limply at your side. You cannot carry any items and must drop anything you were carrying when you received the injury.<br>
+                    An arm with an Unwrapped Wound may not be used to negate the effects of a leg with a Wrapped Wound.<br> An arm with an Unwrapped Wound may not be used to hold an Unwrapped Torso Wound.</td>
+            </tr>
+            <tr>
+                <td>Wrapped Wound (Arm)</td>
+                <td>You are capable of moving your arm around and carrying items with it. You cannot swing melee weapons or shoot firearms with this arm.<br>An arm with a Wrapped Wound
+                    may be used to negate the effects of a leg with a Wrapped Wound as normal.<br>An arm with a Wrapped Wound may be used to hold an Unwrapped Torso Wound as normal.</td>
+            </tr>
+            <tr>
+                <td>Unwrapped Wound (Leg)</td>
+                <td>Your leg is entirely useless and must be dragged behind you. If both legs have Unwrapped Wounds, you are not able to walk and must crawl to get around.</td>
+            </tr>
+            <tr>
+                <td>Wrapped Wound (Leg)</td>
+                <td>Your leg can be used lightly. You must limp on it to get around. Putting your arm around the shoulder of an ally negates these effects, allowing you to move normally
+                    (though you should still roleplay being in pain). If both legs have Wrapped Wounds, you will need to put your arms around the shoulders of two allies to negate the effects.</td>
+            </tr>
+            <tr>
+                <td>Unwrapped Wound (Torso)</td>
+                <td>An Unwrapped Torso Wound must be held with one hand at all times (yours or an ally's). You must drop anything you were carrying on your Torso (such as a backpack) or sheathed weapon.
+                    If you (or an ally) are unable to hold your Unwrapped Torso Wound for more than 30 seconds, it is upgraded to an Unwrapped Fatal Wound.</td>
+            </tr>
+            <tr>
+                <td>Wrapped Wound (Torso)</td>
+                <td>A Torso with a Wrapped Wound is painful. You cannot carry anything on your torso until it's healed (such as backpacks or holstered weapons).</td>
+            </tr>
+            <tr>
+                <td>Unwrapped Fatal Wound (Torso)</td>
+                <td>Unwrapped Fatal Wounds are extremely dangerous. While you have one, you must lie prone on the ground holding your Torso.
+                    All you are able to do is call out in pain hoping someone with come get you. You may not take any other actions (unless you have a skill that says otherwise).
+                    Any time you have an Unwrapped Fatal Wound, you also gain the <condition>Helpless</condition> Condition, leaving you susceptible to the <skill>Tap</skill> skill.
+                    From the moment you reach the ground holding your wounds, you have 2 minutes to have your Fatal Wound Wrapped by someone. If it doesn't get Wrapped in this time,
+                    you bleed out and your character dies.</td>
+            </tr>
+            <tr>
+                <td>Wrapped Fatal Wound (Torso)</td>
+                <td>Wrapped Fatal Wounds are extremely painful. Swinging a melee weapon or shooting a firearm in this state
+                    will cause your wound to open back up, reverting it back to an Unwrapped Fatal Wound.
+                    In addition, you cannot carry anything on your torso (such as backpacks or holstered weapons).</td>
+            </tr>
+        </table>
+
+        <p>
+            As mentioned in the table above, an Unwrapped Fatal Wound also causes you to gain the <condition>Helpless</condition> condition.
+            This condition is the key to taking down zombies. Because they regenerate their wounds, you must kill them by using the <skill>Tap</skill> Skill while they are <condition>Helpless</condition>.
+            Though an Unwrapped Fatal Wound is the most common way to gain the <condition>Helpless</condition> condition, it's not the only way. Some environmental hazards and traps
+            can cause you to become <condition>Helpless</condition> as well. Always keep a keen eye out as you don't want to be on the wrong end of someone's <skill>Tap</skill>.
+        </p>
+        <h2 id="HealingInjuries">Healing Injuries and Infection</h2>
+        <p>
+            Getting your injuries <condition>Wrapped</condition> by someone with the <skill>Medic</skill> skill (or <condition>Wrapping</condition> them yourself)
+            is the best thing you can do to keep yourself healthy and your <item>Infection Rating</item> low.
+            Injuries may only be <condition>Wrapped</condition> while outside of Camp. If you make it back inside the Camp walls without
+            <condition>Wrapping</condition> your wounds first, they must healed without being <condition>Wrapped</condition>.
+            This also applies to attacks that occur within the Camp walls. If a threat manages to sneak its way inside the camp, it's likely going to do much more damage
+            than your typical encounter out in the field. As such, injuries taken inside the Camp walls cannot be <condition>Wrapped</condition>. You should do your
+            best to ensure threats never breach the Camp walls.
+        </p>
+        <p>
+            To actually make your injuries go away instead of just <condition>Wrapping</condition> them, you must get them
+            healed by someone with the <skill>Doctor</skill> skill on one of the open cots in the Medical Area of the Camp.
+            If there are no open cots available, you must wait to have your injuries healed. It is customary to pay the
+            <skill>Doctor</skill> a bullet or two for taking the time to heal you.
+        </p>
+        <p>
+            When your injuries are healed, your <item>Infection Rating</item> may go up (depending on a number of factors such as the source of the wound,
+            the skill level of the doctor, and the use of <item>Medical Supplies</item>). Your <item>Infection Rating</item> is a percentage that symbolizes how
+            much the Zombie Infection has infiltrated your body. If one of your healed injuries causes your <item>Infection Rating</item> to go up, you will make a die roll
+            and add the result will be added to your <item>Infection Rating</item> character's total at Check-Out. This die starts out as a 12-Sided Die, but can be reduced in size
+            with the <skill>Naturally Resistant</skill> skill tree branch (to 10, 8, 6 and 4 sided dice respectively). The <skill>Stalwart</skill> prestige skill reduces all incoming
+            <item>Infection</item> by 1 (minimum 1), and the <skill>Gambler's Luck</skill> and <skill>Gambler's Eye</skill> skills allow you to reroll your die and take the better result.
+            <skill>Doctors</skill> healing injuries use the <a href="https://stillalivelarp.com/healing" target="_blank">Treating Wounds Flowchart</a>
+            (In the Mobile App by going to Rules > Treating Wounds Flowchart) to determine how long healing takes and how many <item>Infection Rolls</item> you need to make.
+        </p>
+        <p>
+            Though having your injuries healed is the most common way to gain <item>Infection Rating</item>, it's not the only way. Traps, environmental hazards, story events, and even special attacks
+            (such as the projectiles that Gushers throw) can all make you gain <item>Infection Rating</item>. It's a dangerous world out there!
+        </p>
+        <p>
+            There are 3 <item>Infection Thresholds</item> that each character has. Threshold 1 at 25%, Threshold 2 at 50% and Threshold 3 at 75%. If your
+            <item>Infection Rating</item> surpasses an <item>Infection Threshold</item> for the first time, or anytime you check out while it's above the 3rd <item>Infection Threshold</item>,
+            you must make an <item>Infection Roll</item> at check out. This consists of rolling two 10-sided dice together (one for the 10's column and one for the 1's column) to get a number between 1-100.
+            If your rolled number is LOWER than your current <item>Infection Rating</item>, your character will die and turn into a zombie during the next event. The <skill>Gambler's Luck</skill>
+            and <skill>Gambler's Eye</skill> skills allow you to roll more than once and take the better result. The <skill>Will to Live</skill> skill allows you to flip a coin instead of rolling dice for this check,
+            where a tails result is equivalent to rolling lower than your current <item>Infection Rating</item>. These coins may also be flipped again by the <skill>Gambler</skill> skills. Finally,
+            the skill <skill>Unshakable Resolve</skill> will completely negate a failed roll (or flip) the first time it happens to your character.
+        </p>
+        <p>
+            Although the only current way to reduce your <item>Infection Rating</item> is through the <skill>Regression</skill> and <skill>Remission</skill> prestige skills (which reduce it by 1 point and 1d4 points per event, respectively), the potential to
+            develop a <item>pharmaceutical</item> that could reduce it is a very real possibility. See the <a href="Pharma">Pharmaceuticals and Research</a> Section for
+            more information. If you have the <skill>Regression</skill> or <skill>Remission</skill> skills, you should apply their <item>Infection Rating</item> reduction BEFORE you make your <item>Infection Roll</item> (when applicable).
+        </p>
+
+        <h2 id="DeathAndNewCharacters">Death and New Characters</h2>
+        <p>
+            Your Character is in danger of dying from a whole host of different sources (such as being <skill>Tapped</skill>, bleeding out, or turning into a zombie from a bad <item>Infection Roll</item>).
+            Still Alive can be a brutal game and no character is safe from death. However, don't give up hope! Every character who dies during an event (or at checkout) rolls a 10-sided die during checkout. If they manage to roll a 10,
+            their character miraculously survives (and they should come up with a story about how they did it). The <skill>Gambler</skill> skills even allow you to roll again and take the better result. Though not a huge chance, it's still something worth holding out
+            hope for! If you are in danger of dying because of an <item>Infection Roll</item> and you have the skill <skill>Unshakable Resolve</skill>, this roll should take place BEFORE you use <skill>Unshakable Resolve</skill> because,
+            if you roll a 10, you won't need to use the skill.
+        </p>
+        <p>
+            In the unfortunate event that your character is still dead after all of your rolls have been made, they are permanently dead.
+            Though, you don't lose all of your progress - you will be refunded half of your Character's spent <item>xp</item> and all of your
+            spent <item>prestige points</item>. Your unspent <item>xp</item>, <item>Free Tier-1 Skills</item>, and <item>Prestige Points</item>
+            are always unaffected by your character's death as they are attached to you - the player - rather than any specific character.
+        </p>
+        <p>
+            <i>Important note - the amount of refunded <item>experience points</item> is capped at a total equal to the total number of events
+                you've attended plus the total number of events that you've played an NPC for. This means that you can still benefit from the bonus experience
+                granted from things like the raffle, without being able to "game the system" by repeatedly killing your character to earn bonus experience. </i>
+        </p>
+        <p>
+            Permanent Camp NPCs play a special role in Camp. They keep things running and do a lot of the background work, which directly affects the rewards given for completing quests and
+            scenarios. The Camp has a maximum of 10 Permanent NPC slots which, when full, ensure that all quests and scenarios give 100% rewards. If a Permanent Camp NPC dies, rewards are reduced by 10%
+            until their position is filled again - usually through a quest or story event. The current number of Permanent Camp NPCs and the percentage rewards are reduced by can be viewed in the
+            Mobile App at any time by going to Community > All NPCs.
+        </p>
+        <h1 id="Downtime">Downtime</h1>
+        <p>
+            Most of the Event will take place in Downtime, during which, characters are free to explore the land,
+            complete quests and jobs, gather resources, and pretty much do whatever they would like (within reason).
+            All of the following subsections explain the different things that are possible during downtime (besides simply
+            exploring the land) should you wish to do something more productive! Downtime is your opportunity to accomplish
+            whatever it is you would like to accomplish during the event.
+        </p>
+        <p>
+            Remember, generally the Daytime is safer than the Nighttime, so if you want to do a lot of work away from camp,
+            plan your time accordingly.
+        </p>
+
+        <h2 id="GatheringResources">Gathering Resources</h2>
+        <p>
+            One of the most common Downtime activities is gathering resources. To start, you need to locate a Fortified Resource Spot.
+            Most Resource Spots have a limited number of materials that can be recovered there before they are depleted and a new spot will need
+            to be discovered and Fortified. There are exceptions to this rule, however - for example, the <item>Wood</item> Resource Spot at The Lone Tree is a permanent
+            Resource Spot.
+        </p>
+        <p>
+            Once you have located a Fortified Resource Spot that you want to Gather from, you need to roleplay an activity
+            relevant to the <item>Material</item> type that is being gathered there for <b>10 Minutes</b> (for example you can roleplay chopping
+            and stacking logs at a <item>Wood</item> Resource Spot). After you are finished, return to Camp and approach a Game Runner.
+            They will award you with your hard-earned <item>Materials</item>.
+        </p>
+        <p>
+            Ordinarily, when you Gather Resources, you earn 1 <item>Material</item> for yourself and 1 <item>Material</item> for the Camp that immediately goes up for sale at the Camp Store.
+            However, skills in the <skill>Scavenger</skill> branch increase these amounts. For each Tier of <skill>Scavenger</skill> skill you have, you gain 1 additional <item>Material</item>
+            for yourself and the camp each time you Gather Resources. Meaning that, if you have the <skill>Uncharted</skill> skill, you earn 5 <item>Materials</item> for yourself and 5 for the Camp Store.
+        </p>
+        <h3 id="MaterialTypes">Material Types</h3>
+        <p>
+            There are 6 basic types of <item>Materials</item> in Still Alive: <item>Wood</item>, <item>Metal</item>, <item>Cloth</item>,
+            <item>Tech Supplies</item>, <item>Medical Supplies</item>, <item>Bullet Casings</item>. All 6
+            can be found inside Hidden Caches, but only the first 5 are all able to be Gathered at Fortified Resource Spots. <item>Bullet Casings</item>,
+            on the other hand, are gathered much more easily. Any time a <item>Bullet</item> is fired, it falls to the ground as a <item>Bullet Casing</item> that
+            can then be picked up and later used as one of the materials required to Craft new bullets. See the <a href="#Crafting">Crafting</a> section for more information.
+            You may not shoot <item>Bullet Casings</item>. They must be kept in a separate pocket or bag from your live rounds to keep everyone honest. All <item>Bullet</item> types
+            (including <item>Rockets</item>) simply become regular <items>Bullet Casings</items> after use, so you do not need to worry about keeping them separate.
+        </p>
+        <p>
+            Sometimes the Camp Store has <item>Materials</item> available for sale, most often after someone finishes Gathering Resources. Below is a table of prices that the Camp Store
+            will generally sell any given <item>Materials</item> at. Those these prices may fluctuate as supply and demand changes. If you're trading <item>Materials</item> to another player, you can
+            use these prices if you wish, but they are not a hard rule. You may charge as little or as much as you like.
+        </p>
+        <table border="1">
+            <tr>
+                <th>Crafting Material</th>
+                <th>Camp Store Price (in Bullets)</th>
+            </tr>
+            <tr>
+                <td>Wood</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Metal</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Cloth</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Tech Supply</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Medical Supply</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>Bullet Casing</td>
+                <td>-</td>
+            </tr>
+        </table>
+        <h3 id="Food">Food "Materials"</h3>
+        <p>
+            There is another special kind of Gatherable Resource in the world: Food. Occasionally you may come across a Fruit Tree or a Fishing Spot.
+            To gather Fruit, start by spending <b>10 Minutes</b> roleplaying gathering it, just like any other Resource Spot. Once finished, you may pick up 1 Fruit
+            <item>Material</item> from the pile nearby (plus any additional Fruit gained because of <skill>Scavenger</skill> skills). If there are not
+            enough fruit for you to gather, just take what you can. When you return, the Camp will buy the Fruit from you for 2 <item>Bullets</item> each.
+        </p>
+        <p>
+            If you are gathering Fish, you need to bring a fishing rod and 4 sided dice with you (the Camp has some you can borrow if you ask). You may not go fishing
+            if you do not have a fishing rod and 4 sided die.
+            If you spend <b>10 Minutes</b> roleplaying Fishing at the spot, roll the 4 sided die. So long as you don't roll a 1, you may pick up 1 fish (plus any additional fish granted
+            by <skill>Scavenger</skill> skills) from the pile nearby. This die roll may be re-rolled with the <skill>Gambler</skill> skills. If there are not enough Fish for you to gather,
+            just take what you can. When you return, the Camp will buy each fish for 4 <item>Bullets</item> each.
+        </p>
+        <p>
+            If there is no Food remaining at a spot, you cannot Gather Resources there. The Food may or may not be replenished over time. This is the nature of gathering food in the wasteland.
+        </p>
+
+        <h2 id="CampFacilities">Camp Facilities</h2>
+        <p>
+            There are several facilities at Camp that are free to be used by all Camp Survivors should the need arise. Though there is limited space, there exists potential for expansion
+            in the future.
+        </p>
+        <h3 id="Store">The Camp Store</h3>
+        <p>
+            The Camp Store is always open. Here you can rent out weapons and tools, buy <item>Materials</item> and <item>pharmaceuticals</item>, and even purchase new Gear for your character (besides crafting,
+            this is the only way you can get new Mechanically-Advantageous Gear and Accessories to your character). Just ask one of the nearby Game Runners what you can buy at the shop!
+        </p>
+        <p>
+            Occasionally a wandering trader may enter the camp and set up a temporary shop in the Trading Post. These traders will often have rare items, large discounts or offer to buy things from you at increased prices. It's important to take advantage of them
+            while they are they because they won't stay very long.
+        </p>
+        <h3 id="TeachingArea">The Teaching Area</h3>
+        <p>
+            The Teaching Area is where you will need to learn any <combat>Combat</combat> or <profession>Profession</profession> type skills that you take after your first event.
+            Someone with the appropriate level of <skill>Teaching</skill> skill will help you learn your new abilities. It's important to pay them a bullet or two for their time.
+            A single <skill>Teacher</skill> may only teach one class at once, but they may have multiple students learning the same skill. Additionally, multiple <skill>Teachers</skill>
+            can host classes at the same time. The limitation on this is the number of chairs in the classroom area. Each student needs one chair in order to be taught. If there are no
+            available chairs, you will have to wait until one is available to learn your new skill.
+        </p>
+        <h3 id="MedicalArea">The Medical Area</h3>
+        <p>
+            The Medical Area is where <skill>Doctors</skill> heal people's injuries. <skill>Doctors</skill> may work on any number of patients at a given time, but they are limited by
+            the number of cots in the Medical Area. Every patient must be lying on a cot in order to be healed. If there are no available cots, you must wait until one is available to be healed.
+        </p>
+        <h3 id="FutureFacilities">Future Facilities and Upgrades</h3>
+        <p>
+            You may come across a Quest to develop the Camp's Facilities. When completed these projects can either upgrade an existing facility (such as adding more chairs to the Teaching Area,
+            more cots to the Medical Area, or improving the Trading Post to attract Wandering Traders more often or encourage them to bring better gear), or create an entirely new facility, such as
+            a Material Bank. You will often have to make a choice about which upgrades or facilities you want to prioritize as there won't be enough time or <item>materials</item> to finish all of them at once.
+        </p>
+
+        <h2 id="SignupBoards">Signup Boards</h2>
+        <p>
+            There are 3 Signup boards positioned around the Camp that you can interact with, allowing you more ways to earn bullets, complete tasks for the camp, or further your own agenda.
+        </p>
+        <h3 id="OddJobs">Odd Jobs</h3>
+        <p>
+            The Odd Jobs board is full of small, relatively short tasks that help out the camp in some way (such as Guard Duty or Repairing Defenses). Unlike quests,
+            Odd Jobs are done by a lone individual. The rewards are small but are a good way to earn a few <item>Bullets</item> here and there. Most Odd Jobs are repeatable so long as there are slots
+            available on the Signup area underneath the Job. To start an Odd Job, sign up in one of the slots and then talk to a Game Runner. They will tell you when you can begin the Job.
+            Once completed, see them again and they will pay you for your work.
+        </p>
+        <h3 id="Mercenaries">Mercenaries</h3>
+        <p>
+            The Mercenary Board is one of the ways that the Commander and his Crew give back to the Survivors who all work together to keep things running.
+            An individual or group can pay The Commander or one of his Crew to borrow them and their expertise for a while (not during Quests or Scenarios).
+            Commander Davis may be hired to fight/bodyguard as well as to destroy <item>Fortifications</item>. Sargent Gantz may be hired to scout out hidden
+            Supply Caches, hidden Resource Spots, or investigate suspicious areas. Airman Wylder may be hired to gather resources or to Teach skills in the Teaching Area.
+            Corporal Lancer may be hired to keep the entire area free of zombies for 1 hour, though his services are extremely expensive.
+        </p>
+        <p>
+            Each time you hire a Mercenary, the price to hire them again increases until the next event.
+        </p>
+        <h3 id="Quests">Quests</h3>
+        <p>
+            The Quest Board is where large jobs that The Commander or The Camp need completed. There are two types of Quests: Passive and Active. Passive Quests often just require
+            a specific number of <item>Materials</item> to be donated and usually lead an Active Quest that gives tangible upgrades to the Camp or surrounding land (such as a new Camp Facility or a bridge over a river).
+            Active Quests, on the other hand, are much more involved.
+        </p>
+        <p>
+            Active Quests will list a name, short description, reward and a sign-up area on them. Sometimes the signup lines will have designations like "Leader" or "Tinkerer".
+            These slots require people who have a relevant skill to be signed up in them as it's usually relevant to the Quest itself. If a quest has a "Leader" spot, that person is in charge of the quest and will be trusted to make any decisions
+            as the quest goes on. The <skill>Leadership</skill> skill branch offers several benefits to people who sign up in the "Leader" slot of quests. Though you don't have to fill up all of the slots of
+            a quest to start it, it is highly recommended that you do.
+        </p>
+        <p>
+            Once all the slots of a Quest are full, the person in the "Leader" Slot (or anyone from the Quest if there isn't a "Leader" slot) may approach a Game Runner at any time during Downtime and ask to Start the quest.
+            At that time the Game Runner will start a 10-minute timer and will begin the quest once it's finished - giving everyone time to finish what they're currently doing. Once the timer is up, everyone will be gathered
+            back at camp and the quest will begin. Even characters who are not involved in the quest will be gathered back at Camp as they will help execute the quest, often playing as Zombies or NPCs to give the Questers more of a challenge.
+            All Downtime activities are stopped while Quests are happening. To signify that things people are still "working" during the quest even though they're helping us out, anyone who was not signed up for the quest will be given 1 <item>Material</item>
+            of any type that could currently be Gathered or 2 bullets.
+        </p>
+        <p>
+            Remember players control the pacing of quests and, just because quests are available, that doesn't mean you have to immediately go on them. There will always be more quests than what is able to be completed in the amount of time you're given. So don't forget to take
+            some time to relax and do other downtime activities. Additionally, throughout the Event more quests may be posted, depending on the time of day, the result of other quests or Scenarios, or even just because of random events. Some quests can
+            be left until the next Event with no consequences,  while others may be more pressing. It's important to determine which quests may serve a direct threat and which can wait.
+        </p>
+        <p>
+            <i>Note - Quest Rewards are affected by the number of living Permanent NPCs at the Camp. Quests give full rewards when all 10 NPC slots are filled. Rewards are
+                reduced by 10% for each open NPC slot at camp (usually because an NPC dies). You can view the current Permanent Camp NPCs and the Quest Reward Reduction in the Mobile App
+                by going to Community > All NPCs.</i>
+        </p>
+
+        <h2 id="Vignettes">Vignettes</h2>
+        <p>
+            Vignettes are small, isolated scenes or interactions that you may run into during downtime. They could be a chance encounter with a friendly traveler, a gruesome scene, or maybe something far stranger.
+            You never know what you might find out in the wilderness and what that encounter could lead to!
+        </p>
+        <h2 id="CampDefenses">Camp Defenses</h2>
+        <p>
+            As the Zombie Threat continues to escalate since the construction of the Radio Tower, the Camp has begun constructing "rings" of defenses around its walls to help keep Campers safe (represented by individual
+            <item>Fortifications</item>). While these Fortifications are standing, no Zombies or Hostiles are able to pass beyond the rings. As of now, the Camp has constructed the area for 2 rings: Ring 1 is the Camp Gate, which counts
+            as a <item>Fortification</item>. Ring 2 is around 10 feet out from the camp wall and has slots for 2 <item>Fortifications</item> to be built. More rings with more slots may be constructed in the future.
+        </p>
+        <p>
+            As the <item>Fortifications</item> are broken down, zombie attacks will become more frequent and if the gate is broken (the final <item>Fortification</item>), zombies will be able to walk right into Camp. So it's
+            extremely important to keep the <item>Fortifications</item> in each ring repaired.
+        </p>
+        <p>
+            See the <a href="#Fortifications">Fortifications</a> section for more information on constructing and repairing <item>Fortifications</item>.
+        </p>
+
+        <h2 id="SkillActivities">Skill-Specific Activities</h2>
+        <p>
+            Many skills allow their users to perform special actions during Downtime. Many of them are listed below. If they involve doing a service for someone else, it's usually customary to request a bullet or two as payment for your services.
+        </p>
+        <h3 id="CreatingAlternateRecipes">Creating Alternate Crafting Recipes</h3>
+        <p>
+            The skill <skill>Master Craftsman</skill> allows you to design alternate Crafting Recipes for existing items. You can focus on trying to make items
+            using different types of <item>Materials</item> or try to create a bulk recipe that saves on <item>Material</item> costs and time over the creation of multiple of the same type of item.
+            Either way, if you have an idea for an Alternate Crafting Recipe for an existing item, let a Game Runner know and talk it over with them. If they approve your idea, they will work with you to
+            create a <item>Research Project</item> for it. The time to complete these can vary wildly. Typically, in order to create or work on an Alternate Recipe <item>Research Project</item>, you need to also have the
+            Skill required to make the item that you're developing an Alternate Recipe for. See the <a href="#ResearchProjects">Research Projects</a> section below for more information.
+        </p>
+        <h3 id="ConstructionAndDeconstruction">Construction and Deconstruction</h3>
+        <p>
+            Downtime is the perfect time to try out one of the multiple <skill>Crafting</skill> skills in the game. Try making a new weapon, more <item>Bullets</item>, or even a new piece of gear! See the
+            <a href="Crafting">Crafting</a> section for more information.
+        </p>
+        <h3 id="HealInjuries">Healing Injuries</h3>
+        <p>
+            Anyone with the <skill>Doctor</skill> skill can heal injuries in the Medical Area at Camp, so long as there are Cots available. Make sure you follow the <a href="https://stillalivelarp.com/healing" target="_blank">Still Alive
+            Treating Wounds Flowchart</a> when healing injuries and to keep note of the gained <item>Infection Rating</item> for each character on the Medical Ledger nearby.
+        </p>
+        <h3 id="MedicalResearch">Medical Research</h3>
+        <p>
+            The skill <skill>Advanced Medical Research</skill> allows you to research how to make new <item>pharmaceuticals</item>
+            and also work on story-relevant <item>Research Projects</item>. The time to complete these can vary wildly. If there's a specific effect that you'd
+            like to develop a <item>pharmaceutical</item> for, let a Game Runner know and we'll work with you on how to develop it. When you have the go-ahead to create a new <item>Pharmaceutical</item> or work on a story-related task, you and a Game Runner will develop
+            a <item>Research Project</item> for it. See the <a href="#ResearchProjects">Research Projects</a> section below for more information.
+        </p>
+        <h3 id="MusicalInspiration">Musical Inspiration</h3>
+        <p>
+            <skill>Musical Inspiration</skill> is a very useful skill. If you sing or perform music within 15ft of anyone who is doing a task that takes a specified amount of time to complete (such as Gathering Resources, Healing Injuries, etc)
+            you cut the amount of time required to complete it in half. This ability stacks with anyone else using the Skill at the same time as you, further reducing the time by half. <skill>Musical Inspiration</skill> cannot be used on tasks that
+            take 1 minute or less to complete and can never reduce the amount of time a task takes below 1 minute.
+        </p>
+        <p>
+            You may not be doing ANY other actions while using <skill>Musical Inspiration</skill> or its affects are nullified. This includes fighting in combat (though, you are allowed to run away and try to dodge while still performing).
+        </p>
+        <h3 id="ResearchProjects">Research Projects</h3>
+        <p>
+            You can work on any active <item>Research Project</item> so long as you have the skill(s) required (usually <skill>Advanced Medical Research</skill> or <skill>Master Craftsman</skill>
+            along with another Crafting skill). Sometimes, a Research Project that requires the <skill>Master Craftsman</skill> skill may be worked on by a team of 3 people using the <skill>Tinkerer</skill> skill;
+            ask a Game Runner if that applies to a current Research Project before attempt it.
+            You can keep track of active <item>Research Projects</item> in the Mobile App under the Community Tab > Research Projects.
+            When you want to start working on a <item>Research Project</item>, let a Game Runner know which one you'll be working towards.
+            Then begin role-playing your research and experimentation. After 10 minutes, let a Game Runner know and you will achieve a <item>Milestone</item>
+            towards that <item>Research Project</item>. Each time you achieve a <item>Milestone</item> a Game Runner will make a secret die roll
+            (or multiple rolls in the case of more difficult projects). The number of completed <item>Milestones</item>
+            increases your chances of succeeding these rolls. If all of the rolls succeed, you and a Game Runner
+            will work together to design the results of the <item>Research Project</item> - usually a new Item or Crafting Recipe.
+            Though you won't be able to tell how much each completed <item>Milestone</item> affects the <item>Research Project</item>
+            as a whole or how close it is to completion, you can always see how many <items>Milestones</items> have been completed for each <item>Research Project</item>
+            in the Mobile App.
+        </p>
+        <p>
+            Anyone with the right skills can work on a <item>Research Project</item>, not just the person who created it. Multiple people can even work towards <item>Milestones</item>
+            at the same time, increasing the speed at which the <item>Research Project</item> is finished.
+        </p>
+        <p>
+            Sometimes, in order to start working on a new <item>Milestone</item> for a Research Project, you'll need to provide
+            <item>Materials</item> to use in your experimentation. These <item>Materials</item> are used up when you start working on the project
+            and you do not get them back. A Game Runner will tell you if you need to provide specific <item>Materials</item> when you ask to start working on a <item>Research Project</item>.
+        </p>
+        <h3 id="Scavenging">Scavenging</h3>
+        <p>
+            In addition to earning you extra <item>Materials</item> when you Gather Resources, the <skill>Scavenger</skill> skills are most useful for opening the Hidden Caches that you
+            can find out in the wilderness around the world! When you find a Hidden Cache, look for a Skill Card on the side of it. It will detail the skill required to open it as well as how long
+            you need to roleplay trying to open it before you can take what's inside. After taking the contents, you can bring the container back to the Camp where they will pay you 1 bullet for it.
+        </p>
+        <p>
+            Each event will have several Hidden Caches placed all around the world. If any of the Caches aren't found by the end of the event, they will become more difficult to open come the next event.
+        </p>
+        <h3 id="SpecialClass">Special Skill Class</h3>
+        <p>
+            Anyone with the <skill>Professor</skill> skill can host a Specialty Class that reduces the <item>xp</item> cost of a skill of their choice for all students in attendance.
+            Each time you take the class, the <item>xp</item> cost of the skill being taught is reduced by 1. The class can be taken
+            for the same skill multiple times to further reduce the cost if it's a higher cost skill (though it can never be reduced below 1 <item>xp</item>). <skill>Professors</skill> do not
+            benefit from their own Specialty Classes. Teaching a Specialty Class takes 10 minutes. After taking the class, talk to a Game Runner and they can get the <item>xp</item> reduction attached to
+            your character.
+        </p>
+        <h3 id="TeachingNewSkills">Teaching New Skills</h3>
+        <p>
+            Anyone with the right level of <skill>Teaching</skill> skill can hold a class to teach characters to use new <combat>Combat</combat> and <profession>Profession</profession> type skills, so long as there
+            are seats available in the Teaching Area. Teaching someone a skill takes 5 minutes.
+        </p>
+
+        <h1 id="Scenarios">Scenarios</h1>
+        <p>
+            While most of the event will take place during Downtime, occasionally the entire Camp will be brought together for larger activities called Scenarios.
+            Typically, Scenarios are big moments that the Event has been leading up to or large scale attacks that require all hands on deck; though occasionally they represent
+            even stranger encounters. Most often Scenarios will move the plot forward in some way or represent a pivotal moment in the life of the Camp.
+            If a Scenario requires fighting, the Camp will often provide <item>Camp Bullets</item>, which are specialty <item>Bullets</item> that are red instead of blue.
+            They do not drop <item>Bullet Casings</item> and cannot be used as currency. Scenarios can house some of the most dangerous, exciting, and challenging gameplay that Still Alive
+            has to offer but they're pivotal to the survival of the Camp as a whole.
+        </p>
+
+        <h1 id="Crafting">Crafting</h1>
+        <p>
+            Crafting is one of the few ways to get new materials into the world of Still Alive once your character has been established. It's the cornerstone of the
+            wasteland and ensures that Camp Still Alive can stay self-sustaining. Every crafting recipe requires <item>Materials</item> and, although you can gather them yourself, it's much faster to just buy them from the Camp or other survivors
+            (see the <a href="#MaterialTypes">Material Types</a> section for guidelines about how <item>Materials</item> should be priced).
+        </p>
+
+        <p>
+            As you may have noticed, some items have Alternate Recipies that may save <skill>Materials</skill> or time or even
+            substitute some <item>Materials</item> for different ones. If you have the skill <skill>Master Craftsman</skill>,
+            you can spend some of your downtime researching a specific craftable item to try and discover an Alternate Recipe for it.
+            See the <a href="#CreatingAlternateRecipes">Creating Alternate Crafting Recipes</a> subsection of Downtime for more information.
+        </p>
+
+        <h2 id="Ammunition and Explosives">Ammunition and Explosives</h2>
+
+        <p>The only thing that has maintained a consistent value since the start of the apocalypse: bullets are the lifebloood of the Still Alive Economy.</p>
+
+        <h3 id="BaseRecipesBullets">Base Ammunition Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Bullet</td>
+                <td>1 Bullet</td>
+                <td>2 Metal</td>
+                <td>1 Minute</td>
+                <td>Bullet Crafting</td>
+            </tr>
+            <tr>
+                <td>Megadart</td>
+                <td>1 Megadart</td>
+                <td>2 Metal<br>1 Cloth</td>
+                <td>1 Minute</td>
+                <td>Large Round Crafting</td>
+            </tr>
+            <tr>
+                <td>Rival</td>
+                <td>1 Rival</td>
+                <td>4 Metal<br>1 Cloth<br>1 Tech</td>
+                <td>1 Minute</td>
+                <td>Military Grade Munitions Crafting</td>
+            </tr>
+            <tr>
+                <td>Rocket</td>
+                <td>1 Rocket</td>
+                <td>10 Metal<br>5 Cloth<br>5 Tech</td>
+                <td>1 Minute</td>
+                <td>Explosives Crafting</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesBullets">Alternate Ammunition Recipies</h3>
+
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+                <th>Difference from Base Recipe</th>
+            </tr>
+            <tr>
+                <td>Refilled Bullet</td>
+                <td>1 Bullet</td>
+                <td>1 Metal<br>1 Bullet Casing</td>
+                <td>1 Minute</td>
+                <td>Bullet Crafting</td>
+                <td>-50% Metal<br>+1 Bullet Casing</td>
+            </tr>
+            <tr>
+                <td>Bulk Bullets</td>
+                <td>10 Bullets</td>
+                <td>10 Metal</td>
+                <td>5 Minutes</td>
+                <td>Bullet Crafting</td>
+                <td>-50% Metal<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Bulk Refilled Bullets</td>
+                <td>10 Bullets</td>
+                <td>5 Metal<br>10 Bullet Casings</td>
+                <td>5 Minutes</td>
+                <td>Bullet Crafting</td>
+                <td>-75% Metal<br>+10 Bullet Casings<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Refilled Megadart</td>
+                <td>1 Megadart</td>
+                <td>1 Metal<br>3 Bullet Casings</td>
+                <td>1 Minute</td>
+                <td>Large Round Crafting</td>
+                <td>-50% Metal<br>-100% Cloth<br>+3 Bullet Casings</td>
+            </tr>
+            <tr>
+                <td>Bulk Megadarts</td>
+                <td>10 Megadarts</td>
+                <td>15 Metal<br>8 Cloth</td>
+                <td>5 Minutes</td>
+                <td>Large Round Crafting</td>
+                <td>-25% Metal<br>-20% Cloth<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Bulk Refilled Megadarts</td>
+                <td>10 Megadarts</td>
+                <td>10 Metal<br>4 Cloth<br>30 Bullet Casings</td>
+                <td>5 Minutes</td>
+                <td>Large Round Crafting</td>
+                <td>-50% Metal<br>-60% Cloth<br>+30 Bullet Casings<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Refilled Rival</td>
+                <td>1 Rival</td>
+                <td>1 Metal<br>1 Cloth<br>1 Tech<br>5 Bullet Casings</td>
+                <td>1 Minute</td>
+                <td>Military Grade Munitions Crafting</td>
+                <td>-75% Metal<br>+5 Bullet Casings</td>
+            </tr>
+            <tr>
+                <td>Bulk Rivals</td>
+                <td>10 Rivals</td>
+                <td>20 Metal<br>8 Cloth<br>8 Tech</td>
+                <td>5 Minutes</td>
+                <td>Military Grade Munitions Crafting</td>
+                <td>-50% Metal<br>-20% Cloth<br>-20% Tech<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Bulk Refilled Rivals</td>
+                <td>10 Rivals</td>
+                <td>10 Metal<br>6 Cloth<br>6 Tech<br>50 Bullet Casings</td>
+                <td>5 Minutes</td>
+                <td>Military Grade Munitions Crafting</td>
+                <td>-75% Metal<br>-40% Cloth<br>-40% Tech<br>+50 Bullet Casings<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Repacked Rocket</td>
+                <td>1 Rocket</td>
+                <td>4 Metal<br>3 Cloth<br>4 Tech<br>10 Bullet Casings</td>
+                <td>1 Minute</td>
+                <td>Explosives Crafting</td>
+                <td>-60% Metal<br>-40% Cloth<br>-20% Tech<br>+10 Bullet Casings</td>
+            </tr>
+            <tr>
+                <td>Bulk Rockets</td>
+                <td>10 Rockets</td>
+                <td>80 Metal<br>30 Cloth<br>40 Tech</td>
+                <td>5 Minutes</td>
+                <td>Explosives Crafting</td>
+                <td>-20% Metal<br>-40% Cloth<br>-20% Tech<br>-50% Crafting Time</td>
+            </tr>
+            <tr>
+                <td>Bulk Repacked Rockets</td>
+                <td>10 Rockets</td>
+                <td>40 Metal<br>20 Cloth<br>30 Tech<br>100 Bullet Casings</td>
+                <td>5 Minutes</td>
+                <td>Explosives Crafting</td>
+                <td>-60% Metal<br>-60% Cloth<br>-40% Tech<br>+100 Bullet Casings<br>-50% Crafting Time</td>
+            </tr>
+        </table>
+
+        <h2 id="Armor">Armor</h2>
+        <p>Though not always the most practical, wearing some amount of <item>Armor</item> is a great way to make sure you have a bit of
+            buffer between your character and the rest of the world. You may only wear one set of <item>Armor</item> at a time. Unused <item>Armor</item>
+            persists between events.</p>
+        <p>There are two classes of <item>Armor</item>: <item>Standard Armor</item> and <item>Bullet-Proof Armor</item>. <item>Standard Armor</item> is represented as
+            a set of Blue Beads and allows you to ignore the injury caused by the next melee attack or zombie bite you experience; they do not protect from gunshot, rocket, or Gusher Ball injuries.
+            <item>Bullet-Proof Armor</item> is represented as a set of Red Beads and works just like <item>Standard Armor</item> but also protects the wearer from Gunshots, Rockets, and Gusher Balls.
+            Just like any other protective beads (such as those from the <skill>Tough Skin</skill> skill), they may only be used once before they break.
+            Once used, hide the beads from view until you get to safety and can return them a Game Runner.
+            If you have multiple sets of protective beads when you take a hit, you may choose which set gets broken first.
+        </p>
+        <h3 id="BaseRecipesArmor">Base Armor Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Standard Armor</td>
+                <td>1 Standard Armor</td>
+                <td>5 Metal<br>2 Cloth</td>
+                <td>5 Minutes</td>
+                <td>Tinkerer</td>
+            </tr>
+            <tr>
+                <td>Bullet-Proof Armor</td>
+                <td>1 Bullet-Proof Armor</td>
+                <td>12 Metal<br>12 Cloth<br>4 Tech</td>
+                <td>10 Minutes</td>
+                <td>Master Craftsman</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesArmor">Alternate Armor Recipies</h3>
+        <p>There are no known Alternate Crafting Recipes for Armor. You could try creating one with the <skill>Master Craftsman</skill>
+            skill! See the <a href="#CreatingAlternateRecipes">Creating Alternate Recipes</a> subsection of Downtime for more information.</p>
+
+        <h2 id="Fortifications">Fortifications</h2>
+        <p>
+            <item>Fortifications</item> are non-permanent structures players may come across or build themselves in Still Alive. They are typically used in one of three ways: to assist with the building of more permanent structures
+            such as bridges or Resource Spots, Camp Fortifications, or to barricade and area - blocking/restricting movement and protecting against attacks. The <item>Fortifications</item> used to build permanent structures are more of an "in-name only"
+            type of <item>Fortification</item> as, once the actual structure is complete, the <item>Fortifications</item> are removed. The Camp and barricade <item>Fortifications</item>, on the other hand, have special mechanics tied to them.
+        </p>
+        <h3 id="CampFortificaitons">Camp Fortifications</h3>
+        <p>
+            The first place you may notice <item>Fortifications</item> is just outside of the Camp Walls. The Camp Gate, itself, is considered a <item>Fortification</item>
+            and there are concentric rings around the camp that can hold <item>Fortifications</item> as well. These <item>Fortifications</item> represent the Camp's defenses and, while they stand,
+            no hostile entities may move past them in the direction of the Camp. Each ring sits 10ft out from the previous ring. They are numbered from smallest to biggest and have slots for a number of <item>Fortifications</item>
+            equal to their number. Ring 1 is the Camp Walls itself, consisting of the Camp Gate as its single <item>Fortification</item>. Ring 2 is 10ft out from the walls and has 2 slots for <item>Fortifications</item>
+            to be built. Currently, the Camp has only cleared the area for rings 1 and 2, but quests to improve the Camp will likely contain ring expansion in the future.
+        </p>
+        <p>
+            Each Camp <item>Fortification</item> (that still has Health Points remaining) reduces the frequency of random events such as special zombies or horde attacks on the Camp itself,
+            making it a safer place let your guard down a bit. The inverse is also true, however. Each empty <item>Fortification</item> slot in a ring and each broken <item>Fortification</item> add to
+            the frequency of such random events.
+        </p>
+        <p>
+            Hostile entities may not pass by a ring towards the Camp if it still has a non-broken <item>Fortification</item> in it.
+            They must instead work on Destroying that <item>Fortification</item> if they wish to get further inside. If all <item>Fortifications</item>
+            are broken (including the Camp Gate), hostile entities can walk into the Camp freely and attack anyone they see fit. It's very important to
+            keep your Camp <item>Fortifications</item> repaired.
+        </p>
+        <p>
+            Friendly and neutral entities may walk through the rings as though they aren't there.
+        </p>
+
+        <h3 id="OtherFortifications">Other Fortifications</h3>
+        <p>
+            You may also come across <item>Fortifications</item> outside of the Camp area. These could represent natural obstacles such as downed trees or perhaps a deliberately placed barricade.
+            Either way, <item>Fortifications</item> in the wild represent walls that are much larger than their prop might suggest. Each <item>Fortification</item> stretches
+            out 20ft in both directions from its prop's edges; if you wish to navigate around a <item>Fortification</item> without destroying it, you'll need to travel at least that far to get around it.
+            You can use this to your advantage to try and force hostile NPCs to take specific paths. Keep in mind that you have to travel around the edges of <item>Fortifications</item> you build as well.
+        </p>
+        <h3 id="ConstructingFortifications">Constructing and Upgrading Fortifications</h3>
+        <p>
+            The recipies for creating <item>Fortifications</item> are listed below. <item>Fortifications</item> cannot have Alternate Crafting Recipes. When
+            a <item>Fortification</item> is built, it always starts the maximum amount of health. If you wish to upgrade an existing <item>Fortification</item> to a higher
+            level, first you need to make sure it's been repaired to full health. Then you may subtract any of the <item>Material</item> costs of the original <item>Fortification</item>
+            from the Crafting Recipe of the new one. Finally, you craft the new <item>Fortification</item> on top of the old one.
+        </p>
+        <table border="1">
+            <tr>
+                <th>Fortification Type</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+                <th>Maximum Health</th>
+            </tr>
+            <tr>
+                <td>Light Fortification</td>
+                <td>5 Wood</td>
+                <td>1 Minute</td>
+                <td>Tinkerer</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>Medium Fortification</td>
+                <td>5 Wood<br>5 Metal</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Heavy Fortification</td>
+                <td>10 Wood<br>5 Metal<br>5 Cloth</td>
+                <td>3 Minutes</td>
+                <td>Tinkerer</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>Advanced Fortification</td>
+                <td>10 Wood<br>10 Metal<br>5 Cloth<br>5 Tech</td>
+                <td>5 Minutes</td>
+                <td>Master Craftsman</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>Military Grade Fortification</td>
+                <td>15 Wood<br>15 Metal<br>10 Cloth<br>10 Tech</td>
+                <td>10 Minutes</td>
+                <td>Master Craftsman</td>
+                <td>30</td>
+            </tr>
+        </table>
+
+        <h3 id="FortificationHealth">Fortification Health and Destorying Fortifications</h3>
+        <p>
+            When a <item>Fortification</item> is constructed, it always starts with its "Maximum Health" value. Health of <item>Fortifications</item>
+            is represented as pieces of wood that are Velcro'd to the <item>Fortification's</item> surface. Each wood piece represents 1 Health.
+            When a <item>Fortification</item> is damaged, one of the velcro'd pieces of wood is removed. <item>Fortifications</item> can be Repaired
+            so long as they have Health remaining. If all of a <item>Fortification's</item> Health is removed, that <item>Fortification</item> is destroyed
+            and must be rebuilt. Check out the <a href="#Repair">Repairing</a> section for more information about how to repair <item>Fortifications</item> that
+            still have Health remaining.
+        </p>
+        <p>
+            Every entity in Still Alive has the ability to damage <item>Fortifications</item> with their own rules. Players, damage
+            them using the <skill>Bash</skill>, <skill>Smash</skill> and <skill>Crash</skill> Skills (reminder that every Character
+            starts with the <skill>Bash</skill> Skill for free). In order to start damaging a <item>Fortification</item>, you'll need
+            a Melee Weapon (though you don't have to be proficient with it). Start roleplaying hitting the <item>Fortification</item> loudly
+            making lots of noise while you are damaging it. If you have the <skill>Smash</skill> or <skill>Crash</skill> Skills, you are able
+            to damage <item>Fortifications</item> quietly, but it takes more time. Use the table below to determine how much time it takes to
+            damage a <item>Fortification</item> (allowing you to remove one of it's velcro'd on wood pieces - i.e. it's Health).
+        </p>
+        <table border="1">
+            <tr>
+                <th></th>
+                <th>Bash</th>
+                <th>Smash</th>
+                <th>Crash</th>
+            </tr>
+            <tr>
+                <th>Regular Damage (loud)</th>
+                <td>30 Seconds</td>
+                <td>20 Seconds</td>
+                <td>10 Seconds</td>
+            </tr>
+            <tr>
+                <th>Quiet Damage</th>
+                <td>-</td>
+                <td>1 Minute</td>
+                <td>30 Seconds</td>
+            </tr>
+        </table>
+
+        <p>Multiple Characters can work on dealing damage to a <item>Fortification</item> at the same time. They all deal damage separately and have separate damage timers.</p>
+
+        <p>
+            Hostile human characters follow the same rules as Players and, as such, will usually damage <item>Fortifications</item> loudly.
+            Zombies, on the other hand, are a little harder to detect. They will slowly chip away at <item>Fortifications</item> by simply swinging their limbs at them.
+            This doesn't make much noise if you aren't paying attention which means that a group of zombies can quickly overwhelm lower quality <item>Fortifications</item>.
+        </p>
+
+        <h2 id="Firearms">Firearms</h2>
+        <p>Aside from the firearms you enter the game with, there are only 2 ways get new firearms into the game: Buying them
+            or Crafting them.</p>
+
+        <h3 id="BaseRecipesFirearms">Base Firearm Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Light Firearm</td>
+                <td>1 Light Firearm</td>
+                <td>1 Metal<br>1 Wood<br>1 Cloth<br>1 Tech</td>
+                <td>1 Minute</td>
+                <td>Gunsmithing</td>
+            </tr>
+            <tr>
+                <td>Medium Firearm</td>
+                <td>1 Medium Firearm</td>
+                <td>2 Metal<br>2 Wood<br>1 Cloth<br>2 Tech</td>
+                <td>2 Minutes</td>
+                <td>Gunsmithing</td>
+            </tr>
+            <tr>
+                <td>Heavy Firearm</td>
+                <td>1 Heavy Firearm</td>
+                <td>4 Metal<br>3 Wood<br>2 Cloth<br>3 Tech</td>
+                <td>3 Minutes</td>
+                <td>Gunsmithing</td>
+            </tr>
+            <tr>
+                <td>Advanced Firearm</td>
+                <td>1 Advanced Firearm</td>
+                <td>8 Metal<br>4 Wood<br>2 Cloth<br>4 Tech</td>
+                <td>5 Minutes</td>
+                <td>Gunsmithing</td>
+            </tr>
+            <tr>
+                <td>Military Grade Firearm</td>
+                <td>1 Military Grade Firearm</td>
+                <td>16 Metal<br>5 Wood<br>3 Cloth<br>8 Tech</td>
+                <td>10 Minutes</td>
+                <td>Military Grade Gunsmithing</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesFirearms">Alternate Firearm Recipies</h3>
+        <p>There are no known Alternate Crafting Recipes for Firearms. You could try creating one with the <skill>Master Craftsman</skill>
+            skill! See the <a href="#CreatingAlternateRecipes">Creating Alternate Recipes</a> subsection of Downtime for more information.</p>
+
+        <h2 id="Gear">Gear</h2>
+        <p>This section is all about crafting personal items for your Character.</p>
+        <p>If you have any piece of gear that was deemed Mechanically Advantageous but isn't present in the table below, reach out to us on Discord and we'll tell you
+            what you need to do to craft it, or if it's allowed in the game at all.</p>
+        <h3 id="BaseRecipesGear">Base Gear Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Small Bag</td>
+                <td>1 Small Bag</td>
+                <td>1 Cloth</td>
+                <td>1 Minute</td>
+                <td>Tinkerer</td>
+                <td>A bag or pouch with a capacity of 0.5 liters (30.5cu in) or less</td>
+            </tr>
+            <tr>
+                <td>Medium Bag</td>
+                <td>1 Medium Bag</td>
+                <td>3 Cloth</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+                <td>A bag or pouch with a capacity of between 0.5 liters (30.5cu in) and 5 liters (305.1cu in)</td>
+            </tr>
+            <tr>
+                <td>Large Bag</td>
+                <td>1 Large Bag</td>
+                <td>7 Cloth</td>
+                <td>5 Minutes</td>
+                <td>Tinkerer</td>
+                <td>A bag or pouch with a capacity of between 5 liters (305.1cu in) and 25 liters (1,525.6cu in)</td>
+            </tr>
+            <tr>
+                <td>Extra Large Bag</td>
+                <td>1 Extra Large Bag</td>
+                <td>13 Cloth</td>
+                <td>10 Minutes</td>
+                <td>Master Craftsman</td>
+                <td>A bag or pouch with a capacity of more than 25 liters (1,525.6cu in)</td>
+            </tr>
+            <tr>
+                <td>Clothing</td>
+                <td>1 Piece of Clothing</td>
+                <td>2 Cloth</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+                <td>
+                    This recipe is for Mechanically Advantageous clothing such as Cargo Shorts or a Coat with many pockets. Regular clothing does not
+                    need to be crafted in this game. If your clothing piece would come in a pair (such as gloves or boots), you craft both parts of the pair.
+                </td>
+            </tr>
+            <tr>
+                <td>Flashlight</td>
+                <td>1 Flashlight</td>
+                <td>2 Metal<br>1 Tech</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+                <td>
+                    This recipe works for both regular flashlights and blacklight flashlights.
+                </td>
+            </tr>
+            <tr>
+                <td>Custom Accessory</td>
+                <td>1 Non-Listed Accessory Item</td>
+                <td>*See Description</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+                <td>
+                    This recipe is special in that it covers all different types of miscellaneous
+                    Technically Advantageous accessory items you may want to bring into the game. You always need to talk to a Game Runner to make
+                    sure that your Accessory is approved and to get the final crafting recipe for it, but under most circumstances,
+                    the recipe for an Accessory just consists of the materials that make it up:<br><br>
+                    - If your Accessory contains metal, 1 metal is required.<br>
+                    - If it contains a textile (such as cloth, leather, polyester, etc), 1 cloth is required.<br>
+                    - If it contains wood or other non-metal, non-textile solid materials (such as plastic, resin, glass, etc), 1 wood is required.<br>
+                    - If it contains circuitry or mechanical parts, 1 tech is required.<br><br>
+                    Note - If your Accessory only requires one material to craft it, add 1 of that material to the cost - all Accessories cost at least 2 materials to craft.
+                </td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesGear">Alternate Gear Recipies</h3>
+        <p>There are no known Alternate Crafting Recipes for Gear. You could try creating one with the <skill>Master Craftsman</skill>
+            skill! See the <a href="#CreatingAlternateRecipes">Creating Alternate Recipes</a> subsection of Downtime for more information.</p>
+
+        <h2 id="MeleeWeapons">Melee Weapons</h2>
+        <p>Aside from the weapons you enter the game with, there are only 2 ways get new melee weapons into the game: Buying them
+            or Crafting them.</p>
+
+        <h3 id="BaseRecipesMelee">Base Melee Weapon Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Super Light Melee Weapon</td>
+                <td>1 Super Light Melee Weapon</td>
+                <td>3 Metal<br>1 Wood</td>
+                <td>1 Minute</td>
+                <td>Weapon Smithing</td>
+            </tr>
+            <tr>
+                <td>Light Melee Weapon</td>
+                <td>1 Light Melee Weapon</td>
+                <td>5 Metal<br>2 Wood<br>1 Cloth</td>
+                <td>2 Minutes</td>
+                <td>Weapon Smithing</td>
+            </tr>
+            <tr>
+                <td>Medium Melee Weapon</td>
+                <td>1 Medium Melee Weapon</td>
+                <td>9 Metal<br>2 Wood<br>2 Cloth<br>1 Tech</td>
+                <td>5 Minutes</td>
+                <td>Weapon Smithing</td>
+            </tr>
+            <tr>
+                <td>Heavy Melee Weapon</td>
+                <td>1 Heavy Melee Weapon</td>
+                <td>17 Metal<br>3 Wood<br>3 Cloth<br>2 Tech</td>
+                <td>10 Minutes</td>
+                <td>Blacksmithing</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesMelee">Alternate Melee Weapon Recipies</h3>
+        <p>There are no known Alternate Crafting Recipes for Melee Weapons. You could try creating one with the <skill>Master Craftsman</skill>
+            skill! See the <a href="#CreatingAlternateRecipes">Creating Alternate Recipes</a> subsection of Downtime for more information.</p>
+
+        <h2 id="Pharmaceuticals">Pharmaceuticals</h2>
+        <p>
+            <item>Pharmaceuticals</item> are an important part of the Post Apocalyptic world and, as such, are very valuable.
+            The <skill>Pharmaceuticals</skill> skill allows you to Craft any <item>pharmaceutical</item> whose recipe is already known to the camp
+            (provided you have all the necessary <item>materials</item> and free time).
+        </p>
+        <p>
+            Most pharmaceuticals last for 1 Encounter. An Encounter is defined as an entire "bout of combat". Though the threat does not
+            need to be continuous, it should be timely. I.e. If everyone in your group has enough time to breathe and relax a little after an attack,
+            the Encounter is over. Most Quests are action-packed enough that they count as one Encounter, though some quests are split up into multiple
+            Encounters because of travel time between attacks. Killing all of the nearby zombies and having a momentary reprove before more poke over the
+            horizon isn't considered the end of an Encounter. It's moreso about the vibe of the current situation and whether or not the threat has been dealt with.
+            If you aren't sure if an Encounter is over, you can always ask a Game Runner.
+        </p>
+        <p>
+            Each type of <item>pharmaceutical</item> may only be taken once per event, per character as they rapidly build up a tolerance that needs
+            to wear off before they can be taken again. All <item>pharmaceuticals</item> known by the camp are listed below. As more are discovered, they will be added as well.
+        </p>
+        <table border="1">
+            <tr>
+                <th>NAME</th>
+                <th>DESCRIPTION AND USE</th>
+                <th>TYPICAL MARKET PRICE</th>
+            </tr>
+            <tr>
+                <td>Adreanaline</td>
+                <td>Adreanaline (pronounced Uh-dree-nuh-line) is represented by small orange candies (such as Tic-Tacs).<br><br>When taken,
+                    The user ignores the effects of all <condition>Wounds</condition> and <condition>Fatal Wounds</condition> for 1 Encounter,
+                    giving them the full use of their limbs and preventing them from gaining the <condition>Helpless</condition> condition.
+                    The user still gains these injuries as normal, they just ignore all the effects until the Encounter is finished, after which they immediately
+                    feel all of their injuries at once.<br><br>Important Notes: Even though you don't feel your injuries and can't gain the <condition>Helpless</condition>
+                    condition, you still have them and thus are still susceptible to dying from a gunshot to the Torso while you have a <condition>Fatal Wound</condition>.
+                    You can also still be dragged to the ground by zombies who are grabbing you as normal.</td>
+                <td>30 Bullets</td>
+            </tr>
+        </table>
+
+        <p>Listed below are all the known Crafting Recipes for <item>pharmaceuticals</item>. Using the <skill>Advanced Medical Research</skill> skill, you may be able to develop
+            new Recipes for existing <item>pharmaceuticals</item> to try and make them cheaper to produce or use different materials!</p>
+
+        <h3 id="BaseRecipesPharmaceuticals">Base Pharmaceutical Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Adreanaline Synthesis</td>
+                <td>1 Adreanaline</td>
+                <td>1 Metal<br>5 Medical</td>
+                <td>5 Minutes</td>
+                <td>Pharmaceuticals</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesPharmaceuticals">Alternate Pharmaceutical Recipies</h3>
+
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+                <th>Difference from Base Recipe</th>
+            </tr>
+            <tr>
+                <td>Bulk Adreanaline Synthesis</td>
+                <td>5 Adreanaline</td>
+                <td>4 Metal<br>20 Medical</td>
+                <td>5 Minutes</td>
+                <td>Pharmaceuticals</td>
+                <td>-20% Metal<br>-20% Medical</b></td>
+            </tr>
+        </table>
+
+        <h2 id="OtherCrafting">Other Crafting Recipes</h2>
+        <p>Some crafting Recipes don't fit in to any other category so they are listed here.</p>
+
+        <h3 id="BaseRecipesOther">Base Other Crafting Recipes</h3>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Items Produced</th>
+                <th>Recipe</th>
+                <th>Crafting Time</th>
+                <th>Skill Required</th>
+            </tr>
+            <tr>
+                <td>Recycled Metal</td>
+                <td>1 Metal</td>
+                <td>10 Bullet Casings</td>
+                <td>2 Minutes</td>
+                <td>Tinkerer</td>
+            </tr>
+        </table>
+
+        <h3 id="AlternateRecipesOther">Alternate Other Crafting Recipies</h3>
+        <p>There are no known Alternate Crafting Recipes for Other (Misc) Items. You could try creating one with the <skill>Master Craftsman</skill>
+            skill! See the <a href="#CreatingAlternateRecipes">Creating Alternate Recipes</a> subsection of Downtime for more information.</p>
+
+        <h2 id="Deconstruction">Deconstructing</h2>
+        <p>
+            Sometimes an item is more useful when deconstructed to it's base components. Maybe you have a firearm that you no
+            longer need or perhaps you looted an otherwise useless busted-up melee weapon off of an enemy combatant and want to glean some value from it.
+            Only the items from the following categories can be deconstructed: Armor, Firearms, Gear, and Melee Weapons. You may NEVER deconstruct something belonging to another Player or NPC without
+            their explicit permission.
+        </p>
+        <p>
+            Before you deconstruct an item, you need to let a Game Runner know first. Deconstructing any item takes 10 minutes. When you go to start deconstructing an item, you need to
+            determine your <item>Recovery Percentage</item> and any <item>Bonus Recoveries</item> you might have by looking at the table below. You always start at 0% <item>Recovery Percentage</item>
+            and have 0 <item>Bonus Recoveries</item>. Then, add to your percentage or bonus based on the following table:
+        </p>
+        <table border="1">
+            <tr>
+                <th>If you have...</th>
+                <th>Recovery Percentage</th>
+                <th>Bonus Recovery</th>
+            </tr>
+            <tr>
+                <td>Bash</td>
+                <td>+10%</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Smash</td>
+                <td>+20%</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Crash</td>
+                <td>+20%</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Tinkerer</td>
+                <td></td>
+                <td>+1</td>
+            </tr>
+            <tr>
+                <td>Master Craftsman</td>
+                <td></td>
+                <td>+1</td>
+            </tr>
+            <tr>
+                <td>The Skill Required To Craft The Item In The First Place</td>
+                <td></td>
+                <td>+1</td>
+            </tr>
+        </table>
+
+        <p>
+            Once you have your <item>Recovery Percentage</item> and <item>Bonus Recovery</item>, look up the item's Crafting Recipe.
+            If the item has multiple recipies, you may use any one you like (though if the recipe would produce multiple of the item you're deconstructing,
+            you need to divide the required materials by the number of produced items, rounded down). For each <item>Material</item> type in the item's crafting recipe,
+            multiply the amount required by your <item>Recovery Percentage</item> and round down to the nearest whole number. You recover that many of each <item>Material</item>.
+            Then, for each <item>Bonus Recovery</item> you have, gain 1 additional <item>Material</item> of your choice from any of the <item>Material</item> types listed in recipe.
+            You may not take more than 100% of any material in the recipe.
+        </p>
+        <p>
+            For example, lets say a player with the following relevant skills: Bash, Smash, Tinkerer and Military Grade Gunsmithing and they want to deconstruct a Military Grade Firearm.
+            Following the table above, they determine their <item>Recovery Percentage</item> is 30% and they have 2 <item>Bonus Recoveries</item>. They spend 10 minutes
+            roleplaying the deconstruction of the item and then look at the crafting recipe for a Military Grade Firearm (which is: 16 Metal, 5 Wood, 3 Cloth, 8 Tech). They multiply each
+            <item>Material</item> amount by their <item>Recovery Percentage</item> of 30% and round down, giving them: 4 Metal, 1 Wood, and 2 Tech - they do not recover any Cloth because the number rounded to 0.
+            They then gain 2 additional <item>Materials</item> of their choice from their <item>Bonus Recoveries</item>. They choose 2 additional Tech Supplies.
+        </p>
+        <h3 id="LootCards">Loot Cards</h3>
+        <p>
+            The only exception to the rule about not deconstructing items belonging to other players or NPCs are <item>Loot Cards</item>. <item>Loot Cards</item> are small
+            cards that can be found on the corpses of some hostile NPCs. They will detail the type of loot you find on them, such as "1 Medium Firearm" or
+            "1 Super Light Melee Weapon". This loot is always damaged beyond repair so it cannot be used but could still be scrapped for materials.
+            If you bring this card back to Camp, you will be given a prop to work with that matches the item type. We use <item>Loot Cards</item> so that players
+            aren't taking the only weapons an NPC might need in order to play multiple roles for an encounter. If you wish to take a loot card, just quietly ask the dead
+            NPC if they have one and they'll give it to you. You do not actually need to search their body.
+        </p>
+
+        <h2 id="Repair">Repairing</h2>
+        <p>
+            You may come across items that need repairs in Still Alive. The most common are broken <item>Super Light Melee
+            Weapons</item> from using the <skill>Break</skill> skill and damaged <item>Fortifications</item>. Anyone can perform
+            repairs on broken items but having specific crafting skills can speed up the process or reduce the <item>Material</item> costs.
+        </p>
+        <p>
+            Use the table below to determine Repair times and <item>Material</item> costs based on your current skill level.
+            <i>Note: Repairing a <item>Fortification</item> gives it one Health back. You will likely have to repair it multiple times to get
+                it back to full health. Check out the <a href="#Fortifications">Fortifications</a> section for more information about how <item>Fortifications</item> work.</i>
+        </p>
+        <table border="1">
+            <tr>
+                <th>Damaged Item</th>
+                <th>Base Repair Cost</th>
+                <th>Base Repair Time</th>
+                <th>Tinkerer Skill Reductions</th>
+                <th>Master Craftsman Skill Reductions</th>
+                <th>Other Skill Reductions</th>
+            </tr>
+            <tr>
+                <td>Super Light Melee Weapon</td>
+                <td>1 Metal<br>1 Wood</td>
+                <td>5 Minutes</td>
+                <td>-2 Minutes</td>
+                <td>-2 Minutes</td>
+                <td><b>Weapon Smithing</b><br>-1 Wood</td>
+            </tr>
+            <tr>
+                <td>Light Fortification</td>
+                <td>1 Wood</td>
+                <td>1 Minute</td>
+                <td>-30 Seconds</td>
+                <td>-20 Seconds</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Medium Fortification</td>
+                <td>1 Wood<br>1 Metal</td>
+                <td>1 Minute</td>
+                <td>-1 Wood</td>
+                <td>-30 Seconds</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Heavy Fortification</td>
+                <td>2 Wood<br>1 Metal</td>
+                <td>2 Minutes</td>
+                <td>-1 Wood</td>
+                <td>-1 Minute</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Advanced Fortification</td>
+                <td>2 Wood<br>1 Metal<br>1 Cloth</td>
+                <td>2 Minutes</td>
+                <td>-1 Wood</td>
+                <td>-1 Wood<br>-1 Minute</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Military Grade Fortification</td>
+                <td>1 Wood<br>1 Metal<br>1 Cloth<br>1 Tech</td>
+                <td>3 Minutes</td>
+                <td>-1 Wood<br>-1 Minute</td>
+                <td>-1 Metal<br>-1 Minute</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <h1 id="SkillCards">Skill Cards</h1>
+        <p>
+            Skill Cards are a small item that signals to players that they need a specific Skill to accomplish a task.
+            Most often you'll find these for the <skill>Scavenger</skill> skills attached to the top of small boxes - you
+            are unable to collect the resources inside without the proper skills. Aside from <skill>Scavenger</skill> cards,
+            <skill>Investigator</skill> cards are also common, often leading to previously unknown information about the area.
+            If you complete an <skill>Investigator</skill> skill card, let a Game Runner know and they'll give you the secret
+            information. Though these are the two most common types of Skill Card, any skill could potentially show up on a card
+            so keep your eyes peeled!
+        </p>
+
+        <p>
+            Skill Cards are always structured the same way: A large line at the top that says "SKILL CARD" with a specific skill
+            below it. Then, an amount of time below that (such as 10 min). In order to get what the Skill Card is hiding,
+            you have to roleplay using that Skill for the specified amount of time - for example, if you're using <skill>Scavenger</skill>, you should
+            roleplay picking through the nearby area searching for materials or maybe act like you're trying to pick the lock.
+        </p>
+        <h1 id="GameUpdatesAndChangelogs">Game Updates and Changelogs</h1>
+        <p>
+            This game is always evolving and changing due to player feedback, the addition of new mechanics, and story events and the Rulebook
+            itself is large. It can be pretty hard to see what all has changed. It's for this reason that we keep track of all version changes at
+            <a href="https://stillalivelarp.com/changelogs" target="_blank">https://stillalivelarp.com/changelogs</a>. There you can see a breakdown of
+            everything that changed in a specific update!
+        </p>
+        <h2 id="PostEventSurveys">Post-Event Surveys</h2>
+        <p>
+            We love getting player feedback and adjusting the game so that it's fun for everyone! You can always reach out to us on our <a href="https://discord.gg/95rsefbQEe">Discord Server</a>
+            if you have any ideas or concerns. However, most often people have notes after going to an event. So, after each event we post a Google Survey where you can answer a few questions about
+            the event and give us feedback for how we're doing. The Survey isn't mandatory but it's extremely appreciated if you complete it!
+        </p>
+        <h2 id="TheLastStands">The Last Stand Newspaper</h2>
+        <p>
+            The Land Stand is the name of the newspaper written by the Still Alive survivors. It's our way of doing event recaps in a fun and immersive way! After each year <a href="#Story">The Story</a> section will update
+            in the Rulebook, but until then The Last Stands are the best way to learn what happened in a previous event. You can find them in the <a href="https://discord.gg/95rsefbQEe">Discord Server</a> in the event-summaries channel
+            and they are also linked with additional event media on at <a href="https://stillalivelarp.com/eventhistory" target="_blank">https://stillalivelarp.com/eventhistory</a>.
+        </p>
+        <h1 id="Terms">Terms Glossary</h1>
+        <table border="1">
+            <tr>
+                <th>Term</th>
+                <th>Explanation</th>
+            </tr>
+            <tr>
+                <td>Breach</td>
+                <td>Say this when you use the Ambush skill after sneaking up to deal a Wound</td>
+            </tr>
+            <tr>
+                <td>Break</td>
+                <td>Say this when you use the Break or Unarmed Break skills to remove a zombie from your body</td>
+            </tr>
+            <tr>
+                <td>Break Away</td>
+                <td>Say this when you use the Break Away skill to remove multiple zombies from your body</td>
+            </tr>
+            <tr>
+                <td>Boom</td>
+                <td>Say this after a Rocket or Grenade hits the ground and you have counted 3 seconds to signify it has gone off</td>
+            </tr>
+            <tr>
+                <td>Grenade</td>
+                <td>Say this as you throw a Grenade to ensure everyone knows to treat it like a Grenade and not a Rocket</td>
+            </tr>
+            <tr>
+                <td>Headshot</td>
+                <td>Say this when you use the Headshot skill to kill a zombie from a distance</td>
+            </tr>
+            <tr>
+                <td>I Guess This Is The End</td>
+                <td>Say this when you use the Mysterious Stranger skill to survive a hopeless situation</td>
+            </tr>
+            <tr>
+                <td>Impale</td>
+                <td>Say this when you use the Assassin skill after sneaking up to deal a Fatal Wound</td>
+            </tr>
+            <tr>
+                <td>Ranged Tap</td>
+                <td>Say this when you use the Ranged Tap skill to Tap from a distance</td>
+            </tr>
+            <tr>
+                <td>Shove</td>
+                <td>Say this when you perform an extra heavy overhead attack with a Heavy Melee Weapon</td>
+            </tr>
+            <tr>
+                <td>Tap</td>
+                <td>Say this when you use the Tap skill to finish off a Helpless creature</td>
+            </tr>
+            <tr>
+                <td>Too Hard</td>
+                <td>Say this if someone hits you too hard with an attack. The attack does not count. Try to keep things Medium Contact.</td>
+            </tr>
+        </table>
+
+        <h1 id="SkillInfo">Skill Information</h1>
+        <h2 id="SpecialPrereqs">Special Skill Prerequisites</h2>
+        <p>
+            Some skills are special and either have additional prerequisites beyond just their experience costs or
+            have restrictions on when you can take them. Currently, there are three types of skills that fall into that
+            category: Infected Skills, Prestige Skills, and Specialization Skills.
+        </p>
+        <p>
+            Infected skills require the player to be at a certain <item>Infection Threshold</item> before they may be taken (abbreviated as inf - example 50%inf).
+            They offer powerful zombie-like abilities such as Wound Regeneration or Armor Plating.
+        </p>
+        <p>
+            Prestige skills are extremely powerful skills that require a <item>Prestige Point</item> to unlock. These are given
+            extremely rarely as rewards to players. (abbreviated as pp - example 1pp).
+        </p>
+        <p>
+            The third type, specialization skills, are a kind of meta-skill that causes future skills of a specific type
+            (<combat>Combat</combat>, <profession>Profession</profession>, or <talent>Talent</talent>) to be cheaper by 1xp (minimum 1).
+            After you take your first specialization skill, you can take a second one which will make another skill type cheaper but at the cost of making
+            the third type 1xp MORE expensive. You may only ever take 2 specialization skills and your choice of first skill determines which are available as your second
+            (Abbreviated as *spec).
+        </p>
+    </div> <!--   END app Content   -->
+</div>
+</body>
+</html>

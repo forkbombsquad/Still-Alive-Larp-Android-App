@@ -3,12 +3,12 @@ package com.forkbombsquad.stillalivelarp.services.utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.forkbombsquad.stillalivelarp.services.models.ErrorModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
-import com.forkbombsquad.stillalivelarp.utils.StillAliveLarpApplication
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.globalGetContext
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.globalToJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.isUnitTesting
 import retrofit2.Response
 import retrofit2.Retrofit
 
@@ -21,6 +21,12 @@ interface ServiceInterface<G, T, H: ServicePayload> {
     suspend fun getResponse(payload: H): Response<T>
 
     suspend fun successfulResponse(payload: H = ServicePayload.empty() as H, ignoreErrors: Boolean = false, ignorePrintResopnseBody: Boolean = false): T? {
+        if (isUnitTesting) {
+            val kClass = Class.forName("com.forkbombsquad.stillalivelarp.utils.MockServiceControllerKt")
+            val mockServiceFunction = kClass.getMethod("MockService", ServiceInterface::class.java)
+            val mockService = mockServiceFunction.invoke(null, this) as ServiceInterface<G, T, H>
+            return mockService.successfulResponse(payload, ignoreErrors, ignorePrintResopnseBody)
+        }
         val response: Response<T>? = try {
             getResponse(payload)
         } catch (e: Exception) {

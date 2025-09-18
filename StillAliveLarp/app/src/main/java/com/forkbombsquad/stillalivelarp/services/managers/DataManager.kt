@@ -5,10 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isGone
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
 import com.forkbombsquad.stillalivelarp.services.CampStatusService
@@ -41,7 +39,6 @@ import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
-import com.forkbombsquad.stillalivelarp.services.models.GearModel
 import com.forkbombsquad.stillalivelarp.services.models.IntrigueModel
 import com.forkbombsquad.stillalivelarp.services.models.PlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
@@ -50,11 +47,12 @@ import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.capitalizeOnlyFirstLetterOfEachWord
-import com.forkbombsquad.stillalivelarp.utils.capitalized
 import com.forkbombsquad.stillalivelarp.utils.getFragmentOrActivityName
 import com.forkbombsquad.stillalivelarp.utils.globalPrint
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.isUnitTesting
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,7 +62,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.select.Evaluator.Id
+import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -283,7 +281,7 @@ class DataManager private constructor() {
     var gearToEdit: GearJsonModel? = null
     var fortificationToEdit: CampFortification? = null
 
-    fun load(lifecycleScope: LifecycleCoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
+    fun load(lifecycleScope: CoroutineScope, loadType: DataManagerLoadType = DataManagerLoadType.DOWNLOAD_IF_NECESSARY, stepFinished: () -> Unit = {}, finished: () -> Unit) {
         var modLoadType = loadType
         if (offlineMode) {
             modLoadType = DataManagerLoadType.OFFLINE
@@ -306,11 +304,11 @@ class DataManager private constructor() {
         }
     }
 
-    private fun loadOffline(lifecycleScope: LifecycleCoroutineScope) {
+    private fun loadOffline(lifecycleScope: CoroutineScope) {
         populateLocalData(lifecycleScope, false)
     }
 
-    private fun loadDownloadIfNecessary(lifecycleScope: LifecycleCoroutineScope) {
+    private fun loadDownloadIfNecessary(lifecycleScope: CoroutineScope) {
         val updateRequest = UpdateTrackerService.GetUpdateTracker()
         lifecycleScope.launch {
             updateRequest.successfulResponse().ifLet({ updateTrackerModel ->
@@ -323,7 +321,7 @@ class DataManager private constructor() {
         }
     }
 
-    private fun loadForceDownloadAll(lifecycleScope: LifecycleCoroutineScope) {
+    private fun loadForceDownloadAll(lifecycleScope: CoroutineScope) {
         lifecycleScope.launch {
             mutexThreadLocker.withLock {
                 _updateLoadingText("Force Clearing Data...")
@@ -334,7 +332,7 @@ class DataManager private constructor() {
         }
     }
 
-    private fun handleUpdates(lifecycleScope: LifecycleCoroutineScope, updateTracker: UpdateTrackerModel) {
+    private fun handleUpdates(lifecycleScope: CoroutineScope, updateTracker: UpdateTrackerModel) {
         updatesNeeded = LocalDataManager.shared.determineWhichTypesNeedUpdates(updateTracker).toMutableList()
         updatesCompleted = mutableListOf()
         currentUpdateTracker = updateTracker
@@ -639,56 +637,71 @@ class DataManager private constructor() {
                         }
                     }
                     DataManagerType.RULEBOOK -> {
-                        lifecycleScope.launch {
-                            val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
-                                lifecycleScope.launch {
-                                    LocalDataManager.shared.storeRulebook(Rulebook.parseWebDocumentAsRulebook(doc, updateTracker.rulebookVersion))
-                                    serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
-                                }
+                        if (isUnitTesting) {
+                            val url = javaClass.getResource("/Rulebook.html")!!
+                            val file = File(url.toURI()).readText()
+                            lifecycleScope.launch {
+                                LocalDataManager.shared.storeRulebook(Rulebook.parseWebDocumentAsRulebook(Jsoup.parse(file), updateTracker.rulebookVersion))
+                                serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
                             }
-                            jsoupAsyncTask.execute()
+                        } else {
+                            lifecycleScope.launch {
+                                val jsoupAsyncTask = JsoupAsyncTask(Constants.URLs.rulebookUrl) { doc ->
+                                    lifecycleScope.launch {
+                                        LocalDataManager.shared.storeRulebook(Rulebook.parseWebDocumentAsRulebook(doc, updateTracker.rulebookVersion))
+                                        serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                    }
+                                }
+                                jsoupAsyncTask.execute()
+                            }
                         }
+
                     }
                     DataManagerType.TREATING_WOUNDS -> {
+                        // TODO setup mocking for this.
                         lifecycleScope.launch {
-                            try {
-                                // 1. Get the document and parse it off the main thread
-                                val imageUrl = withContext(Dispatchers.IO) {
-                                    val doc = Jsoup.connect("https://stillalivelarp.com/healing").get()
-                                    val imageElement = doc.getElementById("image")
-                                    imageElement?.attr("src")
-                                }
-
-                                if (imageUrl != null) {
-                                    // 2. Download the image off the main thread
-                                    val bitmap = withContext(Dispatchers.IO) {
-                                        val url = URL(imageUrl)
-                                        val connection = url.openConnection() as HttpURLConnection
-                                        connection.doInput = true
-                                        connection.connect()
-
-                                        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                                            val inputStream = connection.inputStream
-                                            val bmp = BitmapFactory.decodeStream(inputStream)
-                                            inputStream.close()
-                                            bmp
-                                        } else null
+                            if (isUnitTesting) {
+                                serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                            } else {
+                                try {
+                                    // 1. Get the document and parse it off the main thread
+                                    val imageUrl = withContext(Dispatchers.IO) {
+                                        val doc = Jsoup.connect("https://stillalivelarp.com/healing").get()
+                                        val imageElement = doc.getElementById("image")
+                                        imageElement?.attr("src")
                                     }
 
-                                    // 3. Store the image on the main thread
-                                    if (bitmap != null) {
-                                        LocalDataManager.shared.storeTreatingWounds(bitmap)
-                                        serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                    if (imageUrl != null) {
+                                        // 2. Download the image off the main thread
+                                        val bitmap = withContext(Dispatchers.IO) {
+                                            val url = URL(imageUrl)
+                                            val connection = url.openConnection() as HttpURLConnection
+                                            connection.doInput = true
+                                            connection.connect()
+
+                                            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                                                val inputStream = connection.inputStream
+                                                val bmp = BitmapFactory.decodeStream(inputStream)
+                                                inputStream.close()
+                                                bmp
+                                            } else null
+                                        }
+
+                                        // 3. Store the image on the main thread
+                                        if (bitmap != null) {
+                                            LocalDataManager.shared.storeTreatingWounds(bitmap)
+                                            serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                        } else {
+                                            serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
+                                        }
                                     } else {
                                         serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                                     }
-                                } else {
+
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
                                     serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                                 }
-
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
                             }
                         }
                     }
@@ -711,7 +724,7 @@ class DataManager private constructor() {
         return text
     }
 
-    private suspend fun serviceFinished(lifecycleScope: LifecycleCoroutineScope, type: DataManagerType, succeeded: Boolean, localUpdatesNeeded: List<DataManagerType>) {
+    private suspend fun serviceFinished(lifecycleScope: CoroutineScope, type: DataManagerType, succeeded: Boolean, localUpdatesNeeded: List<DataManagerType>) {
         finishedCountMutexThreadLocker.withLock {
             if (succeeded) {
                 updatesNeeded.remove(type)
@@ -731,7 +744,7 @@ class DataManager private constructor() {
         }
     }
 
-    private fun populateLocalData(lifecycleScope: LifecycleCoroutineScope, updatesDownloaded: Boolean) {
+    private fun populateLocalData(lifecycleScope: CoroutineScope, updatesDownloaded: Boolean) {
         lifecycleScope.launch {
             mutexThreadLocker.withLock {
                 if (firstLoad || updatesDownloaded) {

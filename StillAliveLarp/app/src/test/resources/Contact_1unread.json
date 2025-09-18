@@ -1,0 +1,12 @@
+{
+  "contactRequests": [
+    {
+      "emailAddress": "derrik.domino@wisc.edu",
+      "fullName": "Derrik and the Dominoes",
+      "id": 1,
+      "message": "I love game this boi ",
+      "postalCode": "53959",
+      "read": "FALSE"
+    }
+  ]
+}

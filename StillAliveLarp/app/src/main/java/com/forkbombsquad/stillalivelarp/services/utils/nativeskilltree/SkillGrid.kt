@@ -24,6 +24,7 @@ import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Shapes
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import kotlinx.coroutines.CoroutineScope
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sign
@@ -1017,7 +1018,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         return null
     }
 
-    fun handleTap(x: Float, y: Float, context: Context, lifecycleScope: LifecycleCoroutineScope) {
+    fun handleTap(x: Float, y: Float, context: Context, lifecycleScope: CoroutineScope) {
         if (!makingPurchase) {
             val pb = purchaseButton?.copy()
             if (pb != null && pb.rect.contains(x, y) && couldPurchaseSkill(pb.skill)) {
@@ -1036,7 +1037,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         }
     }
 
-    private fun purchaseSkill(pb: TappablePurchaseButton, lifecycleScope: LifecycleCoroutineScope) {
+    private fun purchaseSkill(pb: TappablePurchaseButton, lifecycleScope: CoroutineScope) {
         makingPurchase = true
         dotHandler.post(dotRunnable)
         val char = character!!

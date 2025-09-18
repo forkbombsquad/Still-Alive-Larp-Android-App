@@ -16,8 +16,12 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
 fun globalPrint(message: String) {
-    if (Constants.Logging.showLogging) {
-        Log.wtf("LOG", "-\n$message")
+    if (isUnitTesting) {
+        globalUnitTestPrint("FORWARD FROM REGULAR GLOBAL PRINT:\n$message")
+    } else {
+        if (Constants.Logging.showLogging) {
+            Log.wtf("LOG", "-\n$message")
+        }
     }
 }
 
@@ -27,9 +31,20 @@ fun globalTestPrint(message: Any) {
     }
 }
 
-fun globalUnitTestPrint(message: Any) {
+var globalLastUnitTestPrint = ""
+    private set
+
+enum class UnitTestColor(val colorCode: String) {
+    RED("\u001B[31m"),
+    GREEN("\u001B[32m"),
+    YELLOW("\u001B[33m"),
+    RESET_COLOR("\u001B[0m")
+}
+
+fun globalUnitTestPrint(message: Any, color: UnitTestColor = UnitTestColor.RED) {
     if (Constants.Logging.showUnitTestLogging) {
-        println(message.toString())
+        globalLastUnitTestPrint = message.toString()
+        println("${color.colorCode}UNIT-TEST-PRINT-MSG: \"$message\"${UnitTestColor.RESET_COLOR.colorCode}")
     }
 }
 
@@ -123,4 +138,13 @@ fun globalStyleHtmlForRulebook(html: String): String {
         .replaceHtmlTagWithTagAndInnerValue("talent", "font", "color='#007AFF'")
         .replaceHtmlTagWithTag("item", "i")
         .replaceHtmlTagWithTag("condition", "u")
+}
+
+val isUnitTesting: Boolean by lazy {
+    try {
+        Class.forName("org.junit.jupiter.api.Test")
+        true
+    } catch (e: ClassNotFoundException) {
+        false
+    }
 }
