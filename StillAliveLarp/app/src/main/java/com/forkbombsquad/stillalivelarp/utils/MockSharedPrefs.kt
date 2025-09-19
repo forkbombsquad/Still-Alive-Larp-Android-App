@@ -1,5 +1,6 @@
 package com.forkbombsquad.stillalivelarp.utils
 import android.content.SharedPreferences
+import com.forkbombsquad.stillalivelarp.services.managers.LocalDataManager
 
 class MockSharedPrefs : SharedPreferences {
 
@@ -106,12 +107,17 @@ class MockSharedPrefs : SharedPreferences {
     }
 }
 
-class MockSharedPrefsFactory {
+class MockSharedPrefsManager private constructor() {
 
     // Map from name -> SharedPreferences instance
     private val prefsMap = mutableMapOf<String, MockSharedPrefs>()
 
     fun getSharedPreferences(name: String): SharedPreferences {
         return prefsMap.getOrPut(name) { MockSharedPrefs() }
+    }
+
+    companion object {
+        var shared = MockSharedPrefsManager()
+            private set
     }
 }

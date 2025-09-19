@@ -148,7 +148,7 @@ class MockData {
 
     class GetAllIntrigueResponses {
         companion object {
-            private const val PATH = "Gear"
+            private const val PATH = "Intrigue"
             val STANDARD: String
                 get() = loadJsonFile(PATH)
         }

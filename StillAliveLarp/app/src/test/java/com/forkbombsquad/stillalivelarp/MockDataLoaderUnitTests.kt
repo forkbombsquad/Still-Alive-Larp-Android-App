@@ -21,14 +21,14 @@ import com.forkbombsquad.stillalivelarp.services.models.ResearchProjectModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillPrereqListModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillPrereqModel
 import com.forkbombsquad.stillalivelarp.services.utils.EmptyServicePayload
-import com.forkbombsquad.stillalivelarp.utils.BaseUiTestClass
+import com.forkbombsquad.stillalivelarp.utils.BaseUnitTestClass
 import com.forkbombsquad.stillalivelarp.utils.MockDataLoader
 import com.forkbombsquad.stillalivelarp.utils.globalLastUnitTestPrint
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class MockDataLoaderUnitTests: BaseUiTestClass {
+class MockDataLoaderUnitTests: BaseUnitTestClass {
 
     @Test
     fun testNoDataForService() = runTest {

@@ -35,8 +35,7 @@ import com.forkbombsquad.stillalivelarp.services.models.SkillModel
 import com.forkbombsquad.stillalivelarp.services.models.SkillPrereqModel
 import com.forkbombsquad.stillalivelarp.services.models.UpdateTrackerModel
 import com.forkbombsquad.stillalivelarp.services.models.XpReductionModel
-import com.forkbombsquad.stillalivelarp.utils.MockSharedPrefs
-import com.forkbombsquad.stillalivelarp.utils.MockSharedPrefsFactory
+import com.forkbombsquad.stillalivelarp.utils.MockSharedPrefsManager
 import com.forkbombsquad.stillalivelarp.utils.Rulebook
 import com.forkbombsquad.stillalivelarp.utils.addCreateListIfNecessary
 import com.forkbombsquad.stillalivelarp.utils.compress
@@ -89,11 +88,11 @@ class LocalDataManager private constructor() {
     }
 
     private fun getUnPSharedPrefs(context: Context? = null): SharedPreferences {
-        return if (isUnitTesting) { MockSharedPrefsFactory().getSharedPreferences(LDMKeys.unpSharedPrefsKey) } else { (context ?: globalGetContext())!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE) }
+        return if (isUnitTesting) { MockSharedPrefsManager.shared.getSharedPreferences(LDMKeys.unpSharedPrefsKey) } else { (context ?: globalGetContext())!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE) }
     }
 
     private fun getUnPSharedPrefsEditor(): SharedPreferences.Editor {
-        return if (isUnitTesting) { MockSharedPrefsFactory().getSharedPreferences(LDMKeys.unpSharedPrefsKey).edit() } else { globalGetContext()!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE).edit() }
+        return if (isUnitTesting) { MockSharedPrefsManager.shared.getSharedPreferences(LDMKeys.unpSharedPrefsKey).edit() } else { globalGetContext()!!.getSharedPreferences(LDMKeys.unpSharedPrefsKey, Context.MODE_PRIVATE).edit() }
     }
 
     fun setUnPRelatedObject(key: String, value: String) {
@@ -109,11 +108,11 @@ class LocalDataManager private constructor() {
     }
 
     private fun getSharedPrefs(): SharedPreferences {
-        return if (isUnitTesting) { MockSharedPrefsFactory().getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION) } else { globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE) }
+        return if (isUnitTesting) { MockSharedPrefsManager.shared.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION) } else { globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE) }
     }
 
     private fun getSharedPrefsEditor(): SharedPreferences.Editor {
-        return if (isUnitTesting) { MockSharedPrefsFactory().getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION).edit() } else { globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE).edit() }
+        return if (isUnitTesting) { MockSharedPrefsManager.shared.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION).edit() } else { globalGetContext()!!.getSharedPreferences(LDMKeys.sharedPrefsBaseKey + LOCAL_DATA_VERSION, Context.MODE_PRIVATE).edit() }
     }
 
     private fun clear(key: String) {

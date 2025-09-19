@@ -4,7 +4,7 @@ import com.forkbombsquad.stillalivelarp.services.models.SkillPrereqModel
 import com.forkbombsquad.stillalivelarp.utils.AwardCharType
 import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
 import com.forkbombsquad.stillalivelarp.utils.AwardType
-import com.forkbombsquad.stillalivelarp.utils.BaseUiTestClass
+import com.forkbombsquad.stillalivelarp.utils.BaseUnitTestClass
 import com.forkbombsquad.stillalivelarp.utils.ValidationType
 import com.forkbombsquad.stillalivelarp.utils.Validator
 import com.forkbombsquad.stillalivelarp.utils.addCreateListIfNecessary
@@ -35,10 +35,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.stream.Stream
 
-class UtilAndExtensionUnitTests: BaseUiTestClass {
+class UtilAndExtensionUnitTests: BaseUnitTestClass {
 
-    override fun setDataLoadType(): BaseUiTestClass.DataLoadType {
-        return BaseUiTestClass.DataLoadType.NONE
+    override fun setDataLoadType(): BaseUnitTestClass.DataLoadType {
+        return BaseUnitTestClass.DataLoadType.NONE
     }
 
     // AwardEnums

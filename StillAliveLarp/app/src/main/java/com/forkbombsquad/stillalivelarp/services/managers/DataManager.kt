@@ -805,7 +805,6 @@ class DataManager private constructor() {
     }
 
     fun setTitleTextPotentiallyOffline(tv: TextView, baseText: String) {
-
         tv.text = offlineMode.ternary("$baseText\n[Offline]", baseText)
     }
 

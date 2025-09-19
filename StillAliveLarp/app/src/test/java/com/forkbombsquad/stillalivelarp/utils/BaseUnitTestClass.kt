@@ -1,17 +1,13 @@
 package com.forkbombsquad.stillalivelarp.utils
 
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.services.AuthPlayerTokenRequest
-import com.forkbombsquad.stillalivelarp.services.AuthService
 import com.forkbombsquad.stillalivelarp.services.AuthTokenRequest
-import com.forkbombsquad.stillalivelarp.services.GetAllAnnouncementsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllAwardsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllCharacterSkillsRequest
-import com.forkbombsquad.stillalivelarp.services.GetAllCharactersRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllContactRequestsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllEventAttendeesRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllEventsRequest
@@ -30,22 +26,20 @@ import com.forkbombsquad.stillalivelarp.services.GetAllSkillsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllXpReductionsRequest
 import com.forkbombsquad.stillalivelarp.services.GetCampStatusRequest
 import com.forkbombsquad.stillalivelarp.services.GetUpdateTrackerRequest
-import com.forkbombsquad.stillalivelarp.services.PlayerAuthService
 import com.forkbombsquad.stillalivelarp.services.SignInPlayerRequest
 import com.forkbombsquad.stillalivelarp.services.VersionRequest
-import com.forkbombsquad.stillalivelarp.services.VersionService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.UserAndPassManager
 import com.forkbombsquad.stillalivelarp.services.utils.EmptyServicePayload
 import com.forkbombsquad.stillalivelarp.utils.mockdata.MockData
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.TestScope
-import org.junit.jupiter.api.AfterAll
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 
-interface BaseUiTestClass {
+interface BaseUnitTestClass {
 
     enum class DataLoadType {
         HAPPY_PATH, NONE
@@ -162,7 +156,12 @@ interface BaseUiTestClass {
 
         // Camp Status
         MDL.loadMockData(GetCampStatusRequest::class, empty, MockData.GetCampStatusResponses.STANDARD)
+    }
 
+    fun loadDataManagerHappyPath(coroutineScope: CoroutineScope, completion: () -> Unit) = runTest {
+        DataManager.shared.setCurrentPlayerIdExternally(1)
+        UserAndPassManager.shared.setUandP("testUsername", "testPass", true)
+        DataManager.shared.load(coroutineScope, finished = completion)
     }
 
 }
