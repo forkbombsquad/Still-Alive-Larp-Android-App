@@ -37,6 +37,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 
 interface BaseUnitTestClass {
@@ -162,6 +163,19 @@ interface BaseUnitTestClass {
         DataManager.shared.setCurrentPlayerIdExternally(1)
         UserAndPassManager.shared.setUandP("testUsername", "testPass", true)
         DataManager.shared.load(coroutineScope, finished = completion)
+    }
+
+    // Asserts
+    fun assertZero(value: Int) {
+        assertEquals(value, 0)
+    }
+
+    fun assertEmpty(collection: Collection<*>) {
+        assertTrue(collection.isEmpty())
+    }
+
+    fun assertNotEmpty(collection: Collection<*>) {
+        assertTrue(collection.isNotEmpty())
     }
 
 }

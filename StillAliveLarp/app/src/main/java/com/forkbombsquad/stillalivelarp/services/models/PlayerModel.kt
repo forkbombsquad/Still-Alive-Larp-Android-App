@@ -127,7 +127,7 @@ data class FullPlayerModel(
         return if (characters.firstOrNull { it.fullName == fName } == null) {
             fName
         } else {
-            getUniqueCharacterNameRec(name, (incrementalCount == null).ternary(1, incrementalCount!! + 1))
+            getUniqueCharacterNameRec(name, (incrementalCount == null).ternary(1, (incrementalCount ?: 0) + 1))
         }
     }
 
