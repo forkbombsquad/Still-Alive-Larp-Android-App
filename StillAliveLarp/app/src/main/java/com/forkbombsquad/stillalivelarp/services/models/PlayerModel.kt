@@ -41,7 +41,7 @@ data class FullPlayerModel(
         player.isCheckedInAsNpc.toBoolean(),
         player.lastCheckIn,
         player.numEventsAttended.toInt(),
-        player.numEventsAttended.toInt(),
+        player.numNpcEventsAttended.toInt(),
         player.isAdmin.toBoolean(),
         characters,
         awards,

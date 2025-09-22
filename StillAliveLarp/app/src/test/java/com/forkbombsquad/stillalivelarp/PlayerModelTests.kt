@@ -101,4 +101,31 @@ class PlayerModelTests: BaseUnitTestClass {
         }
     }
 
+    @Test
+    fun testPlayerModelFields() = runTest {
+        loadDataManagerHappyPath(this) {
+            val player = DataManager.shared.getCurrentPlayer()
+            assertNotNull(player)
+
+            assertEquals(player!!.id, 1)
+            assertEquals(player.username, "smidgeraker@gmail.com")
+            assertEquals(player.fullName, "Smidge Raker")
+            assertEquals(player.startDate, "2017/04/30")
+            assertEquals(player.experience, 2)
+            assertEquals(player.freeTier1Skills, 0)
+            assertEquals(player.prestigePoints, 0)
+            assertFalse(player.isCheckedIn)
+            assertFalse(player.isCheckedInAsNpc)
+            assertEquals(player.lastCheckIn, "2018/06/02")
+            assertEquals(player.numEventsAttended, 6)
+            assertEquals(player.numNpcEventsAttended, 0)
+            assertTrue(player.isAdmin)
+            assertCount(player.characters, 11)
+            assertCount(player.awards, 6)
+            assertEmpty(player.eventAttendees)
+            assertCount(player.preregs, 4)
+            assertNotNull(player.profileImage)
+        }
+    }
+
 }

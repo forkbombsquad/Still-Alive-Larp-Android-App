@@ -65,10 +65,6 @@ data class FullCharacterModifiedSkillModel(
         return xpReduction != null
     }
 
-    fun getXpReductionModel(): XpReductionModel? {
-        return xpReduction
-    }
-
     fun baseXpCost(): Int {
         return skill.xpCost
     }
@@ -190,10 +186,6 @@ data class FullCharacterModifiedSkillModel(
         return skill.postreqs
     }
 
-//    fun hasSameCostPrereq(): Boolean {
-//        return  prereqs().firstOrNull { baseXpCost() == it.xpCost.toInt() } != null
-//    }
-
     fun isPurchased(): Boolean {
         return charSkillModel != null
     }
@@ -255,7 +247,7 @@ data class FullCharacterModifiedSkillModel(
         return text
     }
 
-    fun getFullCostText(): String {
+    fun getFullCostText(allowFreeSkillUse: Boolean): String {
         var text = ""
         charSkillModel.ifLet({ cs ->
             // Already Purchased
@@ -266,7 +258,7 @@ data class FullCharacterModifiedSkillModel(
             }
         }, {
             // Not purchased yet
-            text += getXpCostText()
+            text += getXpCostText(allowFreeSkillUse)
             if (baseInfectionCost() > 0) {
                 text += "\n"
                 text += getInfCostText()
@@ -310,69 +302,6 @@ data class FullSkillModel(
 
     fun fullCharacterModifiedSkillModel(): FullCharacterModifiedSkillModel {
         return FullCharacterModifiedSkillModel(this, null, null, 0, 0, 0, 50, 75)
-    }
-
-    fun getTypeText(): String {
-        when(skillTypeId) {
-            Constants.SkillTypes.combat -> return "Combat"
-            Constants.SkillTypes.profession -> return "Profession"
-            Constants.SkillTypes.talent -> return "Talent"
-        }
-        return ""
-    }
-
-    fun getPrereqNames(): String {
-        var str = ""
-        prereqs.forEachIndexed{ index, prereq ->
-            if (index > 0) {
-                str += "\n"
-            }
-            str += prereq.name
-        }
-        return str
-    }
-
-    fun hasSameCostPrereq(): Boolean {
-        prereqs.forEach {
-            if (it.xpCost.toInt() == xpCost) { return true }
-        }
-        return false
-    }
-
-    fun includeInFilter(seachText: String, filterType: SkillFilterType): Boolean {
-        val text = seachText.trim().lowercase()
-        if (text.isNotEmpty()) {
-            if (!name.lowercase().contains(text) && !getTypeText().lowercase().contains(text) && !description.lowercase().contains(text) && !getPrereqNames().lowercase().contains(text)) {
-                return false
-            }
-        }
-        return when (filterType) {
-            SkillFilterType.NONE -> true
-            SkillFilterType.COMBAT -> skillTypeId == Constants.SkillTypes.combat
-            SkillFilterType.PROFESSION -> skillTypeId == Constants.SkillTypes.profession
-            SkillFilterType.TALENT -> skillTypeId == Constants.SkillTypes.talent
-            SkillFilterType.XP0 -> xpCost == 0
-            SkillFilterType.XP1 -> xpCost == 1
-            SkillFilterType.XP2 -> xpCost == 2
-            SkillFilterType.XP3 -> xpCost == 3
-            SkillFilterType.XP4 -> xpCost == 4
-            SkillFilterType.PP -> prestigeCost > 0
-            SkillFilterType.INF -> minInfection > 0
-        }
-    }
-
-    fun getFullCostText(): String {
-        var text = ""
-        text += "${xpCost}xp"
-        if (minInfection > 0) {
-            text += "\n"
-            text += "${minInfection}% Inf Threshold"
-        }
-        if (prestigeCost > 0) {
-            text += "\n"
-            text += "${prestigeCost}pp"
-        }
-        return text
     }
 
 }

@@ -174,8 +174,26 @@ interface BaseUnitTestClass {
         assertTrue(collection.isEmpty())
     }
 
+    fun assertEmpty(string: String) {
+        assertTrue(string.isEmpty())
+    }
+
     fun assertNotEmpty(collection: Collection<*>) {
         assertTrue(collection.isNotEmpty())
+    }
+
+    fun assertNotEmpty(string: String) {
+        assertTrue(string.isNotEmpty())
+    }
+
+    fun assertCount(collection: Collection<*>, count: Int) {
+        assertEquals(collection.count(), count)
+    }
+
+    fun assertEquals(int: Int, string: String) {
+        val intVal = string.toIntOrNull()
+        assertNotNull(intVal)
+        assertEquals(int, intVal)
     }
 
 }

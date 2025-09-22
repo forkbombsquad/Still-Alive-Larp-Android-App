@@ -74,7 +74,6 @@ data class FullCharacterModel(
 ) : Serializable {
 
     private var skills: List<FullCharacterModifiedSkillModel> = listOf()
-        private set
 
     constructor(charModel: CharacterModel, allSkills: List<FullSkillModel>, charSkills: List<CharacterSkillModel>, gear: GearModel?, awards: List<AwardModel>, eventAttendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>, xpReductions: List<XpReductionModel>): this(
         charModel.id,
