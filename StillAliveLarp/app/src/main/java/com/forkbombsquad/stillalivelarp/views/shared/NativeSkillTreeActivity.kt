@@ -287,7 +287,7 @@ class TouchImageView(context: Context, attrs: AttributeSet?) : AppCompatImageVie
         this.lifecycleScope = lifecycleScope
         this.skillGrid = skillGrid
         this.skillGrid!!.invalidate = {
-            this.invalidate()
+            this.postInvalidate()
         }
         invalidate()
     }

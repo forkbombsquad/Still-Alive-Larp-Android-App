@@ -30,6 +30,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlueSwipeable
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreenBuildable
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
+import com.forkbombsquad.stillalivelarp.views.shared.ViewCharacterActivity
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -260,8 +261,7 @@ class CharacterPlannerActivity : NoStatusBarActivity() {
                 reload()
             }
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
-            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, SkillsListActivity.SkillsListActivityActions.ALLOW_DELETE)
-            val intent = Intent(this, SkillsListActivity::class.java)
+            val intent = Intent(this, ViewCharacterActivity::class.java)
             startActivity(intent)
         }
     }

@@ -12,6 +12,7 @@ import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import com.forkbombsquad.stillalivelarp.views.account.CharacterPlannerActivity
 
 class ViewCharacterActivity : NoStatusBarActivity() {
 
@@ -34,7 +35,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(CharactersListActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(CharactersListActivity::class, CharacterPlannerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.viewchar_title)
         playerName = findViewById(R.id.viewchar_playerName)
@@ -72,7 +73,11 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                     startActivity(intent)
                 }
                 CharacterType.PLANNER -> {
-                    val intent = Intent(this, PlannedCharacterPersonalNativeSkillTreeActivity::class.java)
+                    val intent = if (DataManager.shared.playerIsCurrentPlayer(character.playerId)) {
+                        Intent(this, PlannedCharacterPersonalNativeSkillTreeActivity::class.java)
+                    } else {
+                        Intent(this, OtherCharacterPersonalNativeSkillTreeActivity::class.java)
+                    }
                     startActivity(intent)
                 }
             }
@@ -80,6 +85,9 @@ class ViewCharacterActivity : NoStatusBarActivity() {
 
         viewSkillsList.setOnClick {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
+            if (character.characterType() == CharacterType.PLANNER && DataManager.shared.playerIsCurrentPlayer(character.playerId)) {
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, SkillsListActivity.SkillsListActivityActions.ALLOW_DELETE)
+            }
             val intent = Intent(this, SkillsListActivity::class.java)
             startActivity(intent)
         }
