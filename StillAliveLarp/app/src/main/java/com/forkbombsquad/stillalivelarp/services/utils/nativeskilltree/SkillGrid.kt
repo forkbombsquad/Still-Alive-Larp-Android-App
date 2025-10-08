@@ -24,6 +24,7 @@ import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.Shapes
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import kotlinx.coroutines.CoroutineScope
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sign
@@ -296,8 +297,8 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
     private val lightGreenDull = Color.parseColor("#667D61")
     private val darkGreenDull = Color.parseColor("#346C14")
 
-    val fullGrid: MutableList<MutableList<FullCharacterModifiedSkillModel?>>
-    val gridConnections: List<GridConnection>
+    private lateinit var fullGrid: MutableList<MutableList<FullCharacterModifiedSkillModel?>>
+    private lateinit var gridConnections: List<GridConnection>
 
     lateinit var invalidate: () -> Unit
 
@@ -308,6 +309,10 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         this.player = player
         this.character = character
 
+        recalculateView()
+    }
+
+    private fun recalculateView() {
         calculateWidthAndHeightOfGridCategories()
         orderCategories()
         fullGrid = calculateFullGrid()
@@ -664,7 +669,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
                 heightSoFar += lineHeight + sectionSpacing
 
                 // Cost
-                text = it.skill.getFullCostText()
+                text = it.skill.getFullCostText(allowFreeSkillUse = allowPurchase)
 
                 outlineLayout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1017,7 +1022,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         return null
     }
 
-    fun handleTap(x: Float, y: Float, context: Context, lifecycleScope: LifecycleCoroutineScope) {
+    fun handleTap(x: Float, y: Float, context: Context, lifecycleScope: CoroutineScope) {
         if (!makingPurchase) {
             val pb = purchaseButton?.copy()
             if (pb != null && pb.rect.contains(x, y) && couldPurchaseSkill(pb.skill)) {
@@ -1036,7 +1041,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         }
     }
 
-    private fun purchaseSkill(pb: TappablePurchaseButton, lifecycleScope: LifecycleCoroutineScope) {
+    private fun purchaseSkill(pb: TappablePurchaseButton, lifecycleScope: CoroutineScope) {
         makingPurchase = true
         dotHandler.post(dotRunnable)
         val char = character!!
@@ -1046,9 +1051,8 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
                 DataManager.shared.load(lifecycleScope) {
                     player = DataManager.shared.getCurrentPlayer()!!
                     character = DataManager.shared.getCharacter(character!!.id)
-                    skills = character?.allPurchaseableSkills() ?: listOf()
-                    trueGrid = calculateTrueGrid()
-                    recalculateDottedLines()
+                    skills = character?.allSkillsWithCharacterModifications() ?: skills
+                    recalculateView()
                     DataManager.shared.callUpdateCallback(MyAccountFragment::class)
                     makingPurchase = false
                     dotHandler.removeCallbacks(dotRunnable)
@@ -1098,7 +1102,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
         // Plus dividing line
         totalHeight += lineHeight + sectionSpacing
 
-        text = skill.getFullCostText()
+        text = skill.getFullCostText(allowFreeSkillUse = allowPurchase)
         layout = StaticLayout.Builder.obtain(text, 0, text.length, skillDetailCostPaintOutline, skillWidthExpanded.toInt() - (textPadding * 2))
             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
             .setLineSpacing(1.5f, 1f)
@@ -1151,6 +1155,7 @@ class SkillGrid(skills: List<FullCharacterModifiedSkillModel>, personal: Boolean
     }
 
     private fun calculateWidthAndHeightOfGridCategories() {
+        gridCategories.clear()
         // For Width
         // 1. Count the total number of skills per category
         // 2. Subtract the number of skills that are prerequisites for other skills in the same category. Only count each one once (i.e. use a Set)

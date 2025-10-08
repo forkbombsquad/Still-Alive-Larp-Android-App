@@ -41,7 +41,7 @@ data class FullPlayerModel(
         player.isCheckedInAsNpc.toBoolean(),
         player.lastCheckIn,
         player.numEventsAttended.toInt(),
-        player.numEventsAttended.toInt(),
+        player.numNpcEventsAttended.toInt(),
         player.isAdmin.toBoolean(),
         characters,
         awards,
@@ -123,11 +123,11 @@ data class FullPlayerModel(
     }
 
     fun getUniqueCharacterNameRec(name: String, incrementalCount: Int? = null): String {
-        val fName = "$name${(incrementalCount == null).ternary("", " ${incrementalCount!!}")}"
+        val fName = "$name${" ${incrementalCount ?: ""}"}".trim()
         return if (characters.firstOrNull { it.fullName == fName } == null) {
             fName
         } else {
-            getUniqueCharacterNameRec(name, (incrementalCount == null).ternary(1, incrementalCount!! + 1))
+            getUniqueCharacterNameRec(name, (incrementalCount == null).ternary(1, (incrementalCount ?: 0) + 1))
         }
     }
 

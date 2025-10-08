@@ -63,24 +63,12 @@ fun String.replaceHtmlTagWithTagAndInnerValue(tag: String, replaceWith: String =
     return this.replace("<$tag>", "<$replaceWith $innerValue>").replace("</$tag>", "</$replaceWith>")
 }
 
-fun String.replaceHtmlTags(tags: List<String>, replaceWith: String = ""): String {
-    var replacement = this
-    for (tag in tags) {
-        replacement = replacement.replaceHtmlTag(tag, replaceWith)
-    }
-    return replacement
-}
-
-fun String.replaceHtmlTagsWithTag(tags: List<String>, replaceWith: String = ""): String {
-    var replacement = this
-    for (tag in tags) {
-        replacement = replacement.replaceHtmlTagWithTag(tag, replaceWith)
-    }
-    return replacement
-}
-
 
 fun String.compress(): String {
+    if (isUnitTesting) {
+        globalUnitTestPrint("Pretended to compress String", UnitTestColor.YELLOW)
+        return this
+    }
     val outputStream = ByteArrayOutputStream()
     GZIPOutputStream(outputStream).use { gzipStream ->
         gzipStream.write(this.toByteArray(Charsets.UTF_8))
@@ -90,6 +78,10 @@ fun String.compress(): String {
 }
 
 fun String.decompress(): String {
+    if (isUnitTesting) {
+        globalUnitTestPrint("Pretended to decompress String", UnitTestColor.YELLOW)
+        return this
+    }
     val compressedBytes = Base64.decode(this, Base64.NO_WRAP)
     val inputStream = GZIPInputStream(ByteArrayInputStream(compressedBytes))
     return inputStream.reader(Charsets.UTF_8).readText()

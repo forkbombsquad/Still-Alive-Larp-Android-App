@@ -1,0 +1,359 @@
+{
+  "skillPrereqs": [
+    {
+      "baseSkillId": 2,
+      "id": 1,
+      "prereqSkillId": 34
+    },
+    {
+      "baseSkillId": 3,
+      "id": 2,
+      "prereqSkillId": 73
+    },
+    {
+      "baseSkillId": 3,
+      "id": 3,
+      "prereqSkillId": 62
+    },
+    {
+      "baseSkillId": 4,
+      "id": 4,
+      "prereqSkillId": 88
+    },
+    {
+      "baseSkillId": 5,
+      "id": 5,
+      "prereqSkillId": 61
+    },
+    {
+      "baseSkillId": 7,
+      "id": 6,
+      "prereqSkillId": 91
+    },
+    {
+      "baseSkillId": 9,
+      "id": 7,
+      "prereqSkillId": 8
+    },
+    {
+      "baseSkillId": 11,
+      "id": 8,
+      "prereqSkillId": 20
+    },
+    {
+      "baseSkillId": 12,
+      "id": 9,
+      "prereqSkillId": 21
+    },
+    {
+      "baseSkillId": 14,
+      "id": 10,
+      "prereqSkillId": 13
+    },
+    {
+      "baseSkillId": 16,
+      "id": 11,
+      "prereqSkillId": 15
+    },
+    {
+      "baseSkillId": 17,
+      "id": 12,
+      "prereqSkillId": 46
+    },
+    {
+      "baseSkillId": 22,
+      "id": 14,
+      "prereqSkillId": 53
+    },
+    {
+      "baseSkillId": 23,
+      "id": 15,
+      "prereqSkillId": 1
+    },
+    {
+      "baseSkillId": 26,
+      "id": 16,
+      "prereqSkillId": 90
+    },
+    {
+      "baseSkillId": 27,
+      "id": 18,
+      "prereqSkillId": 29
+    },
+    {
+      "baseSkillId": 32,
+      "id": 21,
+      "prereqSkillId": 66
+    },
+    {
+      "baseSkillId": 33,
+      "id": 22,
+      "prereqSkillId": 47
+    },
+    {
+      "baseSkillId": 33,
+      "id": 23,
+      "prereqSkillId": 34
+    },
+    {
+      "baseSkillId": 34,
+      "id": 24,
+      "prereqSkillId": 48
+    },
+    {
+      "baseSkillId": 35,
+      "id": 25,
+      "prereqSkillId": 50
+    },
+    {
+      "baseSkillId": 36,
+      "id": 26,
+      "prereqSkillId": 85
+    },
+    {
+      "baseSkillId": 37,
+      "id": 27,
+      "prereqSkillId": 38
+    },
+    {
+      "baseSkillId": 39,
+      "id": 28,
+      "prereqSkillId": 10
+    },
+    {
+      "baseSkillId": 42,
+      "id": 29,
+      "prereqSkillId": 43
+    },
+    {
+      "baseSkillId": 44,
+      "id": 30,
+      "prereqSkillId": 78
+    },
+    {
+      "baseSkillId": 47,
+      "id": 31,
+      "prereqSkillId": 48
+    },
+    {
+      "baseSkillId": 47,
+      "id": 32,
+      "prereqSkillId": 40
+    },
+    {
+      "baseSkillId": 49,
+      "id": 33,
+      "prereqSkillId": 42
+    },
+    {
+      "baseSkillId": 49,
+      "id": 34,
+      "prereqSkillId": 50
+    },
+    {
+      "baseSkillId": 50,
+      "id": 35,
+      "prereqSkillId": 43
+    },
+    {
+      "baseSkillId": 51,
+      "id": 36,
+      "prereqSkillId": 2
+    },
+    {
+      "baseSkillId": 52,
+      "id": 37,
+      "prereqSkillId": 31
+    },
+    {
+      "baseSkillId": 53,
+      "id": 38,
+      "prereqSkillId": 39
+    },
+    {
+      "baseSkillId": 55,
+      "id": 39,
+      "prereqSkillId": 60
+    },
+    {
+      "baseSkillId": 56,
+      "id": 40,
+      "prereqSkillId": 57
+    },
+    {
+      "baseSkillId": 57,
+      "id": 41,
+      "prereqSkillId": 58
+    },
+    {
+      "baseSkillId": 58,
+      "id": 42,
+      "prereqSkillId": 59
+    },
+    {
+      "baseSkillId": 60,
+      "id": 43,
+      "prereqSkillId": 80
+    },
+    {
+      "baseSkillId": 61,
+      "id": 44,
+      "prereqSkillId": 16
+    },
+    {
+      "baseSkillId": 62,
+      "id": 45,
+      "prereqSkillId": 46
+    },
+    {
+      "baseSkillId": 63,
+      "id": 46,
+      "prereqSkillId": 19
+    },
+    {
+      "baseSkillId": 64,
+      "id": 47,
+      "prereqSkillId": 21
+    },
+    {
+      "baseSkillId": 65,
+      "id": 48,
+      "prereqSkillId": 77
+    },
+    {
+      "baseSkillId": 67,
+      "id": 49,
+      "prereqSkillId": 24
+    },
+    {
+      "baseSkillId": 69,
+      "id": 50,
+      "prereqSkillId": 68
+    },
+    {
+      "baseSkillId": 73,
+      "id": 51,
+      "prereqSkillId": 17
+    },
+    {
+      "baseSkillId": 74,
+      "id": 52,
+      "prereqSkillId": 20
+    },
+    {
+      "baseSkillId": 75,
+      "id": 53,
+      "prereqSkillId": 19
+    },
+    {
+      "baseSkillId": 77,
+      "id": 54,
+      "prereqSkillId": 36
+    },
+    {
+      "baseSkillId": 79,
+      "id": 55,
+      "prereqSkillId": 81
+    },
+    {
+      "baseSkillId": 81,
+      "id": 56,
+      "prereqSkillId": 71
+    },
+    {
+      "baseSkillId": 83,
+      "id": 58,
+      "prereqSkillId": 40
+    },
+    {
+      "baseSkillId": 83,
+      "id": 59,
+      "prereqSkillId": 42
+    },
+    {
+      "baseSkillId": 84,
+      "id": 60,
+      "prereqSkillId": 47
+    },
+    {
+      "baseSkillId": 84,
+      "id": 61,
+      "prereqSkillId": 49
+    },
+    {
+      "baseSkillId": 84,
+      "id": 62,
+      "prereqSkillId": 83
+    },
+    {
+      "baseSkillId": 86,
+      "id": 63,
+      "prereqSkillId": 9
+    },
+    {
+      "baseSkillId": 87,
+      "id": 64,
+      "prereqSkillId": 79
+    },
+    {
+      "baseSkillId": 88,
+      "id": 65,
+      "prereqSkillId": 54
+    },
+    {
+      "baseSkillId": 89,
+      "id": 66,
+      "prereqSkillId": 93
+    },
+    {
+      "baseSkillId": 94,
+      "id": 69,
+      "prereqSkillId": 80
+    },
+    {
+      "baseSkillId": 98,
+      "id": 70,
+      "prereqSkillId": 97
+    },
+    {
+      "baseSkillId": 102,
+      "id": 71,
+      "prereqSkillId": 101
+    },
+    {
+      "baseSkillId": 103,
+      "id": 72,
+      "prereqSkillId": 102
+    },
+    {
+      "baseSkillId": 104,
+      "id": 73,
+      "prereqSkillId": 103
+    },
+    {
+      "baseSkillId": 106,
+      "id": 74,
+      "prereqSkillId": 48
+    },
+    {
+      "baseSkillId": 107,
+      "id": 75,
+      "prereqSkillId": 43
+    },
+    {
+      "baseSkillId": 110,
+      "id": 76,
+      "prereqSkillId": 94
+    },
+    {
+      "baseSkillId": 113,
+      "id": 77,
+      "prereqSkillId": 70
+    },
+    {
+      "baseSkillId": 115,
+      "id": 78,
+      "prereqSkillId": 114
+    }
+  ]
+}

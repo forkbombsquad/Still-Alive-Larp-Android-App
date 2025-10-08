@@ -1,0 +1,6241 @@
+{
+  "charSkills": [
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 1,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 2,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 3,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 4,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 5,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 6,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 7,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 8,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 9,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 10,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 11,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 12,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 13,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 14,
+      "ppSpent": 0,
+      "skillId": 15,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 15,
+      "ppSpent": 0,
+      "skillId": 16,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 16,
+      "ppSpent": 0,
+      "skillId": 61,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 17,
+      "ppSpent": 0,
+      "skillId": 5,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 18,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 19,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 20,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 21,
+      "ppSpent": 0,
+      "skillId": 2,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 22,
+      "ppSpent": 0,
+      "skillId": 51,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 23,
+      "ppSpent": 0,
+      "skillId": 40,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 24,
+      "ppSpent": 0,
+      "skillId": 47,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 25,
+      "ppSpent": 0,
+      "skillId": 66,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 26,
+      "ppSpent": 0,
+      "skillId": 32,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 29,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 30,
+      "ppSpent": 0,
+      "skillId": 9,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 31,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 32,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 33,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 34,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 35,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 36,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 37,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 38,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 39,
+      "ppSpent": 0,
+      "skillId": 52,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 40,
+      "ppSpent": 0,
+      "skillId": 53,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 41,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 42,
+      "ppSpent": 0,
+      "skillId": 9,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 43,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 44,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 45,
+      "ppSpent": 0,
+      "skillId": 63,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 46,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 47,
+      "ppSpent": 0,
+      "skillId": 22,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 48,
+      "ppSpent": 0,
+      "skillId": 33,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 49,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 50,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 51,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 52,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 53,
+      "ppSpent": 1,
+      "skillId": 45,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 54,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 55,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 56,
+      "ppSpent": 0,
+      "skillId": 42,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 57,
+      "ppSpent": 0,
+      "skillId": 49,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 58,
+      "ppSpent": 0,
+      "skillId": 66,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 59,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 60,
+      "ppSpent": 0,
+      "skillId": 52,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 61,
+      "ppSpent": 0,
+      "skillId": 53,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 62,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 63,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 64,
+      "ppSpent": 0,
+      "skillId": 86,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 65,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 66,
+      "ppSpent": 0,
+      "skillId": 83,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 67,
+      "ppSpent": 0,
+      "skillId": 84,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 68,
+      "ppSpent": 0,
+      "skillId": 86,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 69,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 70,
+      "ppSpent": 0,
+      "skillId": 94,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 71,
+      "ppSpent": 0,
+      "skillId": 88,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 72,
+      "ppSpent": 0,
+      "skillId": 32,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 73,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 74,
+      "ppSpent": 0,
+      "skillId": 4,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 75,
+      "ppSpent": 0,
+      "skillId": 7,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 76,
+      "ppSpent": 0,
+      "skillId": 2,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 77,
+      "ppSpent": 0,
+      "skillId": 22,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 78,
+      "ppSpent": 0,
+      "skillId": 26,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 80,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 81,
+      "ppSpent": 0,
+      "skillId": 94,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 82,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 83,
+      "ppSpent": 0,
+      "skillId": 75,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 84,
+      "ppSpent": 0,
+      "skillId": 85,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 2,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 85,
+      "ppSpent": 0,
+      "skillId": 81,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 3,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 86,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 3,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 87,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 3,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 88,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 3,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 89,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 3,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 90,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 4,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 91,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 4,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 92,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 4,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 93,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 4,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 94,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 4,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 95,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 96,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 97,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 98,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 99,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 100,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 102,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 103,
+      "ppSpent": 0,
+      "skillId": 81,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 105,
+      "ppSpent": 1,
+      "skillId": 96,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 106,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 107,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 111,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 112,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 113,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 114,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 115,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 116,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 117,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 118,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 119,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 120,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 121,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 123,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 124,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 125,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 126,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 127,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 128,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 129,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 130,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 131,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 132,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 133,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 134,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 135,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 136,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 137,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 138,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 139,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 140,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 141,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 142,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 143,
+      "ppSpent": 0,
+      "skillId": 20,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 144,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 11,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 145,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 11,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 146,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 11,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 147,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 11,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 148,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 11,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 149,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 151,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 152,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 153,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 154,
+      "ppSpent": 0,
+      "skillId": 81,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 155,
+      "ppSpent": 1,
+      "skillId": 100,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 12,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 156,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 12,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 157,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 12,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 158,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 12,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 159,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 12,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 160,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 161,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 162,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 163,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 164,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 165,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 166,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 168,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 169,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 170,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 171,
+      "ppSpent": 0,
+      "skillId": 15,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 173,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 174,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 175,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 177,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 178,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 179,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 180,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 181,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 182,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 183,
+      "ppSpent": 0,
+      "skillId": 85,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 184,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 185,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 186,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 187,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 188,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 189,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 190,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 191,
+      "ppSpent": 0,
+      "skillId": 20,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 14,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 192,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 193,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 15,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 194,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 15,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 195,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 15,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 196,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 15,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 197,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 15,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 198,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 199,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 202,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 203,
+      "ppSpent": 0,
+      "skillId": 21,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 204,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 205,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 206,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 207,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 208,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 209,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 210,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 211,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 212,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 6,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 213,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 214,
+      "ppSpent": 1,
+      "skillId": 97,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 10,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 215,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 216,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 217,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 218,
+      "ppSpent": 0,
+      "skillId": 15,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 13,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 219,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 220,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 221,
+      "ppSpent": 0,
+      "skillId": 73,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 222,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 223,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 224,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 9,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 225,
+      "ppSpent": 0,
+      "skillId": 62,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 226,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 227,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 228,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 229,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 230,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 231,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 232,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 296,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 297,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 298,
+      "ppSpent": 0,
+      "skillId": 105,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 299,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 300,
+      "ppSpent": 0,
+      "skillId": 40,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 301,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 302,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 303,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 304,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 305,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 26,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 306,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 307,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 308,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 309,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 310,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 311,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 312,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 313,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 314,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 315,
+      "ppSpent": 0,
+      "skillId": 42,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 316,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 317,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 318,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 27,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 319,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 320,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 321,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 322,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 323,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 324,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 325,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 326,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 327,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 328,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 329,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 330,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 25,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 331,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 332,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 333,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 334,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 335,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 336,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 337,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 338,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 339,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 340,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 341,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 342,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 19,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 343,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 344,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 345,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 346,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 347,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 348,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 349,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 350,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 351,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 352,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 353,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 354,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 24,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 355,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 356,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 357,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 358,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 359,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 360,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 361,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 362,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 363,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 364,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 365,
+      "ppSpent": 0,
+      "skillId": 62,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 22,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 366,
+      "ppSpent": 0,
+      "skillId": 93,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 367,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 368,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 369,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 370,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 371,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 372,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 373,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 374,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 375,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 376,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 377,
+      "ppSpent": 0,
+      "skillId": 2,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 20,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 378,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 379,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 380,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 381,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 382,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 383,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 384,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 385,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 386,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 387,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 388,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 389,
+      "ppSpent": 0,
+      "skillId": 81,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 21,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 390,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 391,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 392,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 393,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 394,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 395,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 396,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 397,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 398,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 399,
+      "ppSpent": 0,
+      "skillId": 102,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 400,
+      "ppSpent": 0,
+      "skillId": 105,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 401,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 23,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 402,
+      "ppSpent": 0,
+      "skillId": 85,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 403,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 404,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 405,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 406,
+      "ppSpent": 0,
+      "skillId": 114,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 407,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 408,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 409,
+      "ppSpent": 0,
+      "skillId": 58,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 410,
+      "ppSpent": 0,
+      "skillId": 109,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 411,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 413,
+      "ppSpent": 0,
+      "skillId": 115,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 414,
+      "ppSpent": 0,
+      "skillId": 110,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 415,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 416,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 417,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 418,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 419,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 420,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 421,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 422,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 423,
+      "ppSpent": 0,
+      "skillId": 102,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 424,
+      "ppSpent": 0,
+      "skillId": 103,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 29,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 425,
+      "ppSpent": 1,
+      "skillId": 105,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 426,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 427,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 428,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 429,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 430,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 431,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 432,
+      "ppSpent": 0,
+      "skillId": 102,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 433,
+      "ppSpent": 1,
+      "skillId": 105,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 434,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 30,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 435,
+      "ppSpent": 0,
+      "skillId": 103,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 436,
+      "ppSpent": 0,
+      "skillId": 27,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 5,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 437,
+      "ppSpent": 1,
+      "skillId": 95,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 438,
+      "ppSpent": 0,
+      "skillId": 93,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 1,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 439,
+      "ppSpent": 0,
+      "skillId": 57,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 440,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 441,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 442,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 443,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 444,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 445,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 446,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 447,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 448,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 449,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 450,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 32,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 451,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 452,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 453,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 454,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 455,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 456,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 457,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 33,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 458,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 459,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 460,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 461,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 462,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 463,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 464,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 465,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 466,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 467,
+      "ppSpent": 0,
+      "skillId": 61,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 468,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 469,
+      "ppSpent": 0,
+      "skillId": 16,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 470,
+      "ppSpent": 0,
+      "skillId": 15,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 471,
+      "ppSpent": 0,
+      "skillId": 5,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 472,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 473,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 474,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 475,
+      "ppSpent": 0,
+      "skillId": 51,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 476,
+      "ppSpent": 0,
+      "skillId": 2,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 477,
+      "ppSpent": 0,
+      "skillId": 40,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 478,
+      "ppSpent": 0,
+      "skillId": 47,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 479,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 480,
+      "ppSpent": 0,
+      "skillId": 66,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 481,
+      "ppSpent": 0,
+      "skillId": 9,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 482,
+      "ppSpent": 0,
+      "skillId": 32,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 483,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 484,
+      "ppSpent": 0,
+      "skillId": 63,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 485,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 486,
+      "ppSpent": 0,
+      "skillId": 33,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 487,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 489,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 490,
+      "ppSpent": 0,
+      "skillId": 42,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 491,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 492,
+      "ppSpent": 0,
+      "skillId": 49,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 493,
+      "ppSpent": 0,
+      "skillId": 52,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 494,
+      "ppSpent": 0,
+      "skillId": 53,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 495,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 496,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 497,
+      "ppSpent": 0,
+      "skillId": 83,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 498,
+      "ppSpent": 0,
+      "skillId": 86,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 499,
+      "ppSpent": 0,
+      "skillId": 84,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 500,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 501,
+      "ppSpent": 0,
+      "skillId": 88,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 502,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 503,
+      "ppSpent": 0,
+      "skillId": 7,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 504,
+      "ppSpent": 0,
+      "skillId": 4,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 505,
+      "ppSpent": 0,
+      "skillId": 22,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 506,
+      "ppSpent": 0,
+      "skillId": 26,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 507,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 508,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 509,
+      "ppSpent": 0,
+      "skillId": 94,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 510,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 511,
+      "ppSpent": 0,
+      "skillId": 114,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 512,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 513,
+      "ppSpent": 0,
+      "skillId": 58,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 514,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 515,
+      "ppSpent": 0,
+      "skillId": 109,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 516,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 517,
+      "ppSpent": 0,
+      "skillId": 115,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 518,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 519,
+      "ppSpent": 0,
+      "skillId": 110,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 520,
+      "ppSpent": 0,
+      "skillId": 57,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 521,
+      "ppSpent": 0,
+      "skillId": 93,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 522,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 523,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 524,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 525,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 526,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 527,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 34,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 528,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 35,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 529,
+      "ppSpent": 1,
+      "skillId": 1,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 530,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 531,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 532,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 533,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 534,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 535,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 536,
+      "ppSpent": 1,
+      "skillId": 1,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 36,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 537,
+      "ppSpent": 0,
+      "skillId": 111,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 538,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 539,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 540,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 541,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 542,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 543,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 544,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 545,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 546,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 547,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 548,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 37,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 549,
+      "ppSpent": 0,
+      "skillId": 94,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 550,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 551,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 552,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 553,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 554,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 555,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 556,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 557,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 558,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 559,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 38,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 560,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 561,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 562,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 563,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 564,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 565,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 566,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 567,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 568,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 569,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 570,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 571,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 572,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 573,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 574,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 575,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 39,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 576,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 577,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 578,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 579,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 580,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 581,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 582,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 583,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 584,
+      "ppSpent": 0,
+      "skillId": 20,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 585,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 586,
+      "ppSpent": 0,
+      "skillId": 44,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 587,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 588,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 40,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 589,
+      "ppSpent": 1,
+      "skillId": 97,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 590,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 591,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 592,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 593,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 594,
+      "ppSpent": 0,
+      "skillId": 109,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 595,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 596,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 31,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 597,
+      "ppSpent": 0,
+      "skillId": 27,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 598,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 1,
+      "id": 599,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 600,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 601,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 602,
+      "ppSpent": 0,
+      "skillId": 27,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 603,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 604,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 16,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 605,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2024/05/31",
+      "fsSpent": 0,
+      "id": 606,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 1,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 607,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 608,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 609,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 610,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 611,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 612,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 613,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 1,
+      "id": 614,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 615,
+      "ppSpent": 0,
+      "skillId": 85,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 616,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 617,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 618,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 619,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 620,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 41,
+      "date": "2025/06/13",
+      "fsSpent": 0,
+      "id": 621,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 7,
+      "date": "2025/06/13",
+      "fsSpent": 1,
+      "id": 622,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 5,
+      "date": "2025/06/16",
+      "fsSpent": 1,
+      "id": 623,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 21,
+      "date": "2025/06/17",
+      "fsSpent": 0,
+      "id": 624,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 19,
+      "date": "2025/06/17",
+      "fsSpent": 0,
+      "id": 625,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2025/06/23",
+      "fsSpent": 1,
+      "id": 626,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2025/06/23",
+      "fsSpent": 0,
+      "id": 627,
+      "ppSpent": 0,
+      "skillId": 79,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 8,
+      "date": "2025/06/23",
+      "fsSpent": 1,
+      "id": 628,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2025/06/23",
+      "fsSpent": 1,
+      "id": 629,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 8,
+      "date": "2025/06/23",
+      "fsSpent": 0,
+      "id": 630,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 16,
+      "date": "2025/06/27",
+      "fsSpent": 0,
+      "id": 631,
+      "ppSpent": 0,
+      "skillId": 109,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 16,
+      "date": "2025/06/27",
+      "fsSpent": 0,
+      "id": 632,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 26,
+      "date": "2025/07/22",
+      "fsSpent": 0,
+      "id": 633,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 1,
+      "date": "2025/07/23",
+      "fsSpent": 0,
+      "id": 634,
+      "ppSpent": 0,
+      "skillId": 55,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 7,
+      "date": "2025/08/03",
+      "fsSpent": 0,
+      "id": 635,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 7,
+      "date": "2025/08/14",
+      "fsSpent": 0,
+      "id": 636,
+      "ppSpent": 0,
+      "skillId": 58,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 9,
+      "date": "2025/08/14",
+      "fsSpent": 0,
+      "id": 637,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 1,
+      "date": "2025/08/14",
+      "fsSpent": 0,
+      "id": 638,
+      "ppSpent": 0,
+      "skillId": 56,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 5,
+      "date": "2025/08/15",
+      "fsSpent": 0,
+      "id": 639,
+      "ppSpent": 0,
+      "skillId": 79,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 640,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 641,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 642,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 643,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 644,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 645,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 646,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 647,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 648,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 649,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 650,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 651,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 1,
+      "id": 652,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 1,
+      "id": 653,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 654,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 655,
+      "ppSpent": 0,
+      "skillId": 62,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 1,
+      "id": 656,
+      "ppSpent": 0,
+      "skillId": 85,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 657,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 658,
+      "ppSpent": 0,
+      "skillId": 36,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 659,
+      "ppSpent": 0,
+      "skillId": 105,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 42,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 660,
+      "ppSpent": 0,
+      "skillId": 38,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 661,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 662,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 663,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 664,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 665,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/19",
+      "fsSpent": 0,
+      "id": 666,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 1,
+      "id": 667,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 1,
+      "id": 668,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 669,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 670,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 671,
+      "ppSpent": 0,
+      "skillId": 102,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 44,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 672,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 673,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 674,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 675,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 676,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 677,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 45,
+      "date": "2025/08/22",
+      "fsSpent": 0,
+      "id": 678,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 43,
+      "date": "2025/08/23",
+      "fsSpent": 0,
+      "id": 679,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 8,
+      "date": "2025/08/25",
+      "fsSpent": 0,
+      "id": 680,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 16,
+      "date": "2025/08/29",
+      "fsSpent": 0,
+      "id": 681,
+      "ppSpent": 0,
+      "skillId": 58,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 11,
+      "date": "2025/08/30",
+      "fsSpent": 0,
+      "id": 682,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 37,
+      "date": "2025/08/30",
+      "fsSpent": 0,
+      "id": 683,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 684,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 685,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 686,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 687,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 688,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 46,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 689,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 690,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 691,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 692,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 693,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 694,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 47,
+      "date": "2025/09/05",
+      "fsSpent": 0,
+      "id": 695,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 696,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 697,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 698,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 699,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 700,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 701,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 702,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 703,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 704,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 705,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 706,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 707,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 708,
+      "ppSpent": 0,
+      "skillId": 2,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 709,
+      "ppSpent": 0,
+      "skillId": 4,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 710,
+      "ppSpent": 0,
+      "skillId": 5,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 711,
+      "ppSpent": 0,
+      "skillId": 8,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 712,
+      "ppSpent": 0,
+      "skillId": 7,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 713,
+      "ppSpent": 0,
+      "skillId": 9,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 714,
+      "ppSpent": 0,
+      "skillId": 26,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 715,
+      "ppSpent": 0,
+      "skillId": 10,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 716,
+      "ppSpent": 0,
+      "skillId": 15,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 717,
+      "ppSpent": 0,
+      "skillId": 16,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 718,
+      "ppSpent": 0,
+      "skillId": 17,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 719,
+      "ppSpent": 0,
+      "skillId": 19,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 720,
+      "ppSpent": 0,
+      "skillId": 22,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 721,
+      "ppSpent": 0,
+      "skillId": 29,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 722,
+      "ppSpent": 0,
+      "skillId": 31,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 723,
+      "ppSpent": 0,
+      "skillId": 32,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 724,
+      "ppSpent": 0,
+      "skillId": 34,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 725,
+      "ppSpent": 0,
+      "skillId": 33,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 726,
+      "ppSpent": 0,
+      "skillId": 109,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 727,
+      "ppSpent": 0,
+      "skillId": 39,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 728,
+      "ppSpent": 0,
+      "skillId": 40,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 729,
+      "ppSpent": 0,
+      "skillId": 35,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 730,
+      "ppSpent": 0,
+      "skillId": 42,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 731,
+      "ppSpent": 0,
+      "skillId": 43,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 1,
+      "id": 732,
+      "ppSpent": 0,
+      "skillId": 46,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 733,
+      "ppSpent": 1,
+      "skillId": 45,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 734,
+      "ppSpent": 0,
+      "skillId": 84,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 735,
+      "ppSpent": 0,
+      "skillId": 47,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 736,
+      "ppSpent": 0,
+      "skillId": 48,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 737,
+      "ppSpent": 0,
+      "skillId": 49,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 738,
+      "ppSpent": 0,
+      "skillId": 50,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 739,
+      "ppSpent": 0,
+      "skillId": 51,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 740,
+      "ppSpent": 0,
+      "skillId": 52,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 741,
+      "ppSpent": 0,
+      "skillId": 54,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 742,
+      "ppSpent": 0,
+      "skillId": 53,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 743,
+      "ppSpent": 0,
+      "skillId": 55,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 744,
+      "ppSpent": 0,
+      "skillId": 56,
+      "xpSpent": 5
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 745,
+      "ppSpent": 0,
+      "skillId": 57,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 746,
+      "ppSpent": 0,
+      "skillId": 83,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 747,
+      "ppSpent": 0,
+      "skillId": 58,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 748,
+      "ppSpent": 0,
+      "skillId": 60,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 749,
+      "ppSpent": 0,
+      "skillId": 59,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 750,
+      "ppSpent": 0,
+      "skillId": 61,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 751,
+      "ppSpent": 0,
+      "skillId": 63,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 752,
+      "ppSpent": 0,
+      "skillId": 66,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 753,
+      "ppSpent": 0,
+      "skillId": 71,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 754,
+      "ppSpent": 0,
+      "skillId": 78,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 755,
+      "ppSpent": 0,
+      "skillId": 80,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 756,
+      "ppSpent": 0,
+      "skillId": 86,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 757,
+      "ppSpent": 0,
+      "skillId": 88,
+      "xpSpent": 4
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 758,
+      "ppSpent": 0,
+      "skillId": 90,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 759,
+      "ppSpent": 0,
+      "skillId": 93,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 760,
+      "ppSpent": 0,
+      "skillId": 91,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 761,
+      "ppSpent": 0,
+      "skillId": 101,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 762,
+      "ppSpent": 0,
+      "skillId": 94,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 763,
+      "ppSpent": 0,
+      "skillId": 106,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 764,
+      "ppSpent": 0,
+      "skillId": 107,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 765,
+      "ppSpent": 0,
+      "skillId": 110,
+      "xpSpent": 2
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 766,
+      "ppSpent": 0,
+      "skillId": 114,
+      "xpSpent": 1
+    },
+    {
+      "characterId": 49,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 767,
+      "ppSpent": 0,
+      "skillId": 115,
+      "xpSpent": 3
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 768,
+      "ppSpent": 0,
+      "skillId": 6,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 769,
+      "ppSpent": 0,
+      "skillId": 25,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 770,
+      "ppSpent": 0,
+      "skillId": 41,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 771,
+      "ppSpent": 0,
+      "skillId": 72,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 772,
+      "ppSpent": 0,
+      "skillId": 76,
+      "xpSpent": 0
+    },
+    {
+      "characterId": 48,
+      "date": "2025/09/16",
+      "fsSpent": 0,
+      "id": 773,
+      "ppSpent": 0,
+      "skillId": 108,
+      "xpSpent": 0
+    }
+  ]
+}

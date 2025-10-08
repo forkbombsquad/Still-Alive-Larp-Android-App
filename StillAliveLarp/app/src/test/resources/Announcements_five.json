@@ -1,0 +1,34 @@
+{
+  "announcements": [
+    {
+      "date": "2023/06/03",
+      "id": 1,
+      "text": "We are pleased to announce that, after a 6-year long hiatus, Still Alive is finally making a comeback and it's going to be better than ever! We are restarting the story from scratch and have updated the system to be cleaner and more efficent! We've secured a new place to play and are currently planning on beginning in Summer of 2024. Keep your eyes open for more announcements and get excited!",
+      "title": "We're Back!"
+    },
+    {
+      "date": "2024/04/24",
+      "id": 2,
+      "text": "Hopefully you all can make it to at least one of our events this season! Still considering doing a Halloween mini game bash in September but otherwise that will be it for the year! Make sure you preregister for the events!",
+      "title": "All Story Events For The 2024 Season Have Been Scheduled!"
+    },
+    {
+      "date": "2024/10/04",
+      "id": 3,
+      "text": "Thank you so much to everyone who attended Season 1! Can't wait for another exciting season!",
+      "title": "Events For The 2025 Season Have Been Scheduled!"
+    },
+    {
+      "date": "2025/04/21",
+      "id": 4,
+      "text": "We have a work day scheduled for May 17th. Come and help clear trails, move debris and get the land ready for the 2025 season of Still Alive! Anyone who comes to help will earn 2xp!",
+      "title": "Still Alive Work Day"
+    },
+    {
+      "date": "2025/07/25",
+      "id": 5,
+      "text": "Hello All!\nDue to some unforeseen circumstances, we needed to reschedule the August 2nd, 2025 event. We will be doing a work day on that day instead. \n\nEvent 5 will take place on August 23rd, 2025!\nEvent 6 will now take place on October 18th. 2025! \n\nCan't wait to see you all there! \nReminder, if you come to help on the work day, you will earn 2xp!\n\nCan't wait to see you all out there!",
+      "title": "Rescheduling Event 6 And August Workday"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "charGear": [
+    {
+      "characterId": 1,
+      "gearJson": "{\"gearJson\":[{\"primarySubtype\":\"Blacklight Flashlight\",\"secondarySubtype\":\"None\",\"desc\":\"Black body with strap\",\"gearType\":\"Accessory\",\"name\":\"Blacklight\"},{\"primarySubtype\":\"Medium Melee Weapon\",\"secondarySubtype\":\"None\",\"desc\":\"Big red fire axe\",\"gearType\":\"Melee Weapon\",\"name\":\"Fire Axe\"},{\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"None\",\"desc\":\"5 shot revolver\",\"gearType\":\"Firearm\",\"name\":\"Hammerstrike\"},{\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"Primary Firearm\",\"desc\":\"5 shot\",\"gearType\":\"Firearm\",\"name\":\"Hammerstrike\"}]}",
+      "id": 1
+    },
+    {
+      "characterId": 8,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"Ahnika doesn\\u0027t have a character yet. Attaching it to you for now\",\"gearType\":\"Other\",\"name\":\"3 Cloth For Ahnika\",\"primarySubtype\":\"Other\",\"secondarySubtype\":\"None\"}]}",
+      "id": 2
+    },
+    {
+      "characterId": 5,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"Unknown Capacity\",\"gearType\":\"Firearm\",\"name\":\"Unknown Name\",\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"Primary Firearm\"},{\"desc\":\"Unknown Capacity \",\"gearType\":\"Firearm\",\"name\":\"Unknown Name Also\",\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Desc\",\"gearType\":\"Melee Weapon\",\"name\":\"Knife\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Desc\",\"gearType\":\"Melee Weapon\",\"name\":\"Second Knife\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Capacity \",\"gearType\":\"Bag\",\"name\":\"Unknown Design Bag\",\"primarySubtype\":\"Large Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Capacity \",\"gearType\":\"Bag\",\"name\":\"Unknown Bag Design \",\"primarySubtype\":\"Small Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Capacity \",\"gearType\":\"Bag\",\"name\":\"Unknown Bag Design Extra \",\"primarySubtype\":\"Small Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Unknown Color\",\"gearType\":\"Accessory\",\"name\":\"Holster\",\"primarySubtype\":\"Other\",\"secondarySubtype\":\"None\"},{\"desc\":\"A blacklight that is strapped to the forehead\",\"gearType\":\"Accessory\",\"name\":\"Head Strapped Blacklight\",\"primarySubtype\":\"Blacklight Flashlight\",\"secondarySubtype\":\"None\"},{\"desc\":\"Cargo pants\",\"gearType\":\"Clothing\",\"name\":\"Cargo Pants\",\"primarySubtype\":\"None\",\"secondarySubtype\":\"None\"}]}",
+      "id": 3
+    },
+    {
+      "characterId": 9,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"A headlight \",\"gearType\":\"Accessory\",\"name\":\"Headlight\",\"primarySubtype\":\"Blacklight Flashlight\",\"secondarySubtype\":\"None\"},{\"desc\":\"Large spear like glaive\",\"gearType\":\"Melee Weapon\",\"name\":\"Glaive\",\"primarySubtype\":\"Heavy Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"A medieval style long sword\",\"gearType\":\"Melee Weapon\",\"name\":\"Long Sword\",\"primarySubtype\":\"Medium Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Standard Dagger\",\"gearType\":\"Melee Weapon\",\"name\":\"Dagger\",\"primarySubtype\":\"Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Super light Dagger\",\"gearType\":\"Melee Weapon\",\"name\":\"Coreless Dagger\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Bag\",\"gearType\":\"Bag\",\"name\":\"Shoulder Bag\",\"primarySubtype\":\"Medium Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Leg strapped green\",\"gearType\":\"Bag\",\"name\":\"Leg Bag\",\"primarySubtype\":\"Small Bag\",\"secondarySubtype\":\"None\"}]}",
+      "id": 4
+    },
+    {
+      "characterId": 7,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"2 detachable pouches \",\"gearType\":\"Bag\",\"name\":\"Backpack\",\"primarySubtype\":\"Large Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"For foraging \",\"gearType\":\"Bag\",\"name\":\"Hip Bag\",\"primarySubtype\":\"Small Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Bo Staff\",\"gearType\":\"Melee Weapon\",\"name\":\"Walking Stick\",\"primarySubtype\":\"Heavy Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Knife\",\"gearType\":\"Melee Weapon\",\"name\":\"Knife\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"6 shots\",\"gearType\":\"Firearm\",\"name\":\"Commander\",\"primarySubtype\":\"Medium Firearm\",\"secondarySubtype\":\"Primary Firearm\"},{\"desc\":\"2 shot\",\"gearType\":\"Firearm\",\"name\":\"Zombie Strike Hammer Action\",\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"None\"},{\"desc\":\"Standard \",\"gearType\":\"Accessory\",\"name\":\"Blacklight \",\"primarySubtype\":\"Blacklight Flashlight\",\"secondarySubtype\":\"None\"}]}",
+      "id": 5
+    },
+    {
+      "characterId": 16,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"Older style wooden  handle knife\",\"gearType\":\"Melee Weapon\",\"name\":\"Knife\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Another knife. Same kind\",\"gearType\":\"Melee Weapon\",\"name\":\"Knife\",\"primarySubtype\":\"Super Light Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"Riveted handle, no hilt.\",\"gearType\":\"Melee Weapon\",\"name\":\"Crimson Death Sword\",\"primarySubtype\":\"Medium Melee Weapon\",\"secondarySubtype\":\"None\"},{\"desc\":\"1 ammo\",\"gearType\":\"Firearm\",\"name\":\"Rebel Peashooter\",\"primarySubtype\":\"Light Firearm\",\"secondarySubtype\":\"Primary Firearm\"},{\"desc\":\"Black\",\"gearType\":\"Accessory\",\"name\":\"Flash\",\"primarySubtype\":\"Blacklight Flashlight\",\"secondarySubtype\":\"None\"},{\"desc\":\"Black gun holster attaches to belt\",\"gearType\":\"Accessory\",\"name\":\"Holster\",\"primarySubtype\":\"Other\",\"secondarySubtype\":\"None\"},{\"desc\":\"Character art on side\",\"gearType\":\"Bag\",\"name\":\"Hanging Pouch\",\"primarySubtype\":\"Small Bag\",\"secondarySubtype\":\"None\"},{\"desc\":\"Pink, white and black. Scratch pattern\",\"gearType\":\"Bag\",\"name\":\"Backpack\",\"primarySubtype\":\"Large Bag\",\"secondarySubtype\":\"None\"}]}",
+      "id": 6
+    },
+    {
+      "characterId": 44,
+      "gearJson": "{\"gearJson\":[{\"desc\":\"Adreanaline\",\"gearType\":\"Other\",\"name\":\"Adreanaline\",\"primarySubtype\":\"Other\",\"secondarySubtype\":\"None\"}]}",
+      "id": 7
+    }
+  ]
+}

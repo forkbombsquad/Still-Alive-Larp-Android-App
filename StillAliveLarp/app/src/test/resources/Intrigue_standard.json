@@ -1,0 +1,53 @@
+{
+  "intrigues": [
+    {
+      "eventId": 1,
+      "id": 1,
+      "interrogatorMessage": "Several hordes have been seen near the camp",
+      "investigatorMessage": "Rumor has it. A large number of zombies has been spotted in the area",
+      "webOfInformantsMessage": "A large number of resources and cashes can be found nearby"
+    },
+    {
+      "eventId": 2,
+      "id": 2,
+      "interrogatorMessage": "All of the roses in the area have been picked. I wonder why\n",
+      "investigatorMessage": "If you tell Jack Lancer to shoot you, he will",
+      "webOfInformantsMessage": "A materials trader was spotted in the area. He gives discounts to friends\n"
+    },
+    {
+      "eventId": 3,
+      "id": 3,
+      "interrogatorMessage": "Mysterious men in all black with masks have been seen wandering the area",
+      "investigatorMessage": "Scouts have reported that an enemy base has been established nearby. They have a power supply that the camp could use for their radio tower.",
+      "webOfInformantsMessage": ""
+    },
+    {
+      "eventId": 4,
+      "id": 4,
+      "interrogatorMessage": "The Juggernaut Walks",
+      "investigatorMessage": "Larger than normal zombie numbers are in the area",
+      "webOfInformantsMessage": ""
+    },
+    {
+      "eventId": 5,
+      "id": 5,
+      "interrogatorMessage": "A well hidden heavy melee weapon for the hunger games will be located near the dead end trail.",
+      "investigatorMessage": "A well hidden ammo cache for the hunger games will be located near the fishing spot.",
+      "webOfInformantsMessage": ""
+    },
+    {
+      "eventId": 6,
+      "id": 6,
+      "interrogatorMessage": "Don't drink anything from strangers.",
+      "investigatorMessage": "The cultists have been up to something nefarious, it seems to be empowering the zombies nearby.",
+      "webOfInformantsMessage": ""
+    },
+    {
+      "eventId": 7,
+      "id": 7,
+      "interrogatorMessage": "The cultists have been strangely quiet as of late. The calm before the storm?",
+      "investigatorMessage": "The 'Hag' has only been spotted at night. During the day, she must be off somewhere else collecting her hordes.",
+      "webOfInformantsMessage": ""
+    }
+  ]
+}

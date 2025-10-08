@@ -1,0 +1,64 @@
+{
+  "skillCategories": [
+    {
+      "id": 1,
+      "name": "Beginner (Free) Skills"
+    },
+    {
+      "id": 2,
+      "name": "Firearms"
+    },
+    {
+      "id": 3,
+      "name": "Dual Wielding"
+    },
+    {
+      "id": 4,
+      "name": "Melee"
+    },
+    {
+      "id": 5,
+      "name": "Deconstruction"
+    },
+    {
+      "id": 6,
+      "name": "Combat Techniques"
+    },
+    {
+      "id": 7,
+      "name": "Resistance and Resolve"
+    },
+    {
+      "id": 8,
+      "name": "Deus Ex Machina"
+    },
+    {
+      "id": 9,
+      "name": "Mutualism"
+    },
+    {
+      "id": 10,
+      "name": "Gathering"
+    },
+    {
+      "id": 11,
+      "name": "Crafting and Repair"
+    },
+    {
+      "id": 12,
+      "name": "Medicine"
+    },
+    {
+      "id": 13,
+      "name": "The Infected"
+    },
+    {
+      "id": 14,
+      "name": "Prestige"
+    },
+    {
+      "id": 15,
+      "name": "Specialization"
+    }
+  ]
+}

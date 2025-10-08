@@ -23,6 +23,7 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.time.LocalDate
@@ -73,7 +74,6 @@ data class FullCharacterModel(
 ) : Serializable {
 
     private var skills: List<FullCharacterModifiedSkillModel> = listOf()
-        private set
 
     constructor(charModel: CharacterModel, allSkills: List<FullSkillModel>, charSkills: List<CharacterSkillModel>, gear: GearModel?, awards: List<AwardModel>, eventAttendees: List<EventAttendeeModel>, preregs: List<EventPreregModel>, xpReductions: List<XpReductionModel>): this(
         charModel.id,
@@ -165,7 +165,7 @@ data class FullCharacterModel(
         return skills.filter { !it.isPurchased() }
     }
 
-    fun attemptToPurchaseSkill(lifecycleScope: LifecycleCoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {
+    fun attemptToPurchaseSkill(lifecycleScope: CoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {
         if (allPurchaseableSkills().firstOrNull { it.id == skill.id } != null) {
             askToPurchase(skill) { cscm ->
                 cscm.ifLet({ charSkillCreateModel ->
@@ -491,7 +491,7 @@ data class FullCharacterModel(
         return awards.sortedByDescending { LocalDate.parse(it.date, formatter) }
     }
 
-    fun deleteSkillsDESTRUCTIVE(lifecycleScope: LifecycleCoroutineScope, completion: (success: Boolean) -> Unit) {
+    fun deleteSkillsDESTRUCTIVE(lifecycleScope: CoroutineScope, completion: (success: Boolean) -> Unit) {
         val deleteSkillsRequest = CharacterSkillService.DeleteCharacterSkills()
         lifecycleScope.launch {
             deleteSkillsRequest.successfulResponse(IdSP(id)).ifLet({ _ ->
@@ -502,7 +502,7 @@ data class FullCharacterModel(
         }
     }
 
-    fun deleteCharacterDESTRUCTIVE(lifecycleScope: LifecycleCoroutineScope, completion: (success: Boolean) -> Unit) {
+    fun deleteCharacterDESTRUCTIVE(lifecycleScope: CoroutineScope, completion: (success: Boolean) -> Unit) {
         val request = CharacterService.DeleteCharacter()
         lifecycleScope.launch {
             request.successfulResponse(IdSP(id)).ifLet({ _ ->

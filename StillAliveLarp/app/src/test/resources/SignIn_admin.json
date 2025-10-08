@@ -1,0 +1,15 @@
+{
+  "experience": "1",
+  "freeTier1Skills": "2",
+  "fullName": "Test Testerson",
+  "id": 1,
+  "isAdmin": "TRUE",
+  "isCheckedIn": "FALSE",
+  "isCheckedInAsNpc": "FALSE",
+  "lastCheckIn": "2018/06/02",
+  "numEventsAttended": "3",
+  "numNpcEventsAttended": "4",
+  "prestigePoints": "5",
+  "startDate": "2017/04/30",
+  "username": "testtesterson@gmail.com"
+}

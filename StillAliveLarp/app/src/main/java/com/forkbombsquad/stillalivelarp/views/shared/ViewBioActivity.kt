@@ -50,7 +50,11 @@ class ViewBioActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, "${character.fullName}'s Bio")
-        edit.isGone = !(DataManager.shared.playerIsCurrentPlayer(character.id) && character.isAlive) || DataManager.shared.offlineMode || character.characterType() != CharacterType.STANDARD
+        var showEdit = DataManager.shared.playerIsCurrentPlayer(character.playerId) && character.isAlive && character.characterType() == CharacterType.STANDARD
+        if (DataManager.shared.offlineMode) {
+            showEdit = false
+        }
+        edit.isGone = !showEdit
         text.text = character.bio
     }
 }

@@ -48,12 +48,8 @@ enum class ValidationType(val subtypes: Array<ValidationSubtype>) {
     START_TIME(arrayOf(ValidationSubtype.NOT_EMPTY)),
     END_TIME(arrayOf(ValidationSubtype.NOT_EMPTY)),
     DESCRIPTION(arrayOf(ValidationSubtype.NOT_EMPTY)),
-    PRIMARY_WEAPON_NAME(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG)),
-    PRIMARY_WEAPON_AMMO(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG)),
-    GEAR_TYPE(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG)),
     GEAR_NAME(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG)),
-    GEAR_DESCRIPTION(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG))
-
+    GEAR_DESCRIPTION(arrayOf(ValidationSubtype.NOT_EMPTY, ValidationSubtype.AT_LEAST_TWO_CHARACTERS_LONG)),
 }
 
 enum class ValidationSubtype {
@@ -96,7 +92,7 @@ class Validator {
             return validationResult
         }
 
-        private fun doValidation(text: String, validationType: ValidationType): String? {
+        fun doValidation(text: String, validationType: ValidationType): String? {
             var error = ""
             val name = validationType.name.lowercase().replace("_", " ").capitalized()
             for (valSubtype in validationType.subtypes) {
@@ -140,7 +136,8 @@ class Validator {
                         }
                     }
                     ValidationSubtype.BETWEEN_0_AND_100 -> {
-                        if (text.toInt() < 0 || text.toInt() > 100) {
+                        val textInt = text.toIntOrNull() ?: -1
+                        if (textInt < 0 || textInt > 100) {
                             error = addToError(error, "$name must be between 0 and 100")
                         }
                     }
