@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.forkbombsquad.stillalivelarp"
         minSdk 29
-        targetSdk 35
-        versionCode 27
-        versionName "2.2.2.0"
+        targetSdk 36
+        versionCode 28
+        versionName "2.2.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
