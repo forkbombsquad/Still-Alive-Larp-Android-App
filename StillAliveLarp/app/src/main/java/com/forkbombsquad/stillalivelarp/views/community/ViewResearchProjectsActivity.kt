@@ -32,7 +32,7 @@ class ViewResearchProjectsActivity : NoStatusBarActivity() {
         val projects = DataManager.shared.researchProjects.sortedByDescending { it.id }
         projects.forEach { rp ->
             val rpCell = ResearchProjectCell(this)
-            rpCell.setup(rp)
+            rpCell.setup(rp, this, this::class)
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             params.setMargins(0, 8, 0, 8)
             rpCell.layoutParams = params

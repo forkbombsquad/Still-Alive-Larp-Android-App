@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".views.community.ViewResearchProjectMilestonesActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+            <TextView
+                android:id="@+id/rpm_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Research Project Name"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dividerColor="@color/mid_gray"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"/>
+
+            <ProgressBar
+                android:id="@+id/rpm_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center_vertical"
+                    android:text="Project Complete?"/>
+                <TextView
+                    android:id="@+id/rpm_complete"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    android:text="No"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="16dp">
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="Completed Milestones:"/>
+                <TextView
+                    android:id="@+id/rpm_milestones"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    android:text="0"/>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dividerColor="@color/mid_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"/>
+
+            <TextView
+                android:id="@+id/rpm_milestoneHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:text="Milestone 1"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/rpm_prevButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="&lt; Prev"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"/>
+                <Button
+                    android:id="@+id/rpm_nextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Next &gt;"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/rpm_milestoneText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:textAlignment="textStart"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="This is a milestone description that can go onto multiple lines and stretch the cell as needed.\n\nThese will likley be pretty long"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

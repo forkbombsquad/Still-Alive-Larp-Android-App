@@ -57,7 +57,7 @@ class LocalDataManager private constructor() {
     companion object {
 
         // TODO ROUTINE - update this number if any of the models change between releases
-        const val LOCAL_DATA_VERSION = "1.0.0.0"
+        const val LOCAL_DATA_VERSION = "1.0.0.1"
 
         var shared = LocalDataManager()
             private set

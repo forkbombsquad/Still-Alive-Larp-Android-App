@@ -109,4 +109,12 @@
         android:textColor="@color/black"
         android:text="This is a Research Project description that can go onto multiple lines and stretch the cell as needed.\n\nThese will likley be pretty long"/>
 
+    <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+        android:id="@+id/rp_viewMilestones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        app:text="View Milestones"
+        app:showLoading="false"/>
+
 </LinearLayout>

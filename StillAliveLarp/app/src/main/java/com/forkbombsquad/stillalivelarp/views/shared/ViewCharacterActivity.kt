@@ -60,7 +60,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
             when (character.characterType()) {
                 CharacterType.STANDARD, CharacterType.HIDDEN -> {
-                    if (DataManager.shared.playerIsCurrentPlayer(character.id) && character.isAlive) {
+                    if (DataManager.shared.playerIsCurrentPlayer(character.playerId) && character.isAlive) {
                         val intent = Intent(this, PersonalNativeSkillTreeActivity::class.java)
                         startActivity(intent)
                     } else {

@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 
 class ManageResearchProjectsActivity : NoStatusBarActivity() {
 
+    // TODO add milestone editing
+
     private lateinit var loadingLayout: LoadingLayout
     private lateinit var innerLayout: LinearLayout
     private lateinit var outerLayout: LinearLayout
@@ -34,6 +36,7 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
     val descKey = "Description"
     val milestonesKey = "Milestones"
     val completeKey = "Complete"
+    val milestoneDescsKey = "MilestoneDescs"
 
     private lateinit var researchProjects: List<ResearchProjectModel>
 
@@ -95,7 +98,8 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
                     name = responses[nameKey] ?: "Unknown",
                     description = responses[descKey] ?: "Unknown",
                     milestones = responses[milestonesKey]?.toInt() ?: 0,
-                    complete = responses[completeKey]?.uppercase() ?: "FALSE"
+                    complete = responses[completeKey]?.uppercase() ?: "FALSE",
+                    milestoneDescs = responses[milestoneDescsKey] ?: "{milestoneDescs:[]}"
                 )
                 val request = AdminService.CreateResearchProject()
                 lifecycleScope.launch {
@@ -119,7 +123,7 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
             innerLayout.removeAllViews()
             researchProjects.sortedByDescending { it.id }.forEach { rp ->
                 val rpCell = ResearchProjectCell(this)
-                rpCell.setup(rp)
+                rpCell.setup(rp, this, this::class)
                 val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 8, 0, 8)
                 rpCell.layoutParams = params
@@ -161,7 +165,8 @@ class ManageResearchProjectsActivity : NoStatusBarActivity() {
                             name = responses[nameKey] ?: "Unknown",
                             description = responses[descKey] ?: "Unknown",
                             milestones = responses[milestonesKey]?.toInt() ?: 0,
-                            complete = responses[completeKey]?.uppercase() ?: "FALSE"
+                            complete = responses[completeKey]?.uppercase() ?: "FALSE",
+                            milestoneDescs = responses[milestoneDescsKey] ?: "{milestoneDescs:[]}"
                         )
                         val request = AdminService.UpdateResearchProject()
                         lifecycleScope.launch {

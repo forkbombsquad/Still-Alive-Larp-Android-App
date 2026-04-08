@@ -89,7 +89,8 @@ enum class DataManagerPassedDataKey {
     ACTION,
     RULEBOOK,
     IMAGE,
-    CAMP_STATUS
+    CAMP_STATUS,
+    RESEARCH_PROJECT
 }
 
 enum class DataManagerType(val localDataKey: String) {
