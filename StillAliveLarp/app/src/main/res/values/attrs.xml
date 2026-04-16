@@ -13,4 +13,6 @@
         <attr name="buttontext" format="string"/>
         <attr name="loading" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="DropdownSpinner">
+    </declare-styleable>
 </resources>

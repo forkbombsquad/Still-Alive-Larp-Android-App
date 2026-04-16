@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import java.io.Serializable
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CraftingRecipeModel(
@@ -28,6 +29,53 @@ data class CraftingRecipeModel(
         get() {
             return globalFromJson<CraftingRecipeOtherRequiredItemsJsonModel>(otherRequiredItemIds ?: "")
         }
+
+    // Check if character has the required skill
+    fun canMakeWithSkills(purchasedSkills: List<FullCharacterModifiedSkillModel>): Boolean {
+        if (skillId == null || skillId == -1) {
+            return true // No skill required
+        }
+        return purchasedSkills.any { it.id == skillId }
+    }
+
+    // Check if character has skill AND materials
+    fun canMakeNow(
+        purchasedSkills: List<FullCharacterModifiedSkillModel>,
+        woodSupplies: Int,
+        metalSupplies: Int,
+        clothSupplies: Int,
+        techSupplies: Int,
+        medicalSupplies: Int,
+        casing: Int
+    ): Boolean {
+        if (!canMakeWithSkills(purchasedSkills)) {
+            return false
+        }
+        if (wood > woodSupplies || metal > metalSupplies || cloth > clothSupplies ||
+            tech > techSupplies || medical > medicalSupplies || casing > casing) {
+            return false
+        }
+        return true
+    }
+
+    // Get crafting time display string
+    fun getCraftingTimeText(): String {
+        return when {
+            craftingTime < 0 -> "*see Notes"
+            craftingTime < 1 -> "${(craftingTime * 60).toInt()} sec"
+            else -> "${craftingTime.toInt()} min"
+        }
+    }
+
+    // Get base recipe name if this is an alternate
+    fun isAlternate(): Boolean {
+        return baseRecipeId != null && baseRecipeId != -1
+    }
+
+    // Get other recipe items referenced
+    fun getOtherRecipeIds(): List<Int> {
+        return otherRequiredItemsJsonModel?.otherItemIds?.map { it.id } ?: listOf()
+    }
 
 }
 

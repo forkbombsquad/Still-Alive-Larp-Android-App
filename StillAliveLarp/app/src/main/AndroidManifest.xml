@@ -43,6 +43,9 @@
             android:name=".views.shared.SkillsListActivity"
             android:exported="false" />
         <activity
+            android:name=".views.shared.CraftingRecipesListActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.shared.ViewCharacterStatsActivity"
             android:exported="false" />
         <activity

@@ -30,6 +30,14 @@ class DropdownSpinner(context: Context): LinearLayout(context) {
         spinner = findViewById(R.id.dropdownspinner_spinner)
     }
 
+    constructor(context: Context, attrs: android.util.AttributeSet): this(context) {
+        // Allow XML inflation with no extra setup needed
+    }
+
+    constructor(context: Context, attrs: android.util.AttributeSet, defStyleAttr: Int): this(context, attrs) {
+        // Allow XML inflation with style
+    }
+
     fun setup(context: Context, titleText: String, options: List<String>, onItemSelected: () -> Unit) {
         title.text = titleText
         setOptions(context, options)
