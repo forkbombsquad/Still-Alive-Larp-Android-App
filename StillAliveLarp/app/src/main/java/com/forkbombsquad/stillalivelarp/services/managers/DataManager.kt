@@ -37,6 +37,7 @@ import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
@@ -94,6 +95,7 @@ enum class DataManagerPassedDataKey {
     CAMP_STATUS,
     RESEARCH_PROJECT,
     CRAFTING_RECIPE_LIST,
+    CRAFTING_RECIPE_CATEGORY,
     SELECTED_CRAFTING_RECIPE
 }
 
@@ -191,10 +193,10 @@ class DataManager private constructor() {
         _researchProjects.value = new
     }
 
-    var craftingRecipes: List<CraftingRecipeModel> = listOf()
-    private val _craftingRecipes = MutableStateFlow<List<CraftingRecipeModel>>(listOf())
-    val craftingRecipesFlow: StateFlow<List<CraftingRecipeModel>> = _craftingRecipes
-    private fun _updateCraftingRecipes(new: List<CraftingRecipeModel>) {
+    var craftingRecipes: List<FullCraftingRecipeModel> = listOf()
+    private val _craftingRecipes = MutableStateFlow<List<FullCraftingRecipeModel>>(listOf())
+    val craftingRecipesFlow: StateFlow<List<FullCraftingRecipeModel>> = _craftingRecipes
+    private fun _updateCraftingRecipes(new: List<FullCraftingRecipeModel>) {
         craftingRecipes = new
         _craftingRecipes.value = new
     }
@@ -786,7 +788,7 @@ class DataManager private constructor() {
                     _updateFeatureFlags(LocalDataManager.shared.getFeatureFlags())
                     _updateIntrigues(LocalDataManager.shared.getIntrigues())
                     _updateResearchProjects(LocalDataManager.shared.getResearchProjects())
-                    _updateCraftingRecipes(LocalDataManager.shared.getCraftingRecipes())
+                    _updateCraftingRecipes(LocalDataManager.shared.getFullCraftingRecipes())
                     _updateCampStatus(LocalDataManager.shared.getCampStatus())
 
                     // Built Models

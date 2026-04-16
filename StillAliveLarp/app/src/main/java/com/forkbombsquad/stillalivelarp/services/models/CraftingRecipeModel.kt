@@ -2,9 +2,9 @@ package com.forkbombsquad.stillalivelarp.services.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.forkbombsquad.stillalivelarp.utils.containsIgnoreCase
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import java.io.Serializable
-import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CraftingRecipeModel(
@@ -30,35 +30,72 @@ data class CraftingRecipeModel(
             return globalFromJson<CraftingRecipeOtherRequiredItemsJsonModel>(otherRequiredItemIds ?: "")
         }
 
-    // Check if character has the required skill
-    fun canMakeWithSkills(purchasedSkills: List<FullCharacterModifiedSkillModel>): Boolean {
-        if (skillId == null || skillId == -1) {
-            return true // No skill required
+    data class MaterialItem(
+        val quantity: Int,
+        val name: String,
+        val recipeId: Int? = null,
+        val isRecipeReference: Boolean = false,
+        val isFood: Boolean = false
+    )
+
+    fun getMaterialsList(): List<MaterialItem> {
+        val matList = mutableListOf<MaterialItem>()
+        if (wood > 0) matList.add(MaterialItem(wood, "Wood"))
+        if (metal > 0) matList.add(MaterialItem(metal, "Metal"))
+        if (cloth > 0) matList.add(MaterialItem(cloth, "Cloth"))
+        if (tech > 0) matList.add(MaterialItem(tech, "Tech Supplies"))
+        if (medical > 0) matList.add(MaterialItem(medical, "Medical Supplies"))
+        if (casing > 0) matList.add(MaterialItem(casing, "Casings"))
+
+        // Other recipe items (these should be bolded)
+        val otherItems = otherRequiredItemsJsonModel?.otherItemIds
+        if (otherItems != null) {
+            for (item in otherItems) {
+                matList.add(MaterialItem(item.num, "Recipe ${item.id}", recipeId = item.id, isRecipeReference = true))
+            }
         }
-        return purchasedSkills.any { it.id == skillId }
+
+        // Foods - each food item should be listed separately
+        val foods = otherRequiredItemsJsonModel?.getFoodMaterials() ?: listOf()
+        foods.forEach {
+            matList.add(it)
+        }
+
+        return matList
     }
 
-    // Check if character has skill AND materials
-    fun canMakeNow(
-        purchasedSkills: List<FullCharacterModifiedSkillModel>,
-        woodSupplies: Int,
-        metalSupplies: Int,
-        clothSupplies: Int,
-        techSupplies: Int,
-        medicalSupplies: Int,
-        casing: Int
-    ): Boolean {
-        if (!canMakeWithSkills(purchasedSkills)) {
-            return false
-        }
-        if (wood > woodSupplies || metal > metalSupplies || cloth > clothSupplies ||
-            tech > techSupplies || medical > medicalSupplies || casing > casing) {
-            return false
-        }
-        return true
+    fun isAlternate(): Boolean {
+        return baseRecipeId != null && baseRecipeId != -1
     }
 
-    // Get crafting time display string
+    fun getOtherRecipeIds(): List<Int> {
+        return otherRequiredItemsJsonModel?.otherItemIds?.map { it.id } ?: listOf()
+    }
+
+}
+
+data class FullCraftingRecipeModel(
+    val craftingRecipe: CraftingRecipeModel,
+    val requiredSkill: FullSkillModel?,
+    private val baseRecipe: FullCraftingRecipeModel?,
+    val otherRecipeReferences: List<FullCraftingRecipeModel>
+) : Serializable {
+
+    val category = craftingRecipe.category
+    val id = craftingRecipe.id
+    private val name = craftingRecipe.name
+    val desc = craftingRecipe.desc
+    private val craftingTime = craftingRecipe.craftingTime
+    private val baseRecipeId = baseRecipe?.id
+
+    fun getDisplayName(): String {
+        return if (isAlternate() && baseRecipe != null) {
+            "${baseRecipe.name} ($name)"
+        } else {
+            name
+        }
+    }
+
     fun getCraftingTimeText(): String {
         return when {
             craftingTime < 0 -> "*see Notes"
@@ -67,18 +104,23 @@ data class CraftingRecipeModel(
         }
     }
 
-    // Get base recipe name if this is an alternate
     fun isAlternate(): Boolean {
         return baseRecipeId != null && baseRecipeId != -1
     }
 
-    // Get other recipe items referenced
-    fun getOtherRecipeIds(): List<Int> {
-        return otherRequiredItemsJsonModel?.otherItemIds?.map { it.id } ?: listOf()
+    fun containedInSearch(searchText: String): Boolean {
+        return if (getDisplayName().containsIgnoreCase(searchText)) {
+            true
+        } else if (category.containsIgnoreCase(searchText)) {
+            true
+        } else if ((desc ?: "").containsIgnoreCase(searchText)) {
+            true
+        } else {
+            false
+        }
     }
 
 }
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CraftingRecipeListModel(
     @JsonProperty("craftingRecipes") val craftingRecipes: Array<CraftingRecipeModel>
@@ -92,5 +134,15 @@ data class CraftingRecipeOtherRequiredItemJsonModel(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CraftingRecipeOtherRequiredItemsJsonModel(
     @JsonProperty("otherItemIds") val otherItemIds: Array<CraftingRecipeOtherRequiredItemJsonModel>?,
-    @JsonProperty("foods") val foods: Any?
-) : Serializable
+    @JsonProperty("foods") val foods: List<Map<String, Int>>
+) : Serializable {
+    fun getFoodMaterials(): List<CraftingRecipeModel.MaterialItem> {
+        val items: MutableList<CraftingRecipeModel.MaterialItem> = mutableListOf()
+        foods.forEach { map ->
+            map.forEach {
+                items.add(CraftingRecipeModel.MaterialItem(it.value, it.key, isFood = true))
+            }
+        }
+        return items
+    }
+}

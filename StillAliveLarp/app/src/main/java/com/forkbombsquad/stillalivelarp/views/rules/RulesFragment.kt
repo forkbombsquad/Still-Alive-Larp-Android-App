@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.utils.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.CraftingRecipesListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.CraftingRecipeCategoriesActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
@@ -79,7 +80,7 @@ class RulesFragment : Fragment() {
         }
 
         craftingRecipesNav.setOnClick {
-            val intent = Intent(v.context, CraftingRecipesListActivity::class.java)
+            val intent = Intent(v.context, CraftingRecipeCategoriesActivity::class.java)
             startActivity(intent)
         }
 

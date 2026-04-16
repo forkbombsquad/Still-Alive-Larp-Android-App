@@ -9,6 +9,7 @@ import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.DeleteCharacterRequest
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.models.FullCraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
@@ -163,6 +164,22 @@ data class FullCharacterModel(
 
     fun allNonPurchasedSkills(): List<FullCharacterModifiedSkillModel> {
         return skills.filter { !it.isPurchased() }
+    }
+
+    fun canCraftWithSkills(recipe: FullCraftingRecipeModel): Boolean {
+        if (recipe.requiredSkill == null) {
+            return true
+        }
+        return allPurchasedSkills().any { it.id == recipe.requiredSkill.id }
+    }
+
+    fun canCraftNow(recipe: FullCraftingRecipeModel): Boolean {
+        if (!canCraftWithSkills(recipe)) {
+            return false
+        }
+        val r = recipe.craftingRecipe
+        return !(r.wood > woodSupplies || r.metal > metalSupplies || r.cloth > clothSupplies ||
+                r.tech > techSupplies || r.medical > medicalSupplies || r.casing > bulletCasings)
     }
 
     fun attemptToPurchaseSkill(lifecycleScope: CoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".views.shared.CraftingRecipesListActivity">
+    tools:context=".views.shared.CraftingRecipeCategoriesActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,43 +20,14 @@
             android:paddingRight="16dp">
 
             <TextView
-                android:id="@+id/craftingrecipes_title"
+                android:id="@+id/craftingcategories_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Crafting Recipes"
+                android:text="Crafting Recipe Categories"
                 android:textStyle="bold"
                 android:textSize="32sp"
                 android:textAlignment="center"/>
-
-            <EditText
-                android:id="@+id/craftingrecipes_searchview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:hint="Search"
-                android:textSize="24sp"
-                android:layout_gravity="center"/>
-
-            <CheckBox
-                android:id="@+id/craftingrecipes_hasskill_checkbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Only Show Recipes I Can Craft"
-                android:checked="false"
-                android:visibility="gone"
-                android:layout_marginTop="8dp"/>
-
-            <CheckBox
-                android:id="@+id/craftingrecipes_hasmaterials_checkbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Only Show Recipes I Have The Materials For"
-                android:checked="false"
-                android:visibility="gone"
-                android:layout_marginTop="8dp"/>
 
             <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
                 android:id="@+id/loadinglayout"
@@ -64,7 +35,7 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:id="@+id/craftingrecipes_layout"
+                android:id="@+id/craftingcategories_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
