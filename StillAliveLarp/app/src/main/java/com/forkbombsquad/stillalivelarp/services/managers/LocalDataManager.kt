@@ -8,6 +8,7 @@ import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.models.AppVersionModel
 import com.forkbombsquad.stillalivelarp.services.models.AwardModel
 import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
+import com.forkbombsquad.stillalivelarp.services.models.CraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
@@ -321,6 +322,14 @@ class LocalDataManager private constructor() {
 
     fun getResearchProjects(): List<ResearchProjectModel> {
         return get(DMT.RESEARCH_PROJECTS) ?: listOf()
+    }
+
+    fun storeCraftingRecipes(craftingRecipes: List<CraftingRecipeModel>) {
+        store(craftingRecipes, DMT.CRAFTING_RECIPES)
+    }
+
+    fun getCraftingRecipes(): List<CraftingRecipeModel> {
+        return get(DMT.CRAFTING_RECIPES) ?: listOf()
     }
 
     fun storeSkills(skills: List<SkillModel>) {
