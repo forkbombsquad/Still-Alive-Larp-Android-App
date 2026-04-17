@@ -42,8 +42,8 @@ enum class UnitTestColor(val colorCode: String) {
 }
 
 fun globalUnitTestPrint(message: Any, color: UnitTestColor = UnitTestColor.RED) {
+    globalLastUnitTestPrint = message.toString()
     if (Constants.Logging.showUnitTestLogging) {
-        globalLastUnitTestPrint = message.toString()
         println("${color.colorCode}UNIT-TEST-PRINT-MSG: \"$message\"${UnitTestColor.RESET_COLOR.colorCode}")
     }
 }

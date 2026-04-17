@@ -24,8 +24,8 @@ class Constants {
             const val showTestLogging = false
             const val showDebugButtonInAccountView = false
             // These can stay true
-            const val showUnitTestLogging = true
-            const val showUITestLogging = true
+            const val showUnitTestLogging = false
+            const val showUITestLogging = false
         }
     }
 

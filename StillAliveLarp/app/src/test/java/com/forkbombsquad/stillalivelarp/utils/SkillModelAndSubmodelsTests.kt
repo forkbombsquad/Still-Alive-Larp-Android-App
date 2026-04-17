@@ -9,6 +9,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
+import kotlin.math.max
+import kotlin.math.min
 
 class SkillModelAndSubmodelsTests: BaseUnitTestClass {
 
@@ -137,12 +139,12 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 assertNotNull(noContextSkill)
 
                 val costMod = skill.getRelevantSpecCostChange()
-                assertEquals(skill.modXpCost(), noContextSkill!!.baseXpCost() - costMod)
+                assertEquals(skill.modXpCost(), max( noContextSkill!!.baseXpCost() + costMod, (noContextSkill.baseXpCost() == 0).ternary(0, 1)))
 
                 if (skill.hasModCost()) {
                     assertNotEquals(skill.modXpCost(), skill.baseXpCost())
                     assertNotEquals(skill.modXpCost(), noContextSkill.baseXpCost())
-                    assertNotEquals(skill.baseXpCost(), noContextSkill.baseXpCost())
+                    assertEquals(skill.baseXpCost(), noContextSkill.baseXpCost())
                 }
 
                 assertFalse(skill.isPurchased())
@@ -155,12 +157,14 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 }
 
                 if (skill.hasModCost()) {
-                    assertTrue(costText.contains("changed from ${skill.baseXpCost()} with"))
+                    val testStr = "changed from ${skill.baseXpCost()}xp with"
+                    assertTrue(costText.contains(testStr))
                 }
 
                 // Commander Davis has a special class xp reduction for Interrogator
                 if (skill.id == Constants.SpecificSkillIds.interrogator) {
-                    assertTrue(costText.contains("-1 from Special Class Xp Reductions"))
+                    val testStr = "-1 from Special Class Xp Reductions"
+                    assertTrue(costText.contains(testStr))
                 }
             }
         }

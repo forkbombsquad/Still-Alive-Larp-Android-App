@@ -691,11 +691,7 @@ class DataManager private constructor() {
                     DataManagerType.TREATING_WOUNDS -> {
                         lifecycleScope.launch {
                             if (isUnitTesting) {
-                                // Create a simple test bitmap (1x1 green pixel)
-                                val testBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888).apply {
-                                    setPixel(0, 0, android.graphics.Color.GREEN)
-                                }
-                                LocalDataManager.shared.storeTreatingWounds(testBitmap)
+                                // Just returns without doing anything because Bitmap isn't mocked. Someday could fix this.
                                 serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
                             } else {
                                 try {

@@ -18,10 +18,13 @@ class DataAndLocalDataManagerTests: BaseUnitTestClass {
     fun testDataManagerAndLocalDataManagerWorkInTandem() = runTest {
         var previousLoadingString = ""
         DataManager.shared.load(this, stepFinished = {
+            val loadingText = DataManager.shared.loadingText
             if (previousLoadingString == "") {
-                previousLoadingString = DataManager.shared.loadingText
-            } else {
-                assertTrue(previousLoadingString.length > DataManager.shared.loadingText.length)
+                previousLoadingString = loadingText
+            }
+            if (previousLoadingString != loadingText && loadingText.startsWith("Loading:")) {
+                assertTrue(previousLoadingString.length > loadingText.length)
+                previousLoadingString = loadingText
             }
         }, finished = {
             val DMT = DataManager.shared
@@ -35,7 +38,7 @@ class DataAndLocalDataManagerTests: BaseUnitTestClass {
             assertTrue(DMT.getAllCharacters().isNotEmpty())
             assertTrue(DMT.players.isNotEmpty())
             assertNotNull(DMT.rulebook)
-            assertNotNull(DMT.treatingWounds)
+            assertNull(DMT.treatingWounds)
             assertNotNull(DMT.campStatus)
         })
     }

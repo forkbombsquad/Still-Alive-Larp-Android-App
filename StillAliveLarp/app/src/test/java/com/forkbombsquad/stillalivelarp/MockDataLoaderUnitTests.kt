@@ -95,7 +95,7 @@ class MockDataLoaderUnitTests: BaseUnitTestClass {
         ), intrigueCount)
         MockDataLoader.shared.loadMockData(GetAllResearchProjectsRequest::class, empty, ResearchProjectListModel(
             arrayOf(
-                ResearchProjectModel(1, "The Project", "A desc", 10, "FALSE")
+                ResearchProjectModel(1, "The Project", "A desc", 10, "FALSE", "{\"milestoneDescs\":[{\"id\":\"1\",\"text\":\"They did it\"}]}")
             )
         ), researchCount)
         MockDataLoader.shared.loadMockData(GetCampStatusRequest::class, empty, CampStatusModel(1, "not real json in here during this test"), campStatusCount)
@@ -150,6 +150,9 @@ class MockDataLoaderUnitTests: BaseUnitTestClass {
                 assertEquals(first.description, "A desc")
                 assertEquals(first.milestones, 10)
                 assertEquals(first.complete, "FALSE")
+                val milestone = first.milestoneJsonModels!!.first()
+                assertEquals(milestone.id, "1")
+                assertEquals(milestone.text, "They did it")
             } else {
                 // Should be null when counter is equal to the count
                 assertNull(response)
