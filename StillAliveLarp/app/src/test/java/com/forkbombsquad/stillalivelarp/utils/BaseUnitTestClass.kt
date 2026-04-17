@@ -11,6 +11,7 @@ import com.forkbombsquad.stillalivelarp.services.GetAllCharacterSkillsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllContactRequestsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllEventAttendeesRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllEventsRequest
+import com.forkbombsquad.stillalivelarp.services.GetAllCraftingRecipesRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllFeatureFlagsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllFullAnnouncementsRequest
 import com.forkbombsquad.stillalivelarp.services.GetAllFullCharactersRequest
@@ -157,6 +158,9 @@ interface BaseUnitTestClass {
 
         // Camp Status
         MDL.loadMockData(GetCampStatusRequest::class, empty, MockData.GetCampStatusResponses.STANDARD)
+
+        // Crafting Recipes
+        MDL.loadMockData(GetAllCraftingRecipesRequest::class, empty, MockData.GetAllCraftingRecipeResponses.STANDARD)
     }
 
     fun loadDataManagerHappyPath(coroutineScope: CoroutineScope, completion: () -> Unit) = runTest {
