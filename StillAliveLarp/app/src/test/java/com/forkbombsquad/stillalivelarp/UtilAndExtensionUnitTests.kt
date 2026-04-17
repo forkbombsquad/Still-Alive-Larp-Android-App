@@ -5,6 +5,8 @@ import com.forkbombsquad.stillalivelarp.utils.AwardCharType
 import com.forkbombsquad.stillalivelarp.utils.AwardPlayerType
 import com.forkbombsquad.stillalivelarp.utils.AwardType
 import com.forkbombsquad.stillalivelarp.utils.BaseUnitTestClass
+import com.forkbombsquad.stillalivelarp.utils.CraftingRecipeFilterType
+import com.forkbombsquad.stillalivelarp.utils.CraftingRecipeSortType
 import com.forkbombsquad.stillalivelarp.utils.ValidationType
 import com.forkbombsquad.stillalivelarp.utils.Validator
 import com.forkbombsquad.stillalivelarp.utils.addCreateListIfNecessary
@@ -21,8 +23,11 @@ import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.replaceHtmlTag
 import com.forkbombsquad.stillalivelarp.utils.replaceHtmlTagWithTag
 import com.forkbombsquad.stillalivelarp.utils.replaceHtmlTagWithTagAndInnerValue
+import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
+import com.forkbombsquad.stillalivelarp.utils.SkillSortType
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.tryOptional
+import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddtoDate
@@ -266,6 +271,144 @@ class UtilAndExtensionUnitTests: BaseUnitTestClass {
         assertEquals(Validator.doValidation(textToValidate, validationType), errors)
     }
 
+    // SkillEnums Tests
+    @ParameterizedTest(name = "SkillFilterType {0}, should return text: {1}")
+    @MethodSource("skillFilterTypeProvider")
+    fun testSkillFilterType(filterType: SkillFilterType, expectedText: String) {
+        assertEquals(filterType.text, expectedText)
+    }
+
+    @Test
+    fun testSkillFilterTypeGetAllStrings() {
+        val allStrings = SkillFilterType.getAllStrings()
+        assertEquals(11, allStrings.size) // NONE, COMBAT, PROFESSION, TALENT, XP0, XP1, XP2, XP3, XP4, PP, INF
+        assertTrue(allStrings.contains("No Filter"))
+        assertTrue(allStrings.contains("Combat"))
+        assertTrue(allStrings.contains("Prestige Points"))
+    }
+
+    @ParameterizedTest(name = "SkillFilterType getTypeForString: {0} -> {1}")
+    @MethodSource("skillFilterTypeFromStringProvider")
+    fun testSkillFilterTypeGetTypeForString(input: String, expected: SkillFilterType) {
+        assertEquals(SkillFilterType.getTypeForString(input), expected)
+    }
+
+    @ParameterizedTest(name = "SkillSortType {0}, should return text: {1}")
+    @MethodSource("skillSortTypeProvider")
+    fun testSkillSortType(sortType: SkillSortType, expectedText: String) {
+        assertEquals(sortType.text, expectedText)
+    }
+
+    @Test
+    fun testSkillSortTypeGetAllStrings() {
+        val allStrings = SkillSortType.getAllStrings()
+        assertEquals(6, allStrings.size) // AZ, ZA, XPASC, XPDESC, TYPEASC, TYPEDESC
+        assertTrue(allStrings.contains("A-Z"))
+        assertTrue(allStrings.contains("XP Asc"))
+    }
+
+    @ParameterizedTest(name = "SkillSortType getTypeForString: {0} -> {1}")
+    @MethodSource("skillSortTypeFromStringProvider")
+    fun testSkillSortTypeGetTypeForString(input: String, expected: SkillSortType) {
+        assertEquals(SkillSortType.getTypeForString(input), expected)
+    }
+
+    // CraftingRecipeEnums Tests
+    @ParameterizedTest(name = "CraftingRecipeFilterType {0}, should return text: {1}")
+    @MethodSource("craftingRecipeFilterTypeProvider")
+    fun testCraftingRecipeFilterType(filterType: CraftingRecipeFilterType, expectedText: String) {
+        assertEquals(filterType.text, expectedText)
+    }
+
+    @Test
+    fun testCraftingRecipeFilterTypeGetAllStrings() {
+        val allStrings = CraftingRecipeFilterType.getAllStrings()
+        assertEquals(3, allStrings.size)
+        assertTrue(allStrings.contains("All Recipes"))
+        assertTrue(allStrings.contains("Can Potentially Make"))
+        assertTrue(allStrings.contains("Can Make Now"))
+    }
+
+    @ParameterizedTest(name = "CraftingRecipeFilterType getTypeForString: {0} -> {1}")
+    @MethodSource("craftingRecipeFilterTypeFromStringProvider")
+    fun testCraftingRecipeFilterTypeGetTypeForString(input: String, expected: CraftingRecipeFilterType) {
+        assertEquals(CraftingRecipeFilterType.getTypeForString(input), expected)
+    }
+
+    @ParameterizedTest(name = "CraftingRecipeSortType {0}, should return text: {1}")
+    @MethodSource("craftingRecipeSortTypeProvider")
+    fun testCraftingRecipeSortType(sortType: CraftingRecipeSortType, expectedText: String) {
+        assertEquals(sortType.text, expectedText)
+    }
+
+    @Test
+    fun testCraftingRecipeSortTypeGetAllStrings() {
+        val allStrings = CraftingRecipeSortType.getAllStrings()
+        assertEquals(8, allStrings.size)
+        assertTrue(allStrings.contains("A-Z"))
+        assertTrue(allStrings.contains("Category A-Z"))
+        assertTrue(allStrings.contains("Time Fastest"))
+    }
+
+    @ParameterizedTest(name = "CraftingRecipeSortType getTypeForString: {0} -> {1}")
+    @MethodSource("craftingRecipeSortTypeFromStringProvider")
+    fun testCraftingRecipeSortTypeGetTypeForString(input: String, expected: CraftingRecipeSortType) {
+        assertEquals(CraftingRecipeSortType.getTypeForString(input), expected)
+    }
+
+    // CharacterEnums Tests
+    @ParameterizedTest(name = "CharacterArmor {0}, should return text: {1}")
+    @MethodSource("characterArmorProvider")
+    fun testCharacterArmor(armor: CharacterArmor, expectedText: String) {
+        assertEquals(armor.text, expectedText)
+    }
+
+    // Constants Tests
+    @Test
+    fun testConstantsCharacterTypeId() {
+        assertEquals(1, com.forkbombsquad.stillalivelarp.utils.Constants.CharacterTypeId.standard)
+        assertEquals(2, com.forkbombsquad.stillalivelarp.utils.Constants.CharacterTypeId.NPC)
+        assertEquals(3, com.forkbombsquad.stillalivelarp.utils.Constants.CharacterTypeId.planner)
+        assertEquals(4, com.forkbombsquad.stillalivelarp.utils.Constants.CharacterTypeId.hidden)
+    }
+
+    @Test
+    fun testConstantsSkillTypes() {
+        assertEquals(1, com.forkbombsquad.stillalivelarp.utils.Constants.SkillTypes.combat)
+        assertEquals(2, com.forkbombsquad.stillalivelarp.utils.Constants.SkillTypes.profession)
+        assertEquals(3, com.forkbombsquad.stillalivelarp.utils.Constants.SkillTypes.talent)
+    }
+
+    @Test
+    fun testConstantsSpecificSkillCategories() {
+        assertEquals(1, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillCategories.BEGINNER_SKILLS)
+        assertEquals(13, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillCategories.THE_INFECTED)
+        assertEquals(14, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillCategories.PRESTIGE)
+        assertEquals(15, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillCategories.SPECIALIZATION)
+    }
+
+    @Test
+    fun testConstantsGearTypes() {
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.GearTypes.allTypes.contains("Melee Weapon"))
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.GearTypes.allTypes.contains("Firearm"))
+        assertEquals(6, com.forkbombsquad.stillalivelarp.utils.Constants.GearTypes.allTypes.size)
+    }
+
+    @Test
+    fun testConstantsSpecificSkillIds() {
+        // Test some specific skill IDs
+        assertEquals(11, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.combatAficionado_T)
+        assertEquals(19, com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.expertCombat)
+        
+        // Test array groupings
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.allSpecalistSkills.contains(11))
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.allSpecalistSkills.contains(19))
+        
+        // Test investigator type skills
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.investigatorTypeSkills.contains(38))
+        assertTrue(com.forkbombsquad.stillalivelarp.utils.Constants.SpecificSkillIds.investigatorTypeSkills.contains(37))
+    }
+
     companion object {
 
         @JvmStatic
@@ -360,6 +503,90 @@ class UtilAndExtensionUnitTests: BaseUnitTestClass {
             org.junit.jupiter.params.provider.Arguments.of(ValidationType.GEAR_NAME, "", "Gear name must not be empty\nGear name must be at least 2 characters long"),
             org.junit.jupiter.params.provider.Arguments.of(ValidationType.GEAR_DESCRIPTION, "A Gear Desc", null),
             org.junit.jupiter.params.provider.Arguments.of(ValidationType.GEAR_DESCRIPTION, "", "Gear description must not be empty\nGear description must be at least 2 characters long")
+        )
+
+        @JvmStatic
+        fun skillFilterTypeProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.NONE, "No Filter"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.COMBAT, "Combat"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.PROFESSION, "Profession"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.TALENT, "Talent"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.XP0, "0xp"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.XP1, "1xp"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.XP2, "2xp"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.XP3, "3xp"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.XP4, "4xp"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.PP, "Prestige Points"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillFilterType.INF, "Infection Threshold")
+        )
+
+        @JvmStatic
+        fun skillFilterTypeFromStringProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of("No Filter", SkillFilterType.NONE),
+            org.junit.jupiter.params.provider.Arguments.of("Combat", SkillFilterType.COMBAT),
+            org.junit.jupiter.params.provider.Arguments.of("Profession", SkillFilterType.PROFESSION),
+            org.junit.jupiter.params.provider.Arguments.of("Talent", SkillFilterType.TALENT),
+            org.junit.jupiter.params.provider.Arguments.of("Invalid String", SkillFilterType.NONE) // Default fallback
+        )
+
+        @JvmStatic
+        fun skillSortTypeProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.AZ, "A-Z"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.ZA, "Z-A"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.XPASC, "XP Asc"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.XPDESC, "XP Desc"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.TYPEASC, "Type Asc"),
+            org.junit.jupiter.params.provider.Arguments.of(SkillSortType.TYPEDESC, "Type Desc")
+        )
+
+        @JvmStatic
+        fun skillSortTypeFromStringProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of("A-Z", SkillSortType.AZ),
+            org.junit.jupiter.params.provider.Arguments.of("Z-A", SkillSortType.ZA),
+            org.junit.jupiter.params.provider.Arguments.of("XP Asc", SkillSortType.XPASC),
+            org.junit.jupiter.params.provider.Arguments.of("Invalid String", SkillSortType.AZ) // Default fallback
+        )
+
+        @JvmStatic
+        fun craftingRecipeFilterTypeProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeFilterType.NONE, "All Recipes"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeFilterType.CAN_POTENTIALLY_MAKE, "Can Potentially Make"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeFilterType.CAN_MAKE_NOW, "Can Make Now")
+        )
+
+        @JvmStatic
+        fun craftingRecipeFilterTypeFromStringProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of("All Recipes", CraftingRecipeFilterType.NONE),
+            org.junit.jupiter.params.provider.Arguments.of("Can Potentially Make", CraftingRecipeFilterType.CAN_POTENTIALLY_MAKE),
+            org.junit.jupiter.params.provider.Arguments.of("Can Make Now", CraftingRecipeFilterType.CAN_MAKE_NOW),
+            org.junit.jupiter.params.provider.Arguments.of("Invalid String", CraftingRecipeFilterType.NONE) // Default fallback
+        )
+
+        @JvmStatic
+        fun craftingRecipeSortTypeProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.AZ, "A-Z"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.ZA, "Z-A"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.CATEGORY_ASC, "Category A-Z"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.CATEGORY_DESC, "Category Z-A"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.SKILL_ASC, "Skill A-Z"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.SKILL_DESC, "Skill Z-A"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.TIME_ASC, "Time Fastest"),
+            org.junit.jupiter.params.provider.Arguments.of(CraftingRecipeSortType.TIME_DESC, "Time Longest")
+        )
+
+        @JvmStatic
+        fun craftingRecipeSortTypeFromStringProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of("A-Z", CraftingRecipeSortType.AZ),
+            org.junit.jupiter.params.provider.Arguments.of("Category A-Z", CraftingRecipeSortType.CATEGORY_ASC),
+            org.junit.jupiter.params.provider.Arguments.of("Time Fastest", CraftingRecipeSortType.TIME_ASC),
+            org.junit.jupiter.params.provider.Arguments.of("Invalid String", CraftingRecipeSortType.AZ) // Default fallback
+        )
+
+        @JvmStatic
+        fun characterArmorProvider(): Stream<org.junit.jupiter.params.provider.Arguments> = Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of(CharacterArmor.NONE, "None"),
+            org.junit.jupiter.params.provider.Arguments.of(CharacterArmor.METAL, "Metal"),
+            org.junit.jupiter.params.provider.Arguments.of(CharacterArmor.BULLETPROOF, "Bullet Proof")
         )
 
     }
