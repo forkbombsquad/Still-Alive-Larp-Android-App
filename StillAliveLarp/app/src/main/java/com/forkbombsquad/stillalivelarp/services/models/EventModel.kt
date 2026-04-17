@@ -83,15 +83,6 @@ data class EventModel(
         return today < eventDate
     }
 
-    fun startedFinishedText(): String {
-        if (isFinished.toBoolean()) {
-            return "Finished"
-        }
-        if (isStarted.toBoolean()) {
-            return "Started"
-        }
-        return ""
-    }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

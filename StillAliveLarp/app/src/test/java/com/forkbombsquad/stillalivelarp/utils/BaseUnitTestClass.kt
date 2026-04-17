@@ -200,4 +200,8 @@ interface BaseUnitTestClass {
         assertEquals(int, intVal)
     }
 
+    fun assertEqualsIgnoreCase(string1: String, string2: String) {
+        assertEquals(string1.lowercase(), string2.lowercase())
+    }
+
 }
