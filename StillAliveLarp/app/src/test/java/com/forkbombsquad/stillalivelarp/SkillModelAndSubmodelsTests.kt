@@ -1,7 +1,12 @@
-package com.forkbombsquad.stillalivelarp.utils
+package com.forkbombsquad.stillalivelarp
 
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.SkillModel
+import com.forkbombsquad.stillalivelarp.utils.BaseUnitTestClass
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -10,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 import kotlin.math.max
-import kotlin.math.min
 
 class SkillModelAndSubmodelsTests: BaseUnitTestClass {
 
@@ -100,7 +104,10 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 val costMod = skill.getRelevantSpecCostChange()
 
                 // Commander Davis has a discount on combat and profession skills but a penalty to talent skills
-                assertEquals(costMod, (skill.skillTypeId.equalsAnyOf(listOf(Constants.SkillTypes.combat, Constants.SkillTypes.profession))).ternary(-1, 1))
+                assertEquals(costMod, (skill.skillTypeId.equalsAnyOf(listOf(
+                    Constants.SkillTypes.combat,
+                    Constants.SkillTypes.profession
+                ))).ternary(-1, 1))
                 // The same skill from base with no context should have 0 modifications to costs:
                 assertEquals(noContextSkill!!.getRelevantSpecCostChange(), 0)
 
