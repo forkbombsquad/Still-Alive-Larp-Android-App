@@ -35,7 +35,7 @@ class DataAndLocalDataManagerTests: BaseUnitTestClass {
             assertTrue(DMT.getAllCharacters().isNotEmpty())
             assertTrue(DMT.players.isNotEmpty())
             assertNotNull(DMT.rulebook)
-            assertNull(DMT.treatingWounds) // TODO when this is mocked, change it here
+            assertNotNull(DMT.treatingWounds)
             assertNotNull(DMT.campStatus)
         })
     }
