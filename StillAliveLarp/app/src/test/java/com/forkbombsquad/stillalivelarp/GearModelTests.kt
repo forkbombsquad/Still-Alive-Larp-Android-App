@@ -185,8 +185,8 @@ class GearModelTests: BaseUnitTestClass {
             // Sorted: small -> large -> (then extra large if existed)
             // Looking at test data: Large Bag, Small Bag, Small Bag
             assertEquals("Small Bag", bags[0].primarySubtype)
-            assertEquals("Large Bag", bags[1].primarySubtype)
-            assertEquals("Small Bag", bags[2].primarySubtype)
+            assertEquals("Small Bag", bags[1].primarySubtype)
+            assertEquals("Large Bag", bags[2].primarySubtype)
         }
     }
 
