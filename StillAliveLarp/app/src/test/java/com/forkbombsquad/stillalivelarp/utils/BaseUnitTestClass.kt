@@ -204,4 +204,8 @@ interface BaseUnitTestClass {
         assertEquals(string1.lowercase(), string2.lowercase())
     }
 
+    fun assertContains(base: String, contains: String) {
+        assertTrue(base.contains(contains))
+    }
+
 }
