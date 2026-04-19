@@ -33,6 +33,7 @@ import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 class ManageEventActivity : NoStatusBarActivity() {
 
@@ -166,30 +167,66 @@ class ManageEventActivity : NoStatusBarActivity() {
             "How Much Food Was Collected?",
                 listOf(
                     MessageInput(
-                    "food",
-                    TextView(this).apply {
-                        text = "Food Required To Meed Threshold: TODO"
-                    },
-                    EditText(this).apply {
-                        hint = "Food Collected"
-                        inputType = InputType.TYPE_CLASS_NUMBER
-                    },
+                    "req",
+                        TextView(this).apply {
+                            text = "Food Required To Meet Threshold (per player attending this event):"
+                        },
+                        EditText(this).apply {
+                            hint = "Per player, default is 2"
+                            setText("2")
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                        },
                     null,
-                    null),
+                    null
+                    ),
+                    MessageInput(
+                        "food",
+                        TextView(this).apply {
+                            text = "Amount Of Food Collected:"
+                        },
+                        EditText(this).apply {
+                            hint = "Food Collected"
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                        },
+                        null,
+                        null
+                    )
                 ),
                 "Submit",
                 "Skip") { messageOutput ->
             if (messageOutput.buttonPressed == ButtonTypePressed.POSITIVE) {
-                (messageOutput.getValuesForKey("food")?.editTextValue ?: "0").toIntOrNull().ifLet({ food ->
-                    // TODO do food calc
-                    // And other stuff like adding resoureces to commander davis (after clearing existing ones)
-                    // ALlow it to be customized so we can change the nubmer without app update
-                  finishEventFlow()
-                }, {
+                val req = (messageOutput.getValuesForKey("req")?.editTextValue ?: "0.0").toDoubleOrNull()
+                val food = (messageOutput.getValuesForKey("food")?.editTextValue ?: "0.0").toIntOrNull()
+                if (req == null || food == null) {
                     AlertUtils.displayOkMessage(this, "Must enter a number!", "Please") { _, _ ->
                         finishEventFlowPromptForFood()
                     }
-                })
+                } else {
+                    val attendees = event.attendees.count().toDouble()
+                    val totalFoodRequired = ceil(attendees * req).toInt()
+                    if (food == totalFoodRequired) {
+                        // Threshold
+                        AlertUtils.displayOkMessage(
+                            this,
+                            "Food Threshold Reached!",
+                            "No additional bonuses or penalties!\n\nFood Donated: $food\nFood Required: $totalFoodRequired")
+                        { _, _ ->
+                            finishEventFlow()
+                        }
+                    } else if (food > totalFoodRequired) {
+                        // Chance for NPC and get awarded!
+                        // TODO need to determine chances of NPC joining. Maybe 5% per additional food?
+                        // TODO also each NPC will give commander davis one random resource to sell at camp store at start of next event, rolled randomly.
+                    } else {
+                        // FAILURE
+                        // TODO calc based on total where zero food would mean that an NPC death is inevitable and threshold would mean 0%
+                        // Roll for EACH npc individually.
+                    }
+                    // TODO do food calc
+
+                    // And other stuff like adding resoureces to commander davis (after clearing existing ones)
+                    // ALlow it to be customized so we can change the nubmer without app update
+                }
             } else {
                 finishEventFlow()
             }
