@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import com.forkbombsquad.stillalivelarp.views.shared.CharactersListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.EventsListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.PlayersListActivity
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -86,10 +89,16 @@ class ManageEventActivity : NoStatusBarActivity() {
             val updateEventRequest = AdminService.UpdateEvent()
             lifecycleScope.launch {
                 updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
-                    AlertUtils.displaySuccessMessage(this@ManageEventActivity, starting.ternary("Event Started!", "Event Finished!")) { _, _ ->
-                        DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
-                        DataManager.shared.closeActiviesToClose()
-                        finish()
+                    if (starting) {
+                        // Event is being started for first time - simple success
+                        AlertUtils.displaySuccessMessage(this@ManageEventActivity, "Event Started!") { _, _ ->
+                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                            DataManager.shared.closeActiviesToClose()
+                            finish()
+                        }
+                    } else {
+                        // Event is being finished - show pre-finish dialog chain
+                        promptForRaffleAward()
                     }
                 }, {
                     startFinishButton.setLoading(false)
@@ -98,6 +107,63 @@ class ManageEventActivity : NoStatusBarActivity() {
         }
 
         buildView()
+    }
+
+    private fun promptForRaffleAward() {
+        AlertUtils.displayYesNoMessage(
+            this,
+            "Pre-Finish Tasks",
+            "Award Raffle Winner?\n\nCharacter: Materials, Ammo, Infection\nPlayer: XP, Free Tier-1 Skills, Prestige Points",
+            onClickYes = { _, _ ->
+                // Yes - show award type choice
+                AlertUtils.displayChoiceMessage(
+                    this@ManageEventActivity,
+                    "Select Award Type",
+                    arrayOf("Award Character", "Award Player")
+                ) { index ->
+                    when (index) {
+                        1 -> this@ManageEventActivity.launchPlayerAwardSelection()
+                        -1 -> this@ManageEventActivity.promptForRaffleAward() // Cancel - loop back
+                    }
+                }
+            },
+            onClickNo = { _, _ ->
+                // No - move to Event Finished
+                this@ManageEventActivity.finishEventFlow()
+            }
+        )
+    }
+
+    private fun launchCharacterAwardSelection() {
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, AwardCharacterActivity::class)
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character to Award")
+        DataManager.shared.setUpdateCallback(this::class) {
+            // After award is given, loop back to raffle prompt
+            this@ManageEventActivity.promptForRaffleAward()
+        }
+        val intent = Intent(this, CharactersListActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchPlayerAwardSelection() {
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.PLAYER_LIST, DataManager.shared.players)
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, AwardPlayerActivity::class)
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Player To Award")
+        DataManager.shared.setUpdateCallback(this::class) {
+            // After award is given, loop back to raffle prompt
+            this@ManageEventActivity.promptForRaffleAward()
+        }
+        val intent = Intent(this, PlayersListActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun finishEventFlow() {
+        AlertUtils.displaySuccessMessage(this, "${event.title} Finished!") { _, _ ->
+            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+            DataManager.shared.closeActiviesToClose()
+            finish()
+        }
     }
 
     private fun buildView() {
