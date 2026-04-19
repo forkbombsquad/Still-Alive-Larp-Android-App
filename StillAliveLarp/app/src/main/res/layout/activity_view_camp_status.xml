@@ -29,6 +29,45 @@
                 android:textSize="32sp"
                 android:textAlignment="center"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/campstatus_npcSlots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="NPC Slots"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/campstatus_medicalCots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Medical Cots"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/campstatus_teachingChairs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Teaching Chairs"
+                app:showDiv="true"/>
+
+            <TextView
+                android:id="@+id/campstatus_forttitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="24dp"
+                android:text="Fortifications"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:textAlignment="textStart"/>
+
             <com.forkbombsquad.stillalivelarp.utils.LoadingLayout
                 android:id="@+id/loadinglayout"
                 android:layout_width="match_parent"
