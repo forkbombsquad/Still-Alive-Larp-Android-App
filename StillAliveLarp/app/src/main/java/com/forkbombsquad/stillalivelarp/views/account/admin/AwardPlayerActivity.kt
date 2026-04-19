@@ -63,6 +63,7 @@ class AwardPlayerActivity : NoStatusBarActivity() {
             lifecycleScope.launch {
                 awardPlayerRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
                     DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                    DataManager.shared.callUpdateCallback(ManageEventActivity::class)
                     AlertUtils.displaySuccessMessage(this@AwardPlayerActivity, "Successfully Awarded ${player.fullName}!") { _, _ ->
                         DataManager.shared.closeActiviesToClose()
                         finish()

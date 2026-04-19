@@ -101,6 +101,7 @@ class AwardCharacterActivity : NoStatusBarActivity() {
                 awardCharRequest.successfulResponse(AwardCreateSP(awardCreateModel)).ifLet({ _ ->
                     AlertUtils.displaySuccessMessage(this@AwardCharacterActivity, "Successfully Awarded ${character.fullName}!") { _, _ ->
                         DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                        DataManager.shared.callUpdateCallback(ManageEventActivity::class)
                         DataManager.shared.closeActiviesToClose()
                         finish()
                     }

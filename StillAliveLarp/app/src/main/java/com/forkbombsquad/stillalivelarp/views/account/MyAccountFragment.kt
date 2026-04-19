@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
+import com.forkbombsquad.stillalivelarp.views.account.admin.ManageEventActivity
 import com.forkbombsquad.stillalivelarp.views.shared.CharactersListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.PersonalNativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
@@ -26,6 +27,7 @@ import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.XpReductionsListActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -238,6 +240,24 @@ class MyAccountFragment : Fragment() {
     private fun doDebugStuff() {
         // Any debug stuff you need to do can be done here
         // TODO ROUTINE - remove all code here before launch
+
+        // DEBUG: Test ManageEventActivity flow with mock event
+        val mockEvent = FullEventModel(
+            id = -1,
+            title = "Debug Event",
+            description = "This is a debug event for testing",
+            date = "2026/04/18",
+            startTime = "10:00",
+            endTime = "18:00",
+            isStarted = true,
+            isFinished = false,
+            attendees = listOf(),
+            preregs = listOf(),
+            intrigue = null
+        )
+        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_EVENT, mockEvent)
+        val intent = Intent(requireContext(), ManageEventActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {

@@ -87,6 +87,10 @@ class AlertUtils {
             }
         }
 
+        fun displayChoiceMessage(context: Context, title: String, choices: List<String>, response: (index: Int) -> Unit) {
+            displayChoiceMessage(context, title, choices.toTypedArray(), response)
+        }
+
         fun displayChoiceMessage(context: Context, title: String, choices: Array<String>, response: (index: Int) -> Unit) {
             StillAliveLarpApplication.currentActivty?.runOnUiThread {
                 val alert = AlertDialog.Builder(context)
@@ -275,9 +279,65 @@ class AlertUtils {
                 alert.setTitle(title)
                 alert.setView(scrollView)
                 alert.setPositiveButton("Ok") { _, _ ->
-                    response(MessageOutput(messageInputs))
+                    response(MessageOutput(ButtonTypePressed.POSITIVE, messageInputs))
                 }
-                alert.setNegativeButton("Cancel", null)
+                alert.setNegativeButton("Cancel") { _, _ ->
+                    response(MessageOutput(ButtonTypePressed.NEGATIVE, messageInputs))
+                }
+                alert.show()
+            }
+        }
+
+        fun displayMessageWithInputs(
+            context: Context,
+            title: String,
+            messageInputs: List<MessageInput>,
+            customPositiveButtonTitle: String,
+            customNegativeButtonTitle: String,
+            response: (messageOutput: MessageOutput) -> Unit
+        ) {
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(24, 24, 24, 24)
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val scrollView = ScrollView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+            scrollView.addView(layout)
+
+            messageInputs.forEach { messageInput ->
+                if (messageInput.sectionTitle != null) {
+                    layout.addView(messageInput.sectionTitle)
+                }
+                if (messageInput.editText != null) {
+                    layout.addView(messageInput.editText)
+                }
+                if (messageInput.checkbox != null) {
+                    layout.addView(messageInput.checkbox)
+                }
+                if (messageInput.spinner != null) {
+                    layout.addView(messageInput.spinner)
+                }
+            }
+
+            StillAliveLarpApplication.currentActivty?.runOnUiThread {
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle(title)
+                alert.setView(scrollView)
+                alert.setPositiveButton(customPositiveButtonTitle) { _, _ ->
+                    response(MessageOutput(ButtonTypePressed.POSITIVE, messageInputs))
+                }
+                alert.setNegativeButton(customNegativeButtonTitle) { _, _ ->
+                    response(MessageOutput(ButtonTypePressed.NEGATIVE, messageInputs))
+                }
                 alert.show()
             }
         }
@@ -294,6 +354,7 @@ data class MessageInput(
 )
 
 data class MessageOutput(
+    val buttonPressed: ButtonTypePressed,
     val messageInputs: List<MessageInput>
 ) {
     fun getValuesForKey(key: String): MessageOutputValue? {
@@ -305,6 +366,10 @@ data class MessageOutput(
         }
     }
 
+}
+
+enum class ButtonTypePressed {
+    POSITIVE, NEGATIVE
 }
 
 data class MessageOutputValue(

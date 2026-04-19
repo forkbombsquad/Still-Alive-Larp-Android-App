@@ -2,6 +2,8 @@ package com.forkbombsquad.stillalivelarp.views.account.admin
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
@@ -17,14 +19,19 @@ import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
+import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.ButtonType
+import com.forkbombsquad.stillalivelarp.utils.ButtonTypePressed
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
+import com.forkbombsquad.stillalivelarp.utils.MessageInput
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
+import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import kotlinx.coroutines.launch
 
 class ManageEventActivity : NoStatusBarActivity() {
@@ -50,7 +57,7 @@ class ManageEventActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        event = DataManager.shared.getPassedData(EventsListActivity::class, DataManagerPassedDataKey.SELECTED_EVENT)!!
+        event = DataManager.shared.getPassedData(listOf(EventsListActivity::class, MyAccountFragment::class), DataManagerPassedDataKey.SELECTED_EVENT)!!
 
         viewTitle = findViewById(R.id.manageevent_viewtitle)
         title = findViewById(R.id.manageevent_title)
@@ -86,9 +93,10 @@ class ManageEventActivity : NoStatusBarActivity() {
             } else {
                 event.isFinished = true
             }
-            val updateEventRequest = AdminService.UpdateEvent()
-            lifecycleScope.launch {
-                updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
+            // TODO only commenting out these lines for testing. Put them back.
+//            val updateEventRequest = AdminService.UpdateEvent()
+//            lifecycleScope.launch {
+//                updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
                     if (starting) {
                         // Event is being started for first time - simple success
                         AlertUtils.displaySuccessMessage(this@ManageEventActivity, "Event Started!") { _, _ ->
@@ -100,37 +108,31 @@ class ManageEventActivity : NoStatusBarActivity() {
                         // Event is being finished - show pre-finish dialog chain
                         promptForRaffleAward()
                     }
-                }, {
-                    startFinishButton.setLoading(false)
-                })
-            }
+//                }, {
+//                    startFinishButton.setLoading(false)
+//                })
+//            }
         }
 
         buildView()
     }
 
     private fun promptForRaffleAward() {
-        AlertUtils.displayYesNoMessage(
+        AlertUtils.displayMessage(
             this,
-            "Pre-Finish Tasks",
-            "Award Raffle Winner?\n\nCharacter: Materials, Ammo, Infection\nPlayer: XP, Free Tier-1 Skills, Prestige Points",
-            onClickYes = { _, _ ->
-                // Yes - show award type choice
-                AlertUtils.displayChoiceMessage(
-                    this@ManageEventActivity,
-                    "Select Award Type",
-                    arrayOf("Award Character", "Award Player")
-                ) { index ->
-                    when (index) {
-                        1 -> this@ManageEventActivity.launchPlayerAwardSelection()
-                        -1 -> this@ManageEventActivity.promptForRaffleAward() // Cancel - loop back
-                    }
-                }
-            },
-            onClickNo = { _, _ ->
-                // No - move to Event Finished
-                this@ManageEventActivity.finishEventFlow()
-            }
+            "Award Raffle Winner?",
+            "Players: Xp, Free Tier 1 Skils, Prestige Points\nCharacters: Infection, Ammo, Materials",
+            arrayOf(
+                AlertButton("Character", { _, _ ->
+                    launchCharacterAwardSelection()
+                }, ButtonType.POSITIVE),
+                AlertButton("Continue", { _, _ ->
+                    finishEventFlowPromptForFood()
+                }, ButtonType.NEUTRAL),
+                AlertButton("Player", { _, _ ->
+                    launchPlayerAwardSelection()
+                }, ButtonType.NEGATIVE),
+            )
         )
     }
 
@@ -156,6 +158,42 @@ class ManageEventActivity : NoStatusBarActivity() {
         }
         val intent = Intent(this, PlayersListActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun finishEventFlowPromptForFood() {
+        AlertUtils.displayMessageWithInputs(
+            this,
+            "How Much Food Was Collected?",
+                listOf(
+                    MessageInput(
+                    "food",
+                    TextView(this).apply {
+                        text = "Food Required To Meed Threshold: TODO"
+                    },
+                    EditText(this).apply {
+                        hint = "Food Collected"
+                        inputType = InputType.TYPE_CLASS_NUMBER
+                    },
+                    null,
+                    null),
+                ),
+                "Submit",
+                "Skip") { messageOutput ->
+            if (messageOutput.buttonPressed == ButtonTypePressed.POSITIVE) {
+                (messageOutput.getValuesForKey("food")?.editTextValue ?: "0").toIntOrNull().ifLet({ food ->
+                    // TODO do food calc
+                    // And other stuff like adding resoureces to commander davis (after clearing existing ones)
+                    // ALlow it to be customized so we can change the nubmer without app update
+                  finishEventFlow()
+                }, {
+                    AlertUtils.displayOkMessage(this, "Must enter a number!", "Please") { _, _ ->
+                        finishEventFlowPromptForFood()
+                    }
+                })
+            } else {
+                finishEventFlow()
+            }
+        }
     }
 
     private fun finishEventFlow() {

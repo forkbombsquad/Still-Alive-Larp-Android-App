@@ -22,6 +22,7 @@ import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.Fortification
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.ButtonTypePressed
 import com.forkbombsquad.stillalivelarp.utils.DropdownSpinner
 import com.forkbombsquad.stillalivelarp.utils.FortificationRingCell
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
@@ -151,24 +152,26 @@ class ManageCampFortificationsActivity : NoStatusBarActivity() {
                         title = "Edit Ring ${it.ring}",
                         messageInputs = messageInputs,
                         response = { output ->
-                            val forts: MutableList<Fortification> = mutableListOf()
-                            var counter = 0
-                            while (counter < it.ring) {
-                                val op = output.getValuesForKey("$counter")
-                                if (op?.checkboxValue == true) {
-                                    val fort = Fortification(
-                                        type = Fortification.FortificationType.getFortificationType(op?.selectedSpinnerItem()?.uppercase() ?: ""),
-                                        health = op?.editTextValue?.toInt() ?: 5
-                                    )
-                                    forts.add(fort)
+                            if (output.buttonPressed == ButtonTypePressed.POSITIVE) {
+                                val forts: MutableList<Fortification> = mutableListOf()
+                                var counter = 0
+                                while (counter < it.ring) {
+                                    val op = output.getValuesForKey("$counter")
+                                    if (op?.checkboxValue == true) {
+                                        val fort = Fortification(
+                                            type = Fortification.FortificationType.getFortificationType(op?.selectedSpinnerItem()?.uppercase() ?: ""),
+                                            health = op?.editTextValue?.toInt() ?: 5
+                                        )
+                                        forts.add(fort)
+                                    }
+                                    counter += 1
                                 }
-                                counter += 1
-                            }
-                            modified = true
-                            DataManager.shared.fortificationToEdit = CampFortification(it.ring, forts)
-                            runOnUiThread {
-                                updateForts()
-                                buildView()
+                                modified = true
+                                DataManager.shared.fortificationToEdit = CampFortification(it.ring, forts)
+                                runOnUiThread {
+                                    updateForts()
+                                    buildView()
+                                }
                             }
                         }
                     )
