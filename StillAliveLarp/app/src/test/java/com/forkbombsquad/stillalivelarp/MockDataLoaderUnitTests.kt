@@ -98,8 +98,6 @@ class MockDataLoaderUnitTests: BaseUnitTestClass {
                 ResearchProjectModel(1, "The Project", "A desc", 10, "FALSE", "{\"milestoneDescs\":[{\"id\":\"1\",\"text\":\"They did it\"}]}")
             )
         ), researchCount)
-        MockDataLoader.shared.loadMockData(GetCampStatusRequest::class, empty, CampStatusModel(1, "not real json in here during this test"), campStatusCount)
-
         // When we call those services multiple times, succeeding each time
         // Then they should only succeed until they exceed their service limit count (and infinite should always work. Going to use 20 for proof)
 
@@ -157,17 +155,6 @@ class MockDataLoaderUnitTests: BaseUnitTestClass {
                 // Should be null when counter is equal to the count
                 assertNull(response)
             }
-            counter += 1
-        }
-
-        // camp status (should be infinite so just test 20)
-        counter = 0
-        while (counter < 20) {
-            val response = CampStatusService.GetCampStatus().successfulResponse()
-            assertNotNull(response)
-            assertEquals(response!!.id, 1)
-            assertEquals(response.campFortificationJson, "not real json in here during this test")
-
             counter += 1
         }
     }

@@ -1,4 +1,8 @@
 {
   "campFortificationJson": "{\"campFortifications\":[{\"fortifications\":[{\"health\":10,\"type\":\"MEDIUM\"}],\"ring\":1},{\"fortifications\":[],\"ring\":2}]}",
-  "id": 1
+  "id": 1,
+  "npcSlots": 10,
+  "medicalCots": 2,
+  "teachingChairs": 1,
+  "otherJson": "{}"
 }

@@ -9,7 +9,11 @@ import java.io.Serializable
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CampStatusModel(
     @JsonProperty("id") val id: Int,
-    @JsonProperty("campFortificationJson") val campFortificationJson: String
+    @JsonProperty("campFortificationJson") val campFortificationJson: String,
+    @JsonProperty("npcSlots") val npcSlots: Int,
+    @JsonProperty("medicalCots") val medicalCots: Int,
+    @JsonProperty("teachingChairs") val teachingChairs: Int,
+    @JsonProperty("otherJson") val otherJson: String = "{}"
 ) : Serializable {
 
     val campFortifications: List<CampFortification>
@@ -18,9 +22,9 @@ data class CampStatusModel(
         }
 
     companion object {
-        fun initWithCampFortifications(id: Int, campFortifications: List<CampFortification>): CampStatusModel {
+        fun initWithCampFortifications(oldModel: CampStatusModel, campFortifications: List<CampFortification>): CampStatusModel {
             val cf = CampFortifications(campFortifications)
-            return CampStatusModel(id, globalToJson(cf))
+            return CampStatusModel(oldModel.id, globalToJson(cf), oldModel.npcSlots, oldModel.medicalCots, oldModel.teachingChairs, oldModel.otherJson)
         }
     }
 }

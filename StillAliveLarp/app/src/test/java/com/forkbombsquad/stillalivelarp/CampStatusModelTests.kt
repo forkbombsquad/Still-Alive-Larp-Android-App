@@ -151,9 +151,12 @@ class CampStatusModelTests : BaseUnitTestClass {
         )
         val campForts = listOf(CampFortification(1, fortifications))
 
-        val campStatus = CampStatusModel.initWithCampFortifications(1, campForts)
+        val campStatus = CampStatusModel.initWithCampFortifications(CampStatusModel(1, "", 10, 2, 1, ""), campForts)
 
         assertEquals(1, campStatus.id)
+        assertEquals(10, campStatus.npcSlots)
+        assertEquals(2, campStatus.medicalCots)
+        assertEquals(1, campStatus.teachingChairs)
         assertNotNull(campStatus.campFortificationJson)
 
         // Verify the JSON can be parsed back
@@ -164,7 +167,9 @@ class CampStatusModelTests : BaseUnitTestClass {
 
     @Test
     fun testInitWithEmptyFortifications() = runTest {
-        val campStatus = CampStatusModel.initWithCampFortifications(1, emptyList())
+        val campStatus = CampStatusModel.initWithCampFortifications(
+            CampStatusModel(1, "",
+                10, 2, 1, ""), emptyList())
 
         assertEquals(1, campStatus.id)
         assertNotNull(campStatus.campFortificationJson)
@@ -218,7 +223,7 @@ class CampStatusModelTests : BaseUnitTestClass {
     @Test
     fun testCampStatusWithNullJson() = runTest {
         // Test with empty/default JSON
-        val campStatus = CampStatusModel(1, "{}")
+        val campStatus = CampStatusModel(1, "{}", 10, 2, 1, "")
         val forts = campStatus.campFortifications
         assertTrue(forts.isEmpty())
     }
@@ -226,7 +231,7 @@ class CampStatusModelTests : BaseUnitTestClass {
     @Test
     fun testCampStatusWithMalformedJson() = runTest {
         // Test with invalid JSON - should return empty list due to null safety
-        val campStatus = CampStatusModel(1, "invalid json")
+        val campStatus = CampStatusModel(1, "invalid json", 10, 2, 1, "")
         val forts = campStatus.campFortifications
         assertNotNull(forts)
     }

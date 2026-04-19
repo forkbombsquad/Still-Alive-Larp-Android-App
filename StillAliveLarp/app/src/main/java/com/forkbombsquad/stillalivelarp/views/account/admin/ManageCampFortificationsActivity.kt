@@ -73,7 +73,7 @@ class ManageCampFortificationsActivity : NoStatusBarActivity() {
         }
 
         submitButton.setOnClick {
-            val campStatus = CampStatusModel.initWithCampFortifications(campStatus.id, campFortifications)
+            val campStatus = CampStatusModel.initWithCampFortifications(campStatus, campFortifications)
             val request = AdminService.UpdateCampStatus()
             submitButton.setLoadingWithText("Updating Camp Status...")
             lifecycleScope.launch {
