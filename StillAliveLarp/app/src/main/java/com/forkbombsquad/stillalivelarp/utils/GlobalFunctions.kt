@@ -140,6 +140,10 @@ fun globalStyleHtmlForRulebook(html: String): String {
         .replaceHtmlTagWithTag("condition", "u")
 }
 
+fun globalRoll1to100(): Int {
+    return (1..100).random()
+}
+
 val isUnitTesting: Boolean by lazy {
     try {
         Class.forName("org.junit.jupiter.api.Test")
@@ -148,3 +152,5 @@ val isUnitTesting: Boolean by lazy {
         false
     }
 }
+
+// TODO need to add secret characters and their ability to be assigned at check in for mock events!

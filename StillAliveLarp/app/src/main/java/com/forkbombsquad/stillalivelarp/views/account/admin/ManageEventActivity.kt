@@ -28,12 +28,15 @@ import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.MessageInput
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlue
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
+import com.forkbombsquad.stillalivelarp.utils.globalRoll1to100
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.min
 
 class ManageEventActivity : NoStatusBarActivity() {
 
@@ -174,7 +177,7 @@ class ManageEventActivity : NoStatusBarActivity() {
                         EditText(this).apply {
                             hint = "Per player, default is 2"
                             setText("2")
-                            inputType = InputType.TYPE_CLASS_NUMBER
+                            inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
                         },
                     null,
                     null
@@ -204,6 +207,8 @@ class ManageEventActivity : NoStatusBarActivity() {
                 } else {
                     val attendees = event.attendees.count().toDouble()
                     val totalFoodRequired = ceil(attendees * req).toInt()
+                    val percentagePerFood = (100.0 / totalFoodRequired.toDouble())
+                    val allNpcs = DataManager.shared.getAllCharacters(type = CharacterType.NPC)
                     if (food == totalFoodRequired) {
                         // Threshold
                         AlertUtils.displayOkMessage(
@@ -214,18 +219,66 @@ class ManageEventActivity : NoStatusBarActivity() {
                             finishEventFlow()
                         }
                     } else if (food > totalFoodRequired) {
+                        // TODO check to see if NPCs are at max
+                        val chanceForNPCAtrraction = 100 - min(ceil((food - totalFoodRequired).toDouble() * percentagePerFood).toInt(), 50)
+                        val roll = globalRoll1to100()
+                        if (roll > chanceForNPCAtrraction) {
+                            AlertUtils.displayOkMessage(
+                                this,
+                                "Success! New NPC Attracted!",
+                                "Rolled: $roll, which is > than $chanceForNPCAtrraction!"
+                            ) { _, _ ->
+                                // TODO need to create new NPC, probably not here though since it'll be a quest
+                                // TODO make sure loading works here.
+                                finishEventFlow()
+                            }
+                        } else {
+                            AlertUtils.displayOkMessage(
+                                this,
+                                ":( Failed To Attract A New NPC This Time",
+                                "Rolled $roll, which was ≤ $chanceForNPCAtrraction!"
+                            ) { _, _ ->
+                                finishEventFlow()
+                            }
+                        }
                         // Chance for NPC and get awarded!
-                        // TODO need to determine chances of NPC joining. Maybe 5% per additional food?
+                        // Chance that a new NPC is attracted (which will open up a new quest the next event) are:
+                        // - NPC slot available (i.e. under the max)
+                        // - Half percentage vs chance for NPC death
+                        // - Capped at 50/50
+                        // When threshold is broken, need to give random resources to commander davis for next event based on excess happiness.
+                        // TODO need to implement grabbing Commander Davis' materials on event start to have available to sell.
                         // TODO also each NPC will give commander davis one random resource to sell at camp store at start of next event, rolled randomly.
+                        // TODO need to add NPC cap to the constants somewhere in the DB.
                     } else {
-                        // FAILURE
-                        // TODO calc based on total where zero food would mean that an NPC death is inevitable and threshold would mean 0%
-                        // Roll for EACH npc individually.
-                    }
-                    // TODO do food calc
+                        val chanceOfDeath = ceil((totalFoodRequired - food).toDouble() * percentagePerFood).toInt()
+                        var rollsMessage = ""
+                        var npcDied = false
+                        for (npc in allNpcs) {
+                            val roll = globalRoll1to100()
+                            if (roll <= chanceOfDeath) {
+                                rollsMessage += "${npc.fullName} DIED OF STARVATION! ($roll ≤ $chanceOfDeath)"
+                                npcDied = true
+                            } else {
+                                rollsMessage += "${npc.fullName} Survived ($roll > $chanceOfDeath)"
+                            }
+                            if (npcDied) {
+                                break
+                            } else {
+                                rollsMessage += "\n"
+                            }
+                        }
 
-                    // And other stuff like adding resoureces to commander davis (after clearing existing ones)
-                    // ALlow it to be customized so we can change the nubmer without app update
+                        AlertUtils.displayOkMessage(
+                            this,
+                            npcDied.ternary("STARVATION!", "Everyone Survived!"),
+                            rollsMessage
+                        ) { _, _ ->
+                            // TODO service calls to kill off NPC.
+                            // TODO make sure loading works here.
+                            finishEventFlow()
+                        }
+                    }
                 }
             } else {
                 finishEventFlow()

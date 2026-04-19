@@ -27,6 +27,7 @@ import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.XpReductionsListActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.utils.CharacterPanel
@@ -251,7 +252,13 @@ class MyAccountFragment : Fragment() {
             endTime = "18:00",
             isStarted = true,
             isFinished = false,
-            attendees = listOf(),
+            attendees = listOf(
+                EventAttendeeModel(1, 1, null, -1, "TRUE", "TRUE", 1),
+                EventAttendeeModel(2, 1, null, -1, "TRUE", "TRUE", 1),
+                EventAttendeeModel(3, 1, null, -1, "TRUE", "TRUE", 1),
+                EventAttendeeModel(4, 1, null, -1, "TRUE", "TRUE", 1),
+                EventAttendeeModel(5, 1, null, -1, "TRUE", "TRUE", 1)
+            ),
             preregs = listOf(),
             intrigue = null
         )
