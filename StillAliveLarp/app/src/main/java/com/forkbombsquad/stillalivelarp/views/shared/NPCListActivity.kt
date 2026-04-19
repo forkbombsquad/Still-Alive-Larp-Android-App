@@ -17,6 +17,7 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import kotlin.math.floor
 import kotlin.reflect.KClass
 
 class NPCListActivity : NoStatusBarActivity() {
@@ -56,9 +57,11 @@ class NPCListActivity : NoStatusBarActivity() {
         layout.removeAllViews()
 
         val living = characters.filter { it.isAlive }
-
-        livingNPCs.set("${living.count()} / 10")
-        rewardReduction.set("${(10 - living.count()) * 10}%")
+        val npcSlots = DataManager.shared.campStatus?.npcSlots ?: 10
+        val percentagePerNpc = (100.0 / npcSlots.toDouble())
+        val missingPercentage = floor((npcSlots - living.count()).toDouble() * percentagePerNpc).toInt()
+        livingNPCs.set("${living.count()} / $npcSlots")
+        rewardReduction.set("- $missingPercentage%")
 
         living.alphabetized().forEachIndexed { index, char ->
             val arrow = NavArrowButtonBlackBuildable(this)
