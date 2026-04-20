@@ -15,7 +15,9 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.AdminService
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 
 import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
@@ -23,6 +25,7 @@ import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonType
 import com.forkbombsquad.stillalivelarp.utils.ButtonTypePressed
+import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.MessageInput
@@ -31,9 +34,11 @@ import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRed
 import com.forkbombsquad.stillalivelarp.utils.globalRoll1to100
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
 import com.forkbombsquad.stillalivelarp.views.account.MyAccountFragment
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -97,25 +102,31 @@ class ManageEventActivity : NoStatusBarActivity() {
             } else {
                 event.isFinished = true
             }
-            // TODO only commenting out these lines for testing. Put them back.
-//            val updateEventRequest = AdminService.UpdateEvent()
-//            lifecycleScope.launch {
-//                updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
+            val updateEventRequest = AdminService.UpdateEvent()
+            lifecycleScope.launch {
+                updateEventRequest.successfulResponse(UpdateModelSP(event)).ifLet({ _ ->
                     if (starting) {
                         // Event is being started for first time - simple success
-                        AlertUtils.displaySuccessMessage(this@ManageEventActivity, "Event Started!") { _, _ ->
-                            DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
-                            DataManager.shared.closeActiviesToClose()
-                            finish()
+                        val davis = DataManager.shared.getAllCharacters().first { it.id == Constants.SpecificCharacterIds.commanderDavis }
+                        AlertUtils.displayOkMessage(
+                            this@ManageEventActivity,
+                            "Materials For Sale!",
+                            "Materials Gathered By NPCs over the past month that are for sale in the camp store:\n\nWood: ${davis.woodSupplies}\nMetal: ${davis.metalSupplies}\nCloth: ${davis.clothSupplies}\nTech: ${davis.techSupplies}\nMedical: ${davis.medicalSupplies}"
+                        ) { _, _ ->
+                            AlertUtils.displaySuccessMessage(this@ManageEventActivity, "Event Started!") { _, _ ->
+                                DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
+                                DataManager.shared.closeActiviesToClose()
+                                finish()
+                            }
                         }
                     } else {
                         // Event is being finished - show pre-finish dialog chain
                         promptForRaffleAward()
                     }
-//                }, {
-//                    startFinishButton.setLoading(false)
-//                })
-//            }
+                }, {
+                    startFinishButton.setLoading(false)
+                })
+            }
         }
 
         buildView()
@@ -200,88 +211,280 @@ class ManageEventActivity : NoStatusBarActivity() {
             if (messageOutput.buttonPressed == ButtonTypePressed.POSITIVE) {
                 val req = (messageOutput.getValuesForKey("req")?.editTextValue ?: "0.0").toDoubleOrNull()
                 val food = (messageOutput.getValuesForKey("food")?.editTextValue ?: "0.0").toIntOrNull()
+
                 if (req == null || food == null) {
                     AlertUtils.displayOkMessage(this, "Must enter a number!", "Please") { _, _ ->
                         finishEventFlowPromptForFood()
                     }
                 } else {
+
                     val attendees = event.attendees.count().toDouble()
                     val totalFoodRequired = ceil(attendees * req).toInt()
                     val percentagePerFood = (100.0 / totalFoodRequired.toDouble())
-                    val allNpcs = DataManager.shared.getAllCharacters(type = CharacterType.NPC)
-                    if (food == totalFoodRequired) {
-                        // Threshold
+                    val allNpcs = DataManager.shared.getAllCharacters(type = CharacterType.NPC).filter { it.isAlive }
+
+                    if (food == totalFoodRequired) { // THRESHOLD
+                        // No Benefits or Downsides
                         AlertUtils.displayOkMessage(
                             this,
                             "Food Threshold Reached!",
                             "No additional bonuses or penalties!\n\nFood Donated: $food\nFood Required: $totalFoodRequired")
                         { _, _ ->
-                            finishEventFlow()
-                        }
-                    } else if (food > totalFoodRequired) {
-                        // TODO check to see if NPCs are at max
-                        val chanceForNPCAtrraction = 100 - min(ceil((food - totalFoodRequired).toDouble() * percentagePerFood).toInt(), 50)
-                        val roll = globalRoll1to100()
-                        if (roll > chanceForNPCAtrraction) {
-                            AlertUtils.displayOkMessage(
-                                this,
-                                "Success! New NPC Attracted!",
-                                "Rolled: $roll, which is > than $chanceForNPCAtrraction!"
-                            ) { _, _ ->
-                                // TODO need to create new NPC, probably not here though since it'll be a quest
-                                // TODO make sure loading works here.
-                                finishEventFlow()
-                            }
-                        } else {
-                            AlertUtils.displayOkMessage(
-                                this,
-                                ":( Failed To Attract A New NPC This Time",
-                                "Rolled $roll, which was ≤ $chanceForNPCAtrraction!"
-                            ) { _, _ ->
-                                finishEventFlow()
-                            }
-                        }
-                        // Chance for NPC and get awarded!
-                        // Chance that a new NPC is attracted (which will open up a new quest the next event) are:
-                        // - NPC slot available (i.e. under the max)
-                        // - Half percentage vs chance for NPC death
-                        // - Capped at 50/50
-                        // When threshold is broken, need to give random resources to commander davis for next event based on excess happiness.
-                        // TODO need to implement grabbing Commander Davis' materials on event start to have available to sell.
-                        // TODO also each NPC will give commander davis one random resource to sell at camp store at start of next event, rolled randomly.
-                        // TODO need to add NPC cap to the constants somewhere in the DB.
-                    } else {
-                        val chanceOfDeath = ceil((totalFoodRequired - food).toDouble() * percentagePerFood).toInt()
-                        var rollsMessage = ""
-                        var npcDied = false
-                        for (npc in allNpcs) {
-                            val roll = globalRoll1to100()
-                            if (roll <= chanceOfDeath) {
-                                rollsMessage += "${npc.fullName} DIED OF STARVATION! ($roll ≤ $chanceOfDeath)"
-                                npcDied = true
-                            } else {
-                                rollsMessage += "${npc.fullName} Survived ($roll > $chanceOfDeath)"
-                            }
-                            if (npcDied) {
-                                break
-                            } else {
-                                rollsMessage += "\n"
+                            val cm = DataManager.shared.getAllCharacters().first { it.id == Constants.SpecificCharacterIds.commanderDavis }
+                            val editedChar = CharacterModel(
+                                id = cm.id,
+                                fullName = cm.fullName,
+                                startDate = cm.startDate,
+                                isAlive = cm.isAlive.toString().uppercase(),
+                                deathDate = cm.deathDate,
+                                infection = cm.infection,
+                                bio = cm.bio,
+                                approvedBio = cm.approvedBio.toString().uppercase(),
+                                bullets = cm.bullets.toString(),
+                                megas = cm.megas.toString(),
+                                rivals = cm.rivals.toString(),
+                                rockets = cm.rockets.toString(),
+                                bulletCasings = cm.bulletCasings.toString(),
+                                clothSupplies = "0",
+                                woodSupplies = "0",
+                                metalSupplies = "0",
+                                techSupplies = "0",
+                                medicalSupplies = "0",
+                                armor = cm.armor,
+                                unshakableResolveUses = cm.unshakableResolveUses.toString(),
+                                mysteriousStrangerUses = cm.mysteriousStrangerUses.toString(),
+                                playerId = cm.playerId,
+                                characterTypeId = cm.characterTypeId
+                            )
+                            startFinishButton.setLoadingWithText("Updating Commander With Zeroed Out Materials...")
+                            val updateCharRequest = AdminService.UpdateCharacter()
+                            lifecycleScope.launch {
+                                updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
+                                    startFinishButton.setLoading(true)
+                                    finishEventFlow()
+                                }, {
+                                    startFinishButton.setLoading(true)
+                                    AlertUtils.displaySomethingWentWrong(this@ManageEventActivity)
+                                    finishEventFlow()
+                                })
                             }
                         }
-
+                    } else if (food > totalFoodRequired) { // ABOVE THRESHOLD
+                        val npcGateredMats = getNPCGatheredMaterials(allNpcs)
                         AlertUtils.displayOkMessage(
                             this,
-                            npcDied.ternary("STARVATION!", "Everyone Survived!"),
-                            rollsMessage
+                            "Food Threshold Exceeded!",
+                            npcGateredMats.getPrintString()
                         ) { _, _ ->
-                            // TODO service calls to kill off NPC.
-                            // TODO make sure loading works here.
-                            finishEventFlow()
+                            val cm = DataManager.shared.getAllCharacters().first { it.id == Constants.SpecificCharacterIds.commanderDavis }
+                            val editedChar = CharacterModel(
+                                id = cm.id,
+                                fullName = cm.fullName,
+                                startDate = cm.startDate,
+                                isAlive = cm.isAlive.toString().uppercase(),
+                                deathDate = cm.deathDate,
+                                infection = cm.infection,
+                                bio = cm.bio,
+                                approvedBio = cm.approvedBio.toString().uppercase(),
+                                bullets = cm.bullets.toString(),
+                                megas = cm.megas.toString(),
+                                rivals = cm.rivals.toString(),
+                                rockets = cm.rockets.toString(),
+                                bulletCasings = cm.bulletCasings.toString(),
+                                clothSupplies = npcGateredMats.cloth.toString(),
+                                woodSupplies = npcGateredMats.wood.toString(),
+                                metalSupplies = npcGateredMats.metal.toString(),
+                                techSupplies = npcGateredMats.tech.toString(),
+                                medicalSupplies = npcGateredMats.medical.toString(),
+                                armor = cm.armor,
+                                unshakableResolveUses = cm.unshakableResolveUses.toString(),
+                                mysteriousStrangerUses = cm.mysteriousStrangerUses.toString(),
+                                playerId = cm.playerId,
+                                characterTypeId = cm.characterTypeId
+                            )
+                            startFinishButton.setLoadingWithText("Updating Commander With New Materials...")
+                            val updateCharRequest = AdminService.UpdateCharacter()
+                            lifecycleScope.launch {
+                                updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
+                                    startFinishButton.setLoading(true)
+                                    finishEventFlowNPCAttraction(allNpcs, food, totalFoodRequired, percentagePerFood)
+                                }, {
+                                    startFinishButton.setLoading(true)
+                                    AlertUtils.displaySomethingWentWrong(this@ManageEventActivity)
+                                    finishEventFlowNPCAttraction(allNpcs, food, totalFoodRequired, percentagePerFood)
+                                })
+                            }
+                        }
+                    } else { // BELOW THRESHOLD
+                        val cm = DataManager.shared.getAllCharacters().first { it.id == Constants.SpecificCharacterIds.commanderDavis }
+                        val editedChar = CharacterModel(
+                            id = cm.id,
+                            fullName = cm.fullName,
+                            startDate = cm.startDate,
+                            isAlive = cm.isAlive.toString().uppercase(),
+                            deathDate = cm.deathDate,
+                            infection = cm.infection,
+                            bio = cm.bio,
+                            approvedBio = cm.approvedBio.toString().uppercase(),
+                            bullets = cm.bullets.toString(),
+                            megas = cm.megas.toString(),
+                            rivals = cm.rivals.toString(),
+                            rockets = cm.rockets.toString(),
+                            bulletCasings = cm.bulletCasings.toString(),
+                            clothSupplies = "0",
+                            woodSupplies = "0",
+                            metalSupplies = "0",
+                            techSupplies = "0",
+                            medicalSupplies = "0",
+                            armor = cm.armor,
+                            unshakableResolveUses = cm.unshakableResolveUses.toString(),
+                            mysteriousStrangerUses = cm.mysteriousStrangerUses.toString(),
+                            playerId = cm.playerId,
+                            characterTypeId = cm.characterTypeId
+                        )
+                        startFinishButton.setLoadingWithText("Updating Commander With Zeroed Out Materials...")
+                        val updateCharRequest = AdminService.UpdateCharacter()
+                        lifecycleScope.launch {
+                            updateCharRequest.successfulResponse(UpdateModelSP(editedChar)).ifLet({ _ ->
+                                startFinishButton.setLoading(true)
+                                finishEventFlowDeathMaybe(allNpcs, totalFoodRequired, food, percentagePerFood)
+                            }, {
+                                startFinishButton.setLoading(true)
+                                AlertUtils.displaySomethingWentWrong(this@ManageEventActivity)
+                                finishEventFlowDeathMaybe(allNpcs, totalFoodRequired, food, percentagePerFood)
+                            })
                         }
                     }
                 }
             } else {
                 finishEventFlow()
+            }
+        }
+    }
+
+    private fun finishEventFlowDeathMaybe(allNpcs: List<FullCharacterModel>, totalFoodRequired: Int, food: Int, percentagePerFood: Double) {
+        val chanceOfDeath = ceil((totalFoodRequired - food).toDouble() * percentagePerFood).toInt()
+        var rollsMessage = ""
+        var deadNPC: FullCharacterModel? = null
+        for (npc in allNpcs.shuffled()) {
+            val roll = globalRoll1to100()
+            if (roll <= chanceOfDeath) {
+                rollsMessage += "${npc.fullName} DIED OF STARVATION! ($roll% ≤ $chanceOfDeath%)"
+                deadNPC = npc
+            } else {
+                rollsMessage += "${npc.fullName} Survived ($roll% > $chanceOfDeath%)"
+            }
+            if (deadNPC != null) {
+                break
+            } else {
+                rollsMessage += "\n"
+            }
+        }
+
+        AlertUtils.displayOkMessage(
+            this,
+            (deadNPC != null).ternary("STARVATION!", "Everyone Survived!"),
+            rollsMessage
+        ) { _, _ ->
+            if (deadNPC != null) {
+                startFinishButton.setLoadingWithText("Killing ${deadNPC.fullName}...")
+                val cm = deadNPC
+                val editedNPC = CharacterModel(
+                    id = cm.id,
+                    fullName = cm.fullName,
+                    startDate = cm.startDate,
+                    isAlive = "FALSE",
+                    deathDate = LocalDate.now().yyyyMMddFormatted(),
+                    infection = cm.infection,
+                    bio = cm.bio,
+                    approvedBio = cm.approvedBio.toString().uppercase(),
+                    bullets = cm.bullets.toString(),
+                    megas = cm.megas.toString(),
+                    rivals = cm.rivals.toString(),
+                    rockets = cm.rockets.toString(),
+                    bulletCasings = cm.bulletCasings.toString(),
+                    clothSupplies = cm.clothSupplies.toString(),
+                    woodSupplies = cm.woodSupplies.toString(),
+                    metalSupplies = cm.metalSupplies.toString(),
+                    techSupplies = cm.techSupplies.toString(),
+                    medicalSupplies = cm.medicalSupplies.toString(),
+                    armor = cm.armor,
+                    unshakableResolveUses = cm.unshakableResolveUses.toString(),
+                    mysteriousStrangerUses = cm.mysteriousStrangerUses.toString(),
+                    playerId = cm.playerId,
+                    characterTypeId = cm.characterTypeId
+                )
+                val updateCharRequest = AdminService.UpdateCharacter()
+                lifecycleScope.launch {
+                    updateCharRequest.successfulResponse(UpdateModelSP(editedNPC)).ifLet({ _ ->
+                        startFinishButton.setLoading(true)
+                        finishEventFlow()
+                    }, {
+                        startFinishButton.setLoading(true)
+                        AlertUtils.displaySomethingWentWrong(this@ManageEventActivity)
+                        finishEventFlow()
+                    })
+                }
+            } else {
+                finishEventFlow()
+            }
+        }
+    }
+    private fun getNPCGatheredMaterials(npcs: List<FullCharacterModel>): NPCGatheredMaterials {
+        val ngm = NPCGatheredMaterials()
+        npcs.forEach { _ ->
+            ngm.addNew(globalRoll1to100())
+        }
+        return ngm
+    }
+
+    private data class NPCGatheredMaterials(var wood: Int = 0, var metal: Int = 0, var cloth: Int = 0, var tech: Int = 0, var medical: Int = 0) {
+        fun getPrintString(): String {
+            return "Your NPCs were well fed enough to gather additional materials for sale at the next event!\n\nWood: $wood\nMetal: $metal\nCloth: $cloth\nTech: $tech\nMedical $medical"
+        }
+
+        fun addNew(rollBetween1and100: Int) {
+            when (rollBetween1and100) {
+                in 1..20 -> wood += 1
+                in 21..40 -> metal += 1
+                in 41..60 -> cloth += 1
+                in 61..80 -> tech += 1
+                in 81..100 -> medical += 1
+            }
+        }
+    }
+    private fun finishEventFlowNPCAttraction(allNpcs: List<FullCharacterModel>, food: Int, totalFoodRequired: Int, percentagePerFood: Double) {
+        // Material Awards and Chance For New NPC (if Room)
+        val maxNpcs = DataManager.shared.campStatus?.npcSlots ?: 10
+        if (allNpcs.count() >= maxNpcs) {
+            // NPC Slots are Full
+            AlertUtils.displayOkMessage(
+                this,
+                "NPC Slots Full!",
+                "You cannot attract any more NPCs without increasing the NPC capacity"
+            ) { _, _ ->
+                finishEventFlow()
+            }
+        } else {
+            // Chance For New NPCs is equal to half the percentage that food was worth below threshold. Capped at 50%.
+            val chanceForNPCAtrraction = 100 - min(ceil((food - totalFoodRequired).toDouble() * (percentagePerFood / 2.0)).toInt(), 50)
+            val roll = globalRoll1to100()
+            if (roll > chanceForNPCAtrraction) {
+                AlertUtils.displayOkMessage(
+                    this,
+                    "Success! New NPC Attracted!",
+                    "Soon, an opportunity to recruit a new NPC will arise!\n(Rolled: $roll%, which is > than $chanceForNPCAtrraction%)"
+                ) { _, _ ->
+                    finishEventFlow()
+                }
+            } else {
+                AlertUtils.displayOkMessage(
+                    this,
+                    ":( Failed To Attract A New NPC This Time",
+                    "Rolled $roll%, which was ≤ $chanceForNPCAtrraction%!"
+                ) { _, _ ->
+                    finishEventFlow()
+                }
             }
         }
     }

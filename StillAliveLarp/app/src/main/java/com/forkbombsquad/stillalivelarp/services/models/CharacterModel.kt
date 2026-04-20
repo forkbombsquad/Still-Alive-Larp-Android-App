@@ -452,6 +452,26 @@ data class FullCharacterModel(
         return false
     }
 
+    fun hasScavengerSkills(): Int {
+        var count = 0
+        allPurchasedSkills().forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allScavengerSkills)) {
+                count++
+            }
+        }
+        return count
+    }
+
+    fun scavengerSkillsCount(): Int {
+        var count = 0
+        allPurchasedSkills().forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allScavengerSkills)) {
+                count++
+            }
+        }
+        return count
+    }
+
     fun mysteriousStrangerCount(): Int {
         var count = 0
         allPurchasedSkills().forEach {
