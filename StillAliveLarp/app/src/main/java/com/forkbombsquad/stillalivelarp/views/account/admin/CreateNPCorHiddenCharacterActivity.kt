@@ -69,7 +69,7 @@ class CreateNPCorHiddenCharacterActivity : NoStatusBarActivity() {
                                 deathDate = "",
                                 infection = "0",
                                 bio = bioView.text.toString().trim(),
-                                approvedBio = "FALSE",
+                                approvedBio = "TRUE",
                                 bullets = "20",
                                 megas = "0",
                                 rivals = "0",
