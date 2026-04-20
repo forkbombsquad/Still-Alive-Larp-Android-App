@@ -113,7 +113,16 @@ tools:context=".views.account.admin.CheckInPlayerActivity">
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginVertical="16dp"
                     android:orientation="vertical">
+                    <CheckBox
+                        android:id="@+id/checkinplayer_hiddennpccheckbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Assign Hidden NPC"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp"/>
                     <TextView
+                        android:id="@+id/checkinplayer_npclabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"

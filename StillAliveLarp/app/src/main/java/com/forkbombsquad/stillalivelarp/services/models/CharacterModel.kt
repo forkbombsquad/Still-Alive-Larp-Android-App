@@ -126,7 +126,7 @@ data class FullCharacterModel(
     }
 
     fun isNpcAndNotAttendingEvent(eventId: Int): Boolean {
-        if (characterType() != CharacterType.NPC) { return false }
+        if (characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) { return false }
         return DataManager.shared.events.firstOrNull { it.id == eventId }?.attendees?.firstOrNull { it.npcId == id } == null
     }
 
