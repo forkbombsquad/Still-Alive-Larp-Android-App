@@ -152,5 +152,3 @@ val isUnitTesting: Boolean by lazy {
         false
     }
 }
-
-// TODO need to add secret characters and their ability to be assigned at check in for mock events!
