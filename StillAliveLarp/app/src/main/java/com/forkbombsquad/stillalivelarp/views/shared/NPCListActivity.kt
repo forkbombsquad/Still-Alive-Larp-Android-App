@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
@@ -64,6 +65,8 @@ class NPCListActivity : NoStatusBarActivity() {
 
     private fun buildView() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
+        createNewButton.isGone = !(DataManager.shared.getCurrentPlayer()?.isAdmin ?: false)
+
         layout.removeAllViews()
 
         val living = characters.filter { it.isAlive }
