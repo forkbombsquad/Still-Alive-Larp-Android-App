@@ -38,11 +38,19 @@
                 app:showLoading="false"/>
 
             <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                android:id="@+id/mannpc_manageskillstree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                app:text="Manage Skills (Tree)"
+                app:showLoading="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                 android:id="@+id/mannpc_manageskills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                app:text="Manage Skills"
+                app:text="Manage Skills (List)"
                 app:showLoading="false"/>
 
         </LinearLayout> <!-- BEFORE THIS ONE-->

@@ -13,10 +13,12 @@ import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
 
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.CreateNPCorHiddenCharacterActivity
 import kotlin.math.floor
 import kotlin.reflect.KClass
 
@@ -25,6 +27,7 @@ class NPCListActivity : NoStatusBarActivity() {
     private lateinit var title: TextView
     private lateinit var livingNPCs: KeyValueView
     private lateinit var rewardReduction: KeyValueView
+    private lateinit var createNewButton: NavArrowButtonGreen
     private lateinit var layout: LinearLayout
 
     private lateinit var destClass: KClass<*>
@@ -47,7 +50,14 @@ class NPCListActivity : NoStatusBarActivity() {
         title = findViewById(R.id.npcs_title)
         livingNPCs = findViewById(R.id.npcs_total)
         rewardReduction = findViewById(R.id.npcs_lootRatio)
+        createNewButton = findViewById(R.id.npcs_createNew)
         layout = findViewById(R.id.npcs_layout)
+
+        createNewButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, false)
+            val intent = Intent(this, CreateNPCorHiddenCharacterActivity::class.java)
+            startActivity(intent)
+        }
 
         buildView()
     }

@@ -22,6 +22,7 @@ import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.shared.NPCEditPersonalNativeSkillTreeActivity
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -30,6 +31,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
     private lateinit var title: TextView
     private lateinit var manageStats: NavArrowButtonBlack
     private lateinit var manageSkills: NavArrowButtonBlack
+    private lateinit var manageSkillsTree: NavArrowButtonBlack
 
     private lateinit var character: FullCharacterModel
     private var isHiddenCharacter: Boolean = false
@@ -43,12 +45,13 @@ class ManageNPCActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
-        isHiddenCharacter = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER) ?: false
+        character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER, false)!!
+        isHiddenCharacter = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, false) ?: false
 
         title = findViewById(R.id.mannpc_title)
         manageStats = findViewById(R.id.mannpc_managestats)
         manageSkills = findViewById(R.id.mannpc_manageskills)
+        manageSkillsTree = findViewById(R.id.mannpc_manageskillstree)
 
         manageStats.setOnClick {
             AlertUtils.displayMessageWithInputs(
@@ -76,6 +79,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
                 runOnUiThread {
                     manageStats.setLoading(true)
                     manageSkills.setLoading(true)
+                    manageSkillsTree.setLoading(true)
                 }
                 val updateCharRequest = AdminService.UpdateCharacter()
 
@@ -91,11 +95,14 @@ class ManageNPCActivity : NoStatusBarActivity() {
                             AlertUtils.displaySuccessMessage(this@ManageNPCActivity, "Updated ${character.fullName}!") { _, _ -> }
                             manageStats.setLoading(false)
                             manageSkills.setLoading(false)
+                            manageSkillsTree.setLoading(false)
                         }
                     }, {
                         AlertUtils.displaySomethingWentWrong(this@ManageNPCActivity)
                         manageStats.setLoading(false)
                         manageSkills.setLoading(false)
+                        manageSkillsTree.setLoading(false)
+
                     })
                 }
             }
@@ -105,6 +112,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
             DataManager.shared.setUpdateCallback(this::class) {
                 DataManager.shared.load(lifecycleScope) {
+                    this.character = DataManager.shared.getCharacter(this.character)!!
                     reload()
                 }
             }
@@ -113,6 +121,17 @@ class ManageNPCActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
 
+        manageSkillsTree.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, character)
+            DataManager.shared.setUpdateCallback(this::class) {
+                DataManager.shared.load(lifecycleScope) {
+                    this.character = DataManager.shared.getCharacter(this.character)!!
+                    reload()
+                }
+            }
+            val intent = Intent(this, NPCEditPersonalNativeSkillTreeActivity::class.java)
+            startActivity(intent)
+        }
         reload()
     }
 
@@ -128,5 +147,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
 
         manageSkills.setLoading(DataManager.shared.loading)
         manageStats.setLoading(DataManager.shared.loading)
+        manageSkillsTree.setLoading(DataManager.shared.loading)
+
     }
 }

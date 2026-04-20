@@ -926,6 +926,10 @@ class DataManager private constructor() {
         return characters.firstOrNull { it.id == id }
     }
 
+    fun getCharacter(char: FullCharacterModel): FullCharacterModel? {
+        return characters.firstOrNull { it.id == char.id }
+    }
+
     fun getOngoingEvent(): FullEventModel? {
         return events.firstOrNull { it.isOngoing() }
     }

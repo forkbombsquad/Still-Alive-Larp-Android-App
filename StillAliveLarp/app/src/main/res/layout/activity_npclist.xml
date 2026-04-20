@@ -50,6 +50,14 @@
                 app:key="Quest Rewards Reduced By"
                 app:showDiv="true"/>
 
+            <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+                android:id="@+id/npcs_createNew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:text="Create New NPC"
+                app:showLoading="false"/>
+
             <LinearLayout
                 android:id="@+id/npcs_layout"
                 android:layout_width="match_parent"
