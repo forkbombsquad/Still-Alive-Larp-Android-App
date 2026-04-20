@@ -28,7 +28,7 @@ class Constants {
             // TODO ROUTINE - set these to false before release
             const val showLogging = false
             const val showTestLogging = false
-            const val showDebugButtonInAccountView = true
+            const val showDebugButtonInAccountView = false
             // These can stay true
             const val showUnitTestLogging = false
             const val showUITestLogging = false

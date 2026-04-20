@@ -241,30 +241,6 @@ class MyAccountFragment : Fragment() {
     private fun doDebugStuff() {
         // Any debug stuff you need to do can be done here
         // TODO ROUTINE - remove all code here before launch
-
-        // DEBUG: Test ManageEventActivity flow with mock event
-        val mockEvent = FullEventModel(
-            id = -1,
-            title = "Debug Event",
-            description = "This is a debug event for testing",
-            date = "2026/04/18",
-            startTime = "10:00",
-            endTime = "18:00",
-            isStarted = true,
-            isFinished = false,
-            attendees = listOf(
-                EventAttendeeModel(1, 1, null, -1, "TRUE", "TRUE", 1),
-                EventAttendeeModel(2, 1, null, -1, "TRUE", "TRUE", 1),
-                EventAttendeeModel(3, 1, null, -1, "TRUE", "TRUE", 1),
-                EventAttendeeModel(4, 1, null, -1, "TRUE", "TRUE", 1),
-                EventAttendeeModel(5, 1, null, -1, "TRUE", "TRUE", 1)
-            ),
-            preregs = listOf(),
-            intrigue = null
-        )
-        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_EVENT, mockEvent)
-        val intent = Intent(requireContext(), ManageEventActivity::class.java)
-        startActivity(intent)
     }
 
     companion object {
