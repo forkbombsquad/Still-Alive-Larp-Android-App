@@ -549,7 +549,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
     private fun getNpc(): FullCharacterModel? {
         if (!isNpc) { return null }
-        return DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.id == eventAttendeeModel.npcId }
+        return DataManager.shared.getAllCharacters(listOf(CharacterType.NPC, CharacterType.HIDDEN)).firstOrNull { it.id == eventAttendeeModel.npcId }
     }
 
     private fun validateFields(): ValidationResult {

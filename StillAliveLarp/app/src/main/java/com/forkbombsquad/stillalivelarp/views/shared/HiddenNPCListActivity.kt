@@ -60,7 +60,7 @@ class HiddenNPCListActivity : NoStatusBarActivity() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         layout.removeAllViews()
 
-        characters.alphabetized().forEachIndexed { index, char ->
+        characters.filter { it.isAlive }.alphabetized().forEachIndexed { index, char ->
             val arrow = NavArrowButtonBlackBuildable(this)
             arrow.textView.text = char.fullName
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
