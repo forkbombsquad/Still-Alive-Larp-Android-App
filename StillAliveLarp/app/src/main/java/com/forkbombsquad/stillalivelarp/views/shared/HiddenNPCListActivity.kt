@@ -7,35 +7,34 @@ import android.widget.TextView
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
-import com.forkbombsquad.stillalivelarp.views.community.CommunityFragment
 import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
-
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
-import kotlin.math.floor
+import com.forkbombsquad.stillalivelarp.views.account.admin.CreateNPCorHiddenCharacterActivity
 import kotlin.reflect.KClass
 
-class NPCListActivity : NoStatusBarActivity() {
+class HiddenNPCListActivity : NoStatusBarActivity() {
 
     private lateinit var title: TextView
-    private lateinit var livingNPCs: KeyValueView
-    private lateinit var rewardReduction: KeyValueView
+    private lateinit var createNewButton: NavArrowButtonGreen
     private lateinit var layout: LinearLayout
 
     private lateinit var destClass: KClass<*>
     private lateinit var characters: List<FullCharacterModel>
     private lateinit var viewTitle: String
 
-    private val sourceClasses: List<KClass<*>> = listOf(CommunityFragment::class, AdminPanelActivity::class)
+    private val sourceClasses: List<KClass<*>> = listOf(AdminPanelActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_npclist)
+        setContentView(R.layout.activity_hidden_npclist)
         setupView()
     }
 
@@ -44,10 +43,15 @@ class NPCListActivity : NoStatusBarActivity() {
         characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST, false)!!
         viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE, false)!!
 
-        title = findViewById(R.id.npcs_title)
-        livingNPCs = findViewById(R.id.npcs_total)
-        rewardReduction = findViewById(R.id.npcs_lootRatio)
-        layout = findViewById(R.id.npcs_layout)
+        title = findViewById(R.id.hiddennpcs_title)
+        createNewButton = findViewById(R.id.hiddennpcs_createNew)
+        layout = findViewById(R.id.hiddennpcs_layout)
+
+        createNewButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, true)
+            val intent = Intent(this, CreateNPCorHiddenCharacterActivity::class.java)
+            startActivity(intent)
+        }
 
         buildView()
     }
@@ -56,14 +60,7 @@ class NPCListActivity : NoStatusBarActivity() {
         DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
         layout.removeAllViews()
 
-        val living = characters.filter { it.isAlive }
-        val npcSlots = DataManager.shared.campStatus?.npcSlots ?: 10
-        val percentagePerNpc = (100.0 / npcSlots.toDouble())
-        val missingPercentage = floor((npcSlots - living.count()).toDouble() * percentagePerNpc).toInt()
-        livingNPCs.set("${living.count()} / $npcSlots")
-        rewardReduction.set("- $missingPercentage%")
-
-        living.alphabetized().forEachIndexed { index, char ->
+        characters.alphabetized().forEachIndexed { index, char ->
             val arrow = NavArrowButtonBlackBuildable(this)
             arrow.textView.text = char.fullName
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

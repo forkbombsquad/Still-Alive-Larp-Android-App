@@ -139,7 +139,7 @@ data class FullCharacterModel(
             CharacterType.STANDARD -> isAlive.ternary("Active", "Inactive")
             CharacterType.NPC -> isAlive.ternary("NPC", "NPC - Deceased")
             CharacterType.PLANNER -> "Planned"
-            CharacterType.HIDDEN -> ""
+            CharacterType.HIDDEN -> "*NPC*"
         }
     }
 
@@ -198,7 +198,7 @@ data class FullCharacterModel(
                                 })
                             }
                         }
-                        CharacterType.NPC, CharacterType.PLANNER -> { // NPC and Planned Characters
+                        CharacterType.NPC, CharacterType.PLANNER, CharacterType.HIDDEN -> { // NPC, Hidden NPC, and Planned Characters
                             val request = CharacterSkillService.TakePlannedCharacterSkill()
                             lifecycleScope.launch {
                                 request.successfulResponse(CreateModelSP(charSkillCreateModel)).ifLet({ _ ->
@@ -208,9 +208,6 @@ data class FullCharacterModel(
                                     completion(false)
                                 })
                             }
-                        }
-                        CharacterType.HIDDEN -> {
-                            completion(false)
                         }
                     }
                 }, {
@@ -233,7 +230,7 @@ data class FullCharacterModel(
                 purchaseText = "Purchase ${skill.name}"
                 purchaseTitle = "Confirm Purchase?"
             }
-            CharacterType.NPC -> {
+            CharacterType.NPC, CharacterType.HIDDEN -> {
                 freeSkillPrompt = "Use NPC 1 Free Tier-1 Skill?"
                 purchaseText = "Purchase ${skill.name} For NPC"
                 purchaseTitle = "Confirm NPC Purchase?"
@@ -244,10 +241,6 @@ data class FullCharacterModel(
                 purchaseText = "Plan to purchase ${skill.name}"
                 purchaseTitle = "Confirm Planned Purchase?"
                 needsFreeSkillPointsToBuyAsFreeSkill = false
-            }
-            CharacterType.HIDDEN -> {
-                completion(null)
-                return
             }
         }
         val player = DataManager.shared.getPlayerForCharacter(this)
@@ -311,8 +304,8 @@ data class FullCharacterModel(
         // Remove all skills you don't have prereqs for
         var newSkillList = charSkills.filter { skillToKeep -> hasAllPrereqsForSkill(skillToKeep) }
 
-        // Planned and NPC characters don't require Prestige Points
-        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+        // Planned and NPC (including Hidden) characters don't require Prestige Points
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) {
             // Filter out pp skills you don't qualify for
             newSkillList = newSkillList.filter { skillToKeep ->
                 skillToKeep.prestigeCost() <= player.prestigePoints
@@ -350,8 +343,8 @@ data class FullCharacterModel(
             }
         }
 
-        // Planned and NPC characters don't require xp, free skills, or infection
-        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+        // Planned and NPC (and hidden) characters don't require xp, free skills, or infection
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) {
             // Filter out skills that you don't have enough xp, fs, or inf for
             newSkillList = newSkillList.filter { skillToKeep ->
                 var keep = true

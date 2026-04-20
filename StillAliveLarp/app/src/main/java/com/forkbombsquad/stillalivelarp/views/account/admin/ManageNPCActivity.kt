@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.views.shared.NPCListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.HiddenNPCListActivity
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
@@ -20,7 +21,9 @@ import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 class ManageNPCActivity : NoStatusBarActivity() {
 
@@ -29,6 +32,9 @@ class ManageNPCActivity : NoStatusBarActivity() {
     private lateinit var manageSkills: NavArrowButtonBlack
 
     private lateinit var character: FullCharacterModel
+    private var isHiddenCharacter: Boolean = false
+
+    private val sourceClasses: List<KClass<*>> = listOf(NPCListActivity::class, HiddenNPCListActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,8 @@ class ManageNPCActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(NPCListActivity::class, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        isHiddenCharacter = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER) ?: false
 
         title = findViewById(R.id.mannpc_title)
         manageStats = findViewById(R.id.mannpc_managestats)
@@ -117,7 +124,7 @@ class ManageNPCActivity : NoStatusBarActivity() {
     }
 
     private fun buildView() {
-        DataManager.shared.setTitleTextPotentiallyOffline(title, "Manage NPC\n${character.fullName}")
+        DataManager.shared.setTitleTextPotentiallyOffline(title, "Manage ${isHiddenCharacter.ternary("Hidden ", "")}NPC\n${character.fullName}")
 
         manageSkills.setLoading(DataManager.shared.loading)
         manageStats.setLoading(DataManager.shared.loading)

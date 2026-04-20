@@ -70,10 +70,16 @@
             android:name=".views.account.admin.ManageNPCActivity"
             android:exported="false" />
         <activity
+            android:name=".views.account.admin.CreateNPCorHiddenCharacterActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.shared.ViewNPCStuffActivity"
             android:exported="false" />
         <activity
             android:name=".views.shared.NPCListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.shared.HiddenNPCListActivity"
             android:exported="false" />
         <activity
             android:name=".views.account.CharacterPlannerActivity"

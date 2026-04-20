@@ -96,7 +96,8 @@ enum class DataManagerPassedDataKey {
     RESEARCH_PROJECT,
     CRAFTING_RECIPE_LIST,
     CRAFTING_RECIPE_CATEGORY,
-    SELECTED_CRAFTING_RECIPE
+    SELECTED_CRAFTING_RECIPE,
+    IS_HIDDEN_CHARACTER
 }
 
 enum class DataManagerType(val localDataKey: String) {
