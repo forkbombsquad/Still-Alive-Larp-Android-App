@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/customborder_gray">
+
+    <!-- Recipe Name - Centered -->
+    <TextView
+        android:id="@+id/craftingrecipecell_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:text="Recipe Name"/>
+
+    <!-- Alternate Subtitle - Centered -->
+    <TextView
+        android:id="@+id/craftingrecipecell_alternate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="Alternate Recipe"/>
+
+    <!-- Divider 1 -->
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Makes, Crafting Time, Skill - 3 Column Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Makes Column -->
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:text="Makes:"/>
+
+            <TextView
+                android:id="@+id/craftingrecipecell_produces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:text="x1"/>
+        </LinearLayout>
+
+        <!-- Crafting Time Column -->
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:text="Crafting Time:"/>
+
+            <TextView
+                android:id="@+id/craftingrecipecell_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:text="5 min"/>
+        </LinearLayout>
+
+        <!-- Skill Column - give more weight for longer skill names -->
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:text="Required Skill:"/>
+
+            <TextView
+                android:id="@+id/craftingrecipecell_skill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:textColor="@color/blue"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:text="Pharmaceuticals"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Divider 2 -->
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Materials Section Header - Centered -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:text="Materials:"/>
+
+    <!-- 3-Column Materials Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/craftingrecipecell_mat_col1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/craftingrecipecell_mat_col2"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/craftingrecipecell_mat_col3"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:text=""/>
+
+    </LinearLayout>
+
+    <!-- Divider 3 -->
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/craftingrecipecell_desc_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/mid_gray"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
+
+    <!-- Description Section Header - Centered -->
+    <TextView
+        android:id="@+id/craftingrecipecell_desc_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="Notes:"/>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/craftingrecipecell_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:paddingTop="4dp"
+        android:visibility="gone"
+        android:text="Optional notes here"/>
+
+</LinearLayout>

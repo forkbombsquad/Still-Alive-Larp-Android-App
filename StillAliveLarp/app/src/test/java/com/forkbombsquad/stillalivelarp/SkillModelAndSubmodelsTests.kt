@@ -1,7 +1,12 @@
-package com.forkbombsquad.stillalivelarp.utils
+package com.forkbombsquad.stillalivelarp
 
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.models.SkillModel
+import com.forkbombsquad.stillalivelarp.utils.BaseUnitTestClass
+import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
+import com.forkbombsquad.stillalivelarp.utils.globalFromJson
+import com.forkbombsquad.stillalivelarp.utils.ternary
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -9,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
+import kotlin.math.max
 
 class SkillModelAndSubmodelsTests: BaseUnitTestClass {
 
@@ -98,7 +104,10 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 val costMod = skill.getRelevantSpecCostChange()
 
                 // Commander Davis has a discount on combat and profession skills but a penalty to talent skills
-                assertEquals(costMod, (skill.skillTypeId.equalsAnyOf(listOf(Constants.SkillTypes.combat, Constants.SkillTypes.profession))).ternary(-1, 1))
+                assertEquals(costMod, (skill.skillTypeId.equalsAnyOf(listOf(
+                    Constants.SkillTypes.combat,
+                    Constants.SkillTypes.profession
+                ))).ternary(-1, 1))
                 // The same skill from base with no context should have 0 modifications to costs:
                 assertEquals(noContextSkill!!.getRelevantSpecCostChange(), 0)
 
@@ -137,12 +146,12 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 assertNotNull(noContextSkill)
 
                 val costMod = skill.getRelevantSpecCostChange()
-                assertEquals(skill.modXpCost(), noContextSkill!!.baseXpCost() - costMod)
+                assertEquals(skill.modXpCost(), max( noContextSkill!!.baseXpCost() + costMod, (noContextSkill.baseXpCost() == 0).ternary(0, 1)))
 
                 if (skill.hasModCost()) {
                     assertNotEquals(skill.modXpCost(), skill.baseXpCost())
                     assertNotEquals(skill.modXpCost(), noContextSkill.baseXpCost())
-                    assertNotEquals(skill.baseXpCost(), noContextSkill.baseXpCost())
+                    assertEquals(skill.baseXpCost(), noContextSkill.baseXpCost())
                 }
 
                 assertFalse(skill.isPurchased())
@@ -155,12 +164,14 @@ class SkillModelAndSubmodelsTests: BaseUnitTestClass {
                 }
 
                 if (skill.hasModCost()) {
-                    assertTrue(costText.contains("changed from ${skill.baseXpCost()} with"))
+                    val testStr = "changed from ${skill.baseXpCost()}xp with"
+                    assertTrue(costText.contains(testStr))
                 }
 
                 // Commander Davis has a special class xp reduction for Interrogator
                 if (skill.id == Constants.SpecificSkillIds.interrogator) {
-                    assertTrue(costText.contains("-1 from Special Class Xp Reductions"))
+                    val testStr = "-1 from Special Class Xp Reductions"
+                    assertTrue(costText.contains(testStr))
                 }
             }
         }

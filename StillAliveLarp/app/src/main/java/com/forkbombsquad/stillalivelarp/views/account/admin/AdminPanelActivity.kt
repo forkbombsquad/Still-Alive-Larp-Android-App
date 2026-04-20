@@ -10,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.forkbombsquad.stillalivelarp.views.shared.CharactersListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.EventsListActivity
 import com.forkbombsquad.stillalivelarp.views.shared.NPCListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.HiddenNPCListActivity
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.views.shared.PlayersListActivity
 import com.forkbombsquad.stillalivelarp.R
@@ -18,14 +19,10 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.CheckInOutBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckInBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckOutBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.LEGACY_globalGenerateNewBarcodeModelFromOld
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
-import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.journeyapps.barcodescanner.ScanContract
@@ -50,6 +47,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var refundSkills: NavArrowButtonBlack
     private lateinit var featureFlagManagement: NavArrowButtonBlack
     private lateinit var manageNPCs: NavArrowButtonBlack
+    private lateinit var manageHiddenNPCs: NavArrowButtonBlack
     private lateinit var researchProjects: NavArrowButtonBlack
     private lateinit var campFortifications: NavArrowButtonBlack
 
@@ -75,17 +73,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
                     val intent = Intent(this, CheckInPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
-                    // TODO remove this once legacy support is gone from iOS update
-                    globalFromJson<LEGACY_PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
-                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, LEGACY_globalGenerateNewBarcodeModelFromOld(it))
-                        DataManager.shared.setUpdateCallback(this::class) {
-                            reload()
-                        }
-                        val intent = Intent(this, CheckInPlayerActivity::class.java)
-                        startActivity(intent)
-                    }, {
-                        AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
-                    })
+                    AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
                 })
             } else if (checkInOutState == CHECKOUT_STATE) {
                 globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
@@ -96,17 +84,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
                     val intent = Intent(this, CheckOutPlayerActivity::class.java)
                     startActivity(intent)
                 }, {
-                    // TODO remove this once legacy support is gone from iOS update
-                    globalFromJson<LEGACY_PlayerCheckOutBarcodeModel>(result.contents.decompress()).ifLet({
-                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, LEGACY_globalGenerateNewBarcodeModelFromOld(it))
-                        DataManager.shared.setUpdateCallback(this::class) {
-                            reload()
-                        }
-                        val intent = Intent(this, CheckOutPlayerActivity::class.java)
-                        startActivity(intent)
-                    }, {
-                        AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
-                    })
+                    AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
                 })
             }
         }
@@ -139,6 +117,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         featureFlagManagement = findViewById(R.id.adminpanel_featureFlagManagement)
         refundSkills = findViewById(R.id.adminpanel_refundSkills)
         manageNPCs = findViewById(R.id.adminpanel_manageNPCs)
+        manageHiddenNPCs = findViewById(R.id.adminpanel_manageHiddenNPCs)
         researchProjects = findViewById(R.id.adminpanel_research)
         campFortifications = findViewById(R.id.adminpanel_campfortifications)
 
@@ -299,6 +278,17 @@ class AdminPanelActivity : NoStatusBarActivity() {
             val intent = Intent(this, NPCListActivity::class.java)
             startActivity(intent)
         }
+        manageHiddenNPCs.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.HIDDEN))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ManageNPCActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Hidden NPC To Manage")
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, true)
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+            }
+            val intent = Intent(this, HiddenNPCListActivity::class.java)
+            startActivity(intent)
+        }
         researchProjects.setOnClick {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.RESEARCH_PROJECT_LIST, DataManager.shared.researchProjects)
             DataManager.shared.setUpdateCallback(this::class) {
@@ -338,6 +328,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         playerCheckIn.isGone = offline
         playerCheckOut.isGone = offline
         giveClassXpRed.isGone = offline
+        manageHiddenNPCs.isGone = offline
         manageNPCs.isGone = offline
         awardPlayer.isGone = offline
         awardChar.isGone = offline

@@ -202,6 +202,14 @@ class MockData {
         }
     }
 
+    class GetAllCraftingRecipeResponses {
+        companion object {
+            private const val PATH = "CraftingRecipes"
+            val STANDARD: String
+                get() = loadJsonFile(PATH)
+        }
+    }
+
     class GetAllProfileImageResponses {
         companion object {
             private const val PATH = "ProfileImage"

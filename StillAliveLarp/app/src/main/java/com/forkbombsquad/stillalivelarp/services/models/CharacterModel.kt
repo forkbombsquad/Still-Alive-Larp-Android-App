@@ -9,6 +9,7 @@ import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.DeleteCharacterRequest
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.models.FullCraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterSkillCreateSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.IdSP
@@ -125,7 +126,7 @@ data class FullCharacterModel(
     }
 
     fun isNpcAndNotAttendingEvent(eventId: Int): Boolean {
-        if (characterType() != CharacterType.NPC) { return false }
+        if (characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) { return false }
         return DataManager.shared.events.firstOrNull { it.id == eventId }?.attendees?.firstOrNull { it.npcId == id } == null
     }
 
@@ -138,7 +139,7 @@ data class FullCharacterModel(
             CharacterType.STANDARD -> isAlive.ternary("Active", "Inactive")
             CharacterType.NPC -> isAlive.ternary("NPC", "NPC - Deceased")
             CharacterType.PLANNER -> "Planned"
-            CharacterType.HIDDEN -> ""
+            CharacterType.HIDDEN -> "*NPC*"
         }
     }
 
@@ -165,6 +166,22 @@ data class FullCharacterModel(
         return skills.filter { !it.isPurchased() }
     }
 
+    fun canCraftWithSkills(recipe: FullCraftingRecipeModel): Boolean {
+        if (recipe.requiredSkill == null) {
+            return true
+        }
+        return allPurchasedSkills().any { it.id == recipe.requiredSkill.id }
+    }
+
+    fun canCraftNow(recipe: FullCraftingRecipeModel): Boolean {
+        if (!canCraftWithSkills(recipe)) {
+            return false
+        }
+        val r = recipe.craftingRecipe
+        return !(r.wood > woodSupplies || r.metal > metalSupplies || r.cloth > clothSupplies ||
+                r.tech > techSupplies || r.medical > medicalSupplies || r.casing > bulletCasings)
+    }
+
     fun attemptToPurchaseSkill(lifecycleScope: CoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {
         if (allPurchaseableSkills().firstOrNull { it.id == skill.id } != null) {
             askToPurchase(skill) { cscm ->
@@ -181,7 +198,7 @@ data class FullCharacterModel(
                                 })
                             }
                         }
-                        CharacterType.NPC, CharacterType.PLANNER -> { // NPC and Planned Characters
+                        CharacterType.NPC, CharacterType.PLANNER, CharacterType.HIDDEN -> { // NPC, Hidden NPC, and Planned Characters
                             val request = CharacterSkillService.TakePlannedCharacterSkill()
                             lifecycleScope.launch {
                                 request.successfulResponse(CreateModelSP(charSkillCreateModel)).ifLet({ _ ->
@@ -191,9 +208,6 @@ data class FullCharacterModel(
                                     completion(false)
                                 })
                             }
-                        }
-                        CharacterType.HIDDEN -> {
-                            completion(false)
                         }
                     }
                 }, {
@@ -216,7 +230,7 @@ data class FullCharacterModel(
                 purchaseText = "Purchase ${skill.name}"
                 purchaseTitle = "Confirm Purchase?"
             }
-            CharacterType.NPC -> {
+            CharacterType.NPC, CharacterType.HIDDEN -> {
                 freeSkillPrompt = "Use NPC 1 Free Tier-1 Skill?"
                 purchaseText = "Purchase ${skill.name} For NPC"
                 purchaseTitle = "Confirm NPC Purchase?"
@@ -227,10 +241,6 @@ data class FullCharacterModel(
                 purchaseText = "Plan to purchase ${skill.name}"
                 purchaseTitle = "Confirm Planned Purchase?"
                 needsFreeSkillPointsToBuyAsFreeSkill = false
-            }
-            CharacterType.HIDDEN -> {
-                completion(null)
-                return
             }
         }
         val player = DataManager.shared.getPlayerForCharacter(this)
@@ -294,8 +304,8 @@ data class FullCharacterModel(
         // Remove all skills you don't have prereqs for
         var newSkillList = charSkills.filter { skillToKeep -> hasAllPrereqsForSkill(skillToKeep) }
 
-        // Planned and NPC characters don't require Prestige Points
-        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+        // Planned and NPC (including Hidden) characters don't require Prestige Points
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) {
             // Filter out pp skills you don't qualify for
             newSkillList = newSkillList.filter { skillToKeep ->
                 skillToKeep.prestigeCost() <= player.prestigePoints
@@ -333,8 +343,8 @@ data class FullCharacterModel(
             }
         }
 
-        // Planned and NPC characters don't require xp, free skills, or infection
-        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC) {
+        // Planned and NPC (and hidden) characters don't require xp, free skills, or infection
+        if (characterType() != CharacterType.PLANNER && characterType() != CharacterType.NPC && characterType() != CharacterType.HIDDEN) {
             // Filter out skills that you don't have enough xp, fs, or inf for
             newSkillList = newSkillList.filter { skillToKeep ->
                 var keep = true
@@ -433,6 +443,26 @@ data class FullCharacterModel(
             }
         }
         return false
+    }
+
+    fun hasScavengerSkills(): Int {
+        var count = 0
+        allPurchasedSkills().forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allScavengerSkills)) {
+                count++
+            }
+        }
+        return count
+    }
+
+    fun scavengerSkillsCount(): Int {
+        var count = 0
+        allPurchasedSkills().forEach {
+            if (it.id.equalsAnyOf(Constants.SpecificSkillIds.allScavengerSkills)) {
+                count++
+            }
+        }
+        return count
     }
 
     fun mysteriousStrangerCount(): Int {

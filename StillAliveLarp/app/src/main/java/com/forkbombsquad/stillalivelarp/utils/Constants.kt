@@ -2,6 +2,12 @@ package com.forkbombsquad.stillalivelarp.utils
 
 class Constants {
 
+    class SpecificCharacterIds {
+        companion object {
+            const val commanderDavis = 1
+        }
+    }
+
     class CharacterTypeId {
         companion object {
             const val standard = 1
@@ -24,8 +30,8 @@ class Constants {
             const val showTestLogging = false
             const val showDebugButtonInAccountView = false
             // These can stay true
-            const val showUnitTestLogging = true
-            const val showUITestLogging = true
+            const val showUnitTestLogging = false
+            const val showUITestLogging = false
         }
     }
 
@@ -165,6 +171,12 @@ class Constants {
             const val fortunateFind = 97
             const val prosperousDiscovery = 98
 
+            // Scavenger Skills
+            const val scavenger = 71
+            const val treasureHunter = 81
+            const val tombRaider = 79
+            const val uncharted = 87
+
             val allSpecalistSkills: Array<Int> = arrayOf(combatAficionado_T, combatSpecialist_P, expertCombat, professionAficionado_T, professionSpecialist_C, expertProfession, talentAficionado_C, talentSpecialist_P, expertTalent)
             
             val allLevel2SpecialistSkills: Array<Int> = arrayOf(combatAficionado_T, combatSpecialist_P, professionAficionado_T, professionSpecialist_C, talentAficionado_C, talentSpecialist_P)
@@ -189,6 +201,8 @@ class Constants {
             val mysteriousStrangerTypeSkills: Array<Int> = arrayOf(mysteriousStranger, unknownAssailant, annonomousAlly)
 
             val fortuneSkills: Array<Int> = arrayOf(fortunateFind, prosperousDiscovery)
+
+            val allScavengerSkills: Array<Int> = arrayOf(scavenger, treasureHunter, tombRaider, uncharted)
 
             val barcodeRelevantSkills: Array<Int> = deepPocketTypeSkills + investigatorTypeSkills + toughSkinTypeSkills + walkLikeAZombieTypeSkills + gamblerTypeSkills + regressionTypeSkills + willToLiveTypeSkills + mysteriousStrangerTypeSkills + fortuneSkills + arrayOf(
                 fullyLoaded)

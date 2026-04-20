@@ -23,6 +23,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 
 import com.forkbombsquad.stillalivelarp.services.utils.nativeskilltree.SkillGrid
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import com.forkbombsquad.stillalivelarp.views.account.admin.ManageNPCActivity
 import kotlinx.coroutines.CoroutineScope
 
 open class NativeSkillTreeActivity : NoStatusBarActivity() {
@@ -125,6 +126,23 @@ class NPCPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
                 allowPurchase = false,
                 player = DataManager.shared.getCurrentPlayer()!!,
                 character = DataManager.shared.getPassedData(listOf(ViewNPCStuffActivity::class, ViewCharacterActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+            ),
+            lifecycleScope
+        )
+    }
+
+}
+
+class NPCEditPersonalNativeSkillTreeActivity : NativeSkillTreeActivity() {
+
+    override fun setImageUpdateDrawables() {
+        img.updateDrawables(
+            SkillGrid(
+                listOf(),
+                personal = true,
+                allowPurchase = true,
+                player = DataManager.shared.getCurrentPlayer()!!,
+                character = DataManager.shared.getPassedData(listOf(ViewNPCStuffActivity::class, ViewCharacterActivity::class, ManageNPCActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
             ),
             lifecycleScope
         )

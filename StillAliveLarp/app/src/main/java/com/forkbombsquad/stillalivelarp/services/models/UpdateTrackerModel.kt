@@ -29,6 +29,7 @@ data class UpdateTrackerModel(
     @JsonProperty("skillPrereqs") var skillPrereqs: Int,
     @JsonProperty("xpReductions") var xpReductions: Int,
     @JsonProperty("campStatus") var campStatus: Int,
+    @JsonProperty("craftingRecipes") var craftingRecipes: Int,
     @JsonProperty("rulebookVersion") var rulebookVersion: String,
     @JsonProperty("treatingWoundsVersion") var treatingWoundsVersion: String
 ) : Serializable {
@@ -97,6 +98,9 @@ data class UpdateTrackerModel(
         if (other.campStatus != this.campStatus) {
             updates.add(DMT.CAMP_STATUS)
         }
+        if (other.craftingRecipes != this.craftingRecipes) {
+            updates.add(DMT.CRAFTING_RECIPES)
+        }
         return updates
     }
 
@@ -125,6 +129,7 @@ data class UpdateTrackerModel(
                 DataManagerType.RULEBOOK -> this.rulebookVersion = newTracker.rulebookVersion
                 DataManagerType.TREATING_WOUNDS -> this.treatingWoundsVersion = newTracker.treatingWoundsVersion
                 DataManagerType.CAMP_STATUS -> this.campStatus = newTracker.campStatus
+                DataManagerType.CRAFTING_RECIPES -> this.craftingRecipes = newTracker.craftingRecipes
             }
         }
     }
@@ -137,7 +142,7 @@ data class UpdateTrackerModel(
 
     companion object {
         fun empty(): UpdateTrackerModel {
-            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, "", "")
+            return UpdateTrackerModel(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, "", "")
         }
     }
 

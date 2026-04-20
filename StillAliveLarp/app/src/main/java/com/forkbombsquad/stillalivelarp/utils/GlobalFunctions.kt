@@ -42,8 +42,8 @@ enum class UnitTestColor(val colorCode: String) {
 }
 
 fun globalUnitTestPrint(message: Any, color: UnitTestColor = UnitTestColor.RED) {
+    globalLastUnitTestPrint = message.toString()
     if (Constants.Logging.showUnitTestLogging) {
-        globalLastUnitTestPrint = message.toString()
         println("${color.colorCode}UNIT-TEST-PRINT-MSG: \"$message\"${UnitTestColor.RESET_COLOR.colorCode}")
     }
 }
@@ -138,6 +138,10 @@ fun globalStyleHtmlForRulebook(html: String): String {
         .replaceHtmlTagWithTagAndInnerValue("talent", "font", "color='#007AFF'")
         .replaceHtmlTagWithTag("item", "i")
         .replaceHtmlTagWithTag("condition", "u")
+}
+
+fun globalRoll1to100(): Int {
+    return (1..100).random()
 }
 
 val isUnitTesting: Boolean by lazy {

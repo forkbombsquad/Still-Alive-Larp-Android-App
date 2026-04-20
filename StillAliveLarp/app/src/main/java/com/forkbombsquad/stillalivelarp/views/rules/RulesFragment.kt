@@ -12,6 +12,8 @@ import com.forkbombsquad.stillalivelarp.views.shared.NativeSkillTreeActivity
 import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.utils.SAImageViewActivity
 import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.CraftingRecipesListActivity
+import com.forkbombsquad.stillalivelarp.views.shared.CraftingRecipeCategoriesActivity
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
@@ -25,6 +27,7 @@ class RulesFragment : Fragment() {
     private lateinit var loadingLayout: LoadingLayout
     private lateinit var rulesTitle: TextView
     private lateinit var skillListNav: NavArrowButtonBlack
+    private lateinit var craftingRecipesNav: NavArrowButtonBlack
     private lateinit var coreRulebookNav: NavArrowButtonBlack
     private lateinit var treatingWoundsNav: NavArrowButtonBlack
     private lateinit var nativeSkillTreeDiagramNav: NavArrowButtonBlack
@@ -43,6 +46,7 @@ class RulesFragment : Fragment() {
         loadingLayout = v.findViewById(R.id.loadinglayout)
         rulesTitle = v.findViewById(R.id.rules_rulesTitle)
         skillListNav = v.findViewById(R.id.rules_skillListNav)
+        craftingRecipesNav = v.findViewById(R.id.rules_craftingRecipesNav)
         coreRulebookNav = v.findViewById(R.id.rules_coreRulebookNav)
         treatingWoundsNav = v.findViewById(R.id.rules_treatingWoundsFlowchartNav)
         nativeSkillTreeDiagramNav = v.findViewById(R.id.rules_skillTreeDiagramNativeNav)
@@ -75,6 +79,11 @@ class RulesFragment : Fragment() {
             startActivity(intent)
         }
 
+        craftingRecipesNav.setOnClick {
+            val intent = Intent(v.context, CraftingRecipeCategoriesActivity::class.java)
+            startActivity(intent)
+        }
+
         reload()
     }
 
@@ -91,6 +100,7 @@ class RulesFragment : Fragment() {
         DataManager.shared.setTitleTextPotentiallyOffline(rulesTitle, "Rules and Reference")
         DataManager.shared.handleLoadingTextAndHidingViews(loadingLayout, listOf()) {}
         skillListNav.setLoading(DataManager.shared.loading)
+        craftingRecipesNav.setLoading(DataManager.shared.loading)
         coreRulebookNav.setLoading(DataManager.shared.loading)
         treatingWoundsNav.setLoading(DataManager.shared.loading)
         nativeSkillTreeDiagramNav.setLoading(DataManager.shared.loading)

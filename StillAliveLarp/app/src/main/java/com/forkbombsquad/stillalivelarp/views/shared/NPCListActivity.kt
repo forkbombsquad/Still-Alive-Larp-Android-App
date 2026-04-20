@@ -13,10 +13,13 @@ import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
 
 import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.CreateNPCorHiddenCharacterActivity
+import kotlin.math.floor
 import kotlin.reflect.KClass
 
 class NPCListActivity : NoStatusBarActivity() {
@@ -24,6 +27,7 @@ class NPCListActivity : NoStatusBarActivity() {
     private lateinit var title: TextView
     private lateinit var livingNPCs: KeyValueView
     private lateinit var rewardReduction: KeyValueView
+    private lateinit var createNewButton: NavArrowButtonGreen
     private lateinit var layout: LinearLayout
 
     private lateinit var destClass: KClass<*>
@@ -39,14 +43,21 @@ class NPCListActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS)!!
-        characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST)!!
-        viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE)!!
+        destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS, false)!!
+        characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST, false)!!
+        viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE, false)!!
 
         title = findViewById(R.id.npcs_title)
         livingNPCs = findViewById(R.id.npcs_total)
         rewardReduction = findViewById(R.id.npcs_lootRatio)
+        createNewButton = findViewById(R.id.npcs_createNew)
         layout = findViewById(R.id.npcs_layout)
+
+        createNewButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, false)
+            val intent = Intent(this, CreateNPCorHiddenCharacterActivity::class.java)
+            startActivity(intent)
+        }
 
         buildView()
     }
@@ -56,9 +67,11 @@ class NPCListActivity : NoStatusBarActivity() {
         layout.removeAllViews()
 
         val living = characters.filter { it.isAlive }
-
-        livingNPCs.set("${living.count()} / 10")
-        rewardReduction.set("${(10 - living.count()) * 10}%")
+        val npcSlots = DataManager.shared.campStatus?.npcSlots ?: 10
+        val percentagePerNpc = (100.0 / npcSlots.toDouble())
+        val missingPercentage = floor((npcSlots - living.count()).toDouble() * percentagePerNpc).toInt()
+        livingNPCs.set("${living.count()} / $npcSlots")
+        rewardReduction.set("- $missingPercentage%")
 
         living.alphabetized().forEachIndexed { index, char ->
             val arrow = NavArrowButtonBlackBuildable(this)

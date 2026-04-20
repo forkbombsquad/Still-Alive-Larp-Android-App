@@ -14,6 +14,7 @@ import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
 import com.forkbombsquad.stillalivelarp.utils.alphabetized
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.ManageEventActivity
 import kotlin.reflect.KClass
 
 class CharactersListActivity : NoStatusBarActivity() {
@@ -25,7 +26,7 @@ class CharactersListActivity : NoStatusBarActivity() {
     private lateinit var characters: List<FullCharacterModel>
     private lateinit var viewTitle: String
 
-    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class)
+    private val sourceClasses: List<KClass<*>> = listOf(ViewPlayerActivity::class, MyAccountFragment::class, AdminPanelActivity::class, ManageEventActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

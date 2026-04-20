@@ -1,0 +1,94 @@
+package com.forkbombsquad.stillalivelarp.views.shared
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.forkbombsquad.stillalivelarp.R
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
+import com.forkbombsquad.stillalivelarp.services.models.CharacterType
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
+import com.forkbombsquad.stillalivelarp.utils.KeyValueView
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlackBuildable
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
+import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonRedBuildable
+import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
+import com.forkbombsquad.stillalivelarp.utils.alphabetized
+import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.CreateNPCorHiddenCharacterActivity
+import kotlin.reflect.KClass
+
+class HiddenNPCListActivity : NoStatusBarActivity() {
+
+    private lateinit var title: TextView
+    private lateinit var createNewButton: NavArrowButtonGreen
+    private lateinit var layout: LinearLayout
+
+    private lateinit var destClass: KClass<*>
+    private lateinit var characters: List<FullCharacterModel>
+    private lateinit var viewTitle: String
+
+    private val sourceClasses: List<KClass<*>> = listOf(AdminPanelActivity::class)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_hidden_npclist)
+        setupView()
+    }
+
+    private fun setupView() {
+        destClass = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.DESTINATION_CLASS, false)!!
+        characters = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.CHARACTER_LIST, false)!!
+        viewTitle = DataManager.shared.getPassedData(sourceClasses, DataManagerPassedDataKey.VIEW_TITLE, false)!!
+
+        title = findViewById(R.id.hiddennpcs_title)
+        createNewButton = findViewById(R.id.hiddennpcs_createNew)
+        layout = findViewById(R.id.hiddennpcs_layout)
+
+        createNewButton.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.IS_HIDDEN_CHARACTER, true)
+            val intent = Intent(this, CreateNPCorHiddenCharacterActivity::class.java)
+            startActivity(intent)
+        }
+
+        buildView()
+    }
+
+    private fun buildView() {
+        DataManager.shared.setTitleTextPotentiallyOffline(title, viewTitle)
+        layout.removeAllViews()
+
+        characters.filter { it.isAlive }.alphabetized().forEachIndexed { index, char ->
+            val arrow = NavArrowButtonBlackBuildable(this)
+            arrow.textView.text = char.fullName
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+            arrow.layoutParams = params
+            arrow.setLoading(false)
+            arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, char)
+                val intent = Intent(this, destClass.java)
+                startActivity(intent)
+            }
+            layout.addView(arrow)
+        }
+        characters.filter { !it.isAlive }.alphabetized().forEachIndexed { index, char ->
+            val arrow = NavArrowButtonRedBuildable(this)
+            arrow.textView.text = "${char.fullName} (Dead)"
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            params.setMargins(0, (index == 0).ternary(32, 16), 0, 16)
+            arrow.layoutParams = params
+            arrow.setLoading(false)
+            arrow.setOnClick {
+                DataManager.shared.addActivityToClose(this)
+                DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_CHARACTER, char)
+                val intent = Intent(this, destClass.java)
+                startActivity(intent)
+            }
+            layout.addView(arrow)
+        }
+    }
+}

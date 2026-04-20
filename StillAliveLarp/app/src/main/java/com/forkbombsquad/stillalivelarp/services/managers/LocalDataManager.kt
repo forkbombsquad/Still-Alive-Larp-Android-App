@@ -8,6 +8,7 @@ import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.models.AppVersionModel
 import com.forkbombsquad.stillalivelarp.services.models.AwardModel
 import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
+import com.forkbombsquad.stillalivelarp.services.models.CraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.LDAwardModels
 import com.forkbombsquad.stillalivelarp.services.models.CharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillModel
@@ -19,6 +20,7 @@ import com.forkbombsquad.stillalivelarp.services.models.EventRegType
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
@@ -57,7 +59,7 @@ class LocalDataManager private constructor() {
     companion object {
 
         // TODO ROUTINE - update this number if any of the models change between releases
-        const val LOCAL_DATA_VERSION = "1.0.0.1"
+        const val LOCAL_DATA_VERSION = "1.0.0.3"
 
         var shared = LocalDataManager()
             private set
@@ -81,9 +83,10 @@ class LocalDataManager private constructor() {
             val fullEventsKey = "fullevents_LDMKEYS_dm_sp_key"
             val fullCharactersKey = "fullcharacters_LDMKEYS_dm_sp_key"
             val fullPlayersKey = "fullplayers_LDMKEYS_dm_sp_key"
+            val fullCraftingRecipesKey = "fullcraftingrecipes_LDMKEYS_dm_sp_key"
             val playerIdKey = "playerid_LDMKEYS_dm_sp_key"
 
-            val allKeys: List<String> = listOf(fullSkillsKey, fullEventsKey, fullCharactersKey, fullPlayersKey, playerIdKey)
+            val allKeys: List<String> = listOf(fullSkillsKey, fullEventsKey, fullCharactersKey, fullPlayersKey, fullCraftingRecipesKey, playerIdKey)
         }
     }
 
@@ -323,6 +326,14 @@ class LocalDataManager private constructor() {
         return get(DMT.RESEARCH_PROJECTS) ?: listOf()
     }
 
+    fun storeCraftingRecipes(craftingRecipes: List<CraftingRecipeModel>) {
+        store(craftingRecipes, DMT.CRAFTING_RECIPES)
+    }
+
+    fun getCraftingRecipes(): List<CraftingRecipeModel> {
+        return get(DMT.CRAFTING_RECIPES) ?: listOf()
+    }
+
     fun storeSkills(skills: List<SkillModel>) {
         store(skills, DMT.SKILLS)
     }
@@ -449,6 +460,13 @@ class LocalDataManager private constructor() {
             builtFullEvents = false
         }
 
+        // FULL CRAFTING RECIPES
+        if (neededUpdates.doesNotContain(listOf(DMT.CRAFTING_RECIPES, DMT.SKILLS, DMT.SKILL_CATEGORIES, DMT.SKILL_PREREQS))) {
+            buildAndStoreFullCraftingRecipes(getCraftingRecipes(), getFullSkills())
+        } else if (getFullCraftingRecipes().isEmpty()) {
+            buildAndStoreFullCraftingRecipes(getCraftingRecipes(), getFullSkills())
+        }
+
         // FULL CHARACTERS
         if (builtFullSkills && builtFullEvents && neededUpdates.doesNotContain(listOf(DMT.CHARACTERS, DMT.CHARACTER_SKILLS, DMT.GEAR, DMT.AWARDS, DMT.XP_REDUCTIONS))) {
             buildAndStoreFullCharacters(
@@ -500,6 +518,53 @@ class LocalDataManager private constructor() {
 
     fun getFullSkills(): List<FullSkillModel> {
         return get(LDMKeys.fullSkillsKey) ?: listOf()
+    }
+
+    private fun buildAndStoreFullCraftingRecipes(craftingRecipes: List<CraftingRecipeModel>, fullSkills: List<FullSkillModel>) {
+        // First pass: create all full recipes with empty references
+        val fullRecipesMap = mutableMapOf<Int, FullCraftingRecipeModel>()
+
+        craftingRecipes.forEach { recipe ->
+            val skill = fullSkills.find { it.id == recipe.skillId }
+            fullRecipesMap[recipe.id] = FullCraftingRecipeModel(
+                craftingRecipe = recipe,
+                requiredSkill = skill,
+                baseRecipe = null,
+                otherRecipeReferences = listOf()
+            )
+        }
+
+        // Second pass: link references together
+        craftingRecipes.forEach { recipe ->
+            val fullRecipe = fullRecipesMap[recipe.id]!!
+
+            // Link base recipe if alternate
+            val baseFullRecipe = if (recipe.isAlternate()) {
+                fullRecipesMap[recipe.baseRecipeId]
+            } else {
+                null
+            }
+
+            // Link other recipe references
+            val otherRefs = recipe.getOtherRecipeIds().mapNotNull { otherId ->
+                fullRecipesMap[otherId]
+            }
+
+            // Update the full recipe with linked references
+            fullRecipesMap[recipe.id] = FullCraftingRecipeModel(
+                craftingRecipe = recipe,
+                requiredSkill = fullRecipe.requiredSkill,
+                baseRecipe = baseFullRecipe,
+                otherRecipeReferences = otherRefs
+            )
+        }
+
+        val fullRecipes = fullRecipesMap.values.toList()
+        store(fullRecipes, LDMKeys.fullCraftingRecipesKey)
+    }
+
+    fun getFullCraftingRecipes(): List<FullCraftingRecipeModel> {
+        return get(LDMKeys.fullCraftingRecipesKey) ?: listOf()
     }
 
     private fun buildAndStoreFullEvents(events: List<EventModel>, attendees: LDEventAttendeeModels, preregs: LDPreregModels, intrigues: Map<Int, IntrigueModel>) {

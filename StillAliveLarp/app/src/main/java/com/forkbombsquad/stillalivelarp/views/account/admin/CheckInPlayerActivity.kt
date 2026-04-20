@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -30,8 +31,6 @@ import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.GearCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.GearJsonModel
 import com.forkbombsquad.stillalivelarp.services.models.GearModel
-import com.forkbombsquad.stillalivelarp.services.models.LEGACY_PlayerCheckInBarcodeModel
-import com.forkbombsquad.stillalivelarp.services.models.LEGACY_globalGenerateNewBarcodeModelFromOld
 import com.forkbombsquad.stillalivelarp.services.utils.CharacterCheckInSP
 import com.forkbombsquad.stillalivelarp.services.utils.CreateModelSP
 import com.forkbombsquad.stillalivelarp.services.utils.GiveCharacterCheckInRewardsSP
@@ -47,7 +46,6 @@ import com.forkbombsquad.stillalivelarp.utils.KeyValueView
 import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
-import com.forkbombsquad.stillalivelarp.utils.decompress
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
@@ -71,6 +69,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var characterLayout: LinearLayout
     private lateinit var npcPickerLayout: LinearLayout
     private lateinit var npcPicker: Spinner
+    private lateinit var hiddenNpcCheckbox: CheckBox
+    private lateinit var npcLabel: TextView
     private lateinit var infection: KeyValueView
     private lateinit var infectionThreshold: KeyValueView
     private lateinit var bullets: KeyValueView
@@ -126,6 +126,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private var gear: GearModel? = null
     private lateinit var gearList: Map<String, List<GearJsonModel>>
     private var isNpc: Boolean = false
+    private var assignAsHiddenNpc: Boolean = false
 
     private val barcodeScanner: ActivityResultLauncher<ScanOptions> = registerForActivityResult(
         ScanContract()
@@ -136,14 +137,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 recalculateModels()
                 buildView()
             }, {
-                // TODO remove this once legacy support is gone from iOS update
-                globalFromJson<LEGACY_PlayerCheckInBarcodeModel>(result.contents.decompress()).ifLet({
-                    barcodeModel = LEGACY_globalGenerateNewBarcodeModelFromOld(it)
-                    recalculateModels()
-                    buildView()
-                }, {
-                    AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
-                })
+                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
             })
         }
     }
@@ -170,7 +164,11 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             isNpc = true
         })
         event = DataManager.shared.events.first { it.id == barcodeModel.eventId }
-        val allNpcs = DataManager.shared.getAllCharacters(CharacterType.NPC).filter { it.isAlive && it.isNpcAndNotAttendingEvent(event.id) }.map { it.fullName }.sorted()
+        val allNpcs = if (assignAsHiddenNpc) {
+            DataManager.shared.getAllCharacters(CharacterType.HIDDEN).filter { it.isAlive && it.isNpcAndNotAttendingEvent(event.id) }.map { it.fullName }.sorted()
+        } else {
+            DataManager.shared.getAllCharacters(CharacterType.NPC).filter { it.isAlive && it.isNpcAndNotAttendingEvent(event.id) }.map { it.fullName }.sorted()
+        }
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, allNpcs)
         npcPicker = findViewById(R.id.checkinplayer_npcpicker)
         npcPicker.adapter = filterAdapter
@@ -191,6 +189,8 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
         characterLayout = findViewById(R.id.checkinplayer_characterLayout)
         npcPickerLayout = findViewById(R.id.checkinplayer_npcpickerlayout)
         npcPicker = findViewById(R.id.checkinplayer_npcpicker)
+        hiddenNpcCheckbox = findViewById(R.id.checkinplayer_hiddennpccheckbox)
+        npcLabel = findViewById(R.id.checkinplayer_npclabel)
         infection = findViewById(R.id.checkinplayer_infection)
         infectionThreshold = findViewById(R.id.checkinplayer_infectionThreshold)
         bullets = findViewById(R.id.checkinplayer_bullets)
@@ -236,6 +236,9 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
 
         checkInButton = findViewById(R.id.checkinplayer_checkInButton)
 
+        npcLabel = findViewById(R.id.checkinplayer_npclabel)
+        hiddenNpcCheckbox = findViewById(R.id.checkinplayer_hiddennpccheckbox)
+
         checkInButton.setOnClick {
             if (gearModified) {
                 saveModifiedGear {
@@ -268,11 +271,21 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        hiddenNpcCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            assignAsHiddenNpc = isChecked
+            recalculateModels()
+            buildView()
+        }
+
         buildView()
     }
 
     private fun getSelectedNpc(): FullCharacterModel? {
         return DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.fullName == npcPicker.selectedItem }
+    }
+
+    private fun getSelectedHiddenNpc(): FullCharacterModel? {
+        return DataManager.shared.getAllCharacters(CharacterType.HIDDEN).firstOrNull { it.fullName == npcPicker.selectedItem }
     }
 
     private fun saveModifiedGear(finished: () -> Unit) {
@@ -308,13 +321,22 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private fun checkIn() {
         checkInButton.setLoadingWithText("Checking in Player...")
         // DO NOT SET THE CHAR ID, The service will do that later
+        val selectedNpcId = if (character == null) {
+            if (assignAsHiddenNpc) {
+                getSelectedHiddenNpc()?.id ?: -1
+            } else {
+                getSelectedNpc()?.id ?: -1
+            }
+        } else {
+            -1
+        }
         val eventAttendeeCreate = EventAttendeeCreateModel(
             playerId = player.id,
             characterId = null,
             eventId = event.id,
             isCheckedIn = "TRUE",
             asNpc = isNpc.ternary("TRUE", "FALSE"),
-            npcId = (character == null).ternary(getSelectedNpc()?.id ?: -1, -1)
+            npcId = selectedNpcId
         )
 
         val checkInPlayerRequest = AdminService.CheckInPlayer()
@@ -461,9 +483,11 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
             unshakableResolveUses.set("${(char.unshakableResolveUses == 0).ternary(1, 0)} / ${char.hasUnshakableResolve().ternary(1, 0)}")
         }, {
             npcPickerLayout.isGone = false
-            getSelectedNpc().ifLet({ npc ->
+            npcLabel.text = (if (assignAsHiddenNpc) "Select Hidden NPC" else "Select NPC")
+            val selectedCharacter = if (assignAsHiddenNpc) getSelectedHiddenNpc() else getSelectedNpc()
+            selectedCharacter.ifLet({ npc ->
                 characterLayout.isGone = false
-                characterName.set("${npc.fullName}\nNPC")
+                characterName.set("${npc.fullName}\n${if (assignAsHiddenNpc) "Hidden NPC" else "NPC"}")
                 characterRaffle.isGone = false
                 val inf = npc.infection.toInt()
                 infection.set("${inf}%", showDiv = (inf < 25))
@@ -498,7 +522,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                 unshakableResolveUses.set("${(npc.unshakableResolveUses == 0).ternary(1, 0)} / ${npc.hasUnshakableResolve().ternary(1, 0)}")
             }, {
                 characterLayout.isGone = true
-                characterName.set("NPC")
+                characterName.set(if (assignAsHiddenNpc) "Hidden NPC" else "NPC")
                 characterRaffle.isGone = false
             })
         })
@@ -644,7 +668,7 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     }
 
     private fun getRelevantSkills(): List<FullCharacterModifiedSkillModel> {
-        return character?.getRelevantBarcodeSkills() ?: getSelectedNpc()?.getRelevantBarcodeSkills() ?: listOf()
+        return character?.getRelevantBarcodeSkills() ?: (if (assignAsHiddenNpc) getSelectedHiddenNpc() else getSelectedNpc())?.getRelevantBarcodeSkills() ?: listOf()
     }
 
     private fun hasRelevantSkills(): Boolean {

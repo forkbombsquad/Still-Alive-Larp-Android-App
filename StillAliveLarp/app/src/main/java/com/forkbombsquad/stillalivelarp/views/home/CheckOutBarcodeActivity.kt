@@ -47,7 +47,13 @@ class CheckOutBarcodeActivity : NoStatusBarActivity() {
             image.isGone = false
 
             title.text = "Check Out\n${it.fullName}"
-            kvView.set("Checking Out", character?.fullName ?: DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { char -> it.eventAttendees.first { att -> att.eventId == barcode.eventId }.id == char.id }?.fullName ?: "" + (character == null).ternary(" - NPC", ""))
+            kvView.set("Checking Out",
+                character?.fullName ?: DataManager.shared.getAllCharacters(
+                    listOf(CharacterType.NPC,CharacterType.HIDDEN)
+                )
+                    .firstOrNull { char -> it.eventAttendees.first { att -> att.eventId == barcode.eventId }.npcId == char.id }?.fullName
+                ?: ("" + (character == null).ternary(" - NPC", ""))
+            )
             image.setImageBitmap(BarcodeGenerator.generateCheckOutBarcode(barcode))
         }, {
             title.text = "Error Generating Barcode"

@@ -112,7 +112,7 @@ data class FullCharacterModifiedSkillModel(
 
     fun canUseFreeSkill(): Boolean {
         // Free Skills may not be used on skills that have been reduced to 1 xp, ONLY skills that are naturally 1 xp
-        return skill.xpCost == 1
+        return skill.xpCost == 1 && (getRelevantSpecCostChange() <= 0)
     }
 
     fun usesInfection(): Boolean {
@@ -221,7 +221,7 @@ data class FullCharacterModifiedSkillModel(
                 text += " and"
             }
             if (hasXpReduction()) {
-                text += " ${xpReduction?.xpReduction?.toInt() ?: 0} from Special Class Xp Reductions"
+                text += " -${xpReduction?.xpReduction?.toInt() ?: 0} from Special Class Xp Reductions"
             }
             text += ")"
         }

@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import com.forkbombsquad.stillalivelarp.services.AnnouncementService
 import com.forkbombsquad.stillalivelarp.services.AwardService
 import com.forkbombsquad.stillalivelarp.services.CampStatusService
+import com.forkbombsquad.stillalivelarp.services.CraftingRecipeService
 import com.forkbombsquad.stillalivelarp.services.CharacterService
 import com.forkbombsquad.stillalivelarp.services.CharacterSkillService
 import com.forkbombsquad.stillalivelarp.services.ContactRequestService
@@ -31,10 +32,12 @@ import com.forkbombsquad.stillalivelarp.services.models.AnnouncementModel
 import com.forkbombsquad.stillalivelarp.services.models.CampFortification
 import com.forkbombsquad.stillalivelarp.services.models.CampStatusModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
+import com.forkbombsquad.stillalivelarp.services.models.CraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.ContactRequestModel
 import com.forkbombsquad.stillalivelarp.services.models.FeatureFlagModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCraftingRecipeModel
 import com.forkbombsquad.stillalivelarp.services.models.FullEventModel
 import com.forkbombsquad.stillalivelarp.services.models.FullPlayerModel
 import com.forkbombsquad.stillalivelarp.services.models.FullSkillModel
@@ -90,7 +93,11 @@ enum class DataManagerPassedDataKey {
     RULEBOOK,
     IMAGE,
     CAMP_STATUS,
-    RESEARCH_PROJECT
+    RESEARCH_PROJECT,
+    CRAFTING_RECIPE_LIST,
+    CRAFTING_RECIPE_CATEGORY,
+    SELECTED_CRAFTING_RECIPE,
+    IS_HIDDEN_CHARACTER
 }
 
 enum class DataManagerType(val localDataKey: String) {
@@ -115,7 +122,8 @@ enum class DataManagerType(val localDataKey: String) {
     XP_REDUCTIONS("xpReductions_dm_sp_key"),
     RULEBOOK("rulebook_dm_sp_key"),
     TREATING_WOUNDS("treatingwounds_dm_sp_key"),
-    CAMP_STATUS("campStatus_dm_sp_key");
+    CAMP_STATUS("campStatus_dm_sp_key"),
+    CRAFTING_RECIPES("craftingRecipes_dm_sp_key");
 }
 
 enum class DataManagerLoadType {
@@ -184,6 +192,14 @@ class DataManager private constructor() {
     private fun _updateResearchProjects(new: List<ResearchProjectModel>) {
         researchProjects = new
         _researchProjects.value = new
+    }
+
+    var craftingRecipes: List<FullCraftingRecipeModel> = listOf()
+    private val _craftingRecipes = MutableStateFlow<List<FullCraftingRecipeModel>>(listOf())
+    val craftingRecipesFlow: StateFlow<List<FullCraftingRecipeModel>> = _craftingRecipes
+    private fun _updateCraftingRecipes(new: List<FullCraftingRecipeModel>) {
+        craftingRecipes = new
+        _craftingRecipes.value = new
     }
 
     // Built Models
@@ -562,6 +578,21 @@ class DataManager private constructor() {
                             })
                         }
                     }
+                    DataManagerType.CRAFTING_RECIPES -> {
+                        val request = CraftingRecipeService.GetAllCraftingRecipes()
+                        lifecycleScope.launch {
+                            request.successfulResponse().ifLet({
+                                lifecycleScope.launch {
+                                    LocalDataManager.shared.storeCraftingRecipes(it.craftingRecipes.toList())
+                                    serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
+                                }
+                            }, {
+                                lifecycleScope.launch {
+                                    serviceFinished(lifecycleScope, updateType, false, updatesNeededCopy)
+                                }
+                            })
+                        }
+                    }
                     DataManagerType.SKILLS -> {
                         val request = SkillService.GetAllSkills()
                         lifecycleScope.launch {
@@ -659,9 +690,9 @@ class DataManager private constructor() {
 
                     }
                     DataManagerType.TREATING_WOUNDS -> {
-                        // TODO setup mocking for this.
                         lifecycleScope.launch {
                             if (isUnitTesting) {
+                                // Just returns without doing anything because Bitmap isn't mocked. Someday could fix this.
                                 serviceFinished(lifecycleScope, updateType, true, updatesNeededCopy)
                             } else {
                                 try {
@@ -758,6 +789,7 @@ class DataManager private constructor() {
                     _updateFeatureFlags(LocalDataManager.shared.getFeatureFlags())
                     _updateIntrigues(LocalDataManager.shared.getIntrigues())
                     _updateResearchProjects(LocalDataManager.shared.getResearchProjects())
+                    _updateCraftingRecipes(LocalDataManager.shared.getFullCraftingRecipes())
                     _updateCampStatus(LocalDataManager.shared.getCampStatus())
 
                     // Built Models
@@ -892,6 +924,10 @@ class DataManager private constructor() {
 
     fun getCharacter(id: Int): FullCharacterModel? {
         return characters.firstOrNull { it.id == id }
+    }
+
+    fun getCharacter(char: FullCharacterModel): FullCharacterModel? {
+        return characters.firstOrNull { it.id == char.id }
     }
 
     fun getOngoingEvent(): FullEventModel? {
