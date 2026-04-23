@@ -336,7 +336,7 @@ class HomeFragment : Fragment() {
 
     private fun prepareAnnouncementsSection() {
         DataManager.shared.setTitleTextPotentiallyOffline(announcementsViewTitle, "Announcements")
-        DataManager.shared.announcements.reversed().getOrNull(currentAnnouncementIndex).ifLet({
+        DataManager.shared.announcements.asReversed().getOrNull(currentAnnouncementIndex).ifLet({
             announcementTitle.text = it.title
             announcementDate.text = it.date.yyyyMMddToMonthDayYear()
             announcementDesc.text = it.text
