@@ -49,45 +49,17 @@ class CreateCharacterActivity : NoStatusBarActivity() {
 
             submitButton.setOnClick {
                 val validationResult = Validator.validateMultiple(arrayOf(ValidationGroup(nameView, ValidationType.FULL_NAME)))
-                if (!validationResult.hasError) {
+                if (!validationResult.hasError && player != null) {
                     submitButton.setLoading(true)
-                    val request = CharacterService.CreateCharacter()
-                    lifecycleScope.launch {
-                        request.successfulResponse(
-                            CharacterCreateSP(
-                                CharacterCreateModel(
-                                    fullName = nameView.text.toString(),
-                                    startDate = LocalDate.now().yyyyMMddFormatted(),
-                                    isAlive = "TRUE",
-                                    deathDate = "",
-                                    infection = "0",
-                                    bio = bioView.text.toString().trim(),
-                                    approvedBio = "FALSE",
-                                    bullets = "20",
-                                    megas = "0",
-                                    rivals = "0",
-                                    rockets = "0",
-                                    bulletCasings = "0",
-                                    clothSupplies = "0",
-                                    woodSupplies = "0",
-                                    metalSupplies = "0",
-                                    techSupplies = "0",
-                                    medicalSupplies = "0",
-                                    armor = CharacterArmor.NONE.text,
-                                    unshakableResolveUses = "0",
-                                    mysteriousStrangerUses = "0",
-                                    playerId = player?.id ?: -1,
-                                    characterTypeId = CharacterType.STANDARD.id
-                                )
-                            )
-                        ).ifLet({
+                    player!!.createCharacter(lifecycleScope, nameView.text.toString().trim(), bioView.text.toString().trim()) { newCharacter ->
+                        if (newCharacter != null) {
                             DataManager.shared.callUpdateCallback(HomeFragment::class)
-                            AlertUtils.displayOkMessage(this@CreateCharacterActivity, "Success!","Character named ${it.fullName} created!") { _, _ ->
+                            AlertUtils.displayOkMessage(this@CreateCharacterActivity, "Success!","Character named ${newCharacter.fullName} created!") { _, _ ->
                                 finish()
                             }
-                        }, {
+                        } else {
                             submitButton.setLoading(false)
-                        })
+                        }
                     }
                 } else {
                     AlertUtils.displayOkMessage(this, "Validation Error(s)", validationResult.getErrorMessages())

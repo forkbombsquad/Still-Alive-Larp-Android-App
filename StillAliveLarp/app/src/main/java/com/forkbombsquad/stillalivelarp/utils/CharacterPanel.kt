@@ -115,6 +115,9 @@ class CharacterPanel(context: Context, attrs: AttributeSet): LinearLayout(contex
             activeCharLayout.isGone = true
             viewInactiveChars.isGone = player.getInactiveCharacters().isEmpty() == true
             viewPlannedChars.isGone = player.getPlannedCharacters().isEmpty() == true
+            if (fromAccount) {
+                viewPlannedChars.isGone = false
+            }
             if (viewInactiveChars.isGone && viewPlannedChars.isGone) {
                 otherCharsTitle.isGone = true
                 otherCharsLayout.isGone = true

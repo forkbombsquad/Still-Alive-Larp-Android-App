@@ -182,6 +182,32 @@ data class FullCharacterModel(
                 r.tech > techSupplies || r.medical > medicalSupplies || r.casing > bulletCasings)
     }
 
+    // DO NOT USE THIS UNLESS YOU HAVE ALREADY CONFIRMED WITH THE USER THAT IT'S OK
+    fun silentlyPurchaseSkill_NO_PROMPTS_EXCEPT_ERRORS(lifecycleScope: CoroutineScope, charSkillCreateModel: CharacterSkillCreateModel, completion: (success: Boolean) -> Unit) {
+        when (characterType()) {
+            CharacterType.STANDARD -> { // Standard Characters
+                val request = CharacterSkillService.TakeCharacterSkill()
+                lifecycleScope.launch {
+                    request.successfulResponse(CharacterSkillCreateSP(playerId, charSkillCreateModel)).ifLet({ _ ->
+                        completion(true)
+                    }, {
+                        completion(false)
+                    })
+                }
+            }
+            CharacterType.NPC, CharacterType.PLANNER, CharacterType.HIDDEN -> { // NPC, Hidden NPC, and Planned Characters
+                val request = CharacterSkillService.TakePlannedCharacterSkill()
+                lifecycleScope.launch {
+                    request.successfulResponse(CreateModelSP(charSkillCreateModel)).ifLet({ _ ->
+                        completion(true)
+                    }, {
+                        completion(false)
+                    })
+                }
+            }
+        }
+    }
+
     fun attemptToPurchaseSkill(lifecycleScope: CoroutineScope, skill: FullCharacterModifiedSkillModel, completion: (successful: Boolean) -> Unit) {
         if (allPurchaseableSkills().firstOrNull { it.id == skill.id } != null) {
             askToPurchase(skill) { cscm ->

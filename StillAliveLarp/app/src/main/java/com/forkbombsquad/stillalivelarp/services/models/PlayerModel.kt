@@ -1,12 +1,26 @@
 package com.forkbombsquad.stillalivelarp.services.models
 
+import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.forkbombsquad.stillalivelarp.services.CharacterService
+import com.forkbombsquad.stillalivelarp.services.managers.DataManager
+import com.forkbombsquad.stillalivelarp.services.utils.CharacterCreateSP
+import com.forkbombsquad.stillalivelarp.utils.AlertUtils
+import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
 import com.forkbombsquad.stillalivelarp.utils.Constants
+import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.utils.yyyyMMddFormatted
+import com.forkbombsquad.stillalivelarp.views.home.HomeFragment
+import com.forkbombsquad.stillalivelarp.views.shared.ViewCharacterActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
+import kotlin.math.min
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FullPlayerModel(
@@ -49,6 +63,63 @@ data class FullPlayerModel(
         preregs,
         profileImage
     )
+
+    fun createCharacter(lifecycleScope: CoroutineScope, name: String, bio: String, completion: (newCharacter: CharacterModel?) -> Unit) {
+        val request = CharacterService.CreateCharacter()
+        lifecycleScope.launch {
+            request.successfulResponse(
+                CharacterCreateSP(
+                    CharacterCreateModel(
+                        fullName = name,
+                        startDate = LocalDate.now().yyyyMMddFormatted(),
+                        isAlive = "TRUE",
+                        deathDate = "",
+                        infection = "0",
+                        bio = bio,
+                        approvedBio = "FALSE",
+                        bullets = "20",
+                        megas = "0",
+                        rivals = "0",
+                        rockets = "0",
+                        bulletCasings = "0",
+                        clothSupplies = "0",
+                        woodSupplies = "0",
+                        metalSupplies = "0",
+                        techSupplies = "0",
+                        medicalSupplies = "0",
+                        armor = CharacterArmor.NONE.text,
+                        unshakableResolveUses = "0",
+                        mysteriousStrangerUses = "0",
+                        playerId = id,
+                        characterTypeId = CharacterType.STANDARD.id
+                    )
+                )
+            ).ifLet({
+                completion(it)
+            }, {
+                completion(null)
+            })
+        }
+    }
+
+    fun determineIfMeetsRequirements(reqs: ViewCharacterActivity.SkillRequirements): ViewCharacterActivity.SkillRequirements {
+        val unmetRequirements = ViewCharacterActivity.SkillRequirements(0, 0, 0, 0)
+        // Zero if there's enough, otherwise value is equal to how much is needed
+        unmetRequirements.xp = abs(min(0, experience - reqs.xp))
+        unmetRequirements.ft1s = abs(min(0, freeTier1Skills - reqs.ft1s))
+        unmetRequirements.pp = abs(min(0, prestigePoints - reqs.pp))
+        if (reqs.inf == 0) {
+            unmetRequirements.inf = 0
+        } else {
+            val char = getActiveCharacter()
+            if (char != null) {
+                unmetRequirements.inf = abs(min(0, char.infection.toInt() - reqs.inf))
+            } else {
+                unmetRequirements.inf = abs(min(0, reqs.inf))
+            }
+        }
+        return unmetRequirements
+    }
 
     fun getActiveCharacter(): FullCharacterModel? {
         return characters.firstOrNull { it.characterType() == CharacterType.STANDARD && it.isAlive }

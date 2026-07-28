@@ -12,7 +12,6 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.forkbombsquad.stillalivelarp.utils.NoStatusBarActivity
@@ -38,7 +37,6 @@ import com.forkbombsquad.stillalivelarp.services.utils.UpdateModelSP
 import com.forkbombsquad.stillalivelarp.utils.AlertButton
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonType
-import com.forkbombsquad.stillalivelarp.utils.CaptureActivityPortrait
 import com.forkbombsquad.stillalivelarp.utils.CharacterArmor
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.GearCell
@@ -47,13 +45,9 @@ import com.forkbombsquad.stillalivelarp.utils.KeyValueViewBuildable
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonGreen
 import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
-import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.utils.yyyyMMddToMonthDayYear
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CheckInPlayerActivity : NoStatusBarActivity() {
@@ -127,20 +121,6 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
     private lateinit var gearList: Map<String, List<GearJsonModel>>
     private var isNpc: Boolean = false
     private var assignAsHiddenNpc: Boolean = false
-
-    private val barcodeScanner: ActivityResultLauncher<ScanOptions> = registerForActivityResult(
-        ScanContract()
-    ) { result ->
-        if(result.contents != null) {
-            globalFromJson<CheckInOutBarcodeModel>(result.contents).ifLet({
-                barcodeModel = it
-                recalculateModels()
-                buildView()
-            }, {
-                AlertUtils.displayError(this, "Unable to parse barcode data!") { _, _ -> }
-            })
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -367,51 +347,40 @@ class CheckInPlayerActivity : NoStatusBarActivity() {
                                     )
                                 ).ifLet({
                                     checkInButton.setLoading(false)
-                                    showSuccessAlertAllowingRescan("${player.fullName} checked in as ${char.fullName}!")
+                                    showSuccessAlert("${player.fullName} checked in as ${char.fullName}!")
                                 }, {
                                     checkInButton.setLoading(false)
-                                    restartScanner()
+                                    AlertUtils.displayError(this@CheckInPlayerActivity, "Error checking in character!") { _, _ -> finish() }
                                 })
                             }
                         }, {
                             checkInButton.setLoading(false)
-                            restartScanner()
+                            AlertUtils.displayError(this@CheckInPlayerActivity, "Error giving check in rewards!") { _, _ -> finish() }
                         })
                     }
                 }, {
                     checkInButton.setLoading(false)
-                    showSuccessAlertAllowingRescan("${player.fullName} checked in as NPC!")
+                    showSuccessAlert("${player.fullName} checked in as NPC!")
                 })
             }, {
                 checkInButton.setLoading(false)
-                restartScanner()
+                AlertUtils.displayError(this@CheckInPlayerActivity, "Error checking in player!") { _, _ -> finish() }
             })
         }
     }
 
-    private fun showSuccessAlertAllowingRescan(message: String) {
+    private fun showSuccessAlert(message: String) {
         AlertUtils.displayMessage(
             context = this,
             title = "Success",
             message = message,
             buttons = arrayOf(
-                AlertButton("Scan Another", { _, _ ->
-                    restartScanner()
-                }, ButtonType.POSITIVE),
                 AlertButton("Finished", { _, _ ->
                     DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                     finish()
                 }, ButtonType.NEGATIVE),
             )
         )
-    }
-
-    private fun restartScanner() {
-        val sc = ScanOptions()
-        sc.setOrientationLocked(true)
-        sc.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-        sc.captureActivity = CaptureActivityPortrait::class.java
-        barcodeScanner.launch(sc)
     }
 
     private fun buildView() {

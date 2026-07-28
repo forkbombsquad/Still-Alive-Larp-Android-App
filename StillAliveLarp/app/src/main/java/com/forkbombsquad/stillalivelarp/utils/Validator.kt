@@ -92,6 +92,14 @@ class Validator {
             return validationResult
         }
 
+        fun validate(string: String, validationType: ValidationType): ValidationResult {
+            var validationResult = ValidationResult(false, null)
+            doValidation(string, validationType).ifLet {
+                validationResult.addErrorMessage(it)
+            }
+            return validationResult
+        }
+
         fun doValidation(text: String, validationType: ValidationType): String? {
             var error = ""
             val name = validationType.name.lowercase().replace("_", " ").capitalized()

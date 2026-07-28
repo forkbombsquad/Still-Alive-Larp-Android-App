@@ -45,6 +45,10 @@ data class FullCharacterModifiedSkillModel(
         return charSkillModel?.date
     }
 
+    fun getCharSkillModel(): CharacterSkillModel? {
+        return charSkillModel
+    }
+
     fun spentXp(): Int {
         return charSkillModel?.xpSpent ?: 0
     }

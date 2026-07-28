@@ -17,6 +17,7 @@ import com.forkbombsquad.stillalivelarp.R
 import com.forkbombsquad.stillalivelarp.services.managers.DataManager
 import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataKey
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
+import com.forkbombsquad.stillalivelarp.services.models.EventAttendeeModel
 import com.forkbombsquad.stillalivelarp.utils.Constants
 import com.forkbombsquad.stillalivelarp.utils.LoadingButton
 import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
@@ -176,7 +177,13 @@ class HomeFragment : Fragment() {
                         DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, barcodeModel)
                         val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
                         startActivity(intent)
+                        checkoutButton.setLoading(false)
                     }, {
+                        val dummyEventAttendeeModel = EventAttendeeModel(-1, player.id, null, -1, "TRUE", "TRUE", -1)
+                        val dummyBarcodeModel = player.getCheckOutBarcodeModel(dummyEventAttendeeModel)
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.BARCODE, dummyBarcodeModel)
+                        val intent = Intent(v.context, CheckOutBarcodeActivity::class.java)
+                        startActivity(intent)
                         checkoutButton.setLoading(false)
                     })
                 }
@@ -364,7 +371,14 @@ class HomeFragment : Fragment() {
         val showCheckout = showCheckout()
         checkoutLayout.isGone = !showCheckout
         if (showCheckout) {
-            checkoutButton.textView.text = "Checkout From Event:\n${DataManager.shared.events.firstOrNull { event -> event.id == DataManager.shared.getCurrentPlayer()!!.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }!!.eventId }!!.title}"
+            val currentPlayer = DataManager.shared.getCurrentPlayer()!!
+            val attendee = currentPlayer.eventAttendees.firstOrNull { it.isCheckedIn.toBoolean() }
+            var checkoutText = "Checkout"
+            if (attendee != null && DataManager.shared.events.firstOrNull { it.id == attendee.eventId } != null) {
+                val event = DataManager.shared.events.firstOrNull { it.id == attendee.eventId }!!
+                checkoutText = "Checkout From Event:\n${event.title}"
+            }
+            checkoutButton.textView.text = checkoutText
         }
     }
 
@@ -525,7 +539,7 @@ class HomeFragment : Fragment() {
             return true
         } else {
             val npcId = DataManager.shared.getOngoingOrTodayEvent()?.attendees?.firstOrNull { it.playerId == (DataManager.shared.getCurrentPlayer()?.id ?: -1) }?.npcId ?: -1
-            val npc = DataManager.shared.getAllCharacters(CharacterType.NPC).firstOrNull { it.id == npcId }
+            val npc = DataManager.shared.getAllCharacters(listOf(CharacterType.NPC, CharacterType.HIDDEN)).firstOrNull { it.id == npcId }
             if (npc != null) {
                 return (npc.getPurchasedIntrigueSkills().isNotEmpty() && show)
             }
@@ -534,7 +548,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showCheckout(): Boolean {
-        return DataManager.shared.getOngoingEvent() == null && DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
+        return DataManager.shared.getCurrentPlayer()?.isCheckedIn == true
     }
 
     private fun showCurrentCharSection(): Boolean {

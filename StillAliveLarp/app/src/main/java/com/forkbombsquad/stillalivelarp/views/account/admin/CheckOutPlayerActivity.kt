@@ -83,8 +83,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
     private lateinit var player: FullPlayerModel
     private var character: FullCharacterModel? = null
     private var isNpc = false
-    private lateinit var event: FullEventModel
-    private lateinit var eventAttendeeModel: EventAttendeeModel
+    private var event: FullEventModel? = null
+    private var eventAttendeeModel: EventAttendeeModel? = null
 
     private val barcodeScanner: ActivityResultLauncher<ScanOptions> = registerForActivityResult(
         ScanContract()
@@ -117,7 +117,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             isNpc = true
         })
         event = DataManager.shared.events.first { it.id == barcodeModel.eventId }
-        eventAttendeeModel = event.attendees.first { it.playerId == barcodeModel.playerId }
+        eventAttendeeModel = event?.attendees?.first { it.playerId == barcodeModel.playerId }
     }
 
     private fun setupView() {
@@ -256,7 +256,6 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                         checkoutStepThree()
                     }, {
                         checkoutButton.setLoading(false)
-                        restartScanner()
                     })
                 }
             } else {
@@ -293,7 +292,6 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
                         checkoutStepThree()
                     }, {
                         checkoutButton.setLoading(false)
-                        restartScanner()
                     })
                 }
             }
@@ -312,6 +310,13 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
         val xp = player.experience + xpAmount
         val events = player.numEventsAttended + 1
+        // Award a Prestige Point every time this player attends exactly 10 events
+        var prestige = player.prestigePoints
+        var awardedPrestige = false
+        if (events % 10 == 0) {
+            prestige += 1
+            awardedPrestige = true
+        }
         val npcEvents = player.numNpcEventsAttended + isNpc.ternary(1, 0)
 
         val playerUpdate = PlayerModel(
@@ -321,7 +326,7 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
             startDate = player.startDate,
             experience = xp.toString(),
             freeTier1Skills = player.freeTier1Skills.toString(),
-            prestigePoints = player.prestigePoints.toString(),
+            prestigePoints = prestige.toString(),
             isCheckedIn = "FALSE",
             isCheckedInAsNpc = "FALSE",
             lastCheckIn = LocalDate.now().yyyyMMddFormatted(),
@@ -335,114 +340,113 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
         val playerUpdateRequest = AdminService.UpdatePlayer()
         lifecycleScope.launch {
             playerUpdateRequest.successfulResponse(UpdateModelSP(playerUpdate)).ifLet({_ ->
-                checkoutStepFour(needToAwardExtraXp)
+                checkoutStepFour(needToAwardExtraXp, awardedPrestige = awardedPrestige)
             }, {
                 checkoutButton.setLoading(false)
-                restartScanner()
             })
         }
     }
 
-    private fun checkoutStepFour(needToAwardExtraXp: Boolean) {
+    private fun checkoutStepFour(needToAwardExtraXp: Boolean, awardedPrestige: Boolean) {
         checkoutButton.setLoadingWithText("Updating Records")
 
-        val eventAttendeeUpdate = EventAttendeeModel(
-            id = eventAttendeeModel.id,
-            playerId = eventAttendeeModel.playerId,
-            characterId = eventAttendeeModel.characterId,
-            eventId = eventAttendeeModel.eventId,
-            isCheckedIn = "FALSE",
-            asNpc = isNpc.ternary("TRUE", "FALSE"),
-            npcId = eventAttendeeModel.npcId
-        )
+        eventAttendeeModel.ifLet({ attendee ->
+            val eventAttendeeUpdate = EventAttendeeModel(
+                id = attendee.id,
+                playerId = attendee.playerId,
+                characterId = attendee.characterId,
+                eventId = attendee.eventId,
+                isCheckedIn = "FALSE",
+                asNpc = isNpc.ternary("TRUE", "FALSE"),
+                npcId = attendee.npcId
+            )
+            val updateAttendeeRequest = AdminService.UpdateEventAttendee()
+            lifecycleScope.launch {
+                updateAttendeeRequest.successfulResponse(UpdateModelSP(eventAttendeeUpdate)).ifLet ({ _ ->
+                    checkoutStepFive(needToAwardExtraXp, awardedPrestige)
+                }, {
+                    checkoutStepFive(needToAwardExtraXp, awardedPrestige)
+                })
+            }
+        }, otherwise = {
+            // skip updating the attendee because it couldn't be found.
+            checkoutStepFive(needToAwardExtraXp, awardedPrestige)
+        })
+    }
 
-        val updateAttendeeRequest = AdminService.UpdateEventAttendee()
-        lifecycleScope.launch {
-            updateAttendeeRequest.successfulResponse(UpdateModelSP(eventAttendeeUpdate)).ifLet({ eventAttendee ->
-                if (needToAwardExtraXp && !isNpc && character != null) {
-                    checkoutButton.setLoadingWithText("Calculating Death Xp Bonus")
-                    val spentXp = character!!.getAllXpSpent()
-                    val spentPp = character!!.getAllSpentPrestigePoints()
-                    var adjustedXp = spentXp / 2
+    private fun checkoutStepFive(needToAwardExtraXp: Boolean, awardedPrestige: Boolean) {
+        var successMessage = "Successfully Checked Out ${player.fullName}!"
+        if (awardedPrestige) {
+            successMessage += "\nA Multiple 10 Events Attended! Prestige Point Automatically Awarded!"
+        }
+        if (needToAwardExtraXp && !isNpc && character != null) {
+            checkoutButton.setLoadingWithText("Calculating Death Xp Bonus")
+            val spentXp = character!!.getAllXpSpent()
+            val spentPp = character!!.getAllSpentPrestigePoints()
+            var adjustedXp = spentXp / 2
 
-                    var max = player.numEventsAttended
-                    max += player.numNpcEventsAttended // Adding double xp for npc events
+            var max = player.numEventsAttended
+            max += player.numNpcEventsAttended // Adding double xp for npc events
 
-                    adjustedXp = min(max, adjustedXp)
+            adjustedXp = min(max, adjustedXp)
 
-                    checkoutButton.setLoadingWithText("Refunding Xp")
+            checkoutButton.setLoadingWithText("Refunding Xp")
 
-                    val award = AwardCreateModel.createPlayerAward(
-                        playerId = player.id,
-                        awardType = AwardPlayerType.XP,
-                        reason = "Death of Character: ${character!!.fullName}",
-                        amount = adjustedXp.toString()
-                    )
-                    val createAwardRequest = AdminService.AwardPlayer()
-                    lifecycleScope.launch {
-                        createAwardRequest.successfulResponse(AwardCreateSP(award)).ifLet({ _ ->
-                            if (spentPp > 0) {
-                                checkoutButton.setLoadingWithText("Refunding Prestige Points")
+            val award = AwardCreateModel.createPlayerAward(
+                playerId = player.id,
+                awardType = AwardPlayerType.XP,
+                reason = "Death of Character: ${character!!.fullName}",
+                amount = adjustedXp.toString()
+            )
+            val createAwardRequest = AdminService.AwardPlayer()
+            lifecycleScope.launch {
+                createAwardRequest.successfulResponse(AwardCreateSP(award)).ifLet({ _ ->
+                    if (spentPp > 0) {
+                        checkoutButton.setLoadingWithText("Refunding Prestige Points")
 
-                                val a = AwardCreateModel.createPlayerAward(
-                                    playerId = player.id,
-                                    awardType = AwardPlayerType.PRESTIGEPOINTS,
-                                    reason = "Death of Character: ${character!!.fullName}",
-                                    amount = spentPp.toString()
-                                )
-                                val car = AdminService.AwardPlayer()
-                                lifecycleScope.launch {
-                                    car.successfulResponse(AwardCreateSP(a)).ifLet({ _ ->
-                                        checkoutButton.setLoading(false)
-                                        showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                                    }, {
-                                        checkoutButton.setLoading(false)
-                                        showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death pp!")
-                                    })
-                                }
-                            } else {
+                        val a = AwardCreateModel.createPlayerAward(
+                            playerId = player.id,
+                            awardType = AwardPlayerType.PRESTIGEPOINTS,
+                            reason = "Death of Character: ${character!!.fullName}",
+                            amount = spentPp.toString()
+                        )
+                        val car = AdminService.AwardPlayer()
+                        lifecycleScope.launch {
+                            car.successfulResponse(AwardCreateSP(a)).ifLet({ _ ->
                                 checkoutButton.setLoading(false)
-                                showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                            }
-                        }, {
-                            checkoutButton.setLoading(false)
-                            showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!\nBut unable to award death xp!")
-                        })
+                                showSuccessAlert(successMessage)
+                            }, {
+                                checkoutButton.setLoading(false)
+                                showSuccessAlert("$successMessage\nBut unable to award death pp!")
+                            })
+                        }
+                    } else {
+                        checkoutButton.setLoading(false)
+                        showSuccessAlert(successMessage)
                     }
-                } else {
+                }, {
                     checkoutButton.setLoading(false)
-                    showSuccessAlertAllowingRescan("Successfully Checked Out ${player.fullName}!")
-                }
-            }, {
-                checkoutButton.setLoading(false)
-                restartScanner()
-            })
+                    showSuccessAlert("$successMessage\nBut unable to award death xp!")
+                })
+            }
+        } else {
+            checkoutButton.setLoading(false)
+            showSuccessAlert(successMessage)
         }
     }
 
-    private fun showSuccessAlertAllowingRescan(message: String) {
+    private fun showSuccessAlert(message: String) {
         AlertUtils.displayMessage(
             context = this,
             title = "Success",
             message = message,
             buttons = arrayOf(
-                AlertButton("Scan Another", { _, _ ->
-                    restartScanner()
-                }, ButtonType.POSITIVE),
                 AlertButton("Finished", { _, _ ->
                     DataManager.shared.callUpdateCallback(AdminPanelActivity::class)
                     finish()
-                }, ButtonType.NEGATIVE),
+                }, ButtonType.POSITIVE),
             )
         )
-    }
-
-    private fun restartScanner() {
-        val sc = ScanOptions()
-        sc.setOrientationLocked(true)
-        sc.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-        sc.captureActivity = CaptureActivityPortrait::class.java
-        barcodeScanner.launch(sc)
     }
 
     private fun buildView() {
@@ -549,7 +553,8 @@ class CheckOutPlayerActivity : NoStatusBarActivity() {
 
     private fun getNpc(): FullCharacterModel? {
         if (!isNpc) { return null }
-        return DataManager.shared.getAllCharacters(listOf(CharacterType.NPC, CharacterType.HIDDEN)).firstOrNull { it.id == eventAttendeeModel.npcId }
+        if (eventAttendeeModel == null) { return null }
+        return DataManager.shared.getAllCharacters(listOf(CharacterType.NPC, CharacterType.HIDDEN)).firstOrNull { it.id == eventAttendeeModel!!.npcId }
     }
 
     private fun validateFields(): ValidationResult {
