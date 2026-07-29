@@ -13,6 +13,7 @@ import com.forkbombsquad.stillalivelarp.services.managers.DataManagerPassedDataK
 import com.forkbombsquad.stillalivelarp.services.models.CharacterSkillCreateModel
 import com.forkbombsquad.stillalivelarp.services.models.CharacterType
 import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModel
+import com.forkbombsquad.stillalivelarp.services.models.FullCharacterModifiedSkillModel
 import com.forkbombsquad.stillalivelarp.utils.AlertUtils
 import com.forkbombsquad.stillalivelarp.utils.ButtonTypePressed
 import com.forkbombsquad.stillalivelarp.utils.Constants
@@ -161,7 +162,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                     if (requirements.pp > 0) {
                         spendMessage += "\n${remainingRequirements.pp} Prestige Points"
                     }
-                    spendMessage = "\non a new character?\nYou cannot undo this action."
+                    spendMessage = "to purchase the following skills:\n${requirements.skills.joinToString(", ")}\nfor a new character?\nYou cannot undo this action."
                     AlertUtils.displayYesNoMessage(this@ViewCharacterActivity, "Are you sure?", spendMessage, onClickYes = { _, _ ->
                         // Go ahead and create character, all requirements met
                         // Don't allow any interactions while this is happening
@@ -199,9 +200,10 @@ class ViewCharacterActivity : NoStatusBarActivity() {
             loadingLayout.isGone = false
             loadingLayout.setLoadingText("Determining Requirements...", showGettingContent = false)
             // Check to see if player meets the prereqs to make it
-            val requirements = determineRequirementsToApplyPlan(player.getActiveCharacter()!!)
+            val char = player.getActiveCharacter()!!
+            val requirements = determineRequirementsToApplyPlan(char)
             val remainingRequirements = player.determineIfMeetsRequirements(requirements)
-            if (remainingRequirements.allZero()) {
+            if (remainingRequirements.allZero() && requirements.conflictingMessage == null) {
                 var spendMessage = "Spend"
                 if (requirements.xp > 0) {
                     spendMessage += "\n${remainingRequirements.xp} xp"
@@ -212,16 +214,21 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                 if (requirements.pp > 0) {
                     spendMessage += "\n${remainingRequirements.pp} Prestige Points"
                 }
-                spendMessage = "\non a new character?\nYou cannot undo this action."
+                spendMessage = "\nto purchase the following skills:\n${requirements.skills.joinToString(", ")}\nfor ${char.fullName}?\nYou cannot undo this action."
                 AlertUtils.displayYesNoMessage(this@ViewCharacterActivity, "Are you sure?", spendMessage, onClickYes = { _, _ ->
                     // Go ahead and create character, all requirements met
                     // Don't allow any interactions while this is happening
                     loadingLayout.setLoadingText("Building Character...", showGettingContent = false)
-                    enterCharNamePrompt()
+                    applyPlanToCharacter(char)
                 }, onClickNo = { _, _ ->
                     setAllLoadings(false)
                     loadingLayout.isGone = true
                 })
+            } else if (requirements.conflictingMessage != null) {
+                AlertUtils.displayOkMessage(this@ViewCharacterActivity, "Cannot Update Your Character: Conflicting Skill Issue", requirements.conflictingMessage!!) { _, _ ->
+                    setAllLoadings(false)
+                    loadingLayout.isGone = true
+                }
             } else {
                 var message = "You are missing the following requirements:"
                 if (remainingRequirements.xp > 0) {
@@ -287,16 +294,21 @@ class ViewCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun applyPlanToCharacter(existingCharacter: FullCharacterModel) {
-        var existingChar = existingCharacter
         val plannerSkills = character.allPurchasedSkills().filter { it.baseXpCost() != 0 }
         val plannerSkillIds = plannerSkills.map { ps -> ps.id }
-        val combinedSkills = existingChar.allNonPurchasedSkills().filter { it.id.equalsAnyOf(plannerSkillIds) }
+        val combinedSkills = existingCharacter.allNonPurchasedSkills().filter { it.id.equalsAnyOf(plannerSkillIds) }
         // Sort by order added to database (i.e. purchase order)
         val addedSkills: MutableList<String> = mutableListOf()
-        plannerSkills.sortedBy { it.getCharSkillModel()?.id ?: -1 }.forEach { plnSkill ->
+        val sortedPlannerSkills = plannerSkills.sortedBy { it.getCharSkillModel()?.id ?: -1 }.toMutableList()
+
+        takeSkillRec(sortedPlannerSkills, combinedSkills, existingCharacter, addedSkills)
+    }
+
+    private fun takeSkillRec(sortedPlannerSkills: MutableList<FullCharacterModifiedSkillModel>, combinedSkills: List<FullCharacterModifiedSkillModel>, existingChar: FullCharacterModel, addedSkills: MutableList<String>) {
+        sortedPlannerSkills.removeFirstOrNull().ifLet { plnSkill ->
             val skill = combinedSkills.firstOrNull { it.id == plnSkill.id }
             if (skill != null) {
-                loadingLayout.setLoadingText("Purchasing ${plnSkill.name}")
+                loadingLayout.setLoadingText("Purchasing ${plnSkill.name}...")
                 val useFreeSkill = plnSkill.spentFt1s() > 0
                 val charSkillCreateModel = CharacterSkillCreateModel(
                     existingChar.id,
@@ -304,20 +316,38 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                     useFreeSkill.ternary(0, skill.modXpCost()),
                     useFreeSkill.ternary(1, 0),
                     skill.prestigeCost())
-                    existingChar.silentlyPurchaseSkill_NO_PROMPTS_EXCEPT_ERRORS(lifecycleScope, charSkillCreateModel) { success ->
-                        if (success) {
-                            addedSkills.add(plnSkill.name)
-                            loadingLayout.setLoadingText("Updating Character...")
-                            DataManager.shared.load(lifecycleScope) {
-                                existingChar = DataManager.shared.getCharacter(existingChar.id)!!
+                existingChar.silentlyPurchaseSkill_NO_PROMPTS_EXCEPT_ERRORS(lifecycleScope, charSkillCreateModel) { success ->
+                    if (success) {
+                        addedSkills.add(plnSkill.name)
+                        loadingLayout.setLoadingText("Updating Character...")
+                        DataManager.shared.load(lifecycleScope) {
+                            val exChar = DataManager.shared.getCharacter(existingChar.id)!!
+                            if (sortedPlannerSkills.isNotEmpty()) {
+                                // More
+                                takeSkillRec(sortedPlannerSkills, combinedSkills, exChar, addedSkills)
+                            } else {
+                                // Finished
+                                AlertUtils.displayOkMessage(this@ViewCharacterActivity, "Success!", "Added the following skills: \n${addedSkills.joinToString("\n") }\nto ${existingChar.fullName}!") { _, _ ->
+                                    runOnUiThread {
+                                        finish()
+                                    }
+                                }
                             }
                         }
                     }
-            }
-        }
-        AlertUtils.displayOkMessage(this@ViewCharacterActivity, "Success!", "Added the following skills: \n${addedSkills.joinToString("\n") }\nto ${existingChar.fullName}!") { _, _ ->
-            runOnUiThread {
-                finish()
+                }
+            } else {
+                if (sortedPlannerSkills.isNotEmpty()) {
+                    // More
+                    takeSkillRec(sortedPlannerSkills, combinedSkills, existingChar, addedSkills)
+                } else {
+                    // Finished
+                    AlertUtils.displayOkMessage(this@ViewCharacterActivity, "Success!", "Added the following skills: \n${addedSkills.joinToString("\n") }\nto ${existingChar.fullName}!") { _, _ ->
+                        runOnUiThread {
+                            finish()
+                        }
+                    }
+                }
             }
         }
     }
@@ -326,7 +356,9 @@ class ViewCharacterActivity : NoStatusBarActivity() {
         var xp: Int,
         var pp: Int,
         var ft1s: Int,
-        var inf: Int
+        var inf: Int,
+        var skills: MutableList<String> = mutableListOf(),
+        var conflictingMessage: String? = null
     ) {
         fun allZero(): Boolean {
             return  xp == 0 && pp == 0 && ft1s == 0 && inf == 0
@@ -342,6 +374,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
             skillReqs.pp = plannerSkills.sumOf { it.spentPp() }
             skillReqs.ft1s = plannerSkills.sumOf { it.spentFt1s() }
             skillReqs.inf = plannerSkills.maxOf { it.baseInfectionCost() }
+            skillReqs.skills = plannerSkills.map { it.name }.toMutableList()
         } else {
             // Existing char
             val plannerSkillIds = plannerSkills.map { ps -> ps.id }
@@ -396,6 +429,28 @@ class ViewCharacterActivity : NoStatusBarActivity() {
                 skillReqs.pp += combSkill.prestigeCost()
                 if (combSkill.modInfectionCost() > 0) {
                     skillReqs.inf = max(skillReqs.inf, combSkill.modInfectionCost())
+                }
+                skillReqs.skills.add(combSkill.name)
+            }
+            val potentialSpecSkills = combinedSkills.filter { it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills) }
+            val currentSpecSkills = existingChar.allPurchasedSkills().filter { it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistSkills) }
+            if (potentialSpecSkills.isNotEmpty()) {
+                if (currentSpecSkills.count() == 2) {
+                    skillReqs.conflictingMessage = "${existingChar.fullName} may not take any more Specialization skills as they already have 2. Conflicting Skill(s): ${potentialSpecSkills.joinToString(", ") { it.name }}"
+                } else if (currentSpecSkills.count() == 1) {
+                    if (currentSpecSkills.firstOrNull { it.id == Constants.SpecificSkillIds.expertCombat } != null) {
+                        if (potentialSpecSkills.any { it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistsNotUnderExpertCombat) }) {
+                            skillReqs.conflictingMessage = "${existingChar.fullName} may not take the following Specialist skill(s) as they conflict with existing skills: ${potentialSpecSkills.joinToString(", ") { it.name }}"
+                        }
+                    } else if (currentSpecSkills.firstOrNull { it.id == Constants.SpecificSkillIds.expertProfession } != null) {
+                        if (potentialSpecSkills.any { it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistsNotUnderExpertProfession) }) {
+                            skillReqs.conflictingMessage = "${existingChar.fullName} may not take the following Specialist skill(s) as they conflict with existing skills: ${potentialSpecSkills.joinToString(", ") { it.name }}"
+                        }
+                    } else if (currentSpecSkills.firstOrNull { it.id == Constants.SpecificSkillIds.expertTalent } != null) {
+                        if (potentialSpecSkills.any { it.id.equalsAnyOf(Constants.SpecificSkillIds.allSpecalistsNotUnderExpertTalent) }) {
+                            skillReqs.conflictingMessage = "${existingChar.fullName} may not take the following Specialist skill(s) as they conflict with existing skills: ${potentialSpecSkills.joinToString(", ") { it.name }}"
+                        }
+                    }
                 }
             }
         }

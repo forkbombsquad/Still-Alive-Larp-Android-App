@@ -133,6 +133,14 @@
                     app:showLoading="false"/>
 
                 <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_awardMVP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Award MVP of the Event"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
                     android:id="@+id/adminpanel_giveClassXpRed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -163,7 +171,6 @@
                     android:paddingTop="16dp"
                     app:text="Update Player Password"
                     app:showLoading="false"/>
-
 
 
                 <TextView
@@ -222,6 +229,56 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
                     app:text="Feature Flag Management"
+                    app:showLoading="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data Aggregation"
+                    android:paddingTop="24dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textAlignment="textStart"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_skillFrequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Skills Sorted By Frequency Taken"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_charsTakenSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Characters Who Have Taken A Specific Skill"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_skillsSinceEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Skills Taken Since Event"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_totalCharacterStatsAndMaterials"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Total Character Stats and Materials"
+                    app:showLoading="false"/>
+
+                <com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
+                    android:id="@+id/adminpanel_totalPlayerStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    app:text="Total Player Stats"
                     app:showLoading="false"/>
 
                 <Space

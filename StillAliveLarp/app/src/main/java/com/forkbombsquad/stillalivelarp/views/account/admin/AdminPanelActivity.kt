@@ -38,6 +38,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var giveClassXpRed: NavArrowButtonBlack
     private lateinit var awardPlayer: NavArrowButtonBlack
     private lateinit var awardChar: NavArrowButtonBlack
+    private lateinit var awardMVP: NavArrowButtonBlack
     private lateinit var manageGear: NavArrowButtonBlack
     private lateinit var createAnnouncement: NavArrowButtonBlack
     private lateinit var manageIntrigue: NavArrowButtonBlack
@@ -50,6 +51,11 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var manageHiddenNPCs: NavArrowButtonBlack
     private lateinit var researchProjects: NavArrowButtonBlack
     private lateinit var campFortifications: NavArrowButtonBlack
+    private lateinit var dataAgri_SkillFrequency: NavArrowButtonBlack
+    private lateinit var dataAgri_CharsTakenSkills: NavArrowButtonBlack
+    private lateinit var dataAgri_SkillsSinceEvent: NavArrowButtonBlack
+    private lateinit var dataAgri_TotalCharStatsAndMaterials: NavArrowButtonBlack
+    private lateinit var dataAgri_TotalPlayerStats: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -108,6 +114,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         giveClassXpRed = findViewById(R.id.adminpanel_giveClassXpRed)
         awardPlayer = findViewById(R.id.adminpanel_awardPlayer)
         awardChar = findViewById(R.id.adminpanel_awardChar)
+        awardMVP = findViewById(R.id.adminpanel_awardMVP)
         manageGear = findViewById(R.id.adminpanel_manageGear)
         createAnnouncement = findViewById(R.id.adminpanel_createAnnouncement)
         manageIntrigue = findViewById(R.id.adminpanel_manageIntrigue)
@@ -120,6 +127,12 @@ class AdminPanelActivity : NoStatusBarActivity() {
         manageHiddenNPCs = findViewById(R.id.adminpanel_manageHiddenNPCs)
         researchProjects = findViewById(R.id.adminpanel_research)
         campFortifications = findViewById(R.id.adminpanel_campfortifications)
+
+        dataAgri_SkillFrequency = findViewById(R.id.adminpanel_skillFrequency)
+        dataAgri_CharsTakenSkills = findViewById(R.id.adminpanel_charsTakenSkills)
+        dataAgri_SkillsSinceEvent = findViewById(R.id.adminpanel_skillsSinceEvent)
+        dataAgri_TotalCharStatsAndMaterials = findViewById(R.id.adminpanel_totalCharacterStatsAndMaterials)
+        dataAgri_TotalPlayerStats = findViewById(R.id.adminpanel_totalPlayerStats)
 
         pullToRefresh = findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -184,6 +197,16 @@ class AdminPanelActivity : NoStatusBarActivity() {
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, AwardCharacterActivity::class)
             DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character to Award")
+            DataManager.shared.setUpdateCallback(this::class) {
+                reload()
+            }
+            val intent = Intent(this, CharactersListActivity::class.java)
+            startActivity(intent)
+        }
+        awardMVP.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.CHARACTER_LIST, DataManager.shared.getAllCharacters(CharacterType.STANDARD))
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, CharactersListActivity.ACTIONS.AWARD_MVP)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Character to Award 1 Of Each material")
             DataManager.shared.setUpdateCallback(this::class) {
                 reload()
             }
@@ -306,6 +329,11 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
 
+        dataAgri_SkillFrequency.setOnClick {
+            val intent = Intent(this, SkillFrequencyActivity::class.java)
+            startActivity(intent)
+        }
+
         reload()
     }
 
@@ -341,6 +369,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
         refundSkills.isGone = offline
         manageIntrigue.isGone = offline
         campFortifications.isGone = offline
+        awardMVP.isGone = offline
 
         val bioApprovalCount = DataManager.shared.getCharactersWhoNeedBiosApproved().count()
         if (bioApprovalCount > 0) {

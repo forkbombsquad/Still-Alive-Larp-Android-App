@@ -4,6 +4,10 @@
         <attr name="text" format="string"/>
         <attr name="showLoading" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="PercentageCell">
+        <attr name="perctext" format="string"/>
+        <attr name="percent" format="float"/>
+    </declare-styleable>
     <declare-styleable name="KeyValueView">
         <attr name="key" format="string"/>
         <attr name="value" format="string"/>
