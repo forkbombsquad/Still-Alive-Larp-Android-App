@@ -31,6 +31,7 @@ import com.forkbombsquad.stillalivelarp.utils.equalsAnyOf
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
 import com.forkbombsquad.stillalivelarp.views.account.CharacterPlannerActivity
+import com.forkbombsquad.stillalivelarp.views.account.admin.ViewSkillAggregationActivity
 import kotlinx.coroutines.flow.combine
 import kotlin.math.max
 
@@ -58,7 +59,7 @@ class ViewCharacterActivity : NoStatusBarActivity() {
     }
 
     private fun setupView() {
-        character = DataManager.shared.getPassedData(listOf(CharactersListActivity::class, CharacterPlannerActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
+        character = DataManager.shared.getPassedData(listOf(CharactersListActivity::class, CharacterPlannerActivity::class, ViewSkillAggregationActivity::class), DataManagerPassedDataKey.SELECTED_CHARACTER)!!
 
         title = findViewById(R.id.viewchar_title)
         playerName = findViewById(R.id.viewchar_playerName)

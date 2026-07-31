@@ -27,14 +27,17 @@ import com.forkbombsquad.stillalivelarp.utils.SkillCell
 import com.forkbombsquad.stillalivelarp.utils.SkillFilterType
 import com.forkbombsquad.stillalivelarp.utils.ifLet
 import com.forkbombsquad.stillalivelarp.utils.ternary
+import com.forkbombsquad.stillalivelarp.views.account.admin.AdminPanelActivity
 import com.forkbombsquad.stillalivelarp.views.account.admin.DeleteSkillsActivity
+import com.forkbombsquad.stillalivelarp.views.account.admin.ViewSkillAggregationActivity
 import kotlin.reflect.KClass
 
 class SkillsListActivity : NoStatusBarActivity() {
 
     enum class SkillsListActivityActions {
         NO_DELETE,
-        ALLOW_DELETE
+        ALLOW_DELETE,
+        VIEW_SKILL_AGRIGATION
     }
 
     private lateinit var title: TextView
@@ -50,7 +53,7 @@ class SkillsListActivity : NoStatusBarActivity() {
     private var titleString: String? = null
     private lateinit var action: SkillsListActivityActions
 
-    private val sourceClasses: List<KClass<*>> = listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class, ManageNPCActivity::class, RulesFragment::class, ViewNPCStuffActivity::class)
+    private val sourceClasses: List<KClass<*>> = listOf(MyAccountFragment::class, ViewPlayerActivity::class, ViewCharacterActivity::class, CharacterPlannerActivity::class, ManageNPCActivity::class, RulesFragment::class, ViewNPCStuffActivity::class, AdminPanelActivity::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,6 +148,13 @@ class SkillsListActivity : NoStatusBarActivity() {
                 cell.setup(skill)
                 cell.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 cell.setPadding(8, (index == 0).ternary(32, 16), 8, 16)
+                if (action == SkillsListActivityActions.VIEW_SKILL_AGRIGATION) {
+                    cell.setOnClickListener {
+                        DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SELECTED_SKILL, skill)
+                        val intent = Intent(this, ViewSkillAggregationActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
                 skillListLayout.addView(cell)
             }
         }

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".views.account.admin.ViewTotalCharacterStatsAndMaterialsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Total Character Stats"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textAlignment="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/chartotal_includeStaff"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:text="Include Staff"/>
+                <CheckBox
+                    android:id="@+id/chartotal_includeNPCs"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:text="Include NPCs"/>
+                <CheckBox
+                    android:id="@+id/chartotal_includeDead"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:text="Include Dead"/>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_infBelow25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Infection Below 25%"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_infBetween25_49"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Infection Between 25% and 49%"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_infBetween50_74"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Infection Between 50% and 74%"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_infAbove75"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Infection 75%+"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_bullets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:key="Total Bullets"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_megas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Megas"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_rivals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Rivals"
+                app:showDiv="true"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_rockets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Rockets"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_bulletCasings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:key="Total Bullet Casings"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_cloth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Cloth Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_wood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Wood Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_metal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Metal Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_tech"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Tech Supplies"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_medical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Medical Supplies"
+                app:showDiv="false"/>
+
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_numSkills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Skills"
+                app:value="55\n12 Combat\n16 Talent\n27 Profession"
+                android:layout_marginTop="32dp"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_spentXp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Xp"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_spentFt1s"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Free Tier-1 Skills"
+                app:showDiv="true"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_spentPp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Spent Prestige Points"
+                app:showDiv="false"/>
+
+        </LinearLayout> <!-- BEFORE THIS ONE-->
+
+    </ScrollView>
+
+</LinearLayout>

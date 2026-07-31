@@ -514,6 +514,10 @@ data class FullCharacterModel(
 
     }
 
+    fun getSkillsTakenSinceEvent(event: FullEventModel): List<FullCharacterModifiedSkillModel> {
+        return allPurchasedSkills().filter { skill -> skill.isNew(event) }
+    }
+
     fun getSkillsTakenSinceLastEvent(): List<FullCharacterModifiedSkillModel> {
         var skillsTaken: List<FullCharacterModifiedSkillModel> = listOf()
         getLastAttendedEvent().ifLet { event ->

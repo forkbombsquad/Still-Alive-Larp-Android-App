@@ -25,6 +25,7 @@ import com.forkbombsquad.stillalivelarp.utils.LoadingLayout
 import com.forkbombsquad.stillalivelarp.utils.NavArrowButtonBlack
 import com.forkbombsquad.stillalivelarp.utils.globalFromJson
 import com.forkbombsquad.stillalivelarp.utils.ifLet
+import com.forkbombsquad.stillalivelarp.views.shared.SkillsListActivity
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -330,6 +331,30 @@ class AdminPanelActivity : NoStatusBarActivity() {
         }
 
         dataAgri_SkillFrequency.setOnClick {
+            val intent = Intent(this, SkillFrequencyActivity::class.java)
+            startActivity(intent)
+        }
+        dataAgri_CharsTakenSkills.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.SKILL_LIST, DataManager.shared.getSkillsAsFCMSM())
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Skill To See Data For")
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.ACTION, SkillsListActivity.SkillsListActivityActions.VIEW_SKILL_AGRIGATION)
+            val intent = Intent(this@AdminPanelActivity, SkillsListActivity::class.java)
+            startActivity(intent)
+        }
+        dataAgri_SkillsSinceEvent.setOnClick {
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.EVENT_LIST, DataManager.shared.events)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.DESTINATION_CLASS, ViewSkillsTakenSinceEventActivity::class)
+            DataManager.shared.setPassedData(this::class, DataManagerPassedDataKey.VIEW_TITLE, "Select Event To View Skills Taken Since It Happened")
+            val intent = Intent(this, EventsListActivity::class.java)
+            startActivity(intent)
+        }
+        dataAgri_TotalCharStatsAndMaterials.setOnClick {
+            // TODO
+            val intent = Intent(this, SkillFrequencyActivity::class.java)
+            startActivity(intent)
+        }
+        dataAgri_TotalPlayerStats.setOnClick {
+            // TODO
             val intent = Intent(this, SkillFrequencyActivity::class.java)
             startActivity(intent)
         }
