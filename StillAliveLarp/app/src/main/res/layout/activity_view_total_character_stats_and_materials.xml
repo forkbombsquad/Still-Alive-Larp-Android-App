@@ -39,6 +39,14 @@
                     android:layout_weight="1"
                     android:text="Include Staff"/>
                 <CheckBox
+                    android:id="@+id/chartotal_includePlayers"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Include Players"/>
+                <CheckBox
                     android:id="@+id/chartotal_includeNPCs"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -82,7 +90,7 @@
                 app:showDiv="true"/>
 
             <com.forkbombsquad.stillalivelarp.utils.KeyValueView
-                android:id="@+id/chartotal_infAbove75"
+                android:id="@+id/chartotal_infAbove74"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:key="Infection 75%+"
@@ -115,6 +123,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:key="Total Rockets"
+                app:showDiv="false"/>
+            <com.forkbombsquad.stillalivelarp.utils.KeyValueView
+                android:id="@+id/chartotal_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="Total Cumulative Bullet Value"
                 app:showDiv="false"/>
 
             <com.forkbombsquad.stillalivelarp.utils.KeyValueView

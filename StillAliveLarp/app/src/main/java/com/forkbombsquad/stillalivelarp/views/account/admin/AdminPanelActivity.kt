@@ -56,7 +56,6 @@ class AdminPanelActivity : NoStatusBarActivity() {
     private lateinit var dataAgri_CharsTakenSkills: NavArrowButtonBlack
     private lateinit var dataAgri_SkillsSinceEvent: NavArrowButtonBlack
     private lateinit var dataAgri_TotalCharStatsAndMaterials: NavArrowButtonBlack
-    private lateinit var dataAgri_TotalPlayerStats: NavArrowButtonBlack
 
     private lateinit var pullToRefresh: SwipeRefreshLayout
 
@@ -133,7 +132,6 @@ class AdminPanelActivity : NoStatusBarActivity() {
         dataAgri_CharsTakenSkills = findViewById(R.id.adminpanel_charsTakenSkills)
         dataAgri_SkillsSinceEvent = findViewById(R.id.adminpanel_skillsSinceEvent)
         dataAgri_TotalCharStatsAndMaterials = findViewById(R.id.adminpanel_totalCharacterStatsAndMaterials)
-        dataAgri_TotalPlayerStats = findViewById(R.id.adminpanel_totalPlayerStats)
 
         pullToRefresh = findViewById(R.id.pulltorefresh_admin)
         pullToRefresh.setOnRefreshListener {
@@ -349,13 +347,7 @@ class AdminPanelActivity : NoStatusBarActivity() {
             startActivity(intent)
         }
         dataAgri_TotalCharStatsAndMaterials.setOnClick {
-            // TODO
-            val intent = Intent(this, SkillFrequencyActivity::class.java)
-            startActivity(intent)
-        }
-        dataAgri_TotalPlayerStats.setOnClick {
-            // TODO
-            val intent = Intent(this, SkillFrequencyActivity::class.java)
+            val intent = Intent(this, ViewTotalCharacterStatsAndMaterialsActivity::class.java)
             startActivity(intent)
         }
 
